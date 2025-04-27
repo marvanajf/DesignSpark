@@ -45,14 +45,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
 
         res.status(201).json(toneAnalysis);
-      } catch (aiError) {
-        if (aiError.message === "OpenAI API key is not configured") {
+      } catch (error: any) {
+        if (error.message === "OpenAI API key is not configured") {
           return res.status(503).json({ 
             error: "OpenAI API is not available. Please add your API key in the environment variables.",
             requires_api_key: true
           });
         }
-        throw aiError;
+        throw error;
       }
     } catch (error) {
       console.error("Error in tone analysis:", error);
@@ -211,26 +211,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (type === 'linkedin_post') {
           contentText = await generateLinkedInPost(
             topic, 
-            toneAnalysis.tone_results, 
+            toneAnalysis.tone_results as any, 
             persona.name, 
-            persona.description
+            persona.description || ""
           );
         } else if (type === 'email') {
           contentText = await generateColdEmail(
             topic, 
-            toneAnalysis.tone_results, 
+            toneAnalysis.tone_results as any, 
             persona.name, 
-            persona.description
+            persona.description || ""
           );
         }
-      } catch (aiError) {
-        if (aiError.message === "OpenAI API key is not configured") {
+      } catch (error: any) {
+        if (error.message === "OpenAI API key is not configured") {
           return res.status(503).json({ 
             error: "OpenAI API is not available. Please add your API key in the environment variables.",
             requires_api_key: true
           });
         }
-        throw aiError;
+        throw error;
       }
       
       // Save the generated content
