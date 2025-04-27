@@ -1,0 +1,113 @@
+Hi Replit AI, I would like help building a SaaS web app. Please follow these instructions carefully:
+
+General Scope:
+Build a web application where users can:
+
+Paste their website URL and/or upload a few examples of their previous content.
+
+Get a tone of voice (TOV) analysis (formal, professional, conversational, technical, etc.).
+
+Choose one or more target personas (e.g., CTO, Small Business Owner, Marketing Manager).
+
+Generate ready-to-publish LinkedIn posts and cold emails based on the tone and selected persona.
+
+Save generated content to their account.
+
+Frontend Requirements:
+
+Use React.js for frontend framework.
+
+Use TailwindCSS for styling to keep the app modern and lightweight.
+
+Create pages/components for:
+
+User signup/login.
+
+Tone Analysis submission page (input website URL and/or upload text examples).
+
+Persona selection page.
+
+Content generation page (LinkedIn post, Email options).
+
+User dashboard (view past generated content).
+
+Frontend should interact with backend APIs securely.
+
+Backend Requirements:
+
+Use Node.js + Express.js for the backend server.
+
+Integrate Passport.js for user authentication (local strategy, email/password).
+
+Use bcrypt to hash passwords.
+
+Connect to PostgreSQL database (this will be hosted on Render).
+
+Create APIs for:
+
+User signup/login/logout.
+
+Tone analysis submission and storage.
+
+Persona selection saving.
+
+Content generation (calls OpenAI API internally).
+
+Fetching user’s previously generated content.
+
+AI Integration:
+
+Connect to the OpenAI API (GPT-4 preferred).
+
+Use dynamic prompt engineering:
+
+Build prompts based on user’s tone analysis results and persona choice.
+
+Example:
+"Write a LinkedIn post for a CTO with a professional, technical tone about [topic]. Use clear, short sentences and a strategic call to action."
+
+Use temperature ~0.7 for creative but brand-consistent outputs.
+
+Database Requirements:
+
+Tables needed:
+
+Users (id, email, hashed_password, created_at)
+
+ToneAnalyses (id, user_id, tone_results, uploaded_content, created_at)
+
+Personas (id, user_id, persona_choice, created_at)
+
+GeneratedContent (id, user_id, type [linkedin_post or email], content_text, created_at)
+
+Use an ORM like Prisma if easier, otherwise direct SQL with pg node package.
+
+Deployment Plan:
+
+Final hosting will be on Render.com:
+
+Node.js backend as a Web Service.
+
+PostgreSQL as a Managed Database.
+
+React frontend either served as Static Site or bundled into Node.js server.
+
+Ensure environment variables for database URLs and OpenAI API keys.
+
+Best Practices:
+
+Keep code modular and clean (separate routes, controllers, services).
+
+Use async/await and try/catch for backend error handling.
+
+Prepare the project so it can easily scale (separating frontend/backend folders if needed).
+
+Secure all API endpoints (authentication middleware on protected routes).
+
+Deliverables:
+
+A working fullstack app prototype ready to deploy on Render.
+
+Clean comments where necessary for future editing.
+
+Please proceed step-by-step and ask me if anything is unclear before assuming details.
