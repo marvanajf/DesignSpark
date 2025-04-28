@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { useAuthModal } from "@/App";
+import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Menu, X, ChevronDown, Users, BookOpen, FileText } from "lucide-react";

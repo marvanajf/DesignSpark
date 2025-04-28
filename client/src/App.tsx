@@ -3,8 +3,9 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
+import { AuthModalProvider, useAuthModal } from "@/hooks/use-auth-modal";
 import { Switch, Route, useLocation } from "wouter";
-import { createContext, useContext, useState, useEffect } from "react";
+import { useEffect } from "react";
 import HomePage from "@/pages/home-page";
 import DashboardPage from "@/pages/dashboard-page";
 import ToneAnalysisPage from "@/pages/tone-analysis-page";
@@ -16,24 +17,9 @@ import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
 
-// Create an authentication modal context
-interface AuthModalContextType {
-  openAuthModal: () => void;
-  closeAuthModal: () => void;
-  isAuthModalOpen: boolean;
-}
-
-export const AuthModalContext = createContext<AuthModalContextType>({
-  openAuthModal: () => {},
-  closeAuthModal: () => {},
-  isAuthModalOpen: false,
-});
-
-export const useAuthModal = () => useContext(AuthModalContext);
-
 function Router() {
   const [location, setLocation] = useLocation();
-  const { openAuthModal } = useAuthModal();
+  const { openAuthModal, isAuthModalOpen } = useAuthModal();
   
   // Handle redirect from /auth to home
   useEffect(() => {
@@ -60,24 +46,27 @@ function Router() {
   );
 }
 
-function App() {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  
-  const openAuthModal = () => setIsAuthModalOpen(true);
-  const closeAuthModal = () => setIsAuthModalOpen(false);
+function AppContent() {
+  const { isAuthModalOpen, closeAuthModal } = useAuthModal();
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
-          <AuthModalContext.Provider value={{ openAuthModal, closeAuthModal, isAuthModalOpen }}>
-            <Toaster />
-            <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
-            <Router />
-          </AuthModalContext.Provider>
+          <Toaster />
+          <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+          <Router />
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
+  );
+}
+
+function App() {
+  return (
+    <AuthModalProvider>
+      <AppContent />
+    </AuthModalProvider>
   );
 }
 

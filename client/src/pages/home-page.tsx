@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { ArrowRight, FileText, Users, PenTool, CheckCircle } from "lucide-react";
 import { useEffect } from "react";
-import { useAuthModal } from "@/App";
+import { useAuthModal } from "@/hooks/use-auth-modal";
 
 export default function HomePage() {
   const { user } = useAuth();
