@@ -132,9 +132,6 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   </div>
 
                   <a href="#" className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                    Enterprise
-                  </a>
-                  <a href="#" className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                     Pricing
                   </a>
                 </>
@@ -226,12 +223,6 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   </Link>
                 </div>
                 
-                <a
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Enterprise
-                </a>
                 <a
                   href="#"
                   className="text-gray-300 hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
