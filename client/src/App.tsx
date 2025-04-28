@@ -15,6 +15,8 @@ import ContentGeneratorPage from "@/pages/content-generator-page";
 import SavedContentPage from "@/pages/saved-content-page";
 import AccountPage from "@/pages/account-page";
 import SupportPage from "@/pages/support-page";
+import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
+import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
@@ -38,6 +40,8 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <ProtectedRoute path="/dashboard" component={DashboardPage} />
+      <Route path="/tone-analysis-info" component={ToneAnalysisMarketingPage} />
+      <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
       <ProtectedRoute path="/tone-analysis" component={ToneAnalysisPage} />
       <ProtectedRoute path="/tone-results/:id" component={ToneResultsPage} />
       <ProtectedRoute path="/personas" component={PersonaSelectionPage} />

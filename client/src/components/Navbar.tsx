@@ -70,14 +70,14 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                         className="absolute left-0 mt-2 w-64 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.15)] bg-black border border-gray-700/60 ring-1 ring-black ring-opacity-5 z-50"
                       >
                         <div className="py-1">
-                          <Link href="/tone-analysis" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                          <Link href="/tone-analysis-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
                             <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
                               <p className="font-medium">Tone Analysis</p>
                               <p className="text-xs text-gray-500">Analyze content tone and style</p>
                             </div>
                           </Link>
-                          <Link href="/content-generation" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                          <Link href="/content-generation-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
                             <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
                               <p className="font-medium">Content Generation</p>
@@ -205,10 +205,10 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
               <>
                 <div className="px-3 py-2">
                   <div className="font-medium text-white text-base">Platform</div>
-                  <Link href="/tone-analysis" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                  <Link href="/tone-analysis-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
                     Tone Analysis
                   </Link>
-                  <Link href="/content-generation" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/content-generation-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
                     Content Generation
                   </Link>
                 </div>
