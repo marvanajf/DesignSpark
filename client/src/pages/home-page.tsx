@@ -35,29 +35,30 @@ export default function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <div className="relative py-8 sm:py-10 lg:py-12 bg-black overflow-hidden">
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
-          <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto">
-            <span className="block text-white">Transform your</span>
-            <span className="block text-[#74d1ea]">content strategy</span>
-          </h1>
-          <p className="mt-6 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto">
-            Analyze your brand's tone of voice, target specific personas, and 
-            generate perfectly tailored content for LinkedIn and cold emails.
-          </p>
-          <div className="mt-8 sm:mt-12 flex flex-col items-center">
-            <div className="rounded-md">
-              <Button 
-                onClick={handleGetStarted}
-                className="w-full sm:w-auto px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-              >
-                Get started free
-              </Button>
-            </div>
-            <p className="mt-3 text-sm text-gray-400">
-              No credit card required. Start generating in minutes.
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] text-center">
+            <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto">
+              <span className="block text-white">Transform your</span>
+              <span className="block text-[#74d1ea]">content strategy</span>
+            </h1>
+            <p className="mt-6 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto">
+              Analyze your brand's tone of voice, target specific personas, and 
+              generate perfectly tailored content for LinkedIn and cold emails.
             </p>
+            <div className="mt-8 sm:mt-12 flex flex-col items-center">
+              <div className="rounded-md">
+                <Button 
+                  onClick={handleGetStarted}
+                  className="w-full sm:w-auto px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+                >
+                  Get started free
+                </Button>
+              </div>
+              <p className="mt-3 text-sm text-gray-400">
+                No credit card required. Start generating in minutes.
+              </p>
+            </div>
           </div>
         </div>
       </div>
