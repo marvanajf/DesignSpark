@@ -97,7 +97,7 @@ export default function HomePage() {
                 </ul>
                 <div>
                   <Button 
-                    onClick={() => window.location.href = "/tone-analysis"}
+                    onClick={() => window.location.href = "/platform/tone-analysis"}
                     variant="outline"
                     className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                   >
@@ -199,6 +199,7 @@ export default function HomePage() {
                   </div>
                   <div className="mt-4 pt-3 border-t border-gray-700/50 text-right">
                     <Button 
+                      onClick={() => window.location.href = "/platform/personas"}
                       variant="ghost" 
                       className="text-xs text-[#74d1ea] hover:text-[#74d1ea] hover:bg-[#74d1ea]/10"
                     >
@@ -232,7 +233,7 @@ export default function HomePage() {
                 </ul>
                 <div>
                   <Button 
-                    onClick={() => window.location.href = "/personas"}
+                    onClick={() => window.location.href = "/platform/personas"}
                     variant="outline"
                     className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                   >
@@ -271,7 +272,7 @@ export default function HomePage() {
                 </ul>
                 <div>
                   <Button 
-                    onClick={() => window.location.href = "/content-generation"}
+                    onClick={() => window.location.href = "/platform/content-generator"}
                     variant="outline"
                     className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                   >
