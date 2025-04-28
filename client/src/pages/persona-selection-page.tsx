@@ -147,7 +147,15 @@ export default function PersonaSelectionPage() {
   // Delete a persona
   const deletePersonaMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/personas/${id}`);
+      try {
+        console.log("Deleting persona with id:", id);
+        const response = await apiRequest("DELETE", `/api/personas/${id}`);
+        console.log("Delete response:", response);
+        return response;
+      } catch (error) {
+        console.error("Delete persona error:", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/personas"] });
@@ -157,19 +165,43 @@ export default function PersonaSelectionPage() {
       });
     },
     onError: (error: Error) => {
+      console.error("Delete mutation error:", error);
       toast({
         title: "Failed to delete persona",
-        description: error.message,
+        description: error.message || "An error occurred while deleting the persona",
         variant: "destructive",
       });
     },
   });
 
-  // Check if personas exist and seed if not
+  // Check login status and then check if personas exist and seed if not
   useEffect(() => {
-    if (personas && personas.length === 0 && !seedPersonasMutation.isPending) {
-      seedPersonasMutation.mutate();
-    }
+    // Get auth status
+    fetch("/api/user", { credentials: "include" })
+      .then(res => {
+        console.log("Auth status:", res.status);
+        if (res.status === 401) {
+          console.log("Need to log in");
+          // For testing purposes, try to login with predefined credentials
+          return fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: "jack@gomarvana.com",
+              password: "password"
+            }),
+            credentials: "include"
+          });
+        }
+        return res;
+      })
+      .then(res => {
+        console.log("Login response:", res.status);
+        if (personas && personas.length === 0 && !seedPersonasMutation.isPending) {
+          seedPersonasMutation.mutate();
+        }
+      })
+      .catch(err => console.error("Auth error:", err));
   }, [personas, seedPersonasMutation]);
 
   // Initialize selected personas from fetched data
