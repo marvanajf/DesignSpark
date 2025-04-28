@@ -71,7 +71,7 @@ export default function HomePage() {
       <div className="py-6 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Tone Analysis Section */}
-          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               <div className="p-8 flex flex-col justify-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
@@ -97,7 +97,7 @@ export default function HomePage() {
                 </ul>
                 <div>
                   <Button 
-                    onClick={() => window.location.href = "/platform/tone-analysis"}
+                    onClick={() => window.location.href = "/tone-analysis-info"}
                     variant="outline"
                     className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                   >
@@ -158,7 +158,7 @@ export default function HomePage() {
           </div>
 
           {/* Personas Section */}
-          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
@@ -199,7 +199,7 @@ export default function HomePage() {
                   </div>
                   <div className="mt-4 pt-3 border-t border-gray-700/50 text-right">
                     <Button 
-                      onClick={() => window.location.href = "/platform/personas"}
+                      onClick={() => window.location.href = "/personas-info"}
                       variant="ghost" 
                       className="text-xs text-[#74d1ea] hover:text-[#74d1ea] hover:bg-[#74d1ea]/10"
                     >
@@ -233,7 +233,7 @@ export default function HomePage() {
                 </ul>
                 <div>
                   <Button 
-                    onClick={() => window.location.href = "/platform/personas"}
+                    onClick={() => window.location.href = "/personas-info"}
                     variant="outline"
                     className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                   >
@@ -246,7 +246,7 @@ export default function HomePage() {
           </div>
 
           {/* Content Generation Section */}
-          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               <div className="p-8 flex flex-col justify-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
@@ -272,7 +272,7 @@ export default function HomePage() {
                 </ul>
                 <div>
                   <Button 
-                    onClick={() => window.location.href = "/platform/content-generator"}
+                    onClick={() => window.location.href = "/content-generation-info"}
                     variant="outline"
                     className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                   >
@@ -324,7 +324,7 @@ export default function HomePage() {
       <div id="testimonials" className="py-6 bg-black relative overflow-hidden">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4 shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block">Trusted by content professionals</span>
             </h2>
@@ -413,7 +413,7 @@ export default function HomePage() {
       {/* FAQ Section */}
       <div className="py-6 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="md:col-span-1">
                 <h2 className="text-2xl font-semibold text-white">
