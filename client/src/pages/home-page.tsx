@@ -336,13 +336,6 @@ export default function HomePage() {
 
           <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="flex items-center mb-4">
-                <div className="text-[#74d1ea]">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">★</span>
-                  ))}
-                </div>
-              </div>
               <p className="text-gray-400 mb-4">
                 "Tovably has transformed how we approach our LinkedIn content strategy. The tone analysis is spot-on and the content generation saves us hours every week."
               </p>
@@ -354,19 +347,11 @@ export default function HomePage() {
                 />
                 <div className="ml-3">
                   <p className="text-sm font-medium text-white">Sarah Johnson</p>
-                  <p className="text-xs text-gray-400">Marketing Director, TechCorp</p>
                 </div>
               </div>
             </div>
 
             <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="flex items-center mb-4">
-                <div className="text-[#74d1ea]">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">★</span>
-                  ))}
-                </div>
-              </div>
               <p className="text-gray-400 mb-4">
                 "Our cold email response rates have increased by 37% since we started using Tovably. The persona targeting feature is incredibly effective."
               </p>
@@ -378,20 +363,11 @@ export default function HomePage() {
                 />
                 <div className="ml-3">
                   <p className="text-sm font-medium text-white">Michael Chen</p>
-                  <p className="text-xs text-gray-400">Sales Manager, GrowthFirm</p>
                 </div>
               </div>
             </div>
 
             <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="flex items-center mb-4">
-                <div className="text-[#74d1ea]">
-                  {[...Array(4)].map((_, i) => (
-                    <span key={i} className="text-lg">★</span>
-                  ))}
-                  <span className="text-[#74d1ea] opacity-30 text-lg">★</span>
-                </div>
-              </div>
               <p className="text-gray-400 mb-4">
                 "As a content team of one, Tovably gives me the ability to scale my output while maintaining a consistent brand voice across all channels."
               </p>
@@ -403,7 +379,6 @@ export default function HomePage() {
                 />
                 <div className="ml-3">
                   <p className="text-sm font-medium text-white">Emma Rodriguez</p>
-                  <p className="text-xs text-gray-400">Content Creator, Startup Inc.</p>
                 </div>
               </div>
             </div>
