@@ -27,6 +27,7 @@ export const personas = pgTable("personas", {
   description: text("description"),
   interests: jsonb("interests"),
   is_selected: boolean("is_selected").default(false),
+  is_predefined: boolean("is_predefined").default(false),
   created_at: timestamp("created_at").defaultNow().notNull()
 });
 
