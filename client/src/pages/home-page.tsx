@@ -78,7 +78,7 @@ export default function HomePage() {
             <div className="rounded-md">
               <Button 
                 onClick={handleGetStarted}
-                className="w-full sm:w-auto px-8 py-3 md:py-4 md:text-lg md:px-10 bg-white hover:bg-gray-200 text-black shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                className="w-full sm:w-auto px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
               >
                 Get started free
               </Button>
@@ -117,8 +117,8 @@ export default function HomePage() {
           <div className="mt-8">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
-                <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-medium text-lg">1</span>
+                <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4 border border-[#74d1ea]/30">
+                  <span className="text-[#74d1ea] font-medium text-lg">1</span>
                 </div>
                 <h3 className="text-xl font-medium text-white mb-3">Upload your content</h3>
                 <p className="text-gray-400 mb-6">
@@ -130,8 +130,8 @@ export default function HomePage() {
               </div>
 
               <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
-                <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-medium text-lg">2</span>
+                <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4 border border-[#74d1ea]/30">
+                  <span className="text-[#74d1ea] font-medium text-lg">2</span>
                 </div>
                 <h3 className="text-xl font-medium text-white mb-3">Select target personas</h3>
                 <p className="text-gray-400 mb-6">
@@ -143,8 +143,8 @@ export default function HomePage() {
               </div>
 
               <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
-                <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-medium text-lg">3</span>
+                <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4 border border-[#74d1ea]/30">
+                  <span className="text-[#74d1ea] font-medium text-lg">3</span>
                 </div>
                 <h3 className="text-xl font-medium text-white mb-3">Generate tailored content</h3>
                 <p className="text-gray-400 mb-6">
@@ -162,11 +162,11 @@ export default function HomePage() {
       {/* Testimonials Section */}
       <div id="testimonials" className="py-10 bg-black relative overflow-hidden">
         {/* Horizontal line pattern */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-15">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
             <defs>
               <pattern id="horizontal-lines" x="0" y="0" width="100" height="20" patternUnits="userSpaceOnUse">
-                <line x1="0" y1="10" x2="100" y2="10" stroke="white" strokeWidth="0.5" />
+                <line x1="0" y1="10" x2="100" y2="10" stroke="white" strokeWidth="0.8" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#horizontal-lines)" />
@@ -234,11 +234,11 @@ export default function HomePage() {
 
             <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
               <div className="flex items-center mb-4">
-                <div className="text-white">
+                <div className="text-[#74d1ea]">
                   {[...Array(4)].map((_, i) => (
                     <span key={i} className="text-lg">★</span>
                   ))}
-                  <span className="text-lg opacity-30">★</span>
+                  <span className="text-[#74d1ea] opacity-30 text-lg">★</span>
                 </div>
               </div>
               <p className="text-gray-400 mb-4">
@@ -287,7 +287,7 @@ export default function HomePage() {
             <div className="mt-8">
               <Button
                 onClick={handleGetStarted}
-                className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-white hover:bg-gray-200 text-black shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
               >
                 Get started free
               </Button>
