@@ -47,23 +47,19 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                         className="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-black border border-gray-800 ring-1 ring-black ring-opacity-5 z-50"
                       >
                         <div className="py-1">
-                          <Link href="/tone-analysis">
-                            <a className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                              <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
-                              <div>
-                                <p className="font-medium">Tone Analysis</p>
-                                <p className="text-xs text-gray-500">Analyze content tone and style</p>
-                              </div>
-                            </a>
+                          <Link href="/tone-analysis" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Tone Analysis</p>
+                              <p className="text-xs text-gray-500">Analyze content tone and style</p>
+                            </div>
                           </Link>
-                          <Link href="/content-generation">
-                            <a className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                              <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
-                              <div>
-                                <p className="font-medium">Content Generation</p>
-                                <p className="text-xs text-gray-500">Create tailored content</p>
-                              </div>
-                            </a>
+                          <Link href="/content-generation" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Content Generation</p>
+                              <p className="text-xs text-gray-500">Create tailored content</p>
+                            </div>
                           </Link>
                         </div>
                       </div>

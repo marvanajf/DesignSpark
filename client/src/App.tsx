@@ -46,7 +46,7 @@ function Router() {
   );
 }
 
-function AppContent() {
+function App() {
   const { isAuthModalOpen, closeAuthModal } = useAuthModal();
 
   return (
@@ -59,14 +59,6 @@ function AppContent() {
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
-  );
-}
-
-function App() {
-  return (
-    <AuthModalProvider>
-      <AppContent />
-    </AuthModalProvider>
   );
 }
 
