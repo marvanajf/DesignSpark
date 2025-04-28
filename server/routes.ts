@@ -6,7 +6,8 @@ import { setupAuth } from "./auth";
 import { 
   analyzeTone, 
   generateLinkedInPost, 
-  generateColdEmail 
+  generateColdEmail,
+  generatePersona
 } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -282,6 +283,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching content:", error);
       res.status(500).json({ error: "Failed to fetch content" });
+    }
+  });
+
+  // Generate a persona using OpenAI
+  app.post("/api/generate-persona", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const schema = z.object({
+        description: z.string().min(1).max(500)
+      });
+
+      const { description } = schema.parse(req.body);
+
+      try {
+        // Generate persona with OpenAI
+        const generatedPersona = await generatePersona(description);
+        
+        // Save the generated persona
+        const persona = await storage.createPersona({
+          user_id: req.user!.id,
+          name: generatedPersona.name,
+          description: generatedPersona.description,
+          interests: generatedPersona.interests,
+          is_selected: false,
+        });
+        
+        res.status(201).json(persona);
+      } catch (error: any) {
+        if (error.message === "OpenAI API key is not configured") {
+          return res.status(503).json({ 
+            error: "OpenAI API is not available. Please add your API key in the environment variables.",
+            requires_api_key: true
+          });
+        }
+        throw error;
+      }
+    } catch (error) {
+      console.error("Error generating persona:", error);
+      res.status(400).json({ error: error instanceof Error ? error.message : "Unknown error" });
     }
   });
 
