@@ -82,32 +82,26 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                         className="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-black border border-gray-800 ring-1 ring-black ring-opacity-5 z-50"
                       >
                         <div className="py-1">
-                          <Link href="/customers">
-                            <a className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                              <Users className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
-                              <div>
-                                <p className="font-medium">Customers</p>
-                                <p className="text-xs text-gray-500">Teams using ContentPersona</p>
-                              </div>
-                            </a>
+                          <Link href="/customers" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <Users className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Customers</p>
+                              <p className="text-xs text-gray-500">Teams using ContentPersona</p>
+                            </div>
                           </Link>
-                          <Link href="/blog">
-                            <a className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                              <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
-                              <div>
-                                <p className="font-medium">Blog</p>
-                                <p className="text-xs text-gray-500">News and updates</p>
-                              </div>
-                            </a>
+                          <Link href="/blog" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Blog</p>
+                              <p className="text-xs text-gray-500">News and updates</p>
+                            </div>
                           </Link>
-                          <Link href="/guides">
-                            <a className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                              <BookOpen className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
-                              <div>
-                                <p className="font-medium">Guides</p>
-                                <p className="text-xs text-gray-500">Best AI practices</p>
-                              </div>
-                            </a>
+                          <Link href="/guides" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <BookOpen className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Guides</p>
+                              <p className="text-xs text-gray-500">Best AI practices</p>
+                            </div>
                           </Link>
                         </div>
                       </div>
@@ -175,34 +169,24 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
               <>
                 <div className="px-3 py-2">
                   <div className="font-medium text-white text-base">Platform</div>
-                  <Link href="/tone-analysis">
-                    <a className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
-                      Tone Analysis
-                    </a>
+                  <Link href="/tone-analysis" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                    Tone Analysis
                   </Link>
-                  <Link href="/content-generation">
-                    <a className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                      Content Generation
-                    </a>
+                  <Link href="/content-generation" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    Content Generation
                   </Link>
                 </div>
                 
                 <div className="px-3 py-2">
                   <div className="font-medium text-white text-base">Resources</div>
-                  <Link href="/customers">
-                    <a className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
-                      Customers
-                    </a>
+                  <Link href="/customers" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                    Customers
                   </Link>
-                  <Link href="/blog">
-                    <a className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                      Blog
-                    </a>
+                  <Link href="/blog" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    Blog
                   </Link>
-                  <Link href="/guides">
-                    <a className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                      Guides
-                    </a>
+                  <Link href="/guides" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    Guides
                   </Link>
                 </div>
                 

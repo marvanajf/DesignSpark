@@ -3,7 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
-import { AuthModalProvider, useAuthModal } from "@/hooks/use-auth-modal";
+import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Switch, Route, useLocation } from "wouter";
 import { useEffect } from "react";
 import HomePage from "@/pages/home-page";
