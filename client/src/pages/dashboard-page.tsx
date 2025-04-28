@@ -52,19 +52,57 @@ export default function DashboardPage() {
     );
   }
 
-  // Content Type Data for the chart
+  // Calculate content type distribution from real data
+  const linkedInPostCount = contentList?.filter(c => c.type === "linkedin_post").length || 0;
+  const coldEmailCount = contentList?.filter(c => c.type === "email").length || 0;
+  const totalContent = linkedInPostCount + coldEmailCount;
+  
   const contentTypes = [
-    { label: "LinkedIn Posts", count: contentList?.filter(c => c.type === "linkedin_post").length || 0, percentage: 70, color: "#74d1ea" },
-    { label: "Cold Emails", count: contentList?.filter(c => c.type === "cold_email").length || 0, percentage: 30, color: "#4983ab" },
+    { 
+      label: "LinkedIn Posts", 
+      count: linkedInPostCount, 
+      percentage: totalContent > 0 ? Math.round((linkedInPostCount / totalContent) * 100) : 0, 
+      color: "#74d1ea" 
+    },
+    { 
+      label: "Cold Emails", 
+      count: coldEmailCount, 
+      percentage: totalContent > 0 ? Math.round((coldEmailCount / totalContent) * 100) : 0, 
+      color: "#4983ab" 
+    },
   ];
 
-  const topTones = [
-    { tone: "Professional", score: 88 },
-    { tone: "Conversational", score: 73 },
-    { tone: "Technical", score: 70 },
-    { tone: "Friendly", score: 55 },
-    { tone: "Formal", score: 49 },
-  ];
+  // Extract and aggregate tone characteristics from tone analyses
+  const toneScores: Record<string, number[]> = {};
+  
+  toneAnalyses?.forEach(analysis => {
+    if (analysis.tone_results) {
+      // Safe access to characteristics with type assertion
+      const characteristics = (analysis.tone_results as any).characteristics;
+      if (characteristics) {
+        Object.entries(characteristics).forEach(([tone, score]) => {
+          if (!toneScores[tone]) {
+            toneScores[tone] = [];
+          }
+          toneScores[tone].push(Number(score));
+        });
+      }
+    }
+  });
+  
+  // Calculate average scores and sort by highest score
+  const topTones = Object.entries(toneScores)
+    .map(([tone, scores]) => {
+      const avgScore = scores.length > 0 
+        ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length) 
+        : 0;
+      return { tone: tone.charAt(0).toUpperCase() + tone.slice(1), score: avgScore };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5); // Just take top 5 tones
+    
+  // If we don't have any tone analysis yet, use empty array
+  const finalTopTones = topTones.length > 0 ? topTones : [];
 
   return (
     <Layout showSidebar={true}>
@@ -144,15 +182,27 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="p-4">
                   <div className="space-y-4">
-                    {topTones.map((tone, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <span className="text-gray-300 w-8">{index + 1}</span>
-                          <span className="text-white">{tone.tone}</span>
+                    {finalTopTones.length > 0 ? (
+                      finalTopTones.map((tone, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <span className="text-gray-300 w-8">{index + 1}</span>
+                            <span className="text-white">{tone.tone}</span>
+                          </div>
+                          <span className="text-gray-400">{tone.score}</span>
                         </div>
-                        <span className="text-gray-400">{tone.score}</span>
+                      ))
+                    ) : (
+                      <div className="text-center text-gray-400 py-8">
+                        <p>No tone analysis data yet</p>
+                        <Button 
+                          onClick={() => navigate('/tone-analysis')}
+                          className="mt-4 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                        >
+                          Create Tone Analysis
+                        </Button>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </CardContent>
               </Card>
