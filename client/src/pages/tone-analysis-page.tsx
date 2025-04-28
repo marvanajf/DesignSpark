@@ -378,7 +378,7 @@ export default function ToneAnalysisPage() {
                       <Button 
                         className="space-x-2 bg-[#74d1ea] hover:bg-[#74d1ea]/90"
                         size="sm"
-                        onClick={() => navigate("/content-generator")}
+                        onClick={() => navigate("/personas")}
                       >
                         <span>Continue to Persona</span>
                         <ArrowRight className="w-4 h-4" />
