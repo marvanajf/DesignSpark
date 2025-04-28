@@ -2,9 +2,15 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { ArrowRight, FileText, Users, PenTool, CheckCircle } from "lucide-react";
-import { useEffect } from "react";
+import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useAuthModal } from "@/hooks/use-auth-modal";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -204,9 +210,82 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* FAQ Section */}
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="md:col-span-1">
+                <h2 className="text-2xl font-semibold text-white">
+                  Frequently<br />
+                  asked questions
+                </h2>
+              </div>
+              
+              <div className="md:col-span-2">
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1" className="border-b border-gray-700/70">
+                    <AccordionTrigger className="text-white hover:text-[#74d1ea] text-left py-4">
+                      What content types does Tovably support?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400 pb-4">
+                      Currently, Tovably supports LinkedIn posts and cold emails. We analyze your brand's tone and adapt it to these formats while targeting specific professional personas.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-2" className="border-b border-gray-700/70">
+                    <AccordionTrigger className="text-white hover:text-[#74d1ea] text-left py-4">
+                      How does tone analysis work?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400 pb-4">
+                      Our AI analyzes your existing content to identify key characteristics of your brand's tone, including professionalism level, conversational style, technical complexity, and formality.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-3" className="border-b border-gray-700/70">
+                    <AccordionTrigger className="text-white hover:text-[#74d1ea] text-left py-4">
+                      How many personas can I create?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400 pb-4">
+                      There's no limit to the number of personas you can create. You can generate AI-powered personas or create custom personas manually to target specific audience segments.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-4" className="border-b border-gray-700/70">
+                    <AccordionTrigger className="text-white hover:text-[#74d1ea] text-left py-4">
+                      Can I modify generated content?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400 pb-4">
+                      Absolutely! All generated content can be edited, refined, and saved for future reference. You maintain full control over the final output.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-5" className="border-b border-gray-700/70">
+                    <AccordionTrigger className="text-white hover:text-[#74d1ea] text-left py-4">
+                      Is my content data secure?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400 pb-4">
+                      Yes, we take data security seriously. Your content and analysis are kept private and secure. We don't use your content to train our models or share it with third parties.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-6" className="border-b border-gray-700/70">
+                    <AccordionTrigger className="text-white hover:text-[#74d1ea] text-left py-4">
+                      Can I export my generated content?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400 pb-4">
+                      Yes, you can easily copy, download, or share your generated content directly from the platform to use in your marketing campaigns.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="py-6 bg-black relative overflow-hidden">
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="border border-gray-700/60 rounded-lg py-10 px-4 shadow-[0_0_30px_rgba(116,209,234,0.20)]">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">

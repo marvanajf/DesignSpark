@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle } from "lucide-react";
 
 interface NavbarProps {
@@ -16,6 +16,32 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
+  
+  // Add timeouts to prevent immediate closing when moving between elements
+  const platformTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resourcesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const handlePlatformMouseEnter = () => {
+    if (platformTimeoutRef.current) clearTimeout(platformTimeoutRef.current);
+    setShowPlatformDropdown(true);
+  };
+  
+  const handlePlatformMouseLeave = () => {
+    platformTimeoutRef.current = setTimeout(() => {
+      setShowPlatformDropdown(false);
+    }, 300);
+  };
+  
+  const handleResourcesMouseEnter = () => {
+    if (resourcesTimeoutRef.current) clearTimeout(resourcesTimeoutRef.current);
+    setShowResourcesDropdown(true);
+  };
+  
+  const handleResourcesMouseLeave = () => {
+    resourcesTimeoutRef.current = setTimeout(() => {
+      setShowResourcesDropdown(false);
+    }, 300);
+  };
 
   return (
     <nav className="bg-black border-b border-gray-700/60 sticky top-0 z-50">
@@ -31,16 +57,16 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   {/* Platform dropdown */}
                   <div className="relative">
                     <button 
-                      onMouseEnter={() => setShowPlatformDropdown(true)}
-                      onMouseLeave={() => setShowPlatformDropdown(false)}
+                      onMouseEnter={handlePlatformMouseEnter}
+                      onMouseLeave={handlePlatformMouseLeave}
                       className={`inline-flex items-center px-1 pt-1 border-b-2 ${location === "/" ? "border-white text-white" : "border-transparent text-gray-300 hover:text-white"} text-sm font-medium`}
                     >
                       Platform <ChevronDown className="ml-1 h-4 w-4" />
                     </button>
                     {showPlatformDropdown && (
                       <div 
-                        onMouseEnter={() => setShowPlatformDropdown(true)} 
-                        onMouseLeave={() => setShowPlatformDropdown(false)}
+                        onMouseEnter={handlePlatformMouseEnter} 
+                        onMouseLeave={handlePlatformMouseLeave}
                         className="absolute left-0 mt-2 w-64 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.15)] bg-black border border-gray-700/60 ring-1 ring-black ring-opacity-5 z-50"
                       >
                         <div className="py-1">
@@ -66,16 +92,16 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   {/* Resources dropdown */}
                   <div className="relative">
                     <button 
-                      onMouseEnter={() => setShowResourcesDropdown(true)}
-                      onMouseLeave={() => setShowResourcesDropdown(false)}
+                      onMouseEnter={handleResourcesMouseEnter}
+                      onMouseLeave={handleResourcesMouseLeave}
                       className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                     >
                       Resources <ChevronDown className="ml-1 h-4 w-4" />
                     </button>
                     {showResourcesDropdown && (
                       <div 
-                        onMouseEnter={() => setShowResourcesDropdown(true)} 
-                        onMouseLeave={() => setShowResourcesDropdown(false)}
+                        onMouseEnter={handleResourcesMouseEnter} 
+                        onMouseLeave={handleResourcesMouseLeave}
                         className="absolute left-0 mt-2 w-64 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.15)] bg-black border border-gray-700/60 ring-1 ring-black ring-opacity-5 z-50"
                       >
                         <div className="py-1">
