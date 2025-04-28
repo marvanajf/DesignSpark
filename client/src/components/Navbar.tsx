@@ -200,6 +200,17 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-black border-b border-gray-700/60">
+          <div className="px-4 py-3 flex items-center justify-between border-b border-gray-700/40">
+            <Link href="/">
+              <img src={tovablyLogo} alt="Tovably" className="h-8" />
+            </Link>
+            <button
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-900"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
           <div className="px-2 pt-2 pb-3 space-y-1">
             {!showDashboardLinks && (
               <>
