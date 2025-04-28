@@ -52,12 +52,12 @@ export default function HomePage() {
         </div>
         
         {/* Horizontal lines - right side */}
-        <div className="absolute top-0 right-0 w-1/3 h-full opacity-5">
+        <div className="absolute top-0 right-0 w-1/3 h-full opacity-15">
           <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <line x1="0" y1="20" x2="100" y2="20" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-            <line x1="0" y1="40" x2="100" y2="40" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-            <line x1="0" y1="60" x2="100" y2="60" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-            <line x1="0" y1="80" x2="100" y2="80" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="20" x2="100" y2="20" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="40" x2="100" y2="40" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="60" x2="100" y2="60" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="80" x2="100" y2="80" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
           </svg>
         </div>
         
