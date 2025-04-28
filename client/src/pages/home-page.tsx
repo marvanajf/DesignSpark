@@ -31,11 +31,11 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="relative py-16 sm:py-24 lg:py-32 bg-black overflow-hidden">
         {/* Subtle line-based background pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-15">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
             <defs>
               <pattern id="grid-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="white" strokeWidth="0.5" />
+                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="white" strokeWidth="0.8" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#grid-pattern)" />
@@ -43,11 +43,11 @@ export default function HomePage() {
         </div>
         
         {/* Diagonal lines */}
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 opacity-5">
+        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 opacity-15">
           <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <line x1="0" y1="100" x2="100" y2="0" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-            <line x1="0" y1="70" x2="70" y2="0" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-            <line x1="0" y1="40" x2="40" y2="0" stroke="white" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="100" x2="100" y2="0" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="70" x2="70" y2="0" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="40" x2="40" y2="0" stroke="white" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
           </svg>
         </div>
         
@@ -62,13 +62,13 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
-          <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-800 text-white mb-6">
-            <span className="h-2 w-2 rounded-full bg-white mr-2"></span>
+          <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#74d1ea]/10 text-[#74d1ea] mb-6 border border-[#74d1ea]/20">
+            <span className="h-2 w-2 rounded-full bg-[#74d1ea] mr-2"></span>
             Tone Analysis & Content Generator
           </div>
           <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto">
             <span className="block text-white">Transform your</span>
-            <span className="block text-white">content strategy</span>
+            <span className="block text-[#74d1ea]">content strategy</span>
           </h1>
           <p className="mt-6 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto">
             Analyze your brand's tone of voice, target specific personas, and 
@@ -93,11 +93,11 @@ export default function HomePage() {
       {/* Features Section */}
       <div id="features" className="py-10 bg-black relative overflow-hidden">
         {/* Vertical line pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-15">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
             <defs>
               <pattern id="vertical-lines" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <line x1="20" y1="0" x2="20" y2="40" stroke="white" strokeWidth="0.5" />
+                <line x1="20" y1="0" x2="20" y2="40" stroke="white" strokeWidth="0.8" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#vertical-lines)" />
@@ -263,12 +263,12 @@ export default function HomePage() {
       {/* CTA Section */}
       <div className="py-10 bg-black relative overflow-hidden">
         {/* Crossed lines background pattern */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-15">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
             <defs>
               <pattern id="crossed-lines" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-                <line x1="0" y1="0" x2="50" y2="50" stroke="white" strokeWidth="0.5" />
-                <line x1="50" y1="0" x2="0" y2="50" stroke="white" strokeWidth="0.5" />
+                <line x1="0" y1="0" x2="50" y2="50" stroke="white" strokeWidth="0.8" />
+                <line x1="50" y1="0" x2="0" y2="50" stroke="white" strokeWidth="0.8" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#crossed-lines)" />
@@ -279,7 +279,7 @@ export default function HomePage() {
           <div className="border border-gray-700/60 rounded-lg py-10 px-4 shadow-[0_0_30px_rgba(116,209,234,0.20)]">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block mb-2">Ready to transform your</span>
-              <span className="block text-white">content strategy?</span>
+              <span className="block text-[#74d1ea]">content strategy?</span>
             </h2>
             <p className="mt-6 text-xl text-gray-400 max-w-3xl mx-auto">
               Start generating perfectly tailored LinkedIn posts and cold emails today.
