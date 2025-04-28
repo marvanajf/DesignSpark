@@ -302,16 +302,8 @@ export default function ContentGenerationMarketingPage() {
           </nav>
           <div className="mt-8 flex justify-center space-x-6">
             <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
-              <span className="sr-only">Twitter</span>
-              <i className="fab fa-twitter fa-lg"></i>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
               <span className="sr-only">LinkedIn</span>
               <i className="fab fa-linkedin fa-lg"></i>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
-              <span className="sr-only">GitHub</span>
-              <i className="fab fa-github fa-lg"></i>
             </a>
           </div>
           <p className="mt-8 text-center text-base text-gray-400">
