@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -19,7 +19,10 @@ import {
   PieChart,
   TrendingUp,
   List,
-  ArrowRight
+  ArrowRight,
+  RefreshCw,
+  MessageSquare,
+  Sparkles
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -45,7 +48,27 @@ export default function ToneAnalysisPage() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
 
-  // Fetch analysis results if we have an ID
+  // Fetch all tone analyses for the user
+  const { 
+    data: userAnalyses,
+    isLoading: isLoadingUserAnalyses,
+  } = useQuery<ToneAnalysis[]>({
+    queryKey: ["/api/tone-analyses"],
+    throwOnError: false,
+  });
+
+  // If we have analyses but no current one selected, select the most recent
+  useEffect(() => {
+    if (userAnalyses?.length && !currentAnalysisId) {
+      // Sort by created_at descending to get the most recent
+      const sortedAnalyses = [...userAnalyses].sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      setCurrentAnalysisId(sortedAnalyses[0].id);
+    }
+  }, [userAnalyses, currentAnalysisId]);
+
+  // Fetch the current analysis if we have an ID
   const { 
     data: toneAnalysis, 
     isLoading: isLoadingAnalysis,
@@ -216,22 +239,65 @@ export default function ToneAnalysisPage() {
                   <div className="mb-8">
                     <h3 className="text-lg font-medium text-white mb-4">Language Patterns</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {Object.entries(toneAnalysis.tone_results.language_patterns).map(([key, value]) => (
-                        <div key={key} className="bg-black/20 border border-gray-800 rounded-lg p-4">
-                          <h4 className="text-white font-medium capitalize mb-2">{key.replace('_', ' ')}</h4>
-                          {Array.isArray(value) ? (
-                            <ul className="space-y-1">
-                              {value.map((item, i) => (
-                                <li key={i} className="text-gray-400 text-sm flex items-start">
-                                  <span className="text-[#74d1ea] mr-2">•</span>
-                                  <span>{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-gray-400 text-sm">{value}</p>
-                          )}
-                        </div>
+                      {/* Highlight Common Phrases specially */}
+                      {Object.entries(toneAnalysis.tone_results.language_patterns)
+                        .filter(([key]) => key === 'common_phrases')
+                        .map(([key, value]) => (
+                          <div key={key} className="md:col-span-2 bg-[#74d1ea]/5 border border-[#74d1ea]/20 rounded-lg p-5 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
+                            <div className="flex items-center mb-4">
+                              <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mr-3">
+                                <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
+                              </div>
+                              <h4 className="text-lg font-medium text-white capitalize">
+                                Common Phrases
+                                <span className="ml-2 text-xs text-[#74d1ea] bg-[#74d1ea]/10 px-2 py-0.5 rounded">
+                                  Brand Identifiers
+                                </span>
+                              </h4>
+                            </div>
+                            
+                            {Array.isArray(value) && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {value.map((phrase, i) => (
+                                  <div 
+                                    key={i} 
+                                    className="bg-black/30 border border-gray-800 p-3 rounded-md flex items-start"
+                                  >
+                                    <div className="mr-3 mt-0.5">
+                                      <Sparkles className="h-4 w-4 text-[#74d1ea]" />
+                                    </div>
+                                    <div>
+                                      <p className="text-white text-sm font-medium mb-1">{phrase}</p>
+                                      <p className="text-gray-400 text-xs">
+                                        Distinctive phrase that helps define your brand voice
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                      ))}
+                      
+                      {/* Other language patterns */}
+                      {Object.entries(toneAnalysis.tone_results.language_patterns)
+                        .filter(([key]) => key !== 'common_phrases')
+                        .map(([key, value]) => (
+                          <div key={key} className="bg-black/20 border border-gray-800 rounded-lg p-4">
+                            <h4 className="text-white font-medium capitalize mb-2">{key.replace('_', ' ')}</h4>
+                            {Array.isArray(value) ? (
+                              <ul className="space-y-1">
+                                {value.map((item, i) => (
+                                  <li key={i} className="text-gray-400 text-sm flex items-start">
+                                    <span className="text-[#74d1ea] mr-2">•</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="text-gray-400 text-sm">{value}</p>
+                            )}
+                          </div>
                       ))}
                     </div>
                   </div>
@@ -264,6 +330,39 @@ export default function ToneAnalysisPage() {
                     </div>
                   </div>
 
+                  {/* Previous Analyses Selector */}
+                  {userAnalyses && userAnalyses.length > 1 && (
+                    <div className="mb-8">
+                      <h3 className="text-lg font-medium text-white mb-4">Saved Analyses</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {userAnalyses.map((analysis) => {
+                          const isActive = analysis.id === currentAnalysisId;
+                          const analysisDate = new Date(analysis.created_at).toLocaleDateString();
+                          const source = analysis.website_url ? 
+                            new URL(analysis.website_url).hostname : 
+                            analysis.sample_text ? 'Text sample' : 'Unknown source';
+                          
+                          return (
+                            <Button
+                              key={analysis.id}
+                              variant={isActive ? "default" : "outline"}
+                              size="sm"
+                              className={
+                                isActive 
+                                  ? "bg-[#74d1ea] text-black hover:bg-[#5db8d0]" 
+                                  : "border-gray-700 text-gray-300 hover:text-white"
+                              }
+                              onClick={() => setCurrentAnalysisId(analysis.id)}
+                            >
+                              <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                              {analysisDate} - {source}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Action Buttons */}
                   <div className="flex justify-end space-x-4">
                     <Button
@@ -271,8 +370,31 @@ export default function ToneAnalysisPage() {
                       className="border-gray-700 text-gray-300 hover:text-white"
                       onClick={() => setCurrentAnalysisId(null)}
                     >
-                      Start New Analysis
+                      New Analysis
                     </Button>
+                    
+                    <Button
+                      variant="outline"
+                      className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                      onClick={() => {
+                        if (toneAnalysis?.website_url) {
+                          setWebsiteUrl(toneAnalysis.website_url);
+                          setAnalysisMethod("url");
+                        } else if (toneAnalysis?.sample_text) {
+                          setSampleText(toneAnalysis.sample_text);
+                          setAnalysisMethod("text");
+                        }
+                        // Run the analysis again with the same input
+                        toneAnalysisMutation.mutate({
+                          websiteUrl: toneAnalysis?.website_url || undefined,
+                          sampleText: toneAnalysis?.sample_text || undefined
+                        });
+                      }}
+                    >
+                      <RefreshCw className="h-4 w-4 mr-1.5" />
+                      Run Again
+                    </Button>
+                    
                     <Button
                       className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                       onClick={() => navigate("/personas")}
