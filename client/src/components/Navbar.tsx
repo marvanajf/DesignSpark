@@ -77,6 +77,13 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                               <p className="text-xs text-gray-500">Analyze content tone and style</p>
                             </div>
                           </Link>
+                          <Link href="/personas-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <Users className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Audience Personas</p>
+                              <p className="text-xs text-gray-500">Create targeted personas</p>
+                            </div>
+                          </Link>
                           <Link href="/content-generation-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
                             <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
@@ -207,6 +214,9 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   <div className="font-medium text-white text-base">Platform</div>
                   <Link href="/tone-analysis-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
                     Tone Analysis
+                  </Link>
+                  <Link href="/personas-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    Audience Personas
                   </Link>
                   <Link href="/content-generation-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
                     Content Generation

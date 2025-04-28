@@ -75,7 +75,7 @@ export default function Layout({ children, showSidebar = false }: LayoutProps) {
   // Determine if we're in the app (dashboard, analysis, etc.) or on a marketing page
   const isAppPage = location.startsWith('/dashboard') || 
                     (location.startsWith('/tone-analysis') && !location.startsWith('/tone-analysis-info')) || 
-                    location.startsWith('/personas') || 
+                    (location.startsWith('/personas') && !location.startsWith('/personas-info')) || 
                     (location.startsWith('/content-generator') && !location.startsWith('/content-generation-info')) || 
                     location.startsWith('/saved-content') || 
                     location.startsWith('/account') || 
