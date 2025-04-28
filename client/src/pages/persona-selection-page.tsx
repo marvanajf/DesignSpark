@@ -139,6 +139,27 @@ export default function PersonaSelectionPage() {
       });
     },
   });
+  
+  // Delete a persona
+  const deletePersonaMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/personas/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/personas"] });
+      toast({
+        title: "Persona deleted",
+        description: "The persona has been successfully deleted",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to delete persona",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   // Check if personas exist and seed if not
   useEffect(() => {
@@ -454,13 +475,26 @@ export default function PersonaSelectionPage() {
                         isSelected ? 'ring-2 ring-[#74d1ea]' : ''
                       }`}
                     >
-                      {isSelected && (
-                        <div className="absolute top-0 right-0 m-2">
+                      <div className="absolute top-0 right-0 m-2 flex space-x-2">
+                        {isSelected && (
                           <Badge className="bg-[#74d1ea]/20 text-[#74d1ea] border-0">
                             Selected
                           </Badge>
-                        </div>
-                      )}
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 rounded-full hover:bg-red-900/20 hover:text-red-500 text-gray-400"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm('Are you sure you want to delete this persona?')) {
+                              deletePersonaMutation.mutate(persona.id);
+                            }
+                          }}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
                       <CardContent className="p-5">
                         <div className="flex items-center mb-4">
                           <Avatar className="h-12 w-12 bg-[#74d1ea]/20 border-0">

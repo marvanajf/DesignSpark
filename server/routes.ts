@@ -176,6 +176,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(400).json({ error: error instanceof Error ? error.message : "Unknown error" });
     }
   });
+  
+  // Delete a persona
+  app.delete("/api/personas/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const personaId = parseInt(req.params.id);
+      
+      // Check if persona exists and belongs to the current user
+      const persona = await storage.getPersona(personaId);
+      
+      if (!persona) {
+        return res.status(404).json({ error: "Persona not found" });
+      }
+      
+      if (persona.user_id !== req.user!.id) {
+        return res.status(403).json({ error: "Not authorized to delete this persona" });
+      }
+      
+      await storage.deletePersona(personaId);
+      
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting persona:", error);
+      res.status(400).json({ error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
 
   // Generate content
   app.post("/api/content", async (req: Request, res: Response) => {
