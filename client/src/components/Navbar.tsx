@@ -4,6 +4,7 @@ import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import React, { useState, useRef } from "react";
 import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle } from "lucide-react";
+import tovablyLogo from "@/assets/tovably-logo.png";
 
 interface NavbarProps {
   showDashboardLinks?: boolean;
