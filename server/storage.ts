@@ -44,6 +44,7 @@ export interface IStorage {
   getPersona(id: number): Promise<Persona | undefined>;
   getPersonasByUserId(userId: number): Promise<Persona[]>;
   updatePersona(id: number, updates: Partial<InsertPersona>): Promise<Persona>;
+  deletePersona(id: number): Promise<void>;
   seedPredefinedPersonas(userId: number): Promise<Persona[]>;
   
   // Content methods
@@ -212,6 +213,13 @@ export class MemStorage implements IStorage {
     
     this.personas.set(id, updatedPersona);
     return updatedPersona;
+  }
+  
+  async deletePersona(id: number): Promise<void> {
+    if (!this.personas.has(id)) {
+      throw new Error(`Persona with id ${id} not found`);
+    }
+    this.personas.delete(id);
   }
 
   async seedPredefinedPersonas(userId: number): Promise<Persona[]> {
