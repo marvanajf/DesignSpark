@@ -96,6 +96,17 @@ export default function ToneAnalysisPage() {
     },
   });
 
+  // Add a function to validate URL format
+  const isValidUrl = (url: string): boolean => {
+    try {
+      // If URL doesn't start with http or https, we'll prepend https:// on the server
+      // Just do a basic check here to make sure it's reasonably correct
+      return url.length > 0;
+    } catch (e) {
+      return false;
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -103,6 +114,15 @@ export default function ToneAnalysisPage() {
       toast({
         title: "Missing URL",
         description: "Please enter a website URL to analyze",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (analysisMethod === "url" && !websiteUrl.includes('.')) {
+      toast({
+        title: "Invalid URL Format",
+        description: "Please enter a valid website URL (e.g., example.com or https://example.com)",
         variant: "destructive",
       });
       return;
@@ -117,8 +137,14 @@ export default function ToneAnalysisPage() {
       return;
     }
     
+    // Prepend https:// if the URL doesn't have a protocol
+    let finalUrl = websiteUrl;
+    if (analysisMethod === "url" && !websiteUrl.startsWith('http')) {
+      finalUrl = `https://${websiteUrl}`;
+    }
+    
     toneAnalysisMutation.mutate({
-      websiteUrl: analysisMethod === "url" ? websiteUrl : undefined,
+      websiteUrl: analysisMethod === "url" ? finalUrl : undefined,
       sampleText: analysisMethod === "text" ? sampleText : undefined,
     });
   };
@@ -471,7 +497,7 @@ export default function ToneAnalysisPage() {
                                   value={websiteUrl}
                                   onChange={(e) => setWebsiteUrl(e.target.value)}
                                   className="rounded-l-none bg-black border-gray-700 text-white"
-                                  placeholder="yourwebsite.com"
+                                  placeholder="yourwebsite.com (no need for https://)"
                                 />
                               </div>
                               <p className="text-sm text-gray-400">

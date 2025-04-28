@@ -31,9 +31,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       const schema = z.object({
-        websiteUrl: z.string().url().optional(),
+        websiteUrl: z.string()
+                      .url({ message: "Please enter a valid URL including 'https://' or 'http://' (e.g., https://www.example.com)" })
+                      .optional(),
         sampleText: z.string().optional(),
       });
+
+      // Try to validate and fix common URL issues
+      try {
+        if (req.body.websiteUrl && typeof req.body.websiteUrl === 'string' && !req.body.websiteUrl.startsWith('http')) {
+          // Try to prepend https:// and validate
+          req.body.websiteUrl = `https://${req.body.websiteUrl}`;
+        }
+      } catch (e) {
+        // Ignore any errors in the automatic fixing - the zod validation will catch them
+      }
 
       const { websiteUrl, sampleText } = schema.parse(req.body);
       
