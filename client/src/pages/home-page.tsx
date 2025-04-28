@@ -125,7 +125,7 @@ export default function HomePage() {
                   Enter your website URL or upload examples of your content for tone analysis.
                 </p>
                 <div className="flex justify-center">
-                  <FileText className="h-8 w-8 text-white" />
+                  <FileText className="h-8 w-8 text-[#74d1ea]" />
                 </div>
               </div>
 
@@ -138,7 +138,7 @@ export default function HomePage() {
                   Choose from a range of professional personas that match your target audience.
                 </p>
                 <div className="flex justify-center">
-                  <Users className="h-8 w-8 text-white" />
+                  <Users className="h-8 w-8 text-[#74d1ea]" />
                 </div>
               </div>
 
@@ -151,7 +151,7 @@ export default function HomePage() {
                   Create LinkedIn posts and cold emails that match your tone and resonate with your target personas.
                 </p>
                 <div className="flex justify-center">
-                  <PenTool className="h-8 w-8 text-white" />
+                  <PenTool className="h-8 w-8 text-[#74d1ea]" />
                 </div>
               </div>
             </div>
