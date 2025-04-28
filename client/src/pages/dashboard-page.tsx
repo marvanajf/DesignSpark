@@ -8,11 +8,11 @@ import {
   Archive, 
   BarChart2, 
   Mail, 
-  Linkedin,
   Filter,
   Calendar,
   ChevronDown
 } from "lucide-react";
+import { SiLinkedin } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import Layout from "@/components/Layout";
@@ -250,7 +250,7 @@ export default function DashboardPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center">
-                      <Linkedin className="h-5 w-5 text-[#74d1ea]" />
+                      <SiLinkedin className="h-5 w-5 text-[#74d1ea]" />
                     </div>
                     <p className="ml-3 text-white">LinkedIn Post</p>
                   </div>
@@ -298,7 +298,7 @@ export default function DashboardPage() {
                         <div>
                           <div className="flex items-center mb-1">
                             {content.type === "linkedin_post" ? (
-                              <Linkedin className="h-4 w-4 text-[#74d1ea] mr-2" />
+                              <SiLinkedin className="h-4 w-4 text-[#74d1ea] mr-2" />
                             ) : (
                               <Mail className="h-4 w-4 text-[#74d1ea] mr-2" />
                             )}
