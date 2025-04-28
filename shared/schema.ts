@@ -7,6 +7,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
+  role: text("role").default("user").notNull(),
   created_at: timestamp("created_at").defaultNow().notNull()
 });
 
@@ -40,6 +41,28 @@ export const generatedContent = pgTable("generated_content", {
   created_at: timestamp("created_at").defaultNow().notNull()
 });
 
+export const blogCategories = pgTable("blog_categories", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  slug: text("slug").notNull().unique(),
+  created_at: timestamp("created_at").defaultNow().notNull()
+});
+
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  excerpt: text("excerpt"),
+  content: text("content").notNull(),
+  author_id: integer("author_id").notNull().references(() => users.id),
+  category_id: integer("category_id").references(() => blogCategories.id),
+  featured_image: text("featured_image"),
+  published: boolean("published").default(false).notNull(),
+  publish_date: timestamp("publish_date"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull()
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -71,6 +94,23 @@ export const insertGeneratedContentSchema = createInsertSchema(generatedContent)
   topic: true
 });
 
+export const insertBlogCategorySchema = createInsertSchema(blogCategories).pick({
+  name: true,
+  slug: true
+});
+
+export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
+  title: true,
+  slug: true,
+  excerpt: true,
+  content: true,
+  author_id: true,
+  category_id: true,
+  featured_image: true,
+  published: true,
+  publish_date: true
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -83,6 +123,12 @@ export type InsertPersona = z.infer<typeof insertPersonaSchema>;
 
 export type GeneratedContent = typeof generatedContent.$inferSelect;
 export type InsertGeneratedContent = z.infer<typeof insertGeneratedContentSchema>;
+
+export type BlogCategory = typeof blogCategories.$inferSelect;
+export type InsertBlogCategory = z.infer<typeof insertBlogCategorySchema>;
+
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 
 // Create predefined personas for seed data
 export const predefinedPersonas = [

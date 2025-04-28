@@ -26,6 +26,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserRole(id: number, role: string): Promise<User>;
   
   // Tone analysis methods
   createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis>;
@@ -43,6 +44,27 @@ export interface IStorage {
   createGeneratedContent(content: InsertGeneratedContent): Promise<GeneratedContent>;
   getGeneratedContent(id: number): Promise<GeneratedContent | undefined>;
   getGeneratedContentByUserId(userId: number): Promise<GeneratedContent[]>;
+  
+  // Blog category methods
+  createBlogCategory(category: InsertBlogCategory): Promise<BlogCategory>;
+  getBlogCategory(id: number): Promise<BlogCategory | undefined>;
+  getBlogCategoryBySlug(slug: string): Promise<BlogCategory | undefined>;
+  getAllBlogCategories(): Promise<BlogCategory[]>;
+  updateBlogCategory(id: number, updates: Partial<InsertBlogCategory>): Promise<BlogCategory>;
+  deleteBlogCategory(id: number): Promise<void>;
+  
+  // Blog post methods
+  createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
+  getBlogPost(id: number): Promise<BlogPost | undefined>;
+  getBlogPostBySlug(slug: string): Promise<BlogPost | undefined>;
+  getAllBlogPosts(options?: { 
+    published?: boolean; 
+    limit?: number; 
+    offset?: number;
+    categoryId?: number;
+  }): Promise<BlogPost[]>;
+  updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPost>;
+  deleteBlogPost(id: number): Promise<void>;
   
   // Session store
   sessionStore: session.Store;
