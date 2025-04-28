@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Menu, X, ChevronDown, Users, BookOpen, FileText } from "lucide-react";
+import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle } from "lucide-react";
 
 interface NavbarProps {
   showDashboardLinks?: boolean;
@@ -118,8 +118,21 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
           <div className="flex items-center">
             {user ? (
               <div className="hidden md:flex items-center">
-                <Link href="/dashboard">
-                  <Button variant="ghost" className="text-white hover:text-gray-300">Dashboard</Button>
+                {!showDashboardLinks && (
+                  <Link href="/dashboard">
+                    <Button variant="ghost" className="text-white hover:text-gray-300">Dashboard</Button>
+                  </Link>
+                )}
+                <Link href="/account">
+                  <Button variant="ghost" className="text-white hover:text-gray-300">Account</Button>
+                </Link>
+                <Link href="/support">
+                  <Button 
+                    className="ml-2 bg-[#74d1ea]/10 hover:bg-[#74d1ea]/20 text-[#74d1ea] border border-[#74d1ea]/30"
+                  >
+                    <HelpCircle className="h-4 w-4 mr-1" />
+                    Support
+                  </Button>
                 </Link>
               </div>
             ) : (
@@ -203,12 +216,29 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
             )}
             
             {user ? (
-              <Link
-                href="/dashboard"
-                className="text-white hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Dashboard
-              </Link>
+              <>
+                {!showDashboardLinks && (
+                  <Link
+                    href="/dashboard"
+                    className="text-white hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <Link
+                  href="/account"
+                  className="text-white hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Account
+                </Link>
+                <Link
+                  href="/support"
+                  className="text-[#74d1ea] bg-[#74d1ea]/10 hover:bg-[#74d1ea]/20 block px-3 py-2 rounded-md text-base font-medium flex items-center mt-2"
+                >
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Support
+                </Link>
+              </>
             ) : (
               <>
                 <button

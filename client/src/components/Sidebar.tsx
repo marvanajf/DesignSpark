@@ -7,7 +7,9 @@ import {
   Edit3,
   Archive,
   Settings,
-  LogOut
+  LogOut,
+  HelpCircle,
+  UserCog
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -27,6 +29,11 @@ export default function Sidebar() {
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
     { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" }
+  ];
+  
+  const bottomMenuItems = [
+    { href: "/account", icon: <UserCog className="h-5 w-5" />, label: "Account" },
+    { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" }
   ];
 
   return (
@@ -59,6 +66,32 @@ export default function Sidebar() {
             );
           })}
         </nav>
+        
+        {/* Bottom navigation items */}
+        <div className="mt-8 pt-6 border-t border-gray-700/60">
+          <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Settings</h3>
+          <nav className="px-2 space-y-1">
+            {bottomMenuItems.map((item) => {
+              const isActive = location === item.href;
+              return (
+                <Link 
+                  key={item.href} 
+                  href={item.href}
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                    isActive 
+                      ? "bg-[#74d1ea]/10 text-[#74d1ea]" 
+                      : "text-gray-300 hover:bg-gray-900 hover:text-white"
+                  }`}
+                >
+                  <span className={`mr-3 ${isActive ? "text-[#74d1ea]" : "text-gray-400 group-hover:text-white"}`}>
+                    {item.icon}
+                  </span>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
       
       {/* User profile section */}
