@@ -2,12 +2,55 @@ import { pgTable, text, serial, integer, jsonb, timestamp, boolean } from "drizz
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export const subscriptionPlans = {
+  free: {
+    name: "Free",
+    personas: 5,
+    toneAnalyses: 3,
+    contentGeneration: 10,
+    price: 0,
+    currency: "GBP",
+    displayPrice: "Free"
+  },
+  standard: {
+    name: "Standard",
+    personas: 10,
+    toneAnalyses: 15,
+    contentGeneration: 100,
+    price: 9.99,
+    currency: "GBP",
+    displayPrice: "£9.99/month"
+  },
+  professional: {
+    name: "Professional",
+    personas: 25,
+    toneAnalyses: 30,
+    contentGeneration: 200,
+    price: 24.99,
+    currency: "GBP",
+    displayPrice: "£24.99/month"
+  },
+  premium: {
+    name: "Premium",
+    personas: 50,
+    toneAnalyses: 100,
+    contentGeneration: 500,
+    price: 39.99,
+    currency: "GBP",
+    displayPrice: "£39.99/month"
+  }
+};
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   role: text("role").default("user").notNull(),
+  subscription_plan: text("subscription_plan").default("free").notNull(),
+  personas_used: integer("personas_used").default(0).notNull(),
+  tone_analyses_used: integer("tone_analyses_used").default(0).notNull(),
+  content_generated: integer("content_generated").default(0).notNull(),
   created_at: timestamp("created_at").defaultNow().notNull()
 });
 

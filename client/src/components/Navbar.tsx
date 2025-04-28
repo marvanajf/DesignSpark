@@ -134,9 +134,9 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                     )}
                   </div>
 
-                  <a href="#" className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  <Link href="/pricing" className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                     Pricing
-                  </a>
+                  </Link>
                 </>
               )}
             </div>
