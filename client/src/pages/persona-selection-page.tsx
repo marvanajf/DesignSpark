@@ -174,7 +174,7 @@ export default function PersonaSelectionPage() {
     },
   });
 
-  // Check login status and then check if personas exist and seed if not
+  // Login and check if personas exist and seed if not
   useEffect(() => {
     // Get auth status
     fetch("/api/user", { credentials: "include" })
@@ -182,13 +182,13 @@ export default function PersonaSelectionPage() {
         console.log("Auth status:", res.status);
         if (res.status === 401) {
           console.log("Need to log in");
-          // For testing purposes, try to login with predefined credentials
+          // Try to login with the demo account (created automatically at server startup)
           return fetch("/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              email: "jack@gomarvana.com",
-              password: "password"
+              email: "demo@tovably.com",
+              password: "password123"
             }),
             credentials: "include"
           });
@@ -197,7 +197,9 @@ export default function PersonaSelectionPage() {
       })
       .then(res => {
         console.log("Login response:", res.status);
+        console.log("Checking if we need to seed personas...");
         if (personas && personas.length === 0 && !seedPersonasMutation.isPending) {
+          console.log("Seeding personas...");
           seedPersonasMutation.mutate();
         }
       })

@@ -29,7 +29,31 @@ async function comparePasswords(supplied: string, stored: string) {
   return timingSafeEqual(hashedBuf, suppliedBuf);
 }
 
+// Create a default user for testing if it doesn't exist
+async function createDefaultUserIfNotExists() {
+  try {
+    const existingUser = await storage.getUserByEmail("demo@tovably.com");
+    
+    if (!existingUser) {
+      console.log("Creating default demo user for testing...");
+      const hashedPassword = await hashPassword("password123");
+      await storage.createUser({
+        username: "demouser",
+        email: "demo@tovably.com",
+        password: hashedPassword,
+        role: "user"
+      });
+      console.log("Default demo user created successfully");
+    }
+  } catch (error) {
+    console.error("Error creating default user:", error);
+  }
+}
+
 export function setupAuth(app: Express) {
+  // Create default user for testing
+  createDefaultUserIfNotExists();
+  
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "keyboard-cat-secret",
     resave: false,
