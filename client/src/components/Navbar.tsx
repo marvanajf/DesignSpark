@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { useAuthModal } from "@/App";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Menu, X, ChevronDown, Users, BookOpen, FileText } from "lucide-react";
@@ -11,6 +12,7 @@ interface NavbarProps {
 export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
   const [location] = useLocation();
   const { user } = useAuth();
+  const { openAuthModal } = useAuthModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
@@ -135,12 +137,19 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
               </div>
             ) : (
               <div className="hidden md:flex items-center">
-                <Link href="/auth">
-                  <Button variant="ghost" className="text-white hover:text-gray-300">Log in</Button>
-                </Link>
-                <Link href="/auth">
-                  <Button className="ml-3 bg-white hover:bg-gray-200 text-black">Get started</Button>
-                </Link>
+                <Button 
+                  variant="ghost" 
+                  className="text-white hover:text-gray-300"
+                  onClick={openAuthModal}
+                >
+                  Log in
+                </Button>
+                <Button 
+                  className="ml-3 bg-white hover:bg-gray-200 text-black"
+                  onClick={openAuthModal}
+                >
+                  Get started
+                </Button>
               </div>
             )}
             
@@ -225,18 +234,18 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
               </Link>
             ) : (
               <>
-                <Link
-                  href="/auth"
-                  className="text-white hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                <button
+                  onClick={openAuthModal}
+                  className="text-white hover:bg-gray-900 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium"
                 >
                   Log In
-                </Link>
-                <Link
-                  href="/auth"
-                  className="bg-white text-black block px-3 py-2 rounded-md text-base font-medium mt-2"
+                </button>
+                <button
+                  onClick={openAuthModal}
+                  className="bg-white text-black block w-full text-left px-3 py-2 rounded-md text-base font-medium mt-2"
                 >
                   Get Started
-                </Link>
+                </button>
               </>
             )}
           </div>

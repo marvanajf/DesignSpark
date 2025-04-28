@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { ArrowRight, FileText, Users, PenTool, CheckCircle } from "lucide-react";
 import { useEffect } from "react";
+import { useAuthModal } from "@/App";
 
 export default function HomePage() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
+  const { openAuthModal } = useAuthModal();
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
@@ -17,7 +19,11 @@ export default function HomePage() {
   }, [user, navigate]);
 
   const handleGetStarted = () => {
-    navigate("/auth");
+    if (user) {
+      navigate("/dashboard");
+    } else {
+      openAuthModal();
+    }
   };
 
   return (
