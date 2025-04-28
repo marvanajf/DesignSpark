@@ -237,12 +237,12 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   </Link>
                 </div>
                 
-                <a
-                  href="#"
+                <Link
+                  href="/pricing"
                   className="text-gray-300 hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Pricing
-                </a>
+                </Link>
               </>
             )}
             

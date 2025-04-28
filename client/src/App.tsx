@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
 import { useAuthModal } from "@/hooks/use-auth-modal";
+import { PricingModalProvider } from "@/hooks/use-pricing-modal";
 import { Switch, Route, useLocation } from "wouter";
 import { useEffect } from "react";
 import HomePage from "@/pages/home-page";
@@ -71,9 +72,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
-          <Toaster />
-          <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
-          <Router />
+          <PricingModalProvider>
+            <Toaster />
+            <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+            <Router />
+          </PricingModalProvider>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>

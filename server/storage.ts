@@ -33,6 +33,10 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserRole(id: number, role: string): Promise<User>;
+  updateUserSubscription(id: number, plan: string): Promise<User>;
+  incrementPersonaUsage(id: number): Promise<User>;
+  incrementToneAnalysisUsage(id: number): Promise<User>;
+  incrementContentUsage(id: number): Promise<User>;
   
   // Tone analysis methods
   createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis>;
@@ -134,6 +138,10 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       role: "user",
+      subscription_plan: "free",
+      personas_used: 0,
+      tone_analyses_used: 0,
+      content_generated: 0,
       created_at: now
     };
     this.users.set(id, user);
@@ -149,6 +157,66 @@ export class MemStorage implements IStorage {
     const updatedUser = {
       ...user,
       role
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async updateUserSubscription(id: number, plan: string): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    const updatedUser = {
+      ...user,
+      subscription_plan: plan
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async incrementPersonaUsage(id: number): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    const updatedUser = {
+      ...user,
+      personas_used: user.personas_used + 1
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async incrementToneAnalysisUsage(id: number): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    const updatedUser = {
+      ...user,
+      tone_analyses_used: user.tone_analyses_used + 1
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async incrementContentUsage(id: number): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    const updatedUser = {
+      ...user,
+      content_generated: user.content_generated + 1
     };
     
     this.users.set(id, updatedUser);
