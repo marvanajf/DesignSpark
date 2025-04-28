@@ -14,7 +14,9 @@ import {
   X,
   Users,
   Search,
-  Sparkles
+  Sparkles,
+  Trash2,
+  AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -33,6 +35,8 @@ export default function PersonaSelectionPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
   const [personaDescription, setPersonaDescription] = useState("");
+  const [personaToDelete, setPersonaToDelete] = useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // Fetch personas
   const { data: personas, isLoading, error } = useQuery<Persona[]>({
@@ -212,6 +216,19 @@ export default function PersonaSelectionPage() {
     }
 
     generatePersonaMutation.mutate(personaDescription);
+  };
+  
+  const handleDeletePersona = (id: number) => {
+    setPersonaToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+  
+  const confirmDeletePersona = () => {
+    if (personaToDelete !== null) {
+      deletePersonaMutation.mutate(personaToDelete);
+      setIsDeleteDialogOpen(false);
+      setPersonaToDelete(null);
+    }
   };
 
   // Filter personas based on search term
@@ -487,12 +504,10 @@ export default function PersonaSelectionPage() {
                           className="h-6 w-6 rounded-full hover:bg-red-900/20 hover:text-red-500 text-gray-400"
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (confirm('Are you sure you want to delete this persona?')) {
-                              deletePersonaMutation.mutate(persona.id);
-                            }
+                            handleDeletePersona(persona.id);
                           }}
                         >
-                          <X className="h-3.5 w-3.5" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                       <CardContent className="p-5">
@@ -609,6 +624,50 @@ export default function PersonaSelectionPage() {
             </div>
           </div>
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent className="bg-[#111] border-gray-800 text-white">
+            <DialogHeader>
+              <DialogTitle className="text-lg font-semibold flex items-center">
+                <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
+                Delete Persona
+              </DialogTitle>
+              <DialogDescription className="text-gray-400">
+                Are you sure you want to delete this persona? This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <p className="text-sm text-gray-300">
+                Deleting this persona will remove it permanently from your account.
+                Any content previously generated using this persona will remain available.
+              </p>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                className="border-gray-700 text-gray-300 hover:text-white"
+                onClick={() => setIsDeleteDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={confirmDeletePersona}
+                disabled={deletePersonaMutation.isPending}
+              >
+                {deletePersonaMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  "Delete Persona"
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </Layout>
   );
