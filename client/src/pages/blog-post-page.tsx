@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Link, useRoute } from "wouter";
-import { ArrowLeft, Calendar, User, Tag, Share2, Twitter, Linkedin, FacebookIcon, MailIcon } from "lucide-react";
+import { ArrowLeft, Calendar, User, Tag, Share2, Linkedin, MailIcon } from "lucide-react";
 
 export default function BlogPostPage() {
   const [, params] = useRoute("/blog/:id");
@@ -136,16 +136,8 @@ export default function BlogPostPage() {
                     <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-900 ring-1 ring-black ring-opacity-5 p-1 z-50 border border-gray-700">
                       <div className="py-1">
                         <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white rounded-md">
-                          <Twitter className="h-4 w-4 mr-3 text-[#74d1ea]" />
-                          Twitter
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white rounded-md">
                           <Linkedin className="h-4 w-4 mr-3 text-[#74d1ea]" />
                           LinkedIn
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white rounded-md">
-                          <FacebookIcon className="h-4 w-4 mr-3 text-[#74d1ea]" />
-                          Facebook
                         </a>
                         <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white rounded-md">
                           <MailIcon className="h-4 w-4 mr-3 text-[#74d1ea]" />
