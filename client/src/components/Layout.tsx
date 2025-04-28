@@ -72,13 +72,22 @@ export default function Layout({ children, showSidebar = false }: LayoutProps) {
     );
   }
 
-  // For other pages, render dashboard layout with sidebar if needed
+  // Determine if we're in the app (dashboard, analysis, etc.) or on a marketing page
+  const isAppPage = location.startsWith('/dashboard') || 
+                    location.startsWith('/tone-analysis') || 
+                    location.startsWith('/personas') || 
+                    location.startsWith('/content-generator') || 
+                    location.startsWith('/saved-content') || 
+                    location.startsWith('/account') || 
+                    location.startsWith('/support');
+  
+  // For app pages, only show sidebar; for other non-homepage pages, show both navbar and sidebar
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar showDashboardLinks={true} />
+      {!isAppPage && <Navbar showDashboardLinks={isAppPage} />}
       <div className="flex flex-1 overflow-hidden">
-        {showSidebar && <Sidebar />}
-        <main className={`flex-1 overflow-y-auto bg-background ${showSidebar ? '' : 'container mx-auto py-6'}`}>
+        {(showSidebar || isAppPage) && <Sidebar />}
+        <main className={`flex-1 overflow-y-auto bg-background ${(showSidebar || isAppPage) ? '' : 'container mx-auto py-6'}`}>
           {children}
         </main>
       </div>

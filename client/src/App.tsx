@@ -13,6 +13,8 @@ import ToneResultsPage from "@/pages/tone-results-page";
 import PersonaSelectionPage from "@/pages/persona-selection-page";
 import ContentGeneratorPage from "@/pages/content-generator-page";
 import SavedContentPage from "@/pages/saved-content-page";
+import AccountPage from "@/pages/account-page";
+import SupportPage from "@/pages/support-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
@@ -41,6 +43,8 @@ function Router() {
       <ProtectedRoute path="/personas" component={PersonaSelectionPage} />
       <ProtectedRoute path="/content-generator" component={ContentGeneratorPage} />
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
+      <ProtectedRoute path="/account" component={AccountPage} />
+      <ProtectedRoute path="/support" component={SupportPage} />
       <Route component={NotFound} />
     </Switch>
   );
