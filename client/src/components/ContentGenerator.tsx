@@ -22,10 +22,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ToneAnalysis, Persona, GeneratedContent } from "@shared/schema";
+import { usePricingModal } from "@/hooks/use-pricing-modal";
 
 export default function ContentGenerator() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
+  const { openPricingModal } = usePricingModal();
   
   const [contentType, setContentType] = useState<'linkedin_post' | 'email'>('linkedin_post');
   const [personaId, setPersonaId] = useState<string>("");
@@ -66,6 +68,16 @@ export default function ContentGenerator() {
       topic: string;
     }) => {
       const res = await apiRequest("POST", "/api/content", data);
+      
+      if (res.status === 402) {
+        // Subscription limit reached
+        const errorData = await res.json();
+        if (errorData.limitType) {
+          openPricingModal(errorData.limitType);
+          throw new Error("Subscription limit reached. Please upgrade your plan.");
+        }
+      }
+      
       return res.json();
     },
     onSuccess: (data: GeneratedContent) => {

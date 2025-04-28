@@ -139,6 +139,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
 
     try {
+      // Check if user has reached their subscription limit for personas
+      const userData = await storage.getUser(req.user!.id);
+      const userPlan = userData.subscription_plan;
+      const personaLimit = subscriptionPlans[userPlan].personas;
+      
+      if (userData.personas_used >= personaLimit) {
+        return res.status(402).json({ 
+          error: "Subscription limit reached", 
+          limitType: "personas",
+          current: userData.personas_used,
+          limit: personaLimit
+        });
+      }
+      
       const schema = z.object({
         name: z.string().min(1),
         description: z.string().optional(),
@@ -155,6 +169,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         interests: validatedData.interests || [],
         is_selected: validatedData.is_selected || false,
       });
+      
+      // Increment the persona usage counter
+      await storage.incrementPersonaUsage(req.user!.id);
 
       res.status(201).json(persona);
     } catch (error) {
@@ -249,6 +266,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
 
     try {
+      // Check if user has reached their subscription limit for content generation
+      const userData = await storage.getUser(req.user!.id);
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const userPlan = userData.subscription_plan;
+      const contentLimit = subscriptionPlans[userPlan].contentGeneration;
+      
+      if (userData.content_generated >= contentLimit) {
+        return res.status(402).json({ 
+          error: "Subscription limit reached", 
+          limitType: "contentGeneration",
+          current: userData.content_generated,
+          limit: contentLimit
+        });
+      }
+      
       const schema = z.object({
         type: z.enum(['linkedin_post', 'email']),
         personaId: z.number(),
@@ -319,6 +354,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         topic,
       });
       
+      // Increment the content generation usage counter
+      await storage.incrementContentUsage(req.user!.id);
+      
       res.status(201).json(generatedContent);
     } catch (error) {
       console.error("Error generating content:", error);
@@ -366,6 +404,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
 
     try {
+      // Check if user has reached their subscription limit for personas
+      const userData = await storage.getUser(req.user!.id);
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const userPlan = userData.subscription_plan;
+      const personaLimit = subscriptionPlans[userPlan].personas;
+      
+      if (userData.personas_used >= personaLimit) {
+        return res.status(402).json({ 
+          error: "Subscription limit reached", 
+          limitType: "personas",
+          current: userData.personas_used,
+          limit: personaLimit
+        });
+      }
+
       const schema = z.object({
         description: z.string().min(1).max(500)
       });
@@ -384,6 +440,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           interests: generatedPersona.interests,
           is_selected: false,
         });
+        
+        // Increment the persona usage counter
+        await storage.incrementPersonaUsage(req.user!.id);
         
         res.status(201).json(persona);
       } catch (error: any) {
@@ -407,11 +466,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       const userId = req.user!.id;
+      const userData = await storage.getUser(userId);
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
       const existingPersonas = await storage.getPersonasByUserId(userId);
       
-      // Only seed if the user has no personas yet
+      // Check subscription limits
+      const userPlan = userData.subscription_plan;
+      const personaLimit = subscriptionPlans[userPlan].personas;
+      
+      // Calculate how many more personas can be added
+      const remainingSlots = personaLimit - userData.personas_used;
+      
+      // Only seed if the user has no personas yet and has available slots
       if (existingPersonas.length === 0) {
+        if (remainingSlots <= 0) {
+          return res.status(402).json({ 
+            error: "Subscription limit reached", 
+            limitType: "personas",
+            current: userData.personas_used,
+            limit: personaLimit
+          });
+        }
+        
+        // Use a smaller set if fewer slots are available than predefined personas
         const predefinedPersonas = await storage.seedPredefinedPersonas(userId);
+        
+        // Update usage count (number of personas added)
+        for (let i = 0; i < predefinedPersonas.length; i++) {
+          await storage.incrementPersonaUsage(userId);
+        }
+        
         res.status(201).json(predefinedPersonas);
       } else {
         res.status(200).json({ message: "Personas already exist for this user" });

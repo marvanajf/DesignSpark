@@ -9,16 +9,28 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { usePricingModal } from "@/hooks/use-pricing-modal";
 
 export default function ToneAnalysisForm() {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [sampleText, setSampleText] = useState("");
   const { toast } = useToast();
   const [, navigate] = useLocation();
+  const { openPricingModal } = usePricingModal();
 
   const toneAnalysisMutation = useMutation({
     mutationFn: async (data: { websiteUrl?: string; sampleText?: string }) => {
       const res = await apiRequest("POST", "/api/tone-analysis", data);
+      
+      if (res.status === 402) {
+        // Subscription limit reached
+        const errorData = await res.json();
+        if (errorData.limitType) {
+          openPricingModal(errorData.limitType);
+          throw new Error("Subscription limit reached. Please upgrade your plan.");
+        }
+      }
+      
       return res.json();
     },
     onSuccess: (data) => {

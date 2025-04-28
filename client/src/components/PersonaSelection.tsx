@@ -9,11 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Persona } from "@shared/schema";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { usePricingModal } from "@/hooks/use-pricing-modal";
 
 export default function PersonaSelection() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [selectedPersonaIds, setSelectedPersonaIds] = useState<number[]>([]);
+  const { openPricingModal } = usePricingModal();
 
   // Fetch personas
   const { data: personas, isLoading, error } = useQuery<Persona[]>({
@@ -31,6 +33,16 @@ export default function PersonaSelection() {
   const seedPersonasMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("POST", "/api/seed-personas", {});
+      
+      if (res.status === 402) {
+        // Subscription limit reached
+        const errorData = await res.json();
+        if (errorData.limitType) {
+          openPricingModal(errorData.limitType);
+          throw new Error("Subscription limit reached. Please upgrade your plan.");
+        }
+      }
+      
       return res.json();
     },
     onSuccess: () => {
