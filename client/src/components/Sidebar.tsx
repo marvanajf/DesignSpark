@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
   HelpCircle,
-  UserCog
+  UserCog,
+  ShieldAlert
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -31,9 +32,13 @@ export default function Sidebar() {
     { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" }
   ];
   
+  // Determine if the current user is an admin
+  const isAdmin = user?.role === "admin";
+  
   const bottomMenuItems = [
     { href: "/account", icon: <UserCog className="h-5 w-5" />, label: "Account" },
-    { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" }
+    { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" },
+    ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : [])
   ];
 
   return (

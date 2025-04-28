@@ -20,6 +20,7 @@ import ContentGenerationMarketingPage from "@/pages/content-generation-marketing
 import PersonasMarketingPage from "@/pages/personas-marketing-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
+import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
@@ -55,6 +56,7 @@ function Router() {
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
       <ProtectedRoute path="/support" component={SupportPage} />
+      <ProtectedRoute path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -9,10 +9,18 @@ import {
   generateColdEmail,
   generatePersona
 } from "./openai";
+import { registerAdminRoutes } from "./admin-routes";
+import { registerBlogRoutes } from "./blog-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
   setupAuth(app);
+  
+  // Set up admin routes
+  registerAdminRoutes(app);
+  
+  // Set up blog routes
+  registerBlogRoutes(app);
 
   // API routes
   // Prefixing all routes with /api
