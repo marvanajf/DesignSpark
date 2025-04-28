@@ -205,11 +205,11 @@ export default function ToneAnalysisPage() {
                           <span className="text-gray-400">High</span>
                         </span>
                         <span className="flex items-center mr-3">
-                          <span className="h-2 w-2 rounded-full bg-[#74d1ea]/70 mr-1"></span>
+                          <span className="h-2 w-2 rounded-full bg-amber-400 mr-1"></span>
                           <span className="text-gray-400">Medium</span>
                         </span>
                         <span className="flex items-center">
-                          <span className="h-2 w-2 rounded-full bg-[#74d1ea]/40 mr-1"></span>
+                          <span className="h-2 w-2 rounded-full bg-red-400 mr-1"></span>
                           <span className="text-gray-400">Low</span>
                         </span>
                       </div>
@@ -226,7 +226,13 @@ export default function ToneAnalysisPage() {
                             <Progress 
                               value={value as number} 
                               className="h-2" 
-                              indicatorClassName="bg-[#74d1ea]"
+                              indicatorClassName={
+                                (value as number) > 70 
+                                  ? "bg-[#74d1ea]" 
+                                  : (value as number) > 30 
+                                    ? "bg-amber-400" 
+                                    : "bg-red-400"
+                              }
                             />
                           </div>
                         ))}
@@ -241,7 +247,13 @@ export default function ToneAnalysisPage() {
                             <Progress 
                               value={value as number} 
                               className="h-2" 
-                              indicatorClassName="bg-[#74d1ea]"
+                              indicatorClassName={
+                                (value as number) > 70 
+                                  ? "bg-[#74d1ea]" 
+                                  : (value as number) > 30 
+                                    ? "bg-amber-400" 
+                                    : "bg-red-400"
+                              }
                             />
                           </div>
                         ))}
@@ -344,220 +356,277 @@ export default function ToneAnalysisPage() {
                     </div>
                   </div>
 
-                  {/* Actions Buttons Row */}
-                  <div className="flex justify-between">
-                    <Button 
-                      variant="outline" 
-                      className="space-x-2"
-                      size="sm"
-                      onClick={() => {
-                        setCurrentAnalysisId(null);
-                        navigate("/tone-analysis");
-                      }}
+                  {/* Previous Analyses Selector */}
+                  {userAnalyses && userAnalyses.length > 1 && (
+                    <div className="mb-8">
+                      <h3 className="text-lg font-medium text-white mb-4">Saved Analyses</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {userAnalyses.map((analysis) => {
+                          const isActive = analysis.id === currentAnalysisId;
+                          const analysisDate = new Date(analysis.created_at).toLocaleDateString();
+                          const source = analysis.website_url ? 
+                            new URL(analysis.website_url).hostname : 
+                            analysis.sample_text ? 'Text sample' : 'Unknown source';
+                          
+                          return (
+                            <Button
+                              key={analysis.id}
+                              variant={isActive ? "default" : "outline"}
+                              size="sm"
+                              className={
+                                isActive 
+                                  ? "bg-[#74d1ea] text-black hover:bg-[#5db8d0]" 
+                                  : "border-gray-700 text-gray-300 hover:text-white"
+                              }
+                              onClick={() => setCurrentAnalysisId(analysis.id)}
+                            >
+                              <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                              {analysisDate} - {source}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-end space-x-4">
+                    <Button
+                      variant="outline"
+                      className="border-gray-700 text-gray-300 hover:text-white"
+                      onClick={() => setCurrentAnalysisId(null)}
                     >
-                      <RefreshCw className="w-4 h-4" />
-                      <span>New Analysis</span>
+                      New Analysis
                     </Button>
                     
-                    <div className="space-x-2">
-                      <Button 
-                        variant="outline" 
-                        className="space-x-2 bg-transparent border-gray-700 hover:bg-gray-800"
-                        size="sm"
-                        onClick={() => {
-                          toneAnalysisMutation.mutate({
-                            websiteUrl: toneAnalysis.website_url,
-                            sampleText: toneAnalysis.sample_text,
-                          });
-                        }}
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                        <span>Run Again</span>
-                      </Button>
-                      
-                      <Button 
-                        className="space-x-2 bg-[#74d1ea] hover:bg-[#74d1ea]/90"
-                        size="sm"
-                        onClick={() => navigate("/content-generator")}
-                      >
-                        <span>Continue to Persona</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    <Button
+                      variant="outline"
+                      className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                      onClick={() => {
+                        if (toneAnalysis?.website_url) {
+                          setWebsiteUrl(toneAnalysis.website_url);
+                          setAnalysisMethod("url");
+                        } else if (toneAnalysis?.sample_text) {
+                          setSampleText(toneAnalysis.sample_text);
+                          setAnalysisMethod("text");
+                        }
+                        // Run the analysis again with the same input
+                        toneAnalysisMutation.mutate({
+                          websiteUrl: toneAnalysis?.website_url || undefined,
+                          sampleText: toneAnalysis?.sample_text || undefined
+                        });
+                      }}
+                    >
+                      <RefreshCw className="h-4 w-4 mr-1.5" />
+                      Run Again
+                    </Button>
+                    
+                    <Button
+                      className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                      onClick={() => navigate("/personas")}
+                    >
+                      Continue to Personas 
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Analysis Input Form */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <Card className="bg-[#111] border-gray-800">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-white">Analyze Your Brand's Tone</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        Enter your website URL or paste sample text to analyze the tone and language patterns.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <form onSubmit={handleSubmit}>
-                        <Tabs defaultValue="url" className="mb-6" onValueChange={(value) => setAnalysisMethod(value)}>
-                          <TabsList className="bg-black/30 border border-gray-800">
-                            <TabsTrigger value="url" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
-                              <Globe className="h-4 w-4 mr-2" />
-                              Website URL
-                            </TabsTrigger>
-                            <TabsTrigger value="text" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
-                              <FileText className="h-4 w-4 mr-2" />
-                              Sample Text
-                            </TabsTrigger>
-                          </TabsList>
-                          
-                          <TabsContent value="url" className="mt-4">
-                            <div className="space-y-4">
-                              <div>
-                                <label htmlFor="websiteUrl" className="block text-sm font-medium text-gray-300 mb-1">
-                                  Website URL
-                                </label>
-                                <div className="relative">
-                                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <LinkIcon className="h-4 w-4 text-gray-400" />
-                                  </div>
-                                  <Input
-                                    id="websiteUrl"
-                                    type="text"
-                                    className="pl-10 bg-black/30 border-gray-700 focus:border-[#74d1ea] focus:ring-[#74d1ea]/10 text-white"
-                                    placeholder="e.g., example.com or https://example.com"
-                                    value={websiteUrl}
-                                    onChange={(e) => setWebsiteUrl(e.target.value)}
-                                  />
-                                </div>
-                                <p className="mt-1 text-xs text-gray-400">
-                                  Enter your website URL to analyze the tone and language patterns.
-                                </p>
+            <>
+              {/* Analysis Form Section */}
+              <div className="mb-8">
+                <div className="mb-4">
+                  <p className="text-sm text-gray-400">Let us understand your communication style to create perfectly matched content</p>
+                </div>
+
+                <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden">
+                  <CardHeader className="p-4 border-b border-gray-800">
+                    <CardTitle className="text-lg font-medium text-white">How would you like your tone analyzed?</CardTitle>
+                    <CardDescription className="text-sm text-gray-400">
+                      Choose your preferred method for tone analysis
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <Tabs
+                      defaultValue={analysisMethod}
+                      onValueChange={(value) => setAnalysisMethod(value)}
+                      className="w-full"
+                    >
+                      <TabsList className="grid w-full grid-cols-3 mb-8 bg-black/30">
+                        <TabsTrigger 
+                          value="url" 
+                          className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]"
+                        >
+                          <Globe className="h-4 w-4 mr-2" />
+                          Website URL
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="file"
+                          className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload File
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="text"
+                          className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]"
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Text Input
+                        </TabsTrigger>
+                      </TabsList>
+
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <TabsContent value="url" className="mt-0">
+                          <div className="bg-black/20 border border-gray-800 rounded-lg p-5">
+                            <div className="flex items-center mb-4">
+                              <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center">
+                                <LinkIcon className="h-5 w-5 text-[#74d1ea]" />
                               </div>
-                              
-                              <Button 
-                                type="submit" 
-                                className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-medium w-full"
-                                disabled={toneAnalysisMutation.isPending}
-                              >
-                                {toneAnalysisMutation.isPending ? (
-                                  <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Analyzing...
-                                  </>
-                                ) : (
-                                  <>
-                                    <BarChart className="mr-2 h-4 w-4" />
-                                    Analyze Website Tone
-                                  </>
-                                )}
-                              </Button>
+                              <h3 className="ml-3 text-lg font-medium text-white">Website URL</h3>
                             </div>
-                          </TabsContent>
-                          
-                          <TabsContent value="text" className="mt-4">
                             <div className="space-y-4">
-                              <div>
-                                <label htmlFor="sampleText" className="block text-sm font-medium text-gray-300 mb-1">
-                                  Sample Text
-                                </label>
-                                <Textarea
-                                  id="sampleText"
-                                  className="min-h-[200px] bg-black/30 border-gray-700 focus:border-[#74d1ea] focus:ring-[#74d1ea]/10 text-white"
-                                  placeholder="Paste your content here to analyze tone and language patterns..."
-                                  value={sampleText}
-                                  onChange={(e) => setSampleText(e.target.value)}
+                              <div className="flex rounded-md shadow-sm">
+                                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-700 bg-black text-gray-500 text-sm">
+                                  https://
+                                </span>
+                                <Input
+                                  type="text"
+                                  id="website-url"
+                                  value={websiteUrl}
+                                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                                  className="rounded-l-none bg-black border-gray-700 text-white"
+                                  placeholder="yourwebsite.com (no need for https://)"
                                 />
-                                <p className="mt-1 text-xs text-gray-400">
-                                  Paste sample text from your content, blog posts, or marketing materials.
-                                </p>
                               </div>
-                              
-                              <Button 
-                                type="submit" 
-                                className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-medium w-full"
-                                disabled={toneAnalysisMutation.isPending}
-                              >
-                                {toneAnalysisMutation.isPending ? (
-                                  <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Analyzing...
-                                  </>
-                                ) : (
-                                  <>
-                                    <BarChart className="mr-2 h-4 w-4" />
-                                    Analyze Text Tone
-                                  </>
-                                )}
-                              </Button>
+                              <p className="text-sm text-gray-400">
+                                We'll analyze public pages to determine your brand's tone
+                              </p>
                             </div>
-                          </TabsContent>
-                        </Tabs>
+                          </div>
+                        </TabsContent>
+
+                        <TabsContent value="file" className="mt-0">
+                          <div className="bg-black/20 border border-gray-800 rounded-lg p-5">
+                            <div className="flex items-center mb-4">
+                              <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center">
+                                <Upload className="h-5 w-5 text-[#74d1ea]" />
+                              </div>
+                              <h3 className="ml-3 text-lg font-medium text-white">Upload Files</h3>
+                            </div>
+                            <div className="flex justify-center px-4 py-5 border-2 border-dashed border-gray-700 rounded-md bg-black/30">
+                              <div className="space-y-1 text-center">
+                                <div className="flex flex-col items-center">
+                                  <Upload className="h-10 w-10 text-gray-500 mb-2" />
+                                  <div className="flex text-sm text-gray-400">
+                                    <label htmlFor="file-upload" className="relative cursor-pointer text-[#74d1ea] hover:text-[#5db8d0]">
+                                      <span>Upload files</span>
+                                      <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple />
+                                    </label>
+                                    <p className="pl-1">or drag and drop</p>
+                                  </div>
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    .txt, .docx, .pdf up to 10MB
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </TabsContent>
+
+                        <TabsContent value="text" className="mt-0">
+                          <div className="bg-black/20 border border-gray-800 rounded-lg p-5">
+                            <div className="flex items-center mb-4">
+                              <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center">
+                                <FileText className="h-5 w-5 text-[#74d1ea]" />
+                              </div>
+                              <h3 className="ml-3 text-lg font-medium text-white">Content Sample</h3>
+                            </div>
+                            <div className="space-y-4">
+                              <Textarea
+                                id="content-sample"
+                                value={sampleText}
+                                onChange={(e) => setSampleText(e.target.value)}
+                                rows={8}
+                                className="bg-black border-gray-700 text-white"
+                                placeholder="Paste your blog post, email, or other content samples here..."
+                              />
+                              <p className="text-sm text-gray-400">
+                                For best results, provide at least 200 words
+                              </p>
+                            </div>
+                          </div>
+                        </TabsContent>
+
+                        <div className="flex justify-end pt-5">
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            className="border-gray-700 text-gray-300 hover:text-white hover:bg-gray-900"
+                            onClick={() => navigate('/dashboard')}
+                          >
+                            Cancel
+                          </Button>
+                          <Button 
+                            type="submit"
+                            className="ml-3 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                            disabled={toneAnalysisMutation.isPending}
+                          >
+                            {toneAnalysisMutation.isPending ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Analyzing...
+                              </>
+                            ) : (
+                              "Analyze Tone"
+                            )}
+                          </Button>
+                        </div>
                       </form>
-                    </CardContent>
-                  </Card>
+                    </Tabs>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Analysis Process Section */}
+              <div>
+                <div className="mb-4">
+                  <h2 className="text-lg font-medium text-white">Our Analysis Process</h2>
+                  <p className="text-sm text-gray-400 mt-1">How we evaluate your brand's tone</p>
                 </div>
                 
-                <div>
-                  <Card className="bg-[#111] border-gray-800 h-full">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-white">Previous Analyses</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        View your recent tone analysis results.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {isLoadingUserAnalyses ? (
-                        <div className="flex justify-center items-center py-8">
-                          <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+                <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden">
+                  <CardContent className="p-6">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                      <div className="flex flex-col items-center text-center p-4">
+                        <div className="w-12 h-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
+                          <span className="text-[#74d1ea] font-medium">1</span>
                         </div>
-                      ) : userAnalyses && userAnalyses.length > 0 ? (
-                        <div className="space-y-3">
-                          {[...userAnalyses]
-                            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                            .map((analysis) => (
-                              <div 
-                                key={analysis.id} 
-                                className={`p-3 rounded-md border cursor-pointer transition-colors ${
-                                  currentAnalysisId === analysis.id 
-                                    ? 'bg-[#74d1ea]/5 border-[#74d1ea]/20' 
-                                    : 'bg-black/20 border-gray-800 hover:bg-black/30'
-                                }`}
-                                onClick={() => setCurrentAnalysisId(analysis.id)}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center">
-                                    {analysis.website_url ? (
-                                      <Globe className="h-4 w-4 text-gray-400 mr-2" />
-                                    ) : (
-                                      <FileText className="h-4 w-4 text-gray-400 mr-2" />
-                                    )}
-                                    <span className="text-sm font-medium text-white truncate max-w-[180px]">
-                                      {analysis.website_url || "Text Analysis"}
-                                    </span>
-                                  </div>
-                                  <Badge variant="outline" className="text-xs">
-                                    {new Date(analysis.created_at).toLocaleDateString()}
-                                  </Badge>
-                                </div>
-                              </div>
-                            ))}
+                        <h3 className="text-white font-medium mb-2">Content Collection</h3>
+                        <p className="text-gray-400 text-sm">We gather and process your provided content samples</p>
+                      </div>
+                      
+                      <div className="flex flex-col items-center text-center p-4">
+                        <div className="w-12 h-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
+                          <span className="text-[#74d1ea] font-medium">2</span>
                         </div>
-                      ) : (
-                        <div className="py-8 text-center">
-                          <FileQuestion className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-                          <p className="text-gray-400 text-sm">No previous analyses found.</p>
-                          <p className="text-gray-500 text-xs mt-1">Your analyses will appear here.</p>
+                        <h3 className="text-white font-medium mb-2">AI Analysis</h3>
+                        <p className="text-gray-400 text-sm">Our AI engine identifies patterns and tone characteristics</p>
+                      </div>
+                      
+                      <div className="flex flex-col items-center text-center p-4">
+                        <div className="w-12 h-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
+                          <span className="text-[#74d1ea] font-medium">3</span>
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
+                        <h3 className="text-white font-medium mb-2">Detailed Report</h3>
+                        <p className="text-gray-400 text-sm">You receive a comprehensive tone analysis with actionable insights</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
