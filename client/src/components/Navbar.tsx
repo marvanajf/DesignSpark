@@ -50,7 +50,9 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-semibold text-white" style={{ fontFamily: "'Open Sans', sans-serif" }}>Tovably</Link>
+              <Link href="/" className="flex items-center">
+                <img src={tovablyLogo} alt="Tovably Logo" className="h-8 w-auto" />
+              </Link>
             </div>
             <div className="hidden md:ml-6 md:flex md:space-x-8">
               {!showDashboardLinks && (
