@@ -78,7 +78,7 @@ export default function HomePage() {
             <div className="rounded-md">
               <Button 
                 onClick={handleGetStarted}
-                className="w-full sm:w-auto px-8 py-3 md:py-4 md:text-lg md:px-10 bg-white hover:bg-gray-200 text-black"
+                className="w-full sm:w-auto px-8 py-3 md:py-4 md:text-lg md:px-10 bg-white hover:bg-gray-200 text-black shadow-[0_0_10px_rgba(255,255,255,0.3)]"
               >
                 Get started free
               </Button>
@@ -105,7 +105,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4">
+          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4 shadow-[0_0_20px_rgba(116,209,234,0.15)]">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block">How it works</span>
             </h2>
@@ -116,7 +116,7 @@ export default function HomePage() {
 
           <div className="mt-8">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="text-center border border-gray-700/60 rounded-lg p-6">
+              <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">1</span>
                 </div>
@@ -129,7 +129,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="text-center border border-gray-700/60 rounded-lg p-6">
+              <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">2</span>
                 </div>
@@ -142,7 +142,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="text-center border border-gray-700/60 rounded-lg p-6">
+              <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">3</span>
                 </div>
@@ -174,7 +174,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4">
+          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4 shadow-[0_0_20px_rgba(116,209,234,0.15)]">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block">Trusted by content professionals</span>
             </h2>
@@ -276,7 +276,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="border border-gray-700/60 rounded-lg py-10 px-4">
+          <div className="border border-gray-700/60 rounded-lg py-10 px-4 shadow-[0_0_30px_rgba(116,209,234,0.20)]">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block mb-2">Ready to transform your</span>
               <span className="block text-white">content strategy?</span>
@@ -287,7 +287,7 @@ export default function HomePage() {
             <div className="mt-8">
               <Button
                 onClick={handleGetStarted}
-                className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-white hover:bg-gray-200 text-black"
+                className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-white hover:bg-gray-200 text-black shadow-[0_0_10px_rgba(255,255,255,0.3)]"
               >
                 Get started free
               </Button>
