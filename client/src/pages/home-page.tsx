@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown } from "lucide-react";
+import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown, BarChart3, MessageSquare, LineChart, Lightbulb, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import {
@@ -113,6 +113,258 @@ export default function HomePage() {
                 </p>
                 <div className="flex justify-center">
                   <PenTool className="h-8 w-8 text-[#74d1ea]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Platform Features Sections */}
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Tone Analysis Section */}
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+              <div className="p-8 flex flex-col justify-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                  <BarChart3 className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-4">Advanced Tone Analysis</h3>
+                <p className="text-gray-400 mb-5">
+                  Decode your brand's unique voice with our AI-powered tone analysis. Understand exactly how professional, conversational, technical, or formal your content appears to your audience.
+                </p>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Quantitative tone metrics across 5 key dimensions</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Identify your most common language patterns</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Content type recommendations based on your tone</span>
+                  </li>
+                </ul>
+                <div>
+                  <Button 
+                    onClick={() => window.location.href = "/tone-analysis"}
+                    variant="outline"
+                    className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                  >
+                    Explore Tone Analysis
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="bg-gray-900/50 p-8 flex items-center justify-center">
+                <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
+                  <h4 className="text-lg font-medium text-white mb-3">Tone Analysis Results</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm text-gray-300">Professional</span>
+                        <span className="text-sm text-[#74d1ea]">85%</span>
+                      </div>
+                      <div className="w-full bg-gray-700/30 rounded-full h-2">
+                        <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "85%" }}></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm text-gray-300">Conversational</span>
+                        <span className="text-sm text-[#74d1ea]">72%</span>
+                      </div>
+                      <div className="w-full bg-gray-700/30 rounded-full h-2">
+                        <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "72%" }}></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm text-gray-300">Technical</span>
+                        <span className="text-sm text-[#74d1ea]">56%</span>
+                      </div>
+                      <div className="w-full bg-gray-700/30 rounded-full h-2">
+                        <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "56%" }}></div>
+                      </div>
+                    </div>
+                    <div className="pt-3 border-t border-gray-700/50">
+                      <h5 className="text-sm font-medium text-white mb-2">Common Phrases</h5>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                          data-driven insights
+                        </span>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                          strategic solutions
+                        </span>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                          seamless integration
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Personas Section */}
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+              <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
+                <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
+                  <h4 className="text-lg font-medium text-white mb-4">Target Personas</h4>
+                  <div className="space-y-4">
+                    <div className="border-l-2 border-[#74d1ea] pl-4 py-1">
+                      <h5 className="text-white font-medium">Tech-Savvy Marketing Director</h5>
+                      <p className="text-sm text-gray-400 mt-1">Seeks innovative solutions to scale content production while maintaining brand consistency.</p>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                          <Lightbulb className="h-3 w-3 mr-1" />
+                          marketing automation
+                        </span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                          <Lightbulb className="h-3 w-3 mr-1" />
+                          roi measurement
+                        </span>
+                      </div>
+                    </div>
+                    <div className="border-l-2 border-gray-700/60 pl-4 py-1">
+                      <h5 className="text-white font-medium">Startup Founder</h5>
+                      <p className="text-sm text-gray-400 mt-1">Needs to establish credibility and generate leads with limited resources.</p>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400 border border-gray-700/50">
+                          <Lightbulb className="h-3 w-3 mr-1" />
+                          venture capital
+                        </span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400 border border-gray-700/50">
+                          <Lightbulb className="h-3 w-3 mr-1" />
+                          growth hacking
+                        </span>
+                      </div>
+                    </div>
+                    <div className="border-l-2 border-gray-700/60 pl-4 py-1">
+                      <h5 className="text-white font-medium">Sales Executive</h5>
+                      <p className="text-sm text-gray-400 mt-1">Focused on building relationships and increasing conversions through personalized outreach.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-700/50 text-right">
+                    <Button 
+                      variant="ghost" 
+                      className="text-xs text-[#74d1ea] hover:text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                    >
+                      Create Custom Persona
+                      <PenTool className="ml-1 h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className="order-1 md:order-2 p-8 flex flex-col justify-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                  <Users className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-4">Targeted Personas</h3>
+                <p className="text-gray-400 mb-5">
+                  Connect with your ideal audience using tailored personas. Our platform helps you create, manage, and target specific professional personas for more effective content.
+                </p>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Create AI-generated or custom personas</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Define interests, pain points, and motivations</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Generate content specifically tailored to each persona</span>
+                  </li>
+                </ul>
+                <div>
+                  <Button 
+                    onClick={() => window.location.href = "/personas"}
+                    variant="outline"
+                    className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                  >
+                    Explore Personas
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Content Generation Section */}
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+              <div className="p-8 flex flex-col justify-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                  <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-4">Content Generation</h3>
+                <p className="text-gray-400 mb-5">
+                  Create compelling content that maintains your brand voice while resonating with your target audience. Tovably generates LinkedIn posts and cold emails that drive engagement and conversions.
+                </p>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Personalized LinkedIn posts that drive engagement</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Effective cold emails that increase response rates</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Content that perfectly balances your tone and persona needs</span>
+                  </li>
+                </ul>
+                <div>
+                  <Button 
+                    onClick={() => window.location.href = "/content-generation"}
+                    variant="outline"
+                    className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                  >
+                    Explore Content Generation
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="bg-gray-900/50 p-8 flex items-center justify-center">
+                <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-lg font-medium text-white">Generated Content</h4>
+                    <div className="flex space-x-2">
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-[#74d1ea]">
+                        <MessageSquare className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-[#74d1ea]">
+                        <LineChart className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-gray-900/70 p-4 mb-4 border border-gray-700/60">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium text-[#74d1ea]">LinkedIn Post</span>
+                      <span className="text-xs text-gray-400">Tech-Savvy Marketing Director</span>
+                    </div>
+                    <p className="text-sm text-gray-300">
+                      Excited to share how our marketing team increased content engagement by 43% last quarter through AI-powered personalization. The key? Balancing automation with authentic brand voice. Anyone else exploring this balance between efficiency and authenticity in their content strategy? #MarketingAutomation #ContentStrategy
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-gray-900/40 p-4 border border-gray-700/40">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium text-gray-400">Cold Email</span>
+                      <span className="text-xs text-gray-500">Sales Executive</span>
+                    </div>
+                    <p className="text-sm text-gray-400 opacity-70">
+                      Hi [Name], <br/><br/>
+                      I noticed [Company] has been expanding your content marketing efforts, and thought you might be interested in how similar companies are using AI to scale their production while maintaining quality...<span className="opacity-30">Read more</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
