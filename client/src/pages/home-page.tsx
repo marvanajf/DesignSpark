@@ -61,7 +61,7 @@ export default function HomePage() {
           </svg>
         </div>
         
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-800/30 rounded-lg py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8">
           <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-800 text-white mb-6">
             <span className="h-2 w-2 rounded-full bg-white mr-2"></span>
             Tone Analysis & Content Generator
@@ -105,7 +105,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center border border-gray-800/30 rounded-lg py-8 px-4">
+          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block">How it works</span>
             </h2>
@@ -116,7 +116,7 @@ export default function HomePage() {
 
           <div className="mt-16">
             <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
-              <div className="text-center border border-gray-800/30 rounded-lg p-6">
+              <div className="text-center border border-gray-700/60 rounded-lg p-6">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">1</span>
                 </div>
@@ -129,7 +129,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="text-center border border-gray-800/30 rounded-lg p-6">
+              <div className="text-center border border-gray-700/60 rounded-lg p-6">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">2</span>
                 </div>
@@ -142,7 +142,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="text-center border border-gray-800/30 rounded-lg p-6">
+              <div className="text-center border border-gray-700/60 rounded-lg p-6">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">3</span>
                 </div>
@@ -174,7 +174,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center border border-gray-800/30 rounded-lg py-8 px-4">
+          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block">Trusted by content professionals</span>
             </h2>
@@ -276,7 +276,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="border border-gray-800/30 rounded-lg py-10 px-4">
+          <div className="border border-gray-700/60 rounded-lg py-10 px-4">
             <h2 className="text-3xl font-semibold sm:text-4xl text-white">
               <span className="block mb-2">Ready to transform your</span>
               <span className="block text-white">content strategy?</span>
