@@ -61,7 +61,7 @@ export default function HomePage() {
           </svg>
         </div>
         
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
           <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-800 text-white mb-6">
             <span className="h-2 w-2 rounded-full bg-white mr-2"></span>
             Tone Analysis & Content Generator
@@ -91,7 +91,7 @@ export default function HomePage() {
       </div>
 
       {/* Features Section */}
-      <div id="features" className="py-16 bg-black relative overflow-hidden">
+      <div id="features" className="py-10 bg-black relative overflow-hidden">
         {/* Vertical line pattern */}
         <div className="absolute inset-0 opacity-10">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
@@ -114,8 +114,8 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-16">
-            <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
+          <div className="mt-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="text-center border border-gray-700/60 rounded-lg p-6">
                 <div className="bg-white/10 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-medium text-lg">1</span>
@@ -160,7 +160,7 @@ export default function HomePage() {
       </div>
 
       {/* Testimonials Section */}
-      <div id="testimonials" className="py-16 bg-black relative overflow-hidden">
+      <div id="testimonials" className="py-10 bg-black relative overflow-hidden">
         {/* Horizontal line pattern */}
         <div className="absolute inset-0 opacity-5">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
@@ -183,8 +183,8 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
               <div className="flex items-center mb-4">
                 <div className="text-white">
                   {[...Array(5)].map((_, i) => (
@@ -208,7 +208,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
               <div className="flex items-center mb-4">
                 <div className="text-white">
                   {[...Array(5)].map((_, i) => (
@@ -232,7 +232,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
               <div className="flex items-center mb-4">
                 <div className="text-white">
                   {[...Array(4)].map((_, i) => (
@@ -261,7 +261,7 @@ export default function HomePage() {
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 bg-black relative overflow-hidden">
+      <div className="py-10 bg-black relative overflow-hidden">
         {/* Crossed lines background pattern */}
         <div className="absolute inset-0 opacity-5">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
