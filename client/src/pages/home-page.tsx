@@ -62,62 +62,9 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Features Section */}
-      <div id="features" className="py-6 bg-black relative overflow-hidden">
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center border border-gray-700/60 rounded-lg py-8 px-4 shadow-[0_0_20px_rgba(116,209,234,0.15)]">
-            <h2 className="text-3xl font-semibold sm:text-4xl text-white">
-              <span className="block">How it works</span>
-            </h2>
-            <p className="mt-4 max-w-2xl text-xl text-gray-400 mx-auto">
-              Generate content that resonates with your audience in three simple steps.
-            </p>
-          </div>
-
-          <div className="mt-8">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
-                <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4 border border-[#74d1ea]/30">
-                  <span className="text-[#74d1ea] font-medium text-lg">1</span>
-                </div>
-                <h3 className="text-xl font-medium text-white mb-3">Upload your content</h3>
-                <p className="text-gray-400 mb-6">
-                  Enter your website URL or upload examples of your content for tone analysis.
-                </p>
-                <div className="flex justify-center">
-                  <FileText className="h-8 w-8 text-[#74d1ea]" />
-                </div>
-              </div>
-
-              <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
-                <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4 border border-[#74d1ea]/30">
-                  <span className="text-[#74d1ea] font-medium text-lg">2</span>
-                </div>
-                <h3 className="text-xl font-medium text-white mb-3">Select target personas</h3>
-                <p className="text-gray-400 mb-6">
-                  Choose from a range of professional personas that match your target audience.
-                </p>
-                <div className="flex justify-center">
-                  <Users className="h-8 w-8 text-[#74d1ea]" />
-                </div>
-              </div>
-
-              <div className="text-center border border-gray-700/60 rounded-lg p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
-                <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mx-auto mb-4 border border-[#74d1ea]/30">
-                  <span className="text-[#74d1ea] font-medium text-lg">3</span>
-                </div>
-                <h3 className="text-xl font-medium text-white mb-3">Generate tailored content</h3>
-                <p className="text-gray-400 mb-6">
-                  Create LinkedIn posts and cold emails that match your tone and resonate with your target personas.
-                </p>
-                <div className="flex justify-center">
-                  <PenTool className="h-8 w-8 text-[#74d1ea]" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Main Features Placeholder - replaced with detailed features below */}
+      <div className="py-2 bg-black relative overflow-hidden">
+        {/* This div serves as a small spacer between the hero and detailed features */}
       </div>
 
       {/* Platform Features Sections */}
