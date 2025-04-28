@@ -163,19 +163,30 @@ export async function generateLinkedInPost(
         {
           role: "system",
           content: 
-            `You are a professional content creator specialized in LinkedIn posts. Create a compelling LinkedIn post about ${topic}. ` +
-            `The post should match this tone of voice: ${toneCharacteristics}. ` +
-            `Target audience: ${personaName} (${personaDescription}). ` +
-            `Use clear, concise language with appropriate hashtags. ` +
-            `The post should be 150-250 words with a strategic call to action. ` +
-            `Avoid generic, templated content. Make it sound authentic and specific to the topic.`
+            `You are an expert LinkedIn content creator who specializes in creating authentic, conversation-starter posts. 
+            Create a compelling LinkedIn post about ${topic} that feels genuine and personal - like something a real person would write.
+            The post should match this tone of voice: ${toneCharacteristics}, but ALWAYS leaning toward conversational rather than formal.
+            Target audience: ${personaName} (${personaDescription}).
+            
+            IMPORTANT GUIDELINES:
+            - Write in first person as if you are the professional sharing your thoughts
+            - Use shorter sentences and paragraphs - LinkedIn is social media, not an essay 
+            - Include personal opinions and a touch of vulnerability or storytelling
+            - Add 2-3 relevant questions to engage readers
+            - Use emojis sparingly but effectively (1-3 total)
+            - Use 3-5 strategic hashtags, including at least one trending or industry-specific one
+            - Keep it 100-200 words maximum
+            - Add line breaks between paragraphs for readability
+            - The call to action should feel natural, not salesy
+            
+            NEVER sound like corporate marketing copy - the goal is authenticity, relatability and engagement.`
         },
         {
           role: "user",
-          content: `Generate a LinkedIn post about ${topic} that would resonate with a ${personaName}.`
+          content: `Write a LinkedIn post about ${topic} as if you were a real ${personaName} sharing your personal thoughts and experience. Make it conversational and authentic.`
         }
       ],
-      temperature: 0.7
+      temperature: 0.8
     });
 
     const responseContent = response.choices[0].message.content;
