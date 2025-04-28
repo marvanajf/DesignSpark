@@ -112,13 +112,6 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                         className="absolute left-0 mt-2 w-64 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.15)] bg-black border border-gray-700/60 ring-1 ring-black ring-opacity-5 z-50"
                       >
                         <div className="py-1">
-                          <Link href="/customers" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <Users className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
-                            <div>
-                              <p className="font-medium">Customers</p>
-                              <p className="text-xs text-gray-500">Teams using Tovably</p>
-                            </div>
-                          </Link>
                           <Link href="/blog" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
                             <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
@@ -225,10 +218,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                 
                 <div className="px-3 py-2">
                   <div className="font-medium text-white text-base">Resources</div>
-                  <Link href="/customers" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
-                    Customers
-                  </Link>
-                  <Link href="/blog" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/blog" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
                     Blog
                   </Link>
                   <Link href="/guides" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
