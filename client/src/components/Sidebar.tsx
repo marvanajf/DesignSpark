@@ -13,6 +13,7 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import tovablyLogo from "@/assets/tovably-logo.png";
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -45,7 +46,9 @@ export default function Sidebar() {
     <div className="flex flex-col w-64 border-r border-gray-700/60 bg-black">
       {/* Logo section */}
       <div className="h-16 flex items-center px-4 border-b border-gray-700/60">
-        <span className="text-lg font-semibold text-white" style={{ fontFamily: "'Open Sans', sans-serif" }}>Tovably</span>
+        <Link href="/dashboard" className="flex items-center">
+          <img src={tovablyLogo} alt="Tovably Logo" className="h-7 w-auto" />
+        </Link>
       </div>
       
       {/* Navigation section */}
