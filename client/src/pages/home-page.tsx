@@ -123,7 +123,7 @@ export default function HomePage() {
               <span className="block">Trusted by content professionals</span>
             </h2>
             <p className="mt-4 max-w-2xl text-xl text-gray-400 mx-auto">
-              See what marketing teams are saying about ContentPersona.
+              See what marketing teams are saying about Tovably.
             </p>
           </div>
 
@@ -137,7 +137,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-gray-400 mb-4">
-                "ContentPersona has transformed how we approach our LinkedIn content strategy. The tone analysis is spot-on and the content generation saves us hours every week."
+                "Tovably has transformed how we approach our LinkedIn content strategy. The tone analysis is spot-on and the content generation saves us hours every week."
               </p>
               <div className="flex items-center">
                 <img 
@@ -161,7 +161,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-gray-400 mb-4">
-                "Our cold email response rates have increased by 37% since we started using ContentPersona. The persona targeting feature is incredibly effective."
+                "Our cold email response rates have increased by 37% since we started using Tovably. The persona targeting feature is incredibly effective."
               </p>
               <div className="flex items-center">
                 <img 
@@ -186,7 +186,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-gray-400 mb-4">
-                "As a content team of one, ContentPersona gives me the ability to scale my output while maintaining a consistent brand voice across all channels."
+                "As a content team of one, Tovably gives me the ability to scale my output while maintaining a consistent brand voice across all channels."
               </p>
               <div className="flex items-center">
                 <img 
