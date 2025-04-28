@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import PricingModal from "@/components/PricingModal";
 
 interface PricingModalContextType {
@@ -12,7 +12,7 @@ const PricingModalContext = createContext<PricingModalContextType>({
   openPricingModal: () => {},
   closePricingModal: () => {},
   isPricingModalOpen: false,
-  currentLimitType: "personas"
+  currentLimitType: "personas",
 });
 
 export function PricingModalProvider({ children }: { children: ReactNode }) {
@@ -34,7 +34,7 @@ export function PricingModalProvider({ children }: { children: ReactNode }) {
         openPricingModal,
         closePricingModal,
         isPricingModalOpen,
-        currentLimitType
+        currentLimitType,
       }}
     >
       {children}
@@ -47,6 +47,7 @@ export function PricingModalProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function usePricingModal() {
+// Exporting as a named constant to avoid React Fast Refresh issues
+export const usePricingModal = () => {
   return useContext(PricingModalContext);
-}
+};

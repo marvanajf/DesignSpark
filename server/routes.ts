@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
+import { subscriptionPlans } from "../shared/schema";
 import { 
   analyzeTone, 
   generateLinkedInPost, 
@@ -30,6 +31,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
 
     try {
+      // Check if user has reached their subscription limit for tone analyses
+      const userData = await storage.getUser(req.user!.id);
+      const userPlan = userData.subscription_plan;
+      const toneAnalysisLimit = subscriptionPlans[userPlan].toneAnalyses;
+      
+      if (userData.tone_analyses_used >= toneAnalysisLimit) {
+        return res.status(402).json({ 
+          error: "Subscription limit reached", 
+          limitType: "toneAnalyses",
+          current: userData.tone_analyses_used,
+          limit: toneAnalysisLimit
+        });
+      }
+      
       const schema = z.object({
         websiteUrl: z.string()
                       .url({ message: "Please enter a valid URL including 'https://' or 'http://' (e.g., https://www.example.com)" })
@@ -64,6 +79,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           sample_text: sampleText,
           tone_results: toneResults
         });
+        
+        // Increment the tone analysis usage counter
+        await storage.incrementToneAnalysisUsage(req.user!.id);
 
         res.status(201).json(toneAnalysis);
       } catch (error: any) {
