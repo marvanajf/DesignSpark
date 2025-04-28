@@ -31,11 +31,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="relative py-8 sm:py-10 lg:py-12 bg-black overflow-hidden">
         
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
-          <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#74d1ea]/10 text-[#74d1ea] mb-6 border border-[#74d1ea]/20">
-            <span className="h-2 w-2 rounded-full bg-[#74d1ea] mr-2"></span>
-            Tone Analysis & Content Generator
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 border border-gray-700/60 rounded-lg py-8 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
           <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto">
             <span className="block text-white">Transform your</span>
             <span className="block text-[#74d1ea]">content strategy</span>
