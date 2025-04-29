@@ -260,464 +260,436 @@ export default function ToneAnalysisPage() {
             </div>
           </div>
 
-          {currentAnalysisId && toneAnalysis ? (
-            <div className="space-y-8">
-              {/* Tone Analysis Results - Enhanced with platform style */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                
-                {/* Header */}
-                <div className="p-6 border-b border-gray-800/60">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-4">
-                        <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-bold text-white">
-                          {toneAnalysis.website_url ? (
-                            <>Website Analysis Results</>
-                          ) : (
-                            <>Text Analysis Results</>
-                          )}
-                        </h2>
-                        <div className="text-sm text-gray-400 mt-1">
-                          {toneAnalysis.website_url ? toneAnalysis.website_url : "Sample text analysis"}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
-                        onClick={() => {
-                          setAnalysisName(toneAnalysis.name || (toneAnalysis.website_url ? 
-                            `Analysis of ${toneAnalysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` : 
-                            `Text Analysis ${new Date().toLocaleDateString()}`));
-                          setSaveDialogOpen(true);
-                        }}
-                      >
-                        <Save className="h-4 w-4 mr-1" />
-                        {toneAnalysis.name ? "Rename" : "Save"}
-                      </Button>
-                      <p className="text-sm text-gray-500">
-                        {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
-                      </p>
-                      <Badge className="bg-[#182030] text-[#74d1ea] border border-[#74d1ea]/30 px-3 py-1">
-                        <CheckCircle className="h-3 w-3 mr-1" /> Complete
-                      </Badge>
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {/* Saved Analyses Panel - Left Column */}
+            <div className="md:col-span-1">
+              <div className="bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                <div className="p-4 border-b border-gray-800/60">
+                  <h3 className="text-lg font-semibold text-white">Saved Analyses</h3>
                 </div>
-
-                <div className="p-8">
-                  {/* Tone Characteristics - Enhanced design */}
-                  <div className="mb-10">
-                    <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-white">Tone Characteristics</h3>
-                      <p className="text-gray-400 text-sm mt-0.5">Key tone indicators detected in your content</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                      <div className="space-y-6">
-                        {Object.entries(toneAnalysis.tone_results.characteristics).slice(0, 3).map(([key, value]) => (
-                          <div key={key}>
-                            <div className="flex justify-between items-center mb-1.5">
-                              <span className="text-sm font-medium capitalize text-white">{key}</span>
-                              <span className="text-sm font-medium text-[#74d1ea]">{value}%</span>
-                            </div>
-                            <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
-                              <div className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" style={{ width: `${value}%` }}></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      
-                      <div className="space-y-6">
-                        {Object.entries(toneAnalysis.tone_results.characteristics).slice(3).map(([key, value]) => (
-                          <div key={key}>
-                            <div className="flex justify-between items-center mb-1.5">
-                              <span className="text-sm font-medium capitalize text-white">{key}</span>
-                              <span className="text-sm font-medium text-[#74d1ea]">{value}%</span>
-                            </div>
-                            <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
-                              <div className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" style={{ width: `${value}%` }}></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Analysis Results */}
-                  <div className="mb-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Keywords section (renamed from Common Phrases) */}
-                      <div className="md:col-span-2 bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
-                        <div className="mb-5">
-                          <h3 className="text-lg font-semibold text-white">Keywords</h3>
-                          <p className="text-gray-400 text-sm mt-0.5">Key phrases that define your brand's voice</p>
-                        </div>
-                        
-                        {Array.isArray(toneAnalysis.tone_results.language_patterns.common_phrases) ? (
-                          toneAnalysis.tone_results.language_patterns.common_phrases.length > 0 ? (
-                            <div className="flex flex-wrap gap-3 mt-8">
-                              {toneAnalysis.tone_results.language_patterns.common_phrases.slice(0, 10).map((phrase, i) => (
-                                <div 
-                                  key={i} 
-                                  className="rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab] text-black font-medium px-5 py-2.5 text-sm shadow-[0_0_15px_rgba(116,209,234,0.15)]"
-                                >
-                                  {phrase}
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="bg-black/30 rounded-lg p-4 text-center mt-2">
-                              <p className="text-gray-400">No keywords detected in your content</p>
-                            </div>
-                          )
-                        ) : null}
-                      </div>
-                      
-                      {/* Language Patterns Section */}
-                      <div className="md:col-span-2 mt-6">
-                        <div className="flex items-center space-x-3 mb-6">
-                          <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                            <AlignLeft className="h-5 w-5 text-[#74d1ea]" />
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-white">Language Patterns</h3>
-                            <p className="text-gray-400 text-sm mt-0.5">Detailed analysis of your writing style</p>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-                          {Object.entries(toneAnalysis.tone_results.language_patterns)
-                            .filter(([key]) => key !== 'common_phrases')
-                            .map(([key, value]) => (
-                              <div key={key} className="bg-black/20 rounded-xl border border-gray-800/60 p-5 hover:bg-[#0e131f]/30 transition-colors">
-                                <div className="flex items-center mb-3">
-                                  <div className="bg-[#182030] rounded-lg p-2 mr-3">
-                                    {key === 'sentence_structure' ? (
-                                      <AlignLeft className="h-4 w-4 text-[#74d1ea]" />
-                                    ) : key === 'vocabulary' ? (
-                                      <BookMarked className="h-4 w-4 text-[#74d1ea]" />
-                                    ) : (
-                                      <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
-                                    )}
-                                  </div>
-                                  <h4 className="text-white font-medium capitalize">{key.replace('_', ' ')}</h4>
-                                </div>
-                                <p className="text-sm text-gray-300 leading-relaxed">
-                                  {value as string}
-                                </p>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Summary section - Enhanced design */}
-                  <div className="mb-10">
-                    <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-white">Summary</h3>
-                      <p className="text-gray-400 text-sm mt-0.5">Overall assessment of your communication style</p>
-                    </div>
-                    
-                    <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 mt-6">
-                      <p className="text-white leading-relaxed">
-                        {toneAnalysis.tone_results.summary}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Recommended Content Types - Enhanced design */}
-                  <div>
-                    <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-white">Recommended Content Types</h3>
-                      <p className="text-gray-400 text-sm mt-0.5">Optimal content formats for your tone and style</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {Array.isArray(toneAnalysis.tone_results.recommended_content_types) ? toneAnalysis.tone_results.recommended_content_types.map((type, i) => (
-                        <div key={i} className="bg-black/20 border border-gray-800/60 rounded-lg p-4 flex items-center hover:bg-[#0e131f]/40 transition-colors">
-                          <div className="flex-shrink-0 bg-[#182030] w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                            <FileText className="h-5 w-5 text-[#74d1ea]" />
-                          </div>
-                          <span className="text-white">{type}</span>
-                        </div>
-                      )) : null}
-                    </div>
-                    
-                    <div className="mt-8 flex justify-center">
-                      <Button 
-                        onClick={() => navigate('/content-generator')}
-                        className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
-                      >
-                        <Sparkles className="mr-2 h-5 w-5" />
-                        Generate Content Based on Analysis
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Left column - Form with dashboard styling */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <div className="p-6">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white">Analyze Your Content</h3>
-                  </div>
-                  
-                  <div>
-                    <form onSubmit={handleSubmit}>
-                      <Tabs defaultValue="url" className="mb-8" onValueChange={(value) => setAnalysisMethod(value)}>
-                        <TabsList className="bg-black/50 border border-gray-800/60 rounded-lg p-1 mb-6">
-                          <TabsTrigger 
-                            value="url" 
-                            className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
-                          >
-                            <Globe className="mr-2 h-4 w-4" />
-                            Website URL
-                          </TabsTrigger>
-                          <TabsTrigger 
-                            value="text" 
-                            className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
-                          >
-                            <FileText className="mr-2 h-4 w-4" />
-                            Text Sample
-                          </TabsTrigger>
-                        </TabsList>
-                        
-                        <TabsContent value="url" className="mt-4 space-y-6">
-                          <div className="space-y-4">
-                            <div>
-                              <label htmlFor="websiteUrl" className="block text-sm font-medium text-white mb-2">
-                                Website URL
-                              </label>
-                              <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                  <LinkIcon className="h-4 w-4 text-gray-500" />
-                                </div>
-                                <Input
-                                  id="websiteUrl"
-                                  type="text"
-                                  className="pl-10 bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
-                                  placeholder="Enter a website URL (e.g., example.com)"
-                                  value={websiteUrl}
-                                  onChange={(e) => setWebsiteUrl(e.target.value)}
-                                />
-                              </div>
-                              <p className="mt-2 text-xs text-gray-500">
-                                We'll analyze the main content and language of the website
-                              </p>
-                            </div>
-                            
-                            <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
-                              <div className="flex items-start">
-                                <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
-                                  <FileQuestion className="h-4 w-4 text-[#74d1ea]" />
-                                </div>
-                                <div>
-                                  <h4 className="text-sm font-medium text-white">How website analysis works</h4>
-                                  <p className="text-xs text-gray-400 mt-1">
-                                    Our AI will extract and analyze text content from the website to identify tone 
-                                    characteristics, language patterns, and provide recommendations
-                                    for content that matches your brand's voice.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <Button 
-                            type="submit" 
-                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
-                            disabled={toneAnalysisMutation.isPending}
-                          >
-                            {toneAnalysisMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-5 w-5 animate-spin text-black" />
-                                Analyzing...
-                              </>
-                            ) : (
-                              <>
-                                <BarChart className="mr-2 h-5 w-5" />
-                                Analyze Website Tone
-                              </>
-                            )}
-                          </Button>
-                        </TabsContent>
-                        
-                        <TabsContent value="text" className="mt-4 space-y-6">
-                          <div className="space-y-4">
-                            <div>
-                              <label htmlFor="sampleText" className="block text-sm font-medium text-white mb-2">
-                                Sample Text
-                              </label>
-                              <Textarea
-                                id="sampleText"
-                                className="min-h-[200px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
-                                placeholder="Paste your content here to analyze tone and language patterns..."
-                                value={sampleText}
-                                onChange={(e) => setSampleText(e.target.value)}
-                              />
-                              <p className="mt-2 text-xs text-gray-500">
-                                Paste sample text from your content, blog posts, or marketing materials
-                              </p>
-                            </div>
-                            
-                            <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
-                              <div className="flex items-start">
-                                <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
-                                  <FileQuestion className="h-4 w-4 text-[#74d1ea]" />
-                                </div>
-                                <div>
-                                  <h4 className="text-sm font-medium text-white">How text analysis works</h4>
-                                  <p className="text-xs text-gray-400 mt-1">
-                                    Our AI will analyze your text to identify tone characteristics, language patterns, 
-                                    and provide recommendations for content types that match your brand's voice.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <Button 
-                            type="submit" 
-                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
-                            disabled={toneAnalysisMutation.isPending}
-                          >
-                            {toneAnalysisMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-5 w-5 animate-spin text-black" />
-                                Analyzing...
-                              </>
-                            ) : (
-                              <>
-                                <BarChart className="mr-2 h-5 w-5" />
-                                Analyze Text Tone
-                              </>
-                            )}
-                          </Button>
-                        </TabsContent>
-                      </Tabs>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Right column - Previous analyses with dashboard styling */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <div className="p-6">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <BarChart className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">Previous Analyses</h3>
-                      <p className="text-gray-400 text-sm mt-0.5">View your recent tone analysis results</p>
-                    </div>
-                  </div>
-                  
+                <div className="max-h-[600px] overflow-y-auto p-2">
                   {isLoadingUserAnalyses ? (
-                    <div className="flex justify-center items-center py-12">
-                      <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+                    <div className="flex items-center justify-center p-6">
+                      <Loader2 className="h-6 w-6 animate-spin text-[#74d1ea]" />
                     </div>
                   ) : userAnalyses && userAnalyses.length > 0 ? (
-                    <div className="space-y-3 mt-4">
-                      {[...userAnalyses]
-                        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                        .map((analysis) => (
-                          <div 
-                            key={analysis.id} 
-                            className={`p-4 rounded-lg border transition-all duration-200 cursor-pointer ${
-                              currentAnalysisId === analysis.id 
-                                ? 'bg-[#182030] border-[#74d1ea]/30 shadow-[0_0_15px_rgba(116,209,234,0.1)]' 
-                                : 'bg-black/30 border-gray-800/60 hover:bg-[#0e131f]/80 hover:border-gray-700/60'
-                            }`}
-                            onClick={() => setCurrentAnalysisId(analysis.id)}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center">
-                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${
-                                  currentAnalysisId === analysis.id 
-                                    ? 'bg-[#74d1ea]/20' 
-                                    : 'bg-black/40'
-                                }`}>
-                                  {analysis.website_url ? (
-                                    <Globe className={`h-4 w-4 ${
-                                      currentAnalysisId === analysis.id 
-                                        ? 'text-[#74d1ea]' 
-                                        : 'text-gray-400'
-                                    }`} />
-                                  ) : (
-                                    <FileText className={`h-4 w-4 ${
-                                      currentAnalysisId === analysis.id 
-                                        ? 'text-[#74d1ea]' 
-                                        : 'text-gray-400'
-                                    }`} />
-                                  )}
-                                </div>
-                                <span className={`text-sm font-medium truncate max-w-[140px] ${
-                                  currentAnalysisId === analysis.id 
-                                    ? 'text-[#74d1ea]' 
-                                    : 'text-white'
-                                }`}>
-                                  {analysis.website_url || "Text Sample"}
-                                </span>
-                              </div>
-                              <Badge variant="outline" className={`text-xs ${
-                                currentAnalysisId === analysis.id 
-                                  ? 'bg-[#74d1ea]/10 text-[#74d1ea] border-[#74d1ea]/30' 
-                                  : 'bg-black/20 border-gray-700'
-                              }`}>
-                                {new Date(analysis.created_at).toLocaleDateString()}
-                              </Badge>
-                            </div>
+                    <div className="space-y-2">
+                      {userAnalyses.map((analysis) => (
+                        <div
+                          key={analysis.id}
+                          className={`p-3 rounded-lg cursor-pointer transition-all ${
+                            currentAnalysisId === analysis.id
+                              ? "bg-[#182030] border border-[#74d1ea]/30"
+                              : "bg-[#111] border border-gray-800/60 hover:bg-gray-900"
+                          }`}
+                          onClick={() => setCurrentAnalysisId(analysis.id)}
+                        >
+                          <h4 className="font-medium text-sm text-white mb-1 truncate">
+                            {analysis.name || (analysis.website_url 
+                              ? `Analysis of ${analysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` 
+                              : `Text Analysis ${new Date(analysis.created_at).toLocaleDateString()}`)}
+                          </h4>
+                          <div className="flex justify-between items-center text-xs text-gray-400">
+                            <span>
+                              {analysis.website_url 
+                                ? analysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '').substring(0, 20) + (analysis.website_url.length > 25 ? '...' : '')
+                                : "Text Analysis"}
+                            </span>
+                            <span>{formatDistanceToNow(new Date(analysis.created_at), { addSuffix: true })}</span>
                           </div>
-                        ))}
+                        </div>
+                      ))}
                     </div>
                   ) : (
-                    <div className="text-center py-8">
-                      <div className="mb-3 inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <FileQuestion className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <p className="text-white font-medium mb-2">No analyses yet</p>
-                      <p className="text-sm text-gray-400 mb-5">Start by analyzing your brand's unique voice</p>
-                      <Button 
-                        onClick={() => {}}
-                        className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
-                      >
-                        Create Your First Analysis
-                      </Button>
+                    <div className="text-center p-6 text-gray-400">
+                      <FileQuestion className="h-8 w-8 mx-auto mb-2 text-gray-600" />
+                      <p>No saved analyses yet</p>
+                      <p className="text-sm mt-1">Complete an analysis to see it here</p>
                     </div>
                   )}
                 </div>
               </div>
             </div>
-          )}
+            
+            {/* Main Content - Right Column */}
+            <div className="md:col-span-3">
+              {currentAnalysisId && toneAnalysis ? (
+                <div className="space-y-8">
+                  {/* Tone Analysis Results - Enhanced with platform style */}
+                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                    
+                    {/* Header */}
+                    <div className="p-6 border-b border-gray-800/60">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-4">
+                            <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
+                          </div>
+                          <div>
+                            <h2 className="text-xl font-bold text-white">
+                              {toneAnalysis.website_url ? (
+                                <>Website Analysis Results</>
+                              ) : (
+                                <>Text Analysis Results</>
+                              )}
+                            </h2>
+                            <div className="text-sm text-gray-400 mt-1">
+                              {toneAnalysis.website_url ? toneAnalysis.website_url : "Sample text analysis"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
+                            onClick={() => {
+                              setAnalysisName(toneAnalysis.name || (toneAnalysis.website_url ? 
+                                `Analysis of ${toneAnalysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` : 
+                                `Text Analysis ${new Date().toLocaleDateString()}`));
+                              setSaveDialogOpen(true);
+                            }}
+                          >
+                            <Save className="h-4 w-4 mr-1" />
+                            Rename
+                          </Button>
+                          <p className="text-sm text-gray-500">
+                            {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
+                          </p>
+                          <Badge className="bg-[#182030] text-[#74d1ea] border border-[#74d1ea]/30 px-3 py-1">
+                            <CheckCircle className="h-3 w-3 mr-1" /> Complete
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-8">
+                      {/* Tone Characteristics - Enhanced design */}
+                      <div className="mb-10">
+                        <div className="mb-6">
+                          <h3 className="text-lg font-semibold text-white">Tone Characteristics</h3>
+                          <p className="text-gray-400 text-sm mt-0.5">Key tone indicators detected in your content</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                          <div className="space-y-6">
+                            {Object.entries(toneAnalysis.tone_results.characteristics).slice(0, 3).map(([key, value]) => (
+                              <div key={key}>
+                                <div className="flex justify-between items-center mb-1.5">
+                                  <span className="text-sm font-medium capitalize text-white">{key}</span>
+                                  <span className="text-sm font-medium text-[#74d1ea]">{value}%</span>
+                                </div>
+                                <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
+                                  <div className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" style={{ width: `${value}%` }}></div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <div className="space-y-6">
+                            {Object.entries(toneAnalysis.tone_results.characteristics).slice(3).map(([key, value]) => (
+                              <div key={key}>
+                                <div className="flex justify-between items-center mb-1.5">
+                                  <span className="text-sm font-medium capitalize text-white">{key}</span>
+                                  <span className="text-sm font-medium text-[#74d1ea]">{value}%</span>
+                                </div>
+                                <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
+                                  <div className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" style={{ width: `${value}%` }}></div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Analysis Results */}
+                      <div className="mb-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Keywords section (renamed from Common Phrases) */}
+                          <div className="md:col-span-2 bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
+                            <div className="mb-5">
+                              <h3 className="text-lg font-semibold text-white">Keywords</h3>
+                              <p className="text-gray-400 text-sm mt-0.5">Key phrases that define your brand's voice</p>
+                            </div>
+                            
+                            {Array.isArray(toneAnalysis.tone_results.language_patterns.common_phrases) ? (
+                              toneAnalysis.tone_results.language_patterns.common_phrases.length > 0 ? (
+                                <div className="flex flex-wrap gap-3 mt-8">
+                                  {toneAnalysis.tone_results.language_patterns.common_phrases.slice(0, 10).map((phrase, i) => (
+                                    <div 
+                                      key={i} 
+                                      className="rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab] text-black font-medium px-5 py-2.5 text-sm shadow-[0_0_15px_rgba(116,209,234,0.15)]"
+                                    >
+                                      {phrase}
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="bg-black/30 rounded-lg p-4 text-center mt-2">
+                                  <p className="text-gray-400">No keywords detected in your content</p>
+                                </div>
+                              )
+                            ) : null}
+                          </div>
+                          
+                          {/* Language Patterns Section */}
+                          <div className="md:col-span-2 mt-6">
+                            <div className="flex items-center space-x-3 mb-6">
+                              <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                                <AlignLeft className="h-5 w-5 text-[#74d1ea]" />
+                              </div>
+                              <div>
+                                <h3 className="text-lg font-semibold text-white">Language Patterns</h3>
+                                <p className="text-gray-400 text-sm mt-0.5">Detailed analysis of your writing style</p>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                              {Object.entries(toneAnalysis.tone_results.language_patterns)
+                                .filter(([key]) => key !== 'common_phrases')
+                                .map(([key, value]) => (
+                                  <div key={key} className="bg-black/20 rounded-xl border border-gray-800/60 p-5 hover:bg-[#0e131f]/30 transition-colors">
+                                    <div className="flex items-center mb-3">
+                                      <div className="bg-[#182030] rounded-lg p-2 mr-3">
+                                        {key === 'sentence_structure' ? (
+                                          <AlignLeft className="h-4 w-4 text-[#74d1ea]" />
+                                        ) : key === 'vocabulary' ? (
+                                          <BookMarked className="h-4 w-4 text-[#74d1ea]" />
+                                        ) : (
+                                          <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                                        )}
+                                      </div>
+                                      <span className="text-sm font-medium capitalize text-white">{key.replace('_', ' ')}</span>
+                                    </div>
+                                    <p className="text-gray-300 text-sm">{value}</p>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Recommended Content Types */}
+                      <div className="mb-6">
+                        <div className="flex items-center space-x-3 mb-6">
+                          <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                            <FileText className="h-5 w-5 text-[#74d1ea]" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-white">Recommended Content Types</h3>
+                            <p className="text-gray-400 text-sm mt-0.5">Content formats that best match your tone</p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                          {Array.isArray(toneAnalysis.tone_results.recommended_content_types) ? 
+                            toneAnalysis.tone_results.recommended_content_types.map((type, i) => (
+                              <div key={i} className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 flex items-center space-x-3">
+                                <div className="bg-[#182030] rounded-lg p-1.5">
+                                  <FileText className="h-5 w-5 text-[#74d1ea]" />
+                                </div>
+                                <span className="text-white">{type}</span>
+                              </div>
+                            )) : null}
+                        </div>
+                        
+                        <div className="mt-8 flex justify-center">
+                          <Button 
+                            onClick={() => navigate('/content-generator')}
+                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                          >
+                            <Sparkles className="mr-2 h-5 w-5" />
+                            Generate Content Based on Analysis
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Left column - Form with dashboard styling */}
+                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                    <div className="p-6">
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                          <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-white">Analyze Your Content</h3>
+                      </div>
+                      
+                      <div>
+                        <form onSubmit={handleSubmit}>
+                          <Tabs defaultValue="url" className="mb-8" onValueChange={(value) => setAnalysisMethod(value)}>
+                            <TabsList className="bg-black/50 border border-gray-800/60 rounded-lg p-1 mb-6">
+                              <TabsTrigger 
+                                value="url" 
+                                className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
+                              >
+                                <Globe className="mr-2 h-4 w-4" />
+                                Website URL
+                              </TabsTrigger>
+                              <TabsTrigger 
+                                value="text" 
+                                className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
+                              >
+                                <FileText className="mr-2 h-4 w-4" />
+                                Text Sample
+                              </TabsTrigger>
+                            </TabsList>
+                            
+                            <TabsContent value="url">
+                              <div className="space-y-4">
+                                <div>
+                                  <Label htmlFor="website-url" className="text-white block mb-2">
+                                    Website URL
+                                  </Label>
+                                  <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                      <LinkIcon className="h-4 w-4" />
+                                    </div>
+                                    <Input 
+                                      id="website-url"
+                                      placeholder="e.g., example.com"
+                                      className="pl-10 bg-black/70 border-gray-800 text-white"
+                                      value={websiteUrl}
+                                      onChange={(e) => setWebsiteUrl(e.target.value)}
+                                    />
+                                  </div>
+                                  <p className="mt-2 text-xs text-gray-400">
+                                    Enter the URL of a website or webpage you want to analyze
+                                  </p>
+                                </div>
+                                
+                                <Button 
+                                  type="submit" 
+                                  className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]" 
+                                  disabled={toneAnalysisMutation.isPending}
+                                >
+                                  {toneAnalysisMutation.isPending ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                                      Analyzing...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <BarChart className="mr-2 h-4 w-4" /> 
+                                      Analyze Website
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </TabsContent>
+                            
+                            <TabsContent value="text">
+                              <div className="space-y-4">
+                                <div>
+                                  <Label htmlFor="sample-text" className="text-white block mb-2">
+                                    Sample Text
+                                  </Label>
+                                  <Textarea 
+                                    id="sample-text"
+                                    placeholder="Paste your text content here..."
+                                    className="min-h-[200px] bg-black/70 border-gray-800 text-white"
+                                    value={sampleText}
+                                    onChange={(e) => setSampleText(e.target.value)}
+                                  />
+                                  <p className="mt-2 text-xs text-gray-400">
+                                    Paste in any text content you want to analyze (e.g., website copy, blog post, email)
+                                  </p>
+                                </div>
+                                
+                                <Button 
+                                  type="submit" 
+                                  className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]" 
+                                  disabled={toneAnalysisMutation.isPending}
+                                >
+                                  {toneAnalysisMutation.isPending ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                                      Analyzing...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <BarChart className="mr-2 h-4 w-4" /> 
+                                      Analyze Text
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </TabsContent>
+                          </Tabs>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Right column - Tips and info card */}
+                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                    <div className="p-6">
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                          <FileText className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-white">Analysis Tips</h3>
+                      </div>
+                      
+                      <div className="space-y-6">
+                        <div className="bg-[#111] border border-gray-800/60 rounded-xl p-5">
+                          <div className="flex items-center mb-3">
+                            <div className="h-8 w-8 rounded-full bg-[#182030] border border-[#74d1ea]/20 flex items-center justify-center mr-3">
+                              <span className="text-[#74d1ea] font-semibold">1</span>
+                            </div>
+                            <h4 className="font-medium text-white">Choose Quality Content</h4>
+                          </div>
+                          <p className="text-gray-400 text-sm">
+                            For best results, analyze content that truly reflects your brand voice. Website copy, blog posts, and emails are all excellent sources.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-[#111] border border-gray-800/60 rounded-xl p-5">
+                          <div className="flex items-center mb-3">
+                            <div className="h-8 w-8 rounded-full bg-[#182030] border border-[#74d1ea]/20 flex items-center justify-center mr-3">
+                              <span className="text-[#74d1ea] font-semibold">2</span>
+                            </div>
+                            <h4 className="font-medium text-white">Sufficient Text Length</h4>
+                          </div>
+                          <p className="text-gray-400 text-sm">
+                            Include at least 200-300 words of text to get the most accurate analysis. Shorter texts may yield limited insights.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-[#111] border border-gray-800/60 rounded-xl p-5">
+                          <div className="flex items-center mb-3">
+                            <div className="h-8 w-8 rounded-full bg-[#182030] border border-[#74d1ea]/20 flex items-center justify-center mr-3">
+                              <span className="text-[#74d1ea] font-semibold">3</span>
+                            </div>
+                            <h4 className="font-medium text-white">Analyze Multiple Sources</h4>
+                          </div>
+                          <p className="text-gray-400 text-sm">
+                            For a comprehensive brand tone profile, analyze different content types and compare the results.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* Save Analysis Dialog */}
+      
+      {/* Rename Dialog */}
       <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
-        <DialogContent className="bg-[#0a0c10] border border-gray-800/60 text-white">
+        <DialogContent className="bg-[#0a0c10] border border-gray-800 text-white max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">
-              {toneAnalysis?.name ? "Rename Analysis" : "Save Analysis"}
-            </DialogTitle>
+            <DialogTitle className="text-white">Save Tone Analysis</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Give your tone analysis a memorable name to easily find it later.
+              Give this analysis a name to help you identify it later.
             </DialogDescription>
           </DialogHeader>
           
