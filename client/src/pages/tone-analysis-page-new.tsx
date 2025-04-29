@@ -190,31 +190,29 @@ export default function ToneAnalysisPage() {
           </div>
 
           {/* Tone Analysis Promo Banner */}
-          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
-            
-            <div className="relative z-10 flex items-start">
-              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
+          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+            <div className="flex p-6">
+              <div className="mr-4 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
               </div>
               
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold text-white mb-3">Advanced Tone Analysis</h2>
-                <p className="text-gray-300 mb-6 max-w-3xl">
+              <div>
+                <h2 className="text-white font-semibold text-lg">Advanced Tone Analysis</h2>
+                <p className="text-gray-400 text-sm mt-1 mb-4">
                   Discover the unique characteristics of your brand's communication style with our AI-powered tone analysis. Extract valuable insights about your language patterns and content effectiveness.
                 </p>
                 
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center text-sm">
+                    <div className="text-[#74d1ea] mr-2">✓</div>
                     <span className="text-gray-300">Detailed analysis of language patterns and tone characteristics</span>
                   </div>
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
+                  <div className="flex items-center text-sm">
+                    <div className="text-[#74d1ea] mr-2">✓</div>
                     <span className="text-gray-300">Professional content recommendations based on your brand voice</span>
                   </div>
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
+                  <div className="flex items-center text-sm">
+                    <div className="text-[#74d1ea] mr-2">✓</div>
                     <span className="text-gray-300">Key phrase extraction to highlight your brand's vocabulary</span>
                   </div>
                 </div>
