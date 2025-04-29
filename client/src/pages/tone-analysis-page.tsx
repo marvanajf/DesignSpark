@@ -500,7 +500,8 @@ export default function ToneAnalysisPage() {
                             
                             <Button 
                               type="submit" 
-                              className="bg-[#8ce1f7] hover:bg-[#74d1ea] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              className="text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              style={{ backgroundColor: '#74d1ea' }}
                               disabled={toneAnalysisMutation.isPending}
                             >
                               {toneAnalysisMutation.isPending ? (
@@ -553,7 +554,8 @@ export default function ToneAnalysisPage() {
                             
                             <Button 
                               type="submit" 
-                              className="bg-[#8ce1f7] hover:bg-[#74d1ea] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              className="text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              style={{ backgroundColor: '#74d1ea' }}
                               disabled={toneAnalysisMutation.isPending}
                             >
                               {toneAnalysisMutation.isPending ? (
