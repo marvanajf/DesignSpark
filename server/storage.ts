@@ -246,6 +246,21 @@ export class MemStorage implements IStorage {
       .filter(analysis => analysis.user_id === userId)
       .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
   }
+  
+  async updateToneAnalysis(id: number, updates: Partial<InsertToneAnalysis>): Promise<ToneAnalysis> {
+    const analysis = this.toneAnalyses.get(id);
+    if (!analysis) {
+      throw new Error(`Tone analysis with id ${id} not found`);
+    }
+    
+    const updatedAnalysis = {
+      ...analysis,
+      ...updates
+    };
+    
+    this.toneAnalyses.set(id, updatedAnalysis);
+    return updatedAnalysis;
+  }
 
   // Persona methods
   async createPersona(persona: InsertPersona): Promise<Persona> {

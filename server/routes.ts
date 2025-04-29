@@ -140,6 +140,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch tone analysis" });
     }
   });
+  
+  // Update tone analysis
+  app.patch("/api/tone-analyses/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const analysisId = parseInt(req.params.id);
+      const schema = z.object({
+        name: z.string().min(1),
+      });
+
+      const { name } = schema.parse(req.body);
+      
+      const toneAnalysis = await storage.getToneAnalysis(analysisId);
+      
+      if (!toneAnalysis) {
+        return res.status(404).json({ error: "Tone analysis not found" });
+      }
+      
+      if (toneAnalysis.user_id !== req.user!.id) {
+        return res.status(403).json({ error: "Not authorized to update this tone analysis" });
+      }
+      
+      const updatedAnalysis = await storage.updateToneAnalysis(analysisId, { name });
+      
+      res.status(200).json(updatedAnalysis);
+    } catch (error) {
+      console.error("Error updating tone analysis:", error);
+      res.status(400).json({ error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
 
   // Create a new persona
   app.post("/api/personas", async (req: Request, res: Response) => {
