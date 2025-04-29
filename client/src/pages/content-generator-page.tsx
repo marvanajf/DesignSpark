@@ -370,15 +370,73 @@ export default function ContentGeneratorPage() {
             </div>
           </div>
           
+          {/* Summary Section */}
+          <div className="mb-8">
+            <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+              <div className="p-6">
+                <div className="flex items-center mb-4">
+                  <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                    <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-white">Content Generator</h3>
+                    <p className="text-sm text-gray-400">Create personalized, on-brand content</p>
+                  </div>
+                </div>
+                
+                <div className="text-sm text-gray-300">
+                  <p className="mb-3">
+                    Tovably's AI Content Generator creates professional LinkedIn posts and cold emails specifically 
+                    tailored to your selected target personas, using your brand's unique tone of voice from 
+                    tone analysis results.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="flex items-start">
+                      <div className="mr-3 text-[#74d1ea]">
+                        <FaLinkedin className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-medium mb-1">LinkedIn Posts</h4>
+                        <p className="text-gray-400 text-sm">
+                          Create engaging, authentic LinkedIn posts that resonate with your professional network while maintaining your brand voice.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-3 text-[#74d1ea]">
+                        <Mail className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-medium mb-1">Cold Emails</h4>
+                        <p className="text-gray-400 text-sm">
+                          Generate personalized cold emails that speak directly to your prospects' needs and pain points in your authentic tone.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* Left Column: Content Generation Form */}
             <div className="xl:col-span-1">
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden h-full">
-                <CardHeader className="pb-3 border-b border-gray-800">
-                  <CardTitle className="text-lg font-medium text-white">Generate New Content</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Create professional content based on your tone and target audience
-                  </CardDescription>
+              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] h-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                <CardHeader className="pb-3 border-b border-gray-800/60 relative z-10">
+                  <div className="flex items-center">
+                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-3">
+                      <Send className="h-5 w-5 text-[#74d1ea]" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg font-semibold text-white">Generate New Content</CardTitle>
+                      <CardDescription className="text-gray-400">
+                        Create professional content based on your tone and target audience
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-5">
                   {/* Content Type Selection */}
@@ -520,14 +578,20 @@ export default function ContentGeneratorPage() {
             
             {/* Right Column: Generated Content */}
             <div className="xl:col-span-2">
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden h-full">
-                <CardHeader className="pb-3 border-b border-gray-800">
+              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] h-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                <CardHeader className="pb-3 border-b border-gray-800/60 relative z-10">
                   <div className="flex justify-between items-center">
-                    <div>
-                      <CardTitle className="text-lg font-medium text-white">Generated Content</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        Your recent content ready to use
-                      </CardDescription>
+                    <div className="flex items-center">
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-3">
+                        <FileText className="h-5 w-5 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg font-semibold text-white">Generated Content</CardTitle>
+                        <CardDescription className="text-gray-400">
+                          Your recent content ready to use
+                        </CardDescription>
+                      </div>
                     </div>
                     <div className="flex space-x-3">
                       <div className="relative">
@@ -573,14 +637,15 @@ export default function ContentGeneratorPage() {
                         const persona = personas.find(p => p.id === content.persona_id);
                         
                         return (
-                          <Card key={content.id} className="bg-black border-gray-800 rounded-lg overflow-hidden">
-                            <CardHeader className="py-3 px-5 bg-black/40 border-b border-gray-800">
+                          <Card key={content.id} className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                            <CardHeader className="py-3 px-5 border-b border-gray-800/60 relative z-10">
                               <div className="flex justify-between items-center">
                                 <div className="flex items-center">
                                   <Badge className={`mr-2 ${
                                     content.type === "linkedin_post" 
-                                      ? "bg-blue-500/20 text-blue-400" 
-                                      : "bg-green-500/20 text-green-400"
+                                      ? "bg-[#74d1ea]/20 text-[#74d1ea]" 
+                                      : "bg-[#74d1ea]/20 text-[#74d1ea]"
                                   } border-0`}>
                                     {content.type === "linkedin_post" ? (
                                       <FaLinkedin className="h-3 w-3 mr-1" />
@@ -640,12 +705,12 @@ export default function ContentGeneratorPage() {
                                 </div>
                               </div>
                             </CardHeader>
-                            <CardContent className="py-4 px-5">
+                            <CardContent className="py-4 px-5 relative z-10">
                               <div className="whitespace-pre-wrap text-gray-300 text-sm">
                                 {content.content_text}
                               </div>
                             </CardContent>
-                            <CardFooter className="py-3 px-5 bg-black/40 border-t border-gray-800 flex justify-between">
+                            <CardFooter className="py-3 px-5 bg-black/20 border-t border-gray-800/60 flex justify-between relative z-10">
                               <div className="flex items-center space-x-4">
                                 <Button
                                   variant="outline"
