@@ -218,11 +218,11 @@ export default function ToneAnalysisPage() {
                   {/* Tone Characteristics - Enhanced design */}
                   <div className="mb-10">
                     <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white">Tone Characteristics</h3>
+                        <h3 className="text-lg font-semibold text-white">Tone Characteristics</h3>
                         <p className="text-gray-400 text-sm mt-0.5">Key tone indicators detected in your content</p>
                       </div>
                     </div>
@@ -261,11 +261,11 @@ export default function ToneAnalysisPage() {
                   {/* Language Patterns - Enhanced design */}
                   <div className="mb-10">
                     <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <MessageSquare className="h-6 w-6 text-[#74d1ea]" />
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white">Language Patterns</h3>
+                        <h3 className="text-lg font-semibold text-white">Language Patterns</h3>
                         <p className="text-gray-400 text-sm mt-0.5">Analysis of your communication style and word choices</p>
                       </div>
                     </div>
@@ -333,11 +333,11 @@ export default function ToneAnalysisPage() {
                   {/* Summary section - Enhanced design */}
                   <div className="mb-10">
                     <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <PieChart className="h-6 w-6 text-[#74d1ea]" />
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <PieChart className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white">Summary</h3>
+                        <h3 className="text-lg font-semibold text-white">Summary</h3>
                         <p className="text-gray-400 text-sm mt-0.5">Overall assessment of your communication style</p>
                       </div>
                     </div>
@@ -357,11 +357,11 @@ export default function ToneAnalysisPage() {
                   {/* Recommended Content Types - Enhanced design */}
                   <div className="mb-10">
                     <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <List className="h-6 w-6 text-[#74d1ea]" />
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <List className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white">Recommended Content</h3>
+                        <h3 className="text-lg font-semibold text-white">Recommended Content</h3>
                         <p className="text-gray-400 text-sm mt-0.5">Content types that match your brand's voice</p>
                       </div>
                     </div>
@@ -430,11 +430,11 @@ export default function ToneAnalysisPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
                     <div className="p-6">
                       <div className="flex items-center space-x-3 mb-6">
-                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                          <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
+                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                          <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-white">Analyze Your Brand's Tone</h3>
+                          <h3 className="text-lg font-semibold text-white">Analyze Your Brand's Tone</h3>
                           <p className="text-gray-400 text-sm mt-0.5">Decode your brand's unique voice with AI-powered tone analysis</p>
                         </div>
                       </div>
@@ -580,11 +580,11 @@ export default function ToneAnalysisPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
                     <div className="p-6">
                       <div className="flex items-center space-x-3 mb-6">
-                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                          <BarChart className="h-6 w-6 text-[#74d1ea]" />
+                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                          <BarChart className="h-5 w-5 text-[#74d1ea]" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-white">Previous Analyses</h3>
+                          <h3 className="text-lg font-semibold text-white">Previous Analyses</h3>
                           <p className="text-gray-400 text-sm mt-0.5">View your recent tone analysis results</p>
                         </div>
                       </div>
