@@ -332,6 +332,39 @@ export default function PersonaSelectionPage() {
             </div>
           </div>
 
+          {/* Persona Promo Banner */}
+          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+            
+            <div className="relative z-10 flex items-start">
+              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <Users className="h-6 w-6 text-[#74d1ea]" />
+              </div>
+              
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-white mb-3">AI-Generated Target Personas</h2>
+                <p className="text-gray-300 mb-6 max-w-3xl">
+                  Create, customize and utilize audience personas that perfectly match your brand's voice. Our AI helps you craft detailed target personas for more effective and focused content creation.
+                </p>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">AI-powered persona generation for your target audience</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Customizable interests, roles, and demographic profiles</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Targeted content creation based on specific audience needs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Create Persona Section */}
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-6">
