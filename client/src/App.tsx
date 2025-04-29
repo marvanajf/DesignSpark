@@ -16,6 +16,7 @@ import ContentGeneratorPage from "@/pages/content-generator-page";
 import SavedContentPage from "@/pages/saved-content-page";
 import AccountPage from "@/pages/account-page";
 import SupportPage from "@/pages/support-page";
+import GuidesPage from "@/pages/guides-page";
 import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
 import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
 import PersonasMarketingPage from "@/pages/personas-marketing-page";
@@ -57,6 +58,7 @@ function Router() {
       <ProtectedRoute path="/personas" component={PersonaSelectionPage} />
       <ProtectedRoute path="/content-generator" component={ContentGeneratorPage} />
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
+      <Route path="/guides" component={GuidesPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
       <ProtectedRoute path="/support" component={SupportPage} />
       <ProtectedRoute path="/admin" component={AdminPage} />

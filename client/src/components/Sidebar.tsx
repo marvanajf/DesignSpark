@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   HelpCircle,
+  Book,
   UserCog,
   ShieldAlert
 } from "lucide-react";
@@ -30,7 +31,8 @@ export default function Sidebar() {
     { href: "/tone-analysis", icon: <BarChart2 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
-    { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" }
+    { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" },
+    { href: "/guides", icon: <Book className="h-5 w-5" />, label: "Guides" }
   ];
   
   // Determine if the current user is an admin
