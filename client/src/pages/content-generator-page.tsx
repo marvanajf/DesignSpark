@@ -574,30 +574,33 @@ export default function ContentGeneratorPage() {
           </div>
           
           {/* Content Generator Promo Banner */}
-          <div className="mb-8 p-6 bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-            <div className="flex items-start">
-              <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+            
+            <div className="relative z-10 flex items-start">
+              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <Sparkles className="h-6 w-6 text-[#74d1ea]" />
               </div>
-              <div>
-                <h2 className="text-lg font-semibold text-white">AI-Powered Content Generation</h2>
-                <p className="mt-1 text-sm text-gray-400">
+              
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-white mb-3">AI-Powered Content Generation</h2>
+                <p className="text-gray-300 mb-6 max-w-3xl">
                   Create compelling, personalized content with our AI engine. Generate precisely targeted LinkedIn posts and cold emails that combine your brand's unique tone with tailored audience personas.
                 </p>
                 
-                <div className="space-y-1 mt-4">
-                  <p className="text-[#74d1ea] text-sm flex items-center">
-                    <Check className="h-4 w-4 mr-2" />
-                    <span>Persona-targeted content to engage specific audience segments</span>
-                  </p>
-                  <p className="text-[#74d1ea] text-sm flex items-center">
-                    <Check className="h-4 w-4 mr-2" />
-                    <span>Tone-matched writing that perfectly reflects your brand voice</span>
-                  </p>
-                  <p className="text-[#74d1ea] text-sm flex items-center">
-                    <Check className="h-4 w-4 mr-2" />
-                    <span>LinkedIn posts and cold emails optimized for high engagement</span>
-                  </p>
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Persona-targeted content to engage specific audience segments</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Tone-matched writing that perfectly reflects your brand voice</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">LinkedIn posts and cold emails optimized for high engagement</span>
+                  </div>
                 </div>
               </div>
             </div>
