@@ -353,43 +353,47 @@ export default function ToneAnalysisPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-4">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
-                            onClick={() => {
-                              setAnalysisName(toneAnalysis.name || (toneAnalysis.website_url ? 
-                                `Analysis of ${toneAnalysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` : 
-                                `Text Analysis ${new Date().toLocaleDateString()}`));
-                              setSaveDialogOpen(true);
-                            }}
-                          >
-                            <Save className="h-4 w-4 mr-1" />
-                            Rename
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
-                            onClick={() => {
-                              // Reset form fields and current analysis ID
-                              setWebsiteUrl("");
-                              setSampleText("");
-                              setCurrentAnalysisId(null);
-                              // Scroll to form
-                              window.scrollTo(0, 0);
-                            }}
-                          >
-                            <PlusCircle className="h-4 w-4 mr-1" />
-                            Create New
-                          </Button>
-                          <p className="text-sm text-gray-500">
-                            {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
-                          </p>
-                          <Badge className="bg-[#182030] text-[#74d1ea] border border-[#74d1ea]/30 px-3 py-1">
-                            <CheckCircle className="h-3 w-3 mr-1" /> Complete
-                          </Badge>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
+                              onClick={() => {
+                                setAnalysisName(toneAnalysis.name || (toneAnalysis.website_url ? 
+                                  `Analysis of ${toneAnalysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` : 
+                                  `Text Analysis ${new Date().toLocaleDateString()}`));
+                                setSaveDialogOpen(true);
+                              }}
+                            >
+                              <Save className="h-4 w-4 mr-1" />
+                              Rename
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
+                              onClick={() => {
+                                // Reset form fields and current analysis ID
+                                setWebsiteUrl("");
+                                setSampleText("");
+                                setCurrentAnalysisId(null);
+                                // Scroll to form
+                                window.scrollTo(0, 0);
+                              }}
+                            >
+                              <PlusCircle className="h-4 w-4 mr-1" />
+                              Create New
+                            </Button>
+                          </div>
+                          <div className="flex items-center gap-3 ml-auto">
+                            <p className="text-sm text-gray-500">
+                              {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
+                            </p>
+                            <Badge className="bg-[#182030] text-[#74d1ea] border border-[#74d1ea]/30 px-3 py-1">
+                              <CheckCircle className="h-3 w-3 mr-1" /> Complete
+                            </Badge>
+                          </div>
                         </div>
                       </div>
                     </div>
