@@ -467,17 +467,17 @@ export default function ToneAnalysisPage() {
                             
                             <Button 
                               type="submit" 
-                              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black w-full h-11 font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              className="bg-[#0e131f] hover:bg-[#182030] text-white w-full h-11 font-medium border border-[#74d1ea]/20 shadow-[0_0_25px_rgba(116,209,234,0.25)]"
                               disabled={toneAnalysisMutation.isPending}
                             >
                               {toneAnalysisMutation.isPending ? (
                                 <>
-                                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                  <Loader2 className="mr-2 h-5 w-5 animate-spin text-white" />
                                   Analyzing...
                                 </>
                               ) : (
                                 <>
-                                  <BarChart className="mr-2 h-5 w-5" />
+                                  <BarChart className="mr-2 h-5 w-5 text-[#74d1ea]" />
                                   Analyze Website Tone
                                 </>
                               )}
@@ -520,17 +520,17 @@ export default function ToneAnalysisPage() {
                             
                             <Button 
                               type="submit" 
-                              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black w-full h-11 font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              className="bg-[#0e131f] hover:bg-[#182030] text-white w-full h-11 font-medium border border-[#74d1ea]/20 shadow-[0_0_25px_rgba(116,209,234,0.25)]"
                               disabled={toneAnalysisMutation.isPending}
                             >
                               {toneAnalysisMutation.isPending ? (
                                 <>
-                                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                  <Loader2 className="mr-2 h-5 w-5 animate-spin text-white" />
                                   Analyzing...
                                 </>
                               ) : (
                                 <>
-                                  <BarChart className="mr-2 h-5 w-5" />
+                                  <BarChart className="mr-2 h-5 w-5 text-[#74d1ea]" />
                                   Analyze Text Tone
                                 </>
                               )}
