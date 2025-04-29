@@ -57,6 +57,7 @@ export const users = pgTable("users", {
 export const toneAnalyses = pgTable("tone_analyses", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id").notNull().references(() => users.id),
+  name: text("name"),
   website_url: text("website_url"),
   sample_text: text("sample_text"),
   tone_results: jsonb("tone_results"),
@@ -115,6 +116,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export const insertToneAnalysisSchema = createInsertSchema(toneAnalyses).pick({
   user_id: true,
+  name: true,
   website_url: true,
   sample_text: true,
   tone_results: true
