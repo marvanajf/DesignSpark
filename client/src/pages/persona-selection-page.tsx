@@ -336,23 +336,27 @@ export default function PersonaSelectionPage() {
 
           {/* Create Persona Section */}
           <div className="mb-8">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <UserCircle className="h-5 w-5 text-[#74d1ea]" />
+              </div>
               <div>
-                <h2 className="text-lg font-medium text-white">Create New Persona</h2>
-                <p className="text-sm text-gray-400 mt-1">Specify your target audience profiles</p>
+                <h2 className="text-lg font-semibold text-white">Create New Persona</h2>
+                <p className="text-sm text-gray-400 mt-0.5">Specify your target audience profiles</p>
               </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* AI Generator Card */}
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden cursor-pointer hover:bg-gray-900 transition-all duration-300">
+              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center">
-                      <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                      <Sparkles className="h-5 w-5 text-[#74d1ea]" />
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-medium text-white">AI Generator</h3>
+                      <h3 className="text-lg font-semibold text-white">AI Generator</h3>
                       <p className="text-sm text-gray-400">Create a persona using AI</p>
                     </div>
                   </div>
@@ -413,14 +417,15 @@ export default function PersonaSelectionPage() {
               </Card>
 
               {/* Manual Create Card */}
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden cursor-pointer hover:bg-gray-900 transition-all duration-300">
+              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center">
-                      <UserCircle className="h-6 w-6 text-[#74d1ea]" />
+                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                      <UserCircle className="h-5 w-5 text-[#74d1ea]" />
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-medium text-white">Custom Persona</h3>
+                      <h3 className="text-lg font-semibold text-white">Custom Persona</h3>
                       <p className="text-sm text-gray-400">Create a persona manually</p>
                     </div>
                   </div>
@@ -506,10 +511,13 @@ export default function PersonaSelectionPage() {
 
           {/* Personas List Section */}
           <div className="mb-8">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <Users className="h-5 w-5 text-[#74d1ea]" />
+              </div>
               <div>
-                <h2 className="text-lg font-medium text-white">Your Personas</h2>
-                <p className="text-sm text-gray-400 mt-1">
+                <h2 className="text-lg font-semibold text-white">Your Personas</h2>
+                <p className="text-sm text-gray-400 mt-0.5">
                   Select up to 5 personas for content generation
                 </p>
               </div>
@@ -522,10 +530,11 @@ export default function PersonaSelectionPage() {
                   return (
                     <Card 
                       key={persona.id} 
-                      className={`bg-[#111] border-gray-800 rounded-lg overflow-hidden relative ${
-                        isSelected ? 'ring-2 ring-[#74d1ea]' : ''
+                      className={`group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
+                        isSelected ? 'ring-2 ring-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.2)]' : ''
                       }`}
                     >
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                       <div className="absolute top-0 right-0 m-2 flex space-x-2">
                         {isSelected && (
                           <Badge className="bg-[#74d1ea]/20 text-[#74d1ea] border-0">
@@ -609,28 +618,32 @@ export default function PersonaSelectionPage() {
                 })}
               </div>
             ) : (
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden">
-                <CardContent className="p-6 text-center">
+              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                <div className="p-6 text-center">
                   <div className="py-10">
-                    <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">No personas found</h3>
-                    <p className="text-gray-400 mb-4">
+                    <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                      <Users className="h-6 w-6 text-[#74d1ea]" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">No personas found</h3>
+                    <p className="text-gray-400 mb-4 max-w-md mx-auto">
                       {searchTerm 
                         ? `No personas match "${searchTerm}". Try a different search term.` 
                         : "You haven't created any personas yet. Create one to get started."}
                     </p>
                     {searchTerm && (
                       <Button 
-                        variant="outline"
-                        className="border-gray-700 text-gray-300"
+                        variant="outline" 
+                        className="border-gray-800/80 bg-black/30 hover:bg-[#0e131f] text-white h-10"
                         onClick={() => setSearchTerm("")}
                       >
+                        <X className="h-4 w-4 mr-2 text-[#74d1ea]" />
                         Clear Search
                       </Button>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )}
           </div>
 
