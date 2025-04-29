@@ -287,11 +287,11 @@ export default function ToneAnalysisPage() {
                         
                         {Array.isArray(toneAnalysis.tone_results.language_patterns.common_phrases) ? (
                           toneAnalysis.tone_results.language_patterns.common_phrases.length > 0 ? (
-                            <div className="flex flex-wrap gap-2 mt-4">
+                            <div className="flex flex-wrap gap-3 mt-8">
                               {toneAnalysis.tone_results.language_patterns.common_phrases.slice(0, 10).map((phrase, i) => (
                                 <div 
                                   key={i} 
-                                  className="rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab] text-black font-medium px-4 py-2 text-sm shadow-[0_0_15px_rgba(116,209,234,0.15)]"
+                                  className="rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab] text-black font-medium px-5 py-2.5 text-sm shadow-[0_0_15px_rgba(116,209,234,0.15)]"
                                 >
                                   {phrase}
                                 </div>
