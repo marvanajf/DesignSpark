@@ -374,12 +374,16 @@ export default function ToneAnalysisPage() {
                               size="sm" 
                               className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
                               onClick={() => {
-                                // Reset form fields and current analysis ID
+                                // Reset form fields
                                 setWebsiteUrl("");
                                 setSampleText("");
+                                
+                                // Clear current analysis ID to show the form
                                 setCurrentAnalysisId(null);
+                                setAnalysisMethod("url");
+                                
                                 // Scroll to form
-                                window.scrollTo(0, 0);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
                               }}
                             >
                               <PlusCircle className="h-4 w-4 mr-1" />
