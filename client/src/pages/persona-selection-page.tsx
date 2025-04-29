@@ -686,7 +686,10 @@ export default function PersonaSelectionPage() {
               </div>
             </div>
 
-            {filteredPersonas && filteredPersonas.length > 0 ? (
+            {filteredPersonas && filteredPersonas.length > 0 && 
+              filteredPersonas.filter((persona: any) => 
+                !["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
+                  "HR Director", "Financial Advisor"].includes(persona.name)).length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredPersonas
                   .filter((persona: any) => 
