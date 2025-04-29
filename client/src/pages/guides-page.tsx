@@ -382,77 +382,7 @@ export default function GuidesPage() {
             </TabsContent>
           </Tabs>
 
-          {/* Additional Resources */}
-          <div className="mb-10">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-white">Expert Webinars & Training</h2>
-              <p className="text-sm text-gray-400 mt-1">In-depth educational content from communication professionals</p>
-            </div>
-            
-            <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {/* Webinar Card 1 */}
-                  <div className="bg-[#111] border border-gray-800/80 rounded-lg overflow-hidden">
-                    <div className="h-40 bg-[#182030] flex items-center justify-center">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-16 w-16 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <Bot className="h-8 w-8 text-[#74d1ea]" />
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-md font-semibold text-white mb-2">AI Writing Masterclass</h3>
-                      <p className="text-xs text-gray-400 mb-3">Expert techniques for leveraging AI in professional communications</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-[#74d1ea]">45 minutes</span>
-                        <Button variant="link" className="text-xs text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
-                          Coming Soon
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Webinar Card 2 */}
-                  <div className="bg-[#111] border border-gray-800/80 rounded-lg overflow-hidden">
-                    <div className="h-40 bg-[#182030] flex items-center justify-center">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-16 w-16 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <MessageSquare className="h-8 w-8 text-[#74d1ea]" />
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-md font-semibold text-white mb-2">Tone & Voice Workshop</h3>
-                      <p className="text-xs text-gray-400 mb-3">Building brand consistency through AI-powered tone analysis</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-[#74d1ea]">60 minutes</span>
-                        <Button variant="link" className="text-xs text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
-                          Coming Soon
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Webinar Card 3 */}
-                  <div className="bg-[#111] border border-gray-800/80 rounded-lg overflow-hidden">
-                    <div className="h-40 bg-[#182030] flex items-center justify-center">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-16 w-16 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <Lightbulb className="h-8 w-8 text-[#74d1ea]" />
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-md font-semibold text-white mb-2">Advanced Persona Targeting</h3>
-                      <p className="text-xs text-gray-400 mb-3">Strategies for persona-based content optimization</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-[#74d1ea]">50 minutes</span>
-                        <Button variant="link" className="text-xs text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
-                          Coming Soon
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </Layout>
