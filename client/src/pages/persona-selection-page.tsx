@@ -540,25 +540,27 @@ export default function PersonaSelectionPage() {
             </div>
           </div>
 
-          {/* Personas List Section */}
+          {/* Example Personas Section */}
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <Users className="h-5 w-5 text-[#74d1ea]" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-white">Your Personas</h2>
-                <p className="text-sm text-gray-400 mt-0.5">
-                  Select up to 5 personas for content generation
-                </p>
+                <h2 className="text-lg font-semibold text-white">Example Personas</h2>
+                <p className="text-sm text-gray-400 mt-0.5">Ready-to-use personas for common audience segments</p>
               </div>
             </div>
 
             {filteredPersonas && filteredPersonas.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredPersonas.map((persona: any) => {
-                  const isSelected = selectedPersonaIds.includes(persona.id);
-                  return (
+                {filteredPersonas
+                  .filter((persona: any) => 
+                    ["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
+                     "HR Director", "Financial Advisor"].includes(persona.name))
+                  .map((persona: any) => {
+                    const isSelected = selectedPersonaIds.includes(persona.id);
+                    return (
                     <Card 
                       key={persona.id} 
                       className={`group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
@@ -572,17 +574,9 @@ export default function PersonaSelectionPage() {
                             Selected
                           </Badge>
                         )}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 rounded-full hover:bg-red-900/20 hover:text-red-500 text-gray-400"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeletePersona(persona.id);
-                          }}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                        <Badge className="bg-[#182030] text-[#74d1ea] border border-[#74d1ea]/30 px-2 py-0.5">
+                          Example
+                        </Badge>
                       </div>
                       <CardContent className="p-5">
                         <div className="flex items-center mb-4">
@@ -661,6 +655,148 @@ export default function PersonaSelectionPage() {
                       {searchTerm 
                         ? `No personas match "${searchTerm}". Try a different search term.` 
                         : "You haven't created any personas yet. Create one to get started."}
+                    </p>
+                    {searchTerm && (
+                      <Button 
+                        variant="outline" 
+                        className="border-gray-800/80 bg-black/30 hover:bg-[#0e131f] text-white h-10"
+                        onClick={() => setSearchTerm("")}
+                      >
+                        <X className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                        Clear Search
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Your Personas Section */}
+          <div className="mb-8 mt-12">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <UserCircle className="h-5 w-5 text-[#74d1ea]" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-white">Your Personas</h2>
+                <p className="text-sm text-gray-400 mt-0.5">
+                  Custom personas you've created for your specific audience targets
+                </p>
+              </div>
+            </div>
+
+            {filteredPersonas && filteredPersonas.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredPersonas
+                  .filter((persona: any) => 
+                    !["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
+                      "HR Director", "Financial Advisor"].includes(persona.name))
+                  .map((persona: any) => {
+                    const isSelected = selectedPersonaIds.includes(persona.id);
+                    return (
+                      <Card 
+                        key={persona.id} 
+                        className={`group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
+                          isSelected ? 'ring-2 ring-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.2)]' : ''
+                        }`}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                        <div className="absolute top-0 right-0 m-2 flex space-x-2">
+                          {isSelected && (
+                            <Badge className="bg-[#74d1ea]/20 text-[#74d1ea] border-0">
+                              Selected
+                            </Badge>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 rounded-full hover:bg-red-900/20 hover:text-red-500 text-gray-400"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeletePersona(persona.id);
+                            }}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                        <CardContent className="p-5">
+                          <div className="flex items-center mb-4">
+                            <Avatar className="h-12 w-12 bg-[#74d1ea]/20 border-0">
+                              <AvatarFallback className="text-[#74d1ea]">
+                                {persona.name.substring(0, 2)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="ml-4">
+                              <h3 className="text-lg font-medium text-white">{persona.name}</h3>
+                              <p className="text-sm text-gray-400">
+                                {persona.name.includes("Director") || 
+                                 persona.name.includes("Manager") || 
+                                 persona.name.includes("Owner") || 
+                                 persona.name.includes("Officer")
+                                  ? persona.name.split(" ").slice(0, -1).join(" ")
+                                  : "Professional"}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <p className="text-sm text-gray-300 mb-4">
+                            {persona.description}
+                          </p>
+                          
+                          {persona.interests && Array.isArray(persona.interests) && persona.interests.length > 0 && (
+                            <div className="mt-3">
+                              <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Key Interests</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {persona.interests.map((interest: any, index: number) => (
+                                  <Badge key={index} variant="outline" className="bg-[#74d1ea]/10 text-[#74d1ea] border-0">
+                                    {interest}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </CardContent>
+                        <CardFooter className="bg-black/20 py-3 px-5 border-t border-gray-800">
+                          <Button
+                            variant={isSelected ? "default" : "outline"}
+                            className={`w-full ${
+                              isSelected 
+                                ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black' 
+                                : 'border-gray-700 text-gray-300 hover:text-white'
+                            }`}
+                            onClick={() => togglePersonaSelection(persona.id)}
+                          >
+                            {isSelected ? (
+                              <>
+                                <X className="h-4 w-4 mr-2" />
+                                Deselect
+                              </>
+                            ) : (
+                              <>
+                                <Plus className="h-4 w-4 mr-2" />
+                                Select
+                              </>
+                            )}
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    );
+                  })}
+              </div>
+            ) : (
+              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
+                <div className="p-6 text-center">
+                  <div className="py-10">
+                    <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                      <UserCircle className="h-6 w-6 text-[#74d1ea]" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">No custom personas found</h3>
+                    <p className="text-gray-400 mb-4 max-w-md mx-auto">
+                      {searchTerm 
+                        ? `No custom personas match "${searchTerm}". Try a different search term.` 
+                        : "You haven't created any custom personas yet. Try creating one using the options above."}
                     </p>
                     {searchTerm && (
                       <Button 
