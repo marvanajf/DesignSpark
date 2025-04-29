@@ -42,6 +42,7 @@ export interface IStorage {
   createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis>;
   getToneAnalysis(id: number): Promise<ToneAnalysis | undefined>;
   getToneAnalysesByUserId(userId: number): Promise<ToneAnalysis[]>;
+  updateToneAnalysis(id: number, updates: Partial<InsertToneAnalysis>): Promise<ToneAnalysis>;
   
   // Persona methods
   createPersona(persona: InsertPersona): Promise<Persona>;

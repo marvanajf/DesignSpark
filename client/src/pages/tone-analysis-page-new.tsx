@@ -98,7 +98,7 @@ export default function ToneAnalysisPage() {
   });
 
   const toneAnalysisMutation = useMutation({
-    mutationFn: async (data: { websiteUrl?: string; sampleText?: string }) => {
+    mutationFn: async (data: { websiteUrl?: string; sampleText?: string; name?: string }) => {
       const res = await apiRequest("POST", "/api/tone-analysis", data);
       return res.json();
     },
@@ -109,6 +109,30 @@ export default function ToneAnalysisPage() {
     onError: (error: Error) => {
       toast({
         title: "Analysis failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  
+  // Mutation for saving/updating analysis name
+  const saveAnalysisMutation = useMutation({
+    mutationFn: async (data: { id: number; name: string }) => {
+      const res = await apiRequest("PATCH", `/api/tone-analyses/${data.id}`, { name: data.name });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "Tone analysis saved successfully.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/tone-analyses"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/tone-analyses/${currentAnalysisId}`] });
+      setSaveDialogOpen(false);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Save failed",
         description: error.message,
         variant: "destructive",
       });
@@ -684,6 +708,58 @@ export default function ToneAnalysisPage() {
           )}
         </div>
       </div>
+
+      {/* Save Analysis Dialog */}
+      <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
+        <DialogContent className="bg-[#0a0c10] border border-gray-800/60 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">
+              {toneAnalysis?.name ? "Rename Analysis" : "Save Analysis"}
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Give your tone analysis a memorable name to easily find it later.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <Label htmlFor="analysis-name" className="text-white mb-2 block">
+              Analysis Name
+            </Label>
+            <Input
+              id="analysis-name"
+              placeholder="E.g., Company Website Analysis"
+              value={analysisName}
+              onChange={(e) => setAnalysisName(e.target.value)}
+              className="bg-black border-gray-700 text-white"
+            />
+          </div>
+          
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setSaveDialogOpen(false)}
+              className="border-gray-700 text-gray-300 hover:bg-gray-900 hover:text-white"
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit"
+              disabled={!analysisName}
+              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium"
+              onClick={() => {
+                if (toneAnalysis && analysisName) {
+                  saveAnalysisMutation.mutate({ 
+                    id: toneAnalysis.id, 
+                    name: analysisName 
+                  });
+                }
+              }}
+            >
+              {toneAnalysis?.name ? "Update" : "Save"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
