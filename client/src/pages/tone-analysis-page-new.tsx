@@ -270,19 +270,9 @@ export default function ToneAnalysisPage() {
                     </div>
                   </div>
 
-                  {/* Language Patterns - Enhanced design */}
+                  {/* Analysis Results */}
                   <div className="mb-10">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">Language Patterns</h3>
-                        <p className="text-gray-400 text-sm mt-0.5">Analysis of your communication style and word choices</p>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Keywords section (renamed from Common Phrases) */}
                       <div className="md:col-span-2 bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
                         <div className="flex items-center mb-5">
