@@ -17,7 +17,8 @@ import {
   Sparkles,
   Layers,
   Search,
-  Filter
+  Filter,
+  AlertTriangle
 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
