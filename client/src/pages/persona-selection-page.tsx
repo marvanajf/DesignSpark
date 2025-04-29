@@ -673,23 +673,23 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Your Personas Section */}
-          <div className="mb-8 mt-12">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                <UserCircle className="h-5 w-5 text-[#74d1ea]" />
+          {filteredPersonas && 
+           Array.isArray(filteredPersonas) && 
+           filteredPersonas.filter((persona: any) => 
+             !["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
+               "HR Director", "Financial Advisor"].includes(persona.name)).length > 0 && (
+            <div className="mb-8 mt-12">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                  <UserCircle className="h-5 w-5 text-[#74d1ea]" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-white">Your Personas</h2>
+                  <p className="text-sm text-gray-400 mt-0.5">
+                    Custom personas you've created for your specific audience targets
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-lg font-semibold text-white">Your Personas</h2>
-                <p className="text-sm text-gray-400 mt-0.5">
-                  Custom personas you've created for your specific audience targets
-                </p>
-              </div>
-            </div>
-
-            {filteredPersonas && filteredPersonas.length > 0 && 
-              filteredPersonas.filter((persona: any) => 
-                !["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
-                  "HR Director", "Financial Advisor"].includes(persona.name)).length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredPersonas
                   .filter((persona: any) => 
@@ -787,35 +787,8 @@ export default function PersonaSelectionPage() {
                     );
                   })}
               </div>
-            ) : (
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <div className="p-6 text-center">
-                  <div className="py-10">
-                    <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <UserCircle className="h-6 w-6 text-[#74d1ea]" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">No custom personas found</h3>
-                    <p className="text-gray-400 mb-4 max-w-md mx-auto">
-                      {searchTerm 
-                        ? `No custom personas match "${searchTerm}". Try a different search term.` 
-                        : "You haven't created any custom personas yet. Try creating one using the options above."}
-                    </p>
-                    {searchTerm && (
-                      <Button 
-                        variant="outline" 
-                        className="border-gray-800/80 bg-black/30 hover:bg-[#0e131f] text-white h-10"
-                        onClick={() => setSearchTerm("")}
-                      >
-                        <X className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                        Clear Search
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Continue Button Section */}
           <div className="mt-10 text-center">
