@@ -6,8 +6,6 @@ import { useLocation } from "wouter";
 import { 
   Loader2, 
   Info, 
-  ChevronDown, 
-  Calendar, 
   Filter,
   UserCircle,
   Plus,
@@ -19,7 +17,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Persona } from "@shared/schema";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -39,7 +37,7 @@ export default function PersonaSelectionPage() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // Fetch personas
-  const { data: personas, isLoading, error } = useQuery<Persona[]>({
+  const { data: personas, isLoading, error } = useQuery({
     queryKey: ["/api/personas"],
     onError: (err: Error) => {
       toast({
@@ -210,8 +208,8 @@ export default function PersonaSelectionPage() {
   useEffect(() => {
     if (personas) {
       const initialSelectedIds = personas
-        .filter(persona => persona.is_selected)
-        .map(persona => persona.id);
+        .filter((persona: any) => persona.is_selected)
+        .map((persona: any) => persona.id);
       setSelectedPersonaIds(initialSelectedIds);
     }
   }, [personas]);
@@ -266,7 +264,7 @@ export default function PersonaSelectionPage() {
   };
 
   // Filter personas based on search term
-  const filteredPersonas = personas?.filter(persona => 
+  const filteredPersonas = personas?.filter((persona: any) => 
     persona.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     (persona.description && persona.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -525,7 +523,7 @@ export default function PersonaSelectionPage() {
 
             {filteredPersonas && filteredPersonas.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredPersonas.map((persona) => {
+                {filteredPersonas.map((persona: any) => {
                   const isSelected = selectedPersonaIds.includes(persona.id);
                   return (
                     <Card 
@@ -581,7 +579,7 @@ export default function PersonaSelectionPage() {
                           <div className="mt-3">
                             <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Key Interests</h4>
                             <div className="flex flex-wrap gap-2">
-                              {persona.interests.map((interest, index) => (
+                              {persona.interests.map((interest: any, index: number) => (
                                 <Badge key={index} variant="outline" className="bg-[#74d1ea]/10 text-[#74d1ea] border-0">
                                   {interest}
                                 </Badge>
