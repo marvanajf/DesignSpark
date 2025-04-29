@@ -27,7 +27,8 @@ import {
   Sparkles,
   AlignLeft,
   BookMarked,
-  Save
+  Save,
+  PlusCircle
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Input } from "@/components/ui/input";
@@ -103,6 +104,19 @@ export default function ToneAnalysisPage() {
       return res.json();
     },
     onSuccess: (data) => {
+      // Generate a default name based on URL or date
+      const defaultName = data.website_url 
+        ? `Analysis of ${data.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` 
+        : `Text Analysis ${new Date().toLocaleDateString()}`;
+      
+      // Auto-save the analysis with a default name
+      if (data.id) {
+        saveAnalysisMutation.mutate({ 
+          id: data.id, 
+          name: defaultName 
+        });
+      }
+
       queryClient.invalidateQueries({ queryKey: ["/api/tone-analyses"] });
       setCurrentAnalysisId(data.id);
     },
@@ -353,6 +367,22 @@ export default function ToneAnalysisPage() {
                           >
                             <Save className="h-4 w-4 mr-1" />
                             Rename
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
+                            onClick={() => {
+                              // Reset form fields and current analysis ID
+                              setWebsiteUrl("");
+                              setSampleText("");
+                              setCurrentAnalysisId(null);
+                              // Scroll to form
+                              window.scrollTo(0, 0);
+                            }}
+                          >
+                            <PlusCircle className="h-4 w-4 mr-1" />
+                            Create New
                           </Button>
                           <p className="text-sm text-gray-500">
                             {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
