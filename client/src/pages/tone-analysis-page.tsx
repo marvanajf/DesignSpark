@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { formatDistanceToNow } from "date-fns";
 import { 
   Loader2, 
   BarChart2,
@@ -22,7 +23,9 @@ import {
   ArrowRight,
   RefreshCw,
   MessageSquare,
-  Sparkles
+  Sparkles,
+  AlignLeft,
+  BookMarked
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -255,139 +258,163 @@ export default function ToneAnalysisPage() {
                     </div>
                   </div>
 
-                  {/* Language Patterns Section */}
-                  <div className="mb-8">
-                    <h3 className="text-lg font-medium text-white mb-4">Language Patterns</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Highlight Common Phrases specially */}
-                      {Object.entries(toneAnalysis.tone_results.language_patterns)
-                        .filter(([key]) => key === 'common_phrases')
-                        .map(([key, value]) => (
-                          <div key={key} className="md:col-span-2 bg-[#74d1ea]/5 border border-[#74d1ea]/20 rounded-lg p-5 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
-                            <div className="flex items-center mb-4">
-                              <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mr-3">
-                                <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
-                              </div>
-                              <h4 className="text-lg font-medium text-white capitalize">
-                                Common Phrases
-                                <span className="ml-2 text-xs text-[#74d1ea] bg-[#74d1ea]/10 px-2 py-0.5 rounded">
-                                  Brand Identifiers
-                                </span>
-                              </h4>
-                            </div>
-                            
-                            {Array.isArray(value) && (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {value.map((phrase, i) => (
-                                  <div 
-                                    key={i} 
-                                    className="bg-black/30 border border-gray-800 p-3 rounded-md flex items-start"
-                                  >
-                                    <div className="mr-3 mt-0.5">
-                                      <Sparkles className="h-4 w-4 text-[#74d1ea]" />
-                                    </div>
-                                    <div>
-                                      <p className="text-white text-sm font-medium mb-1">{phrase}</p>
-                                      <p className="text-gray-400 text-xs">
-                                        Distinctive phrase that helps define your brand voice
-                                      </p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
+                  {/* Language Patterns - Enhanced design */}
+                  <div className="mb-10">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <MessageSquare className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">Language Patterns</h3>
+                        <p className="text-gray-400 text-sm mt-0.5">Analysis of your communication style and word choices</p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      {/* Common phrases section */}
+                      <div className="md:col-span-2 bg-[#0e131f]/50 border border-[#74d1ea]/20 rounded-xl p-6 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
+                        <div className="flex items-center mb-5">
+                          <div className="bg-[#182030] border border-[#74d1ea]/20 h-10 w-10 rounded-lg flex items-center justify-center mr-3 shadow-[0_0_10px_rgba(116,209,234,0.1)]">
+                            <Sparkles className="h-5 w-5 text-[#74d1ea]" />
                           </div>
-                      ))}
+                          <div>
+                            <h4 className="text-white font-semibold">Common Phrases</h4>
+                            <p className="text-gray-400 text-xs mt-0.5">Key phrases that define your brand's voice</p>
+                          </div>
+                        </div>
+                        
+                        {Array.isArray(toneAnalysis.tone_results.language_patterns.common_phrases) ? (
+                          toneAnalysis.tone_results.language_patterns.common_phrases.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                              {toneAnalysis.tone_results.language_patterns.common_phrases.map((phrase, i) => (
+                                <div key={i} className="bg-[#182030] border border-[#74d1ea]/10 p-4 rounded-lg flex items-start">
+                                  <div className="bg-[#74d1ea]/10 w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                                    <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                                  </div>
+                                  <div>
+                                    <p className="text-white text-sm font-medium">{phrase}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="bg-black/30 rounded-lg p-4 text-center mt-2">
+                              <p className="text-gray-400">No common phrases detected in your content</p>
+                            </div>
+                          )
+                        ) : null}
+                      </div>
                       
                       {/* Other language patterns */}
                       {Object.entries(toneAnalysis.tone_results.language_patterns)
                         .filter(([key]) => key !== 'common_phrases')
                         .map(([key, value]) => (
-                          <div key={key} className="bg-black/20 border border-gray-800 rounded-lg p-4">
-                            <h4 className="text-white font-medium capitalize mb-2">{key.replace('_', ' ')}</h4>
-                            {Array.isArray(value) ? (
-                              <ul className="space-y-1">
-                                {value.map((item, i) => (
-                                  <li key={i} className="text-gray-400 text-sm flex items-start">
-                                    <span className="text-[#74d1ea] mr-2">•</span>
-                                    <span>{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="text-gray-400 text-sm">{value}</p>
-                            )}
+                          <div key={key} className="bg-black/20 rounded-xl border border-gray-800/60 p-5 hover:bg-[#0e131f]/30 transition-colors">
+                            <div className="flex items-center mb-3">
+                              <div className="bg-[#182030] rounded-lg p-2 mr-3">
+                                {key === 'sentence_structure' ? (
+                                  <AlignLeft className="h-4 w-4 text-[#74d1ea]" />
+                                ) : key === 'vocabulary' ? (
+                                  <BookMarked className="h-4 w-4 text-[#74d1ea]" />
+                                ) : (
+                                  <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                                )}
+                              </div>
+                              <h4 className="text-white font-medium capitalize">{key.replace('_', ' ')}</h4>
+                            </div>
+                            <p className="text-sm text-gray-300 leading-relaxed">
+                              {value as string}
+                            </p>
                           </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
 
-                  {/* Summary and Recommendations Section */}
-                  <div className="mb-8">
-                    <h3 className="text-lg font-medium text-white mb-4">Summary & Recommendations</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-black/20 border border-gray-800 rounded-lg p-4">
-                        <div className="flex items-center mb-3">
-                          <PieChart className="h-5 w-5 text-[#74d1ea] mr-2" />
-                          <h4 className="text-white font-medium">Tone Summary</h4>
-                        </div>
-                        <p className="text-gray-400 text-sm">{toneAnalysis.tone_results.summary}</p>
+                  {/* Summary section - Enhanced design */}
+                  <div className="mb-10">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <PieChart className="h-6 w-6 text-[#74d1ea]" />
                       </div>
-                      
-                      <div className="bg-black/20 border border-gray-800 rounded-lg p-4">
-                        <div className="flex items-center mb-3">
-                          <List className="h-5 w-5 text-[#74d1ea] mr-2" />
-                          <h4 className="text-white font-medium">Recommended Content Types</h4>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">Summary</h3>
+                        <p className="text-gray-400 text-sm mt-0.5">Overall assessment of your communication style</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-5 mt-4">
+                      <div className="flex">
+                        <div className="bg-[#182030] self-start rounded-lg p-2 mr-4 mt-0.5">
+                          <FileText className="h-4 w-4 text-[#74d1ea]" />
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                          {toneAnalysis.tone_results.recommended_content_types.map((type, i) => (
-                            <Badge key={i} className="bg-[#74d1ea]/10 text-[#74d1ea] hover:bg-[#74d1ea]/20">
-                              {type}
-                            </Badge>
-                          ))}
-                        </div>
+                        <p className="text-gray-300 leading-relaxed">
+                          {toneAnalysis.tone_results.summary}
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Actions Buttons Row */}
-                  <div className="flex justify-between">
+                  {/* Recommended Content Types - Enhanced design */}
+                  <div className="mb-10">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <List className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">Recommended Content</h3>
+                        <p className="text-gray-400 text-sm mt-0.5">Content types that match your brand's voice</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-[#0e131f]/40 rounded-xl border border-[#74d1ea]/20 p-6 mt-4">
+                      <div className="flex flex-wrap gap-3">
+                        {toneAnalysis.tone_results.recommended_content_types.map((type, i) => (
+                          <div key={i} className="bg-[#182030] border border-[#74d1ea]/20 px-4 py-3 rounded-lg flex items-center">
+                            <div className="bg-[#74d1ea]/10 w-8 h-8 rounded-lg flex items-center justify-center mr-3">
+                              <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
+                            </div>
+                            <span className="text-white">{type}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action buttons - Enhanced design */}
+                  <div className="flex justify-between items-center border-t border-gray-800/60 px-2 pt-8">
                     <Button 
                       variant="outline" 
-                      className="space-x-2"
-                      size="sm"
+                      className="border-gray-800/80 bg-black/30 hover:bg-[#0e131f] text-white h-10"
                       onClick={() => {
                         setCurrentAnalysisId(null);
                         navigate("/tone-analysis");
                       }}
                     >
-                      <RefreshCw className="w-4 h-4" />
-                      <span>New Analysis</span>
+                      <RefreshCw className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                      New Analysis
                     </Button>
                     
-                    <div className="space-x-2">
+                    <div className="flex items-center space-x-3">
                       <Button 
                         variant="outline" 
-                        className="space-x-2 bg-transparent border-gray-700 hover:bg-gray-800"
-                        size="sm"
+                        className="border-gray-800/80 bg-black/30 hover:bg-[#0e131f] text-white h-10"
                         onClick={() => {
                           toneAnalysisMutation.mutate({
-                            websiteUrl: toneAnalysis.website_url,
-                            sampleText: toneAnalysis.sample_text,
+                            websiteUrl: toneAnalysis.website_url ?? undefined,
+                            sampleText: toneAnalysis.sample_text ?? undefined,
                           });
                         }}
                       >
-                        <RefreshCw className="w-4 h-4" />
-                        <span>Run Again</span>
+                        <RefreshCw className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                        Run Again
                       </Button>
                       
                       <Button 
-                        className="space-x-2 bg-[#74d1ea] hover:bg-[#74d1ea]/90"
-                        size="sm"
+                        className="bg-[#0e131f] hover:bg-[#182030] text-white h-10 border border-[#74d1ea]/20 shadow-[0_0_25px_rgba(116,209,234,0.25)]"
                         onClick={() => navigate("/personas")}
                       >
-                        <span>Continue to Persona</span>
-                        <ArrowRight className="w-4 h-4" />
+                        Continue to Persona
+                        <ArrowRight className="h-4 w-4 ml-2 text-[#74d1ea]" />
                       </Button>
                     </div>
                   </div>
