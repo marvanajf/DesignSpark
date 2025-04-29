@@ -176,73 +176,79 @@ export default function ToneAnalysisPage() {
 
           {currentAnalysisId && toneAnalysis ? (
             <div className="space-y-8">
-              {/* Tone Analysis Results */}
-              <div className="bg-[#111] border border-gray-800 rounded-lg overflow-hidden">
-                <div className="p-6 border-b border-gray-800">
-                  <div className="flex items-center justify-between">
+              {/* Tone Analysis Results - Enhanced with platform style */}
+              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+                
+                {/* Header */}
+                <div className="p-6 border-b border-gray-800/60">
+                  <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                      <div className="h-8 w-8 rounded-full bg-[#74d1ea]/20 flex items-center justify-center mr-3">
-                        <BarChart2 className="h-4 w-4 text-[#74d1ea]" />
+                      <div className="bg-[#182030] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-4">
+                        <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
                       </div>
-                      <h2 className="text-xl font-semibold text-white">Tone Analysis Results</h2>
+                      <div>
+                        <h2 className="text-xl font-bold text-white">
+                          {toneAnalysis.website_url ? (
+                            <>Website Analysis Results</>
+                          ) : (
+                            <>Text Analysis Results</>
+                          )}
+                        </h2>
+                        <div className="text-sm text-gray-400 mt-1">
+                          {toneAnalysis.website_url ? toneAnalysis.website_url : "Sample text analysis"}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge className="bg-[#74d1ea]/10 text-[#74d1ea] hover:bg-[#74d1ea]/20 px-3 py-1">
+                    <div className="flex items-center space-x-4">
+                      <p className="text-sm text-gray-500">
+                        {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
+                      </p>
+                      <Badge className="bg-[#182030] text-[#74d1ea] border border-[#74d1ea]/30 px-3 py-1">
                         <CheckCircle className="h-3 w-3 mr-1" /> Complete
                       </Badge>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6">
-                  {/* Top themes/keywords section inspired by reference image */}
-                  <div className="mb-8">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-medium text-white">Tone Characteristics</h3>
-                      <div className="flex items-center text-xs">
-                        <span className="flex items-center mr-3">
-                          <span className="h-2 w-2 rounded-full bg-[#74d1ea] mr-1"></span>
-                          <span className="text-gray-400">High</span>
-                        </span>
-                        <span className="flex items-center mr-3">
-                          <span className="h-2 w-2 rounded-full bg-[#74d1ea]/70 mr-1"></span>
-                          <span className="text-gray-400">Medium</span>
-                        </span>
-                        <span className="flex items-center">
-                          <span className="h-2 w-2 rounded-full bg-[#74d1ea]/40 mr-1"></span>
-                          <span className="text-gray-400">Low</span>
-                        </span>
+                <div className="p-8">
+                  {/* Tone Characteristics - Enhanced design */}
+                  <div className="mb-10">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                        <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">Tone Characteristics</h3>
+                        <p className="text-gray-400 text-sm mt-0.5">Key tone indicators detected in your content</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      <div className="space-y-6">
                         {Object.entries(toneAnalysis.tone_results.characteristics).slice(0, 3).map(([key, value]) => (
-                          <div key={key} className="space-y-1">
-                            <div className="flex justify-between">
+                          <div key={key}>
+                            <div className="flex justify-between items-center mb-2">
                               <span className="text-sm font-medium capitalize text-white">{key}</span>
-                              <span className="text-sm font-medium text-gray-400">{value}%</span>
+                              <span className="text-sm font-medium text-[#74d1ea]">{value}%</span>
                             </div>
-                            <Progress 
-                              value={value as number} 
-                              className="h-2" 
-                              indicatorClassName="bg-[#74d1ea]"
-                            />
+                            <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
+                              <div className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" style={{ width: `${value}%` }}></div>
+                            </div>
                           </div>
                         ))}
                       </div>
-                      <div className="space-y-4">
+                      
+                      <div className="space-y-6">
                         {Object.entries(toneAnalysis.tone_results.characteristics).slice(3).map(([key, value]) => (
-                          <div key={key} className="space-y-1">
-                            <div className="flex justify-between">
+                          <div key={key}>
+                            <div className="flex justify-between items-center mb-2">
                               <span className="text-sm font-medium capitalize text-white">{key}</span>
-                              <span className="text-sm font-medium text-gray-400">{value}%</span>
+                              <span className="text-sm font-medium text-[#74d1ea]">{value}%</span>
                             </div>
-                            <Progress 
-                              value={value as number} 
-                              className="h-2" 
-                              indicatorClassName="bg-[#74d1ea]"
-                            />
+                            <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
+                              <div className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" style={{ width: `${value}%` }}></div>
+                            </div>
                           </div>
                         ))}
                       </div>
