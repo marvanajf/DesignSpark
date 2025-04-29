@@ -295,36 +295,7 @@ export default function ContentGeneratorPage() {
               </div>
             </div>
 
-            {/* Content Generator Promo Banner */}
-            <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-              <div className="flex p-6">
-                <div className="mr-4 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                  <Sparkles className="h-5 w-5 text-[#74d1ea]" />
-                </div>
-                
-                <div>
-                  <h2 className="text-white font-semibold text-lg">AI-Powered Content Generation</h2>
-                  <p className="text-gray-400 text-sm mt-1 mb-4">
-                    Create compelling, personalized content with our AI engine. Generate precisely targeted LinkedIn posts and cold emails that combine your brand's unique tone with tailored audience personas.
-                  </p>
-                  
-                  <div className="space-y-1.5">
-                    <div className="flex items-center text-sm">
-                      <div className="text-[#74d1ea] mr-2">✓</div>
-                      <span className="text-gray-300">Persona-targeted content to engage specific audience segments</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <div className="text-[#74d1ea] mr-2">✓</div>
-                      <span className="text-gray-300">Tone-matched writing that perfectly reflects your brand voice</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <div className="text-[#74d1ea] mr-2">✓</div>
-                      <span className="text-gray-300">LinkedIn posts and cold emails optimized for high engagement</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             
             <div className="grid grid-cols-1 gap-6 mb-8">
               {/* Setup Required Card */}
