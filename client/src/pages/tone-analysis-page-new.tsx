@@ -229,14 +229,9 @@ export default function ToneAnalysisPage() {
                 <div className="p-8">
                   {/* Tone Characteristics - Enhanced design */}
                   <div className="mb-10">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">Tone Characteristics</h3>
-                        <p className="text-gray-400 text-sm mt-0.5">Key tone indicators detected in your content</p>
-                      </div>
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white">Tone Characteristics</h3>
+                      <p className="text-gray-400 text-sm mt-0.5">Key tone indicators detected in your content</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -341,14 +336,9 @@ export default function ToneAnalysisPage() {
 
                   {/* Summary section - Enhanced design */}
                   <div className="mb-10">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <PieChart className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">Summary</h3>
-                        <p className="text-gray-400 text-sm mt-0.5">Overall assessment of your communication style</p>
-                      </div>
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white">Summary</h3>
+                      <p className="text-gray-400 text-sm mt-0.5">Overall assessment of your communication style</p>
                     </div>
                     
                     <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 mt-6">
@@ -360,14 +350,9 @@ export default function ToneAnalysisPage() {
 
                   {/* Recommended Content Types - Enhanced design */}
                   <div>
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                        <List className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">Recommended Content Types</h3>
-                        <p className="text-gray-400 text-sm mt-0.5">Optimal content formats for your tone and style</p>
-                      </div>
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white">Recommended Content Types</h3>
+                      <p className="text-gray-400 text-sm mt-0.5">Optimal content formats for your tone and style</p>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
