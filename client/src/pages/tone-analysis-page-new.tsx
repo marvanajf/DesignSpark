@@ -77,16 +77,20 @@ export default function ToneAnalysisPage() {
     throwOnError: false,
   });
 
+  // State to track if we're creating a new analysis
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
+
   // If we have analyses but no current one selected, select the most recent
+  // But only if we're not deliberately creating a new analysis
   useEffect(() => {
-    if (userAnalyses?.length && !currentAnalysisId) {
+    if (userAnalyses?.length && !currentAnalysisId && !isCreatingNew) {
       // Sort by created_at descending to get the most recent
       const sortedAnalyses = [...userAnalyses].sort((a, b) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
       setCurrentAnalysisId(sortedAnalyses[0].id);
     }
-  }, [userAnalyses, currentAnalysisId]);
+  }, [userAnalyses, currentAnalysisId, isCreatingNew]);
 
   // Fetch the current analysis if we have an ID
   const { 
@@ -117,6 +121,10 @@ export default function ToneAnalysisPage() {
         });
       }
 
+      // Reset isCreatingNew flag after successful analysis
+      setIsCreatingNew(false);
+      
+      // Refresh the list and set current analysis
       queryClient.invalidateQueries({ queryKey: ["/api/tone-analyses"] });
       setCurrentAnalysisId(data.id);
     },
@@ -296,7 +304,11 @@ export default function ToneAnalysisPage() {
                               ? "bg-[#182030] border border-[#74d1ea]/30"
                               : "bg-[#111] border border-gray-800/60 hover:bg-gray-900"
                           }`}
-                          onClick={() => setCurrentAnalysisId(analysis.id)}
+                          onClick={() => {
+                            setCurrentAnalysisId(analysis.id);
+                            // Reset isCreatingNew when selecting a saved analysis
+                            setIsCreatingNew(false);
+                          }}
                         >
                           <h4 className="font-medium text-sm text-white mb-1 truncate">
                             {analysis.name || (analysis.website_url 
@@ -377,6 +389,9 @@ export default function ToneAnalysisPage() {
                                 // Reset form fields
                                 setWebsiteUrl("");
                                 setSampleText("");
+                                
+                                // Set isCreatingNew to true to prevent auto-loading
+                                setIsCreatingNew(true);
                                 
                                 // Clear current analysis ID to show the form
                                 setCurrentAnalysisId(null);
