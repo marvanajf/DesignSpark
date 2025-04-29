@@ -191,28 +191,6 @@ export default function SupportPage() {
                       </div>
                       <MoveRight className="h-4 w-4 text-gray-500" />
                     </a>
-                    
-                    <a href="#" className="flex items-center p-3 rounded-lg border border-gray-800/60 bg-black/30 hover:bg-[#0e131f]/80 transition-colors">
-                      <div className="w-10 h-10 rounded-lg bg-[#182030] border border-[#74d1ea]/20 shadow-[0_0_10px_rgba(116,209,234,0.1)] flex items-center justify-center">
-                        <YoutubeIcon className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div className="ml-3 flex-1">
-                        <p className="text-white font-medium">Video Tutorials</p>
-                        <p className="text-gray-400 text-sm">Watch and learn</p>
-                      </div>
-                      <MoveRight className="h-4 w-4 text-gray-500" />
-                    </a>
-                    
-                    <a href="#" className="flex items-center p-3 rounded-lg border border-gray-800/60 bg-black/30 hover:bg-[#0e131f]/80 transition-colors">
-                      <div className="w-10 h-10 rounded-lg bg-[#182030] border border-[#74d1ea]/20 shadow-[0_0_10px_rgba(116,209,234,0.1)] flex items-center justify-center">
-                        <Users className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div className="ml-3 flex-1">
-                        <p className="text-white font-medium">Community Forum</p>
-                        <p className="text-gray-400 text-sm">Ask the community</p>
-                      </div>
-                      <Badge className="bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/30">New</Badge>
-                    </a>
                   </div>
                 </div>
               </div>
@@ -238,17 +216,10 @@ export default function SupportPage() {
                     
                     <div className="p-4 border border-gray-800/60 rounded-lg bg-black/30">
                       <div className="flex items-center">
-                        <Phone className="h-5 w-5 text-[#74d1ea] mr-3" />
-                        <p className="text-white">+1 (800) 123-4567</p>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 border border-gray-800/60 rounded-lg bg-black/30">
-                      <div className="flex items-center">
                         <Clock className="h-5 w-5 text-[#74d1ea] mr-3" />
                         <div>
                           <p className="text-white">Support Hours</p>
-                          <p className="text-gray-400 text-sm">Monday-Friday, 9am-5pm EST</p>
+                          <p className="text-gray-400 text-sm">Monday-Friday, 9am-5pm BST</p>
                         </div>
                       </div>
                     </div>
