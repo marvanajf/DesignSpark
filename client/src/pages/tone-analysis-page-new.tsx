@@ -26,7 +26,8 @@ import {
   MessageSquare,
   Sparkles,
   AlignLeft,
-  BookMarked
+  BookMarked,
+  Save
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,17 @@ import {
   TabsList, 
   TabsTrigger 
 } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import Layout from "@/components/Layout";
 import { ToneAnalysis } from "@shared/schema";
 
@@ -50,6 +62,8 @@ export default function ToneAnalysisPage() {
   const [sampleText, setSampleText] = useState("");
   const [analysisMethod, setAnalysisMethod] = useState<string>("url");
   const [currentAnalysisId, setCurrentAnalysisId] = useState<number | null>(null);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [analysisName, setAnalysisName] = useState("");
   const { toast } = useToast();
   const [, navigate] = useLocation();
 
@@ -249,6 +263,20 @@ export default function ToneAnalysisPage() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-4">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#182030] hover:text-[#74d1ea]"
+                        onClick={() => {
+                          setAnalysisName(toneAnalysis.name || (toneAnalysis.website_url ? 
+                            `Analysis of ${toneAnalysis.website_url.replace(/^https?:\/\//, '').replace(/^www\./, '')}` : 
+                            `Text Analysis ${new Date().toLocaleDateString()}`));
+                          setSaveDialogOpen(true);
+                        }}
+                      >
+                        <Save className="h-4 w-4 mr-1" />
+                        {toneAnalysis.name ? "Rename" : "Save"}
+                      </Button>
                       <p className="text-sm text-gray-500">
                         {formatDistanceToNow(new Date(toneAnalysis.created_at), { addSuffix: true })}
                       </p>

@@ -50,6 +50,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                       .url({ message: "Please enter a valid URL including 'https://' or 'http://' (e.g., https://www.example.com)" })
                       .optional(),
         sampleText: z.string().optional(),
+        name: z.string().optional(),
       });
 
       // Try to validate and fix common URL issues
@@ -62,7 +63,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Ignore any errors in the automatic fixing - the zod validation will catch them
       }
 
-      const { websiteUrl, sampleText } = schema.parse(req.body);
+      const { websiteUrl, sampleText, name } = schema.parse(req.body);
       
       if (!websiteUrl && !sampleText) {
         return res.status(400).send("Please provide either a website URL or sample text");
@@ -72,9 +73,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Send content to OpenAI for tone analysis
         const toneResults = await analyzeTone(websiteUrl || sampleText || "");
         
+        // Generate a default name if none provided
+        const analysisName = name || (websiteUrl ? 
+          `Analysis of ${websiteUrl.replace(/^https?:\/\//, '').replace(/^www\./, '')}` : 
+          `Text Analysis ${new Date().toLocaleDateString()}`);
+          
         // Save tone analysis results
         const toneAnalysis = await storage.createToneAnalysis({
           user_id: req.user!.id,
+          name: analysisName,
           website_url: websiteUrl,
           sample_text: sampleText,
           tone_results: toneResults
