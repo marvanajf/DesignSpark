@@ -390,156 +390,224 @@ export default function ToneAnalysisPage() {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Analysis Input Form */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Analysis Input Form - Enhanced with platform style */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                  <Card className="bg-[#111] border-gray-800">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-white">Analyze Your Brand's Tone</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        Enter your website URL or paste sample text to analyze the tone and language patterns.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
+                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+                    <div className="p-6">
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                          <BarChart2 className="h-6 w-6 text-[#74d1ea]" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white">Analyze Your Brand's Tone</h3>
+                          <p className="text-gray-400 text-sm mt-0.5">Decode your brand's unique voice with AI-powered tone analysis</p>
+                        </div>
+                      </div>
+
                       <form onSubmit={handleSubmit}>
-                        <Tabs defaultValue="url" className="mb-6" onValueChange={(value) => setAnalysisMethod(value)}>
-                          <TabsList className="bg-black/30 border border-gray-800">
-                            <TabsTrigger value="url" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                        <Tabs defaultValue="url" className="mb-8" onValueChange={(value) => setAnalysisMethod(value)}>
+                          <TabsList className="bg-black/50 border border-gray-800/60 rounded-lg p-1 mb-6">
+                            <TabsTrigger 
+                              value="url" 
+                              className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
+                            >
                               <Globe className="h-4 w-4 mr-2" />
                               Website URL
                             </TabsTrigger>
-                            <TabsTrigger value="text" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                            <TabsTrigger 
+                              value="text" 
+                              className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
+                            >
                               <FileText className="h-4 w-4 mr-2" />
                               Sample Text
                             </TabsTrigger>
                           </TabsList>
                           
-                          <TabsContent value="url" className="mt-4">
+                          <TabsContent value="url" className="mt-4 space-y-6">
                             <div className="space-y-4">
                               <div>
-                                <label htmlFor="websiteUrl" className="block text-sm font-medium text-gray-300 mb-1">
+                                <label htmlFor="websiteUrl" className="block text-sm font-medium text-white mb-2">
                                   Website URL
                                 </label>
                                 <div className="relative">
                                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <LinkIcon className="h-4 w-4 text-gray-400" />
+                                    <LinkIcon className="h-4 w-4 text-[#74d1ea]" />
                                   </div>
                                   <Input
                                     id="websiteUrl"
                                     type="text"
-                                    className="pl-10 bg-black/30 border-gray-700 focus:border-[#74d1ea] focus:ring-[#74d1ea]/10 text-white"
+                                    className="pl-10 bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20 h-11"
                                     placeholder="e.g., example.com or https://example.com"
                                     value={websiteUrl}
                                     onChange={(e) => setWebsiteUrl(e.target.value)}
                                   />
                                 </div>
-                                <p className="mt-1 text-xs text-gray-400">
-                                  Enter your website URL to analyze the tone and language patterns.
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Enter your website URL to analyze the tone and language patterns
                                 </p>
                               </div>
                               
-                              <Button 
-                                type="submit" 
-                                className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-medium w-full"
-                                disabled={toneAnalysisMutation.isPending}
-                              >
-                                {toneAnalysisMutation.isPending ? (
-                                  <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Analyzing...
-                                  </>
-                                ) : (
-                                  <>
-                                    <BarChart className="mr-2 h-4 w-4" />
-                                    Analyze Website Tone
-                                  </>
-                                )}
-                              </Button>
+                              <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
+                                <div className="flex items-start">
+                                  <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
+                                    <FileQuestion className="h-4 w-4 text-[#74d1ea]" />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-medium text-white">How website analysis works</h4>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      Our AI will extract and analyze the main content from your website, identifying tone characteristics
+                                      and language patterns that define your brand's voice.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
+                            
+                            <Button 
+                              type="submit" 
+                              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black w-full h-11 font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              disabled={toneAnalysisMutation.isPending}
+                            >
+                              {toneAnalysisMutation.isPending ? (
+                                <>
+                                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                  Analyzing...
+                                </>
+                              ) : (
+                                <>
+                                  <BarChart className="mr-2 h-5 w-5" />
+                                  Analyze Website Tone
+                                </>
+                              )}
+                            </Button>
                           </TabsContent>
                           
-                          <TabsContent value="text" className="mt-4">
+                          <TabsContent value="text" className="mt-4 space-y-6">
                             <div className="space-y-4">
                               <div>
-                                <label htmlFor="sampleText" className="block text-sm font-medium text-gray-300 mb-1">
+                                <label htmlFor="sampleText" className="block text-sm font-medium text-white mb-2">
                                   Sample Text
                                 </label>
                                 <Textarea
                                   id="sampleText"
-                                  className="min-h-[200px] bg-black/30 border-gray-700 focus:border-[#74d1ea] focus:ring-[#74d1ea]/10 text-white"
+                                  className="min-h-[200px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
                                   placeholder="Paste your content here to analyze tone and language patterns..."
                                   value={sampleText}
                                   onChange={(e) => setSampleText(e.target.value)}
                                 />
-                                <p className="mt-1 text-xs text-gray-400">
-                                  Paste sample text from your content, blog posts, or marketing materials.
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Paste sample text from your content, blog posts, or marketing materials
                                 </p>
                               </div>
                               
-                              <Button 
-                                type="submit" 
-                                className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-medium w-full"
-                                disabled={toneAnalysisMutation.isPending}
-                              >
-                                {toneAnalysisMutation.isPending ? (
-                                  <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Analyzing...
-                                  </>
-                                ) : (
-                                  <>
-                                    <BarChart className="mr-2 h-4 w-4" />
-                                    Analyze Text Tone
-                                  </>
-                                )}
-                              </Button>
+                              <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
+                                <div className="flex items-start">
+                                  <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
+                                    <FileQuestion className="h-4 w-4 text-[#74d1ea]" />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-medium text-white">How text analysis works</h4>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      Our AI will analyze your text to identify tone characteristics, language patterns, 
+                                      and provide recommendations for content types that match your brand's voice.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
+                            
+                            <Button 
+                              type="submit" 
+                              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black w-full h-11 font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              disabled={toneAnalysisMutation.isPending}
+                            >
+                              {toneAnalysisMutation.isPending ? (
+                                <>
+                                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                  Analyzing...
+                                </>
+                              ) : (
+                                <>
+                                  <BarChart className="mr-2 h-5 w-5" />
+                                  Analyze Text Tone
+                                </>
+                              )}
+                            </Button>
                           </TabsContent>
                         </Tabs>
                       </form>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
                 
                 <div>
-                  <Card className="bg-[#111] border-gray-800 h-full">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-white">Previous Analyses</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        View your recent tone analysis results.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
+                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] h-full">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+                    <div className="p-6">
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                          <BarChart className="h-6 w-6 text-[#74d1ea]" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white">Previous Analyses</h3>
+                          <p className="text-gray-400 text-sm mt-0.5">View your recent tone analysis results</p>
+                        </div>
+                      </div>
+                      
                       {isLoadingUserAnalyses ? (
-                        <div className="flex justify-center items-center py-8">
+                        <div className="flex justify-center items-center py-12">
                           <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
                         </div>
                       ) : userAnalyses && userAnalyses.length > 0 ? (
-                        <div className="space-y-3">
+                        <div className="space-y-3 mt-4">
                           {[...userAnalyses]
                             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                             .map((analysis) => (
                               <div 
                                 key={analysis.id} 
-                                className={`p-3 rounded-md border cursor-pointer transition-colors ${
+                                className={`p-4 rounded-lg border transition-all duration-200 cursor-pointer ${
                                   currentAnalysisId === analysis.id 
-                                    ? 'bg-[#74d1ea]/5 border-[#74d1ea]/20' 
-                                    : 'bg-black/20 border-gray-800 hover:bg-black/30'
+                                    ? 'bg-[#182030] border-[#74d1ea]/30 shadow-[0_0_15px_rgba(116,209,234,0.1)]' 
+                                    : 'bg-black/30 border-gray-800/60 hover:bg-[#0e131f]/80 hover:border-gray-700/60'
                                 }`}
                                 onClick={() => setCurrentAnalysisId(analysis.id)}
                               >
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center">
-                                    {analysis.website_url ? (
-                                      <Globe className="h-4 w-4 text-gray-400 mr-2" />
-                                    ) : (
-                                      <FileText className="h-4 w-4 text-gray-400 mr-2" />
-                                    )}
-                                    <span className="text-sm font-medium text-white truncate max-w-[180px]">
-                                      {analysis.website_url || "Text Analysis"}
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${
+                                      currentAnalysisId === analysis.id 
+                                        ? 'bg-[#74d1ea]/20' 
+                                        : 'bg-black/40'
+                                    }`}>
+                                      {analysis.website_url ? (
+                                        <Globe className={`h-4 w-4 ${
+                                          currentAnalysisId === analysis.id 
+                                            ? 'text-[#74d1ea]' 
+                                            : 'text-gray-400'
+                                        }`} />
+                                      ) : (
+                                        <FileText className={`h-4 w-4 ${
+                                          currentAnalysisId === analysis.id 
+                                            ? 'text-[#74d1ea]' 
+                                            : 'text-gray-400'
+                                        }`} />
+                                      )}
+                                    </div>
+                                    <span className={`text-sm font-medium truncate max-w-[140px] ${
+                                      currentAnalysisId === analysis.id 
+                                        ? 'text-[#74d1ea]' 
+                                        : 'text-white'
+                                    }`}>
+                                      {analysis.website_url || "Text Sample"}
                                     </span>
                                   </div>
-                                  <Badge variant="outline" className="text-xs">
+                                  <Badge variant="outline" className={`text-xs ${
+                                    currentAnalysisId === analysis.id 
+                                      ? 'bg-[#74d1ea]/10 text-[#74d1ea] border-[#74d1ea]/30' 
+                                      : 'bg-black/20 border-gray-700'
+                                  }`}>
                                     {new Date(analysis.created_at).toLocaleDateString()}
                                   </Badge>
                                 </div>
@@ -547,14 +615,18 @@ export default function ToneAnalysisPage() {
                             ))}
                         </div>
                       ) : (
-                        <div className="py-8 text-center">
-                          <FileQuestion className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-                          <p className="text-gray-400 text-sm">No previous analyses found.</p>
-                          <p className="text-gray-500 text-xs mt-1">Your analyses will appear here.</p>
+                        <div className="py-12 text-center">
+                          <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                            <FileQuestion className="h-6 w-6 text-[#74d1ea]" />
+                          </div>
+                          <h4 className="text-white font-medium mb-2">No analyses yet</h4>
+                          <p className="text-gray-400 text-sm max-w-[220px] mx-auto">
+                            Submit a URL or text sample to analyze your brand's tone
+                          </p>
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

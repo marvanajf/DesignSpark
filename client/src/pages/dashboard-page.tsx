@@ -10,7 +10,9 @@ import {
   Mail, 
   Filter,
   Calendar,
-  ChevronDown
+  ChevronDown,
+  Copy,
+  Edit
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -400,10 +402,6 @@ export default function DashboardPage() {
                               className="h-8 px-3 text-xs border-gray-700 bg-black/30 hover:bg-gray-900"
                               onClick={() => {
                                 navigator.clipboard.writeText(content.content_text);
-                                toast({
-                                  title: "Content copied",
-                                  description: "Content has been copied to your clipboard",
-                                });
                               }}
                             >
                               <Copy className="h-3.5 w-3.5 mr-1.5" />
