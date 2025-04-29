@@ -480,4 +480,366 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { eq, and, desc, sql } from "drizzle-orm";
+import { db } from "./db";
+import connectPg from "connect-pg-simple";
+import { pool } from "./db";
+
+const PostgresSessionStore = connectPg(session);
+
+export class DatabaseStorage implements IStorage {
+  sessionStore: session.Store;
+
+  constructor() {
+    this.sessionStore = new PostgresSessionStore({
+      pool,
+      createTableIfMissing: true
+    });
+  }
+
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async updateUserRole(id: number, role: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ role })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async updateUserSubscription(id: number, plan: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ subscription: plan })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async incrementPersonaUsage(id: number): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        personas_count: sql`${users.personas_count} + 1` 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async incrementToneAnalysisUsage(id: number): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        tone_analyses_count: sql`${users.tone_analyses_count} + 1` 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async incrementContentUsage(id: number): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        content_count: sql`${users.content_count} + 1` 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  // Tone analysis methods
+  async createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis> {
+    const [toneAnalysis] = await db
+      .insert(toneAnalyses)
+      .values(analysis)
+      .returning();
+    return toneAnalysis;
+  }
+
+  async getToneAnalysis(id: number): Promise<ToneAnalysis | undefined> {
+    const [toneAnalysis] = await db
+      .select()
+      .from(toneAnalyses)
+      .where(eq(toneAnalyses.id, id));
+    return toneAnalysis;
+  }
+
+  async getToneAnalysesByUserId(userId: number): Promise<ToneAnalysis[]> {
+    return db
+      .select()
+      .from(toneAnalyses)
+      .where(eq(toneAnalyses.user_id, userId))
+      .orderBy(desc(toneAnalyses.created_at));
+  }
+
+  async updateToneAnalysis(id: number, updates: Partial<InsertToneAnalysis>): Promise<ToneAnalysis> {
+    const [toneAnalysis] = await db
+      .update(toneAnalyses)
+      .set(updates)
+      .where(eq(toneAnalyses.id, id))
+      .returning();
+    
+    if (!toneAnalysis) {
+      throw new Error(`Tone analysis with id ${id} not found`);
+    }
+    
+    return toneAnalysis;
+  }
+
+  // Persona methods
+  async createPersona(persona: InsertPersona): Promise<Persona> {
+    const [newPersona] = await db
+      .insert(personas)
+      .values(persona)
+      .returning();
+    return newPersona;
+  }
+
+  async getPersona(id: number): Promise<Persona | undefined> {
+    const [persona] = await db
+      .select()
+      .from(personas)
+      .where(eq(personas.id, id));
+    return persona;
+  }
+
+  async getPersonasByUserId(userId: number): Promise<Persona[]> {
+    return db
+      .select()
+      .from(personas)
+      .where(eq(personas.user_id, userId));
+  }
+
+  async updatePersona(id: number, updates: Partial<InsertPersona>): Promise<Persona> {
+    const [persona] = await db
+      .update(personas)
+      .set(updates)
+      .where(eq(personas.id, id))
+      .returning();
+    
+    if (!persona) {
+      throw new Error(`Persona with id ${id} not found`);
+    }
+    
+    return persona;
+  }
+
+  async deletePersona(id: number): Promise<void> {
+    console.log("Delete persona request received for ID:", id);
+    console.log("Authentication status:", !!process);
+
+    const [personaToDelete] = await db
+      .select()
+      .from(personas)
+      .where(eq(personas.id, id));
+      
+    if (!personaToDelete) {
+      throw new Error(`Persona with id ${id} not found`);
+    }
+    
+    console.log("User ID:", personaToDelete.user_id);
+    console.log("Persona to delete:", personaToDelete);
+    
+    await db
+      .delete(personas)
+      .where(eq(personas.id, id));
+      
+    console.log("Persona deleted successfully");
+  }
+
+  async seedPredefinedPersonas(userId: number): Promise<Persona[]> {
+    // Check if the user already has predefined personas
+    const existingPersonas = await db
+      .select()
+      .from(personas)
+      .where(eq(personas.user_id, userId));
+    
+    if (existingPersonas.length > 0) {
+      return existingPersonas;
+    }
+    
+    // Add predefined personas
+    const personasToAdd = predefinedPersonas.map(p => ({
+      ...p,
+      user_id: userId
+    }));
+    
+    return db
+      .insert(personas)
+      .values(personasToAdd)
+      .returning();
+  }
+
+  // Content methods
+  async createGeneratedContent(content: InsertGeneratedContent): Promise<GeneratedContent> {
+    const [newContent] = await db
+      .insert(generatedContent)
+      .values(content)
+      .returning();
+    return newContent;
+  }
+
+  async getGeneratedContent(id: number): Promise<GeneratedContent | undefined> {
+    const [content] = await db
+      .select()
+      .from(generatedContent)
+      .where(eq(generatedContent.id, id));
+    return content;
+  }
+
+  async getGeneratedContentByUserId(userId: number): Promise<GeneratedContent[]> {
+    return db
+      .select()
+      .from(generatedContent)
+      .where(eq(generatedContent.user_id, userId))
+      .orderBy(desc(generatedContent.created_at));
+  }
+
+  // Blog category methods
+  async createBlogCategory(category: InsertBlogCategory): Promise<BlogCategory> {
+    const [newCategory] = await db
+      .insert(blogCategories)
+      .values(category)
+      .returning();
+    return newCategory;
+  }
+
+  async getBlogCategory(id: number): Promise<BlogCategory | undefined> {
+    const [category] = await db
+      .select()
+      .from(blogCategories)
+      .where(eq(blogCategories.id, id));
+    return category;
+  }
+
+  async getBlogCategoryBySlug(slug: string): Promise<BlogCategory | undefined> {
+    const [category] = await db
+      .select()
+      .from(blogCategories)
+      .where(eq(blogCategories.slug, slug));
+    return category;
+  }
+
+  async getAllBlogCategories(): Promise<BlogCategory[]> {
+    return db.select().from(blogCategories);
+  }
+
+  async updateBlogCategory(id: number, updates: Partial<InsertBlogCategory>): Promise<BlogCategory> {
+    const [category] = await db
+      .update(blogCategories)
+      .set(updates)
+      .where(eq(blogCategories.id, id))
+      .returning();
+    
+    if (!category) {
+      throw new Error(`Blog category with id ${id} not found`);
+    }
+    
+    return category;
+  }
+
+  async deleteBlogCategory(id: number): Promise<void> {
+    await db
+      .delete(blogCategories)
+      .where(eq(blogCategories.id, id));
+  }
+
+  // Blog post methods
+  async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
+    const [newPost] = await db
+      .insert(blogPosts)
+      .values(post)
+      .returning();
+    return newPost;
+  }
+
+  async getBlogPost(id: number): Promise<BlogPost | undefined> {
+    const [post] = await db
+      .select()
+      .from(blogPosts)
+      .where(eq(blogPosts.id, id));
+    return post;
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    const [post] = await db
+      .select()
+      .from(blogPosts)
+      .where(eq(blogPosts.slug, slug));
+    return post;
+  }
+
+  async getAllBlogPosts(options?: { 
+    published?: boolean; 
+    limit?: number; 
+    offset?: number;
+    categoryId?: number;
+  }): Promise<BlogPost[]> {
+    let query = db.select().from(blogPosts);
+    
+    if (options?.published !== undefined) {
+      query = query.where(eq(blogPosts.published, options.published));
+    }
+    
+    if (options?.categoryId !== undefined) {
+      query = query.where(eq(blogPosts.category_id, options.categoryId));
+    }
+    
+    query = query.orderBy(desc(blogPosts.created_at));
+    
+    if (options?.limit !== undefined) {
+      query = query.limit(options.limit);
+    }
+    
+    if (options?.offset !== undefined) {
+      query = query.offset(options.offset);
+    }
+    
+    return query;
+  }
+
+  async updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPost> {
+    const [post] = await db
+      .update(blogPosts)
+      .set(updates)
+      .where(eq(blogPosts.id, id))
+      .returning();
+    
+    if (!post) {
+      throw new Error(`Blog post with id ${id} not found`);
+    }
+    
+    return post;
+  }
+
+  async deleteBlogPost(id: number): Promise<void> {
+    await db
+      .delete(blogPosts)
+      .where(eq(blogPosts.id, id));
+  }
+}
+
+// Use DatabaseStorage to persist data to Postgres
+export const storage = new DatabaseStorage();
