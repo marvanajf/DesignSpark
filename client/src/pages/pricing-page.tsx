@@ -37,12 +37,13 @@ export default function PricingPage() {
     <Layout>
       <div className="py-12 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Heading section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold tracking-tight text-white mb-3">
-              Choose Your Subscription Plan
+          {/* Heading section inspired by the screenshot */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+              <span className="block text-white">Choose Your</span>
+              <span className="block text-[#74d1ea]">Subscription Plan</span>
             </h1>
-            <p className="text-gray-400 max-w-3xl mx-auto">
+            <p className="text-gray-400 max-w-3xl mx-auto text-lg">
               Select the plan that best fits your needs. All plans include access to our core features, with
               higher tiers offering more usage allowances and premium features.
             </p>
@@ -50,110 +51,164 @@ export default function PricingPage() {
 
           {/* Pricing cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            {Object.entries(subscriptionPlans).map(([planId, plan], index) => (
-              <div 
-                key={planId} 
-                className={`relative group transform transition-all duration-300 hover:scale-105 bg-black rounded-lg overflow-hidden h-full ${
-                  planId === 'professional' 
-                    ? 'border-2 border-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.3)]' 
-                    : 'border border-gray-700/60'
-                }`}
-              >
-                {/* Accent top border */}
-                <div className={`h-1 w-full bg-gradient-to-r ${
-                  planId === 'free' ? 'from-gray-700 to-gray-600' :
-                  planId === 'standard' ? 'from-[#53b0c9] to-[#74d1ea]' :
-                  planId === 'professional' ? 'from-[#74d1ea] to-[#53b0c9]' :
-                  'from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]'
-                }`}></div>
-                
-                {planId === 'professional' && (
-                  <div className="absolute -top-3 left-0 right-0 mx-auto text-center">
-                    <span className="bg-[#74d1ea] text-black text-xs font-bold px-3 py-1 rounded-full">
-                      MOST POPULAR
-                    </span>
-                  </div>
-                )}
-                
-                <div className="p-6 text-center mt-2">
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {plan.name}
-                    {user?.subscription_plan === planId && (
-                      <span className="ml-2 text-xs px-2 py-1 bg-[#74d1ea] text-black rounded-full">Current</span>
-                    )}
-                  </h3>
+            {Object.entries(subscriptionPlans).map(([planId, plan], index) => {
+              // Calculate different visual styling based on plan
+              const isProPlan = planId === 'professional';
+              const isPremiumPlan = planId === 'premium';
+              const isFreePlan = planId === 'free';
+              const isPaidPlan = !isFreePlan;
+              
+              return (
+                <div 
+                  key={planId} 
+                  className={`relative group transform transition-all duration-300 hover:scale-105 bg-black rounded-lg overflow-hidden h-full ${
+                    isProPlan 
+                      ? 'border-[1.5px] border-[#74d1ea] shadow-[0_0_35px_rgba(116,209,234,0.4)]' 
+                      : isPremiumPlan
+                        ? 'border-[1.5px] border-[#5db8d0] shadow-[0_0_25px_rgba(116,209,234,0.25)]'
+                        : 'border border-gray-700/60'
+                  }`}
+                >
+                  {/* Glowing background effect */}
+                  {isPaidPlan && (
+                    <div 
+                      className="absolute inset-0 opacity-5 bg-[#74d1ea] blur-3xl rounded-full -z-10 group-hover:opacity-10 transition-opacity"
+                      style={{
+                        width: '150%',
+                        height: '150%',
+                        top: '-25%',
+                        left: '-25%',
+                      }}
+                    ></div>
+                  )}
                   
-                  <div className="text-center mb-3">
-                    <span className="text-4xl font-bold text-white">{plan.displayPrice}</span>
-                    {planId !== 'free' && <span className="text-sm text-gray-400">/month</span>}
-                  </div>
+                  {/* Top accent gradient */}
+                  <div className={`h-2 w-full bg-gradient-to-r ${
+                    isFreePlan ? 'from-gray-800 to-gray-700' :
+                    planId === 'standard' ? 'from-[#53b0c9] to-[#74d1ea]' :
+                    isProPlan ? 'from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]' :
+                    'from-[#74d1ea] via-[#53b0c9] to-[#40a3bd]'
+                  }`}></div>
                   
-                  <p className="text-gray-400 text-sm mb-5 pb-2 border-b border-gray-800">
-                    {planId === 'free' ? 'Get started with basic features' : 
-                     planId === 'standard' ? 'Perfect for professionals' : 
-                     planId === 'professional' ? 'Ideal for growing businesses' : 
-                     'For demanding content creators'}
-                  </p>
+                  {/* Popular tag */}
+                  {isProPlan && (
+                    <div className="absolute -top-3 left-0 right-0 mx-auto text-center">
+                      <span className="bg-[#74d1ea] text-black text-xs font-bold px-4 py-1 rounded-full shadow-[0_0_10px_rgba(116,209,234,0.5)]">
+                        MOST POPULAR
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="p-6 text-center mt-2">
+                    {/* Plan name with current indicator */}
+                    <h3 className={`text-xl font-bold mb-2 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-white'}`}>
+                      {plan.name}
+                      {user?.subscription_plan === planId && (
+                        <span className="ml-2 text-xs px-2 py-1 bg-[#74d1ea] text-black rounded-full">
+                          Current
+                        </span>
+                      )}
+                    </h3>
+                    
+                    {/* Price display */}
+                    <div className="text-center mb-3">
+                      <span className="text-4xl font-bold text-white">{plan.displayPrice}</span>
+                      {!isFreePlan && <span className="text-sm text-gray-400">/month</span>}
+                    </div>
+                    
+                    {/* Plan description */}
+                    <p className="text-gray-400 text-sm mb-5 pb-3 border-b border-gray-800/50">
+                      {isFreePlan ? 'Get started with basic features' : 
+                      planId === 'standard' ? 'Perfect for professionals' : 
+                      isProPlan ? 'Ideal for growing businesses' : 
+                      'For demanding content creators'}
+                    </p>
 
-                  <ul className="space-y-3 text-sm text-left mb-6">
-                    <li className="flex items-center">
-                      <Check className={`mr-2 h-4 w-4 ${planId !== 'free' ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
-                      <span className="text-gray-300">{plan.personas} AI Personas</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className={`mr-2 h-4 w-4 ${planId !== 'free' ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
-                      <span className="text-gray-300">{plan.toneAnalyses} Tone Analyses</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className={`mr-2 h-4 w-4 ${planId !== 'free' ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
-                      <span className="text-gray-300">{plan.contentGeneration} Content Pieces</span>
-                    </li>
-                    <li className="flex items-center">
-                      {planId === 'free' ? (
-                        <X className="mr-2 h-4 w-4 text-red-500" />
-                      ) : (
-                        <Check className="mr-2 h-4 w-4 text-[#74d1ea]" />
-                      )}
-                      <span className="text-gray-300">Email Support</span>
-                    </li>
-                    <li className="flex items-center">
-                      {['free', 'standard'].includes(planId) ? (
-                        <X className="mr-2 h-4 w-4 text-red-500" />
-                      ) : (
-                        <Check className="mr-2 h-4 w-4 text-[#74d1ea]" />
-                      )}
-                      <span className="text-gray-300">Priority Support</span>
-                    </li>
-                    <li className="flex items-center">
-                      {planId === 'premium' ? (
-                        <Check className="mr-2 h-4 w-4 text-[#74d1ea]" />
-                      ) : (
-                        <X className="mr-2 h-4 w-4 text-red-500" />
-                      )}
-                      <span className="text-gray-300">API Access</span>
-                    </li>
-                  </ul>
-                </div>
+                    {/* Features list */}
+                    <ul className="space-y-3 text-sm text-left mb-8">
+                      <li className="flex items-center">
+                        <div className={`flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center ${
+                          isPaidPlan ? 'bg-[#74d1ea]/20' : 'bg-emerald-500/20'
+                        }`}>
+                          <Check className={`h-3 w-3 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
+                        </div>
+                        <span className="text-gray-300">{plan.personas} AI Personas</span>
+                      </li>
+                      <li className="flex items-center">
+                        <div className={`flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center ${
+                          isPaidPlan ? 'bg-[#74d1ea]/20' : 'bg-emerald-500/20'
+                        }`}>
+                          <Check className={`h-3 w-3 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
+                        </div>
+                        <span className="text-gray-300">{plan.toneAnalyses} Tone Analyses</span>
+                      </li>
+                      <li className="flex items-center">
+                        <div className={`flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center ${
+                          isPaidPlan ? 'bg-[#74d1ea]/20' : 'bg-emerald-500/20'
+                        }`}>
+                          <Check className={`h-3 w-3 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
+                        </div>
+                        <span className="text-gray-300">{plan.contentGeneration} Content Pieces</span>
+                      </li>
+                      <li className="flex items-center">
+                        {isFreePlan ? (
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-red-500/20">
+                            <X className="h-3 w-3 text-red-500" />
+                          </div>
+                        ) : (
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                            <Check className="h-3 w-3 text-[#74d1ea]" />
+                          </div>
+                        )}
+                        <span className="text-gray-300">Email Support</span>
+                      </li>
+                      <li className="flex items-center">
+                        {['free', 'standard'].includes(planId) ? (
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-red-500/20">
+                            <X className="h-3 w-3 text-red-500" />
+                          </div>
+                        ) : (
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                            <Check className="h-3 w-3 text-[#74d1ea]" />
+                          </div>
+                        )}
+                        <span className="text-gray-300">Priority Support</span>
+                      </li>
+                      <li className="flex items-center">
+                        {isPremiumPlan ? (
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                            <Check className="h-3 w-3 text-[#74d1ea]" />
+                          </div>
+                        ) : (
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-red-500/20">
+                            <X className="h-3 w-3 text-red-500" />
+                          </div>
+                        )}
+                        <span className="text-gray-300">API Access</span>
+                      </li>
+                    </ul>
+                  </div>
 
-                <div className="px-6 pb-6">
-                  <Button 
-                    className={`w-full transition-all duration-300 ${
-                      planId !== 'free' 
-                        ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.3)] hover:shadow-[0_0_15px_rgba(116,209,234,0.5)]' 
-                        : 'border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white'
-                    }`}
-                    disabled={user?.subscription_plan === planId}
-                    onClick={() => handleSelectPlan(planId as SubscriptionPlanType)}
-                  >
-                    {user?.subscription_plan === planId 
-                      ? "Current Plan" 
-                      : planId === 'free' 
-                        ? "Get Started" 
-                        : "Subscribe"}
-                  </Button>
+                  <div className="px-6 pb-6">
+                    <Button 
+                      className={`w-full font-medium transition-all duration-300 ${
+                        !isFreePlan 
+                          ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)]' 
+                          : 'border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white'
+                      }`}
+                      disabled={user?.subscription_plan === planId}
+                      onClick={() => handleSelectPlan(planId as SubscriptionPlanType)}
+                    >
+                      {user?.subscription_plan === planId 
+                        ? "Current Plan" 
+                        : isFreePlan 
+                          ? "Get Started" 
+                          : "Subscribe"}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {selectedPlan && (
