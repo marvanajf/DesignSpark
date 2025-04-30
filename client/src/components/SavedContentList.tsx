@@ -125,7 +125,7 @@ export default function SavedContentList() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by topic, content or type..."
-                className="pl-10 bg-black border-gray-700 text-gray-300 w-full"
+                className="pl-10 bg-black border-gray-700 text-gray-300 w-full focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
               />
             </div>
             {searchQuery && (

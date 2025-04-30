@@ -549,7 +549,7 @@ export default function ContentGeneratorPage() {
                           }
                         }}
                       >
-                        <SelectTrigger className="bg-black border-gray-800 text-gray-300 w-[150px]">
+                        <SelectTrigger className="bg-black border-gray-800 text-gray-300 w-[150px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                           <SelectValue placeholder="Filter type" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#111] border-gray-800">

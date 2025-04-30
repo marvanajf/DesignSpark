@@ -13,15 +13,12 @@ import {
   Mail, 
   RefreshCcw,
   Calendar,
-  Check,
   CheckCheck,
   Sparkles,
   Layers,
   Search,
-  Filter,
-  AlertTriangle
+  Filter
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -280,239 +277,35 @@ export default function ContentGeneratorPage() {
   if (!toneAnalyses || toneAnalyses.length === 0) {
     return (
       <Layout showSidebar={true}>
-        <div className="flex-1 overflow-y-auto bg-black">
-          <div className="p-6">
-            {/* Header Section with Breadcrumbs */}
-            <div className="mb-6">
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="flex items-center text-sm text-gray-400">
-                    <span>Tovably</span>
-                    <span className="mx-2">›</span>
-                    <span>Content Generator</span>
+        <div className="flex-1 overflow-y-auto bg-black p-6">
+          <div className="max-w-3xl mx-auto mt-10">
+            <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-xl font-medium text-white">Tone Analysis Required</CardTitle>
+                <CardDescription className="text-gray-400">
+                  Before you can generate content, you need to analyze your tone of voice.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start">
+                  <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-gray-900">
+                    <Globe className="h-5 w-5 text-[#74d1ea]" />
                   </div>
-                  <h1 className="text-2xl font-semibold text-white mt-1">Content Generator</h1>
-                </div>
-              </div>
-            </div>
-
-            {/* Content Generator Promo Banner */}
-            <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
-              
-              <div className="relative z-10 flex items-start">
-                <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                  <Sparkles className="h-6 w-6 text-[#74d1ea]" />
-                </div>
-                
-                <div className="flex-1">
-                  <h2 className="text-xl font-semibold text-white mb-3">AI-Powered Content Generation</h2>
-                  <p className="text-gray-300 mb-6 max-w-3xl">
-                    Create compelling, personalized content with our AI engine. Generate precisely targeted LinkedIn posts and cold emails that combine your brand's unique tone with tailored audience personas.
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <div className="text-[#74d1ea] mr-3">✓</div>
-                      <span className="text-gray-300">Persona-targeted content to engage specific audience segments</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="text-[#74d1ea] mr-3">✓</div>
-                      <span className="text-gray-300">Tone-matched writing that perfectly reflects your brand voice</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="text-[#74d1ea] mr-3">✓</div>
-                      <span className="text-gray-300">LinkedIn posts and cold emails optimized for high engagement</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-6 mb-8">
-              {/* Setup Required Card */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)]">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <div className="p-6">
-                  <div className="flex items-center mb-5">
-                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <Globe className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-white">Tone Analysis Required</h3>
-                      <p className="text-sm text-gray-400">One step away from generating great content</p>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-black/30 rounded-lg p-5 mb-5 border border-gray-800/60">
-                    <div className="flex items-start">
-                      <div className="min-w-[24px] mt-0.5">
-                        <AlertTriangle className="h-6 w-6 text-[#74d1ea]" />
-                      </div>
-                      <div className="ml-4">
-                        <h4 className="text-white font-medium mb-1">Before you can generate content</h4>
-                        <p className="text-gray-400 text-sm">
-                          You need to analyze your tone of voice first. This helps our AI create content that sounds 
-                          authentically like your brand.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <div className="flex-1 bg-black/20 rounded-lg p-5 border border-gray-800/50">
-                      <h4 className="text-white font-medium flex items-center mb-2">
-                        <CheckCheck className="h-4 w-4 text-[#74d1ea] mr-2" />
-                        What you'll get from tone analysis
-                      </h4>
-                      <ul className="space-y-2 text-sm text-gray-300">
-                        <li className="flex items-start">
-                          <div className="mr-2 mt-0.5 text-[#74d1ea]">•</div>
-                          <span>Identification of your brand's unique voice characteristics</span>
-                        </li>
-                        <li className="flex items-start">
-                          <div className="mr-2 mt-0.5 text-[#74d1ea]">•</div>
-                          <span>Analysis of your language patterns and preferred terminology</span>
-                        </li>
-                        <li className="flex items-start">
-                          <div className="mr-2 mt-0.5 text-[#74d1ea]">•</div>
-                          <span>Content recommendations tailored to your communication style</span>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="flex-1 bg-black/20 rounded-lg p-5 border border-gray-800/50">
-                      <h4 className="text-white font-medium flex items-center mb-2">
-                        <CheckCheck className="h-4 w-4 text-[#74d1ea] mr-2" />
-                        How it improves your content
-                      </h4>
-                      <ul className="space-y-2 text-sm text-gray-300">
-                        <li className="flex items-start">
-                          <div className="mr-2 mt-0.5 text-[#74d1ea]">•</div>
-                          <span>Maintains consistent brand voice across all communications</span>
-                        </li>
-                        <li className="flex items-start">
-                          <div className="mr-2 mt-0.5 text-[#74d1ea]">•</div>
-                          <span>Creates more authentic content that resonates with your audience</span>
-                        </li>
-                        <li className="flex items-start">
-                          <div className="mr-2 mt-0.5 text-[#74d1ea]">•</div>
-                          <span>Higher engagement through personalized tone and language</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 text-center">
+                  <div>
+                    <h3 className="text-lg font-medium text-white">Run a Tone Analysis</h3>
+                    <p className="mt-1 text-gray-400">
+                      Analyze your website or sample text to understand your current tone of voice, which helps us generate content that aligns with your brand voice.
+                    </p>
                     <Button 
                       onClick={() => navigate('/tone-analysis')}
-                      className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-6 py-6 text-lg rounded-md"
+                      className="mt-4 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                     >
-                      <Globe className="mr-2 h-5 w-5" />
-                      Run Tone Analysis
+                      Go to Tone Analysis
                     </Button>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            {/* The Framework Demonstration */}
-            <div className="mb-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                  <Layers className="h-5 w-5 text-[#74d1ea]" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-white">How Content Generation Works</h2>
-                  <p className="text-sm text-gray-400 mt-0.5">The tool will be unlocked after tone analysis</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                {/* Left Column: Content Generation Form Preview */}
-                <div className="xl:col-span-1">
-                  <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] opacity-60 h-full">
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                    <CardHeader className="pb-3 border-b border-gray-800/60 relative z-10">
-                      <div className="flex items-center">
-                        <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-3">
-                          <Send className="h-5 w-5 text-[#74d1ea]" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg font-semibold text-white">Generate New Content</CardTitle>
-                          <CardDescription className="text-gray-400">
-                            Create professional content based on your tone and target audience
-                          </CardDescription>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-5">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Content Type</label>
-                        <div className="h-10 bg-black/50 rounded-md border border-gray-800/60"></div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Topic</label>
-                        <div className="h-10 bg-black/50 rounded-md border border-gray-800/60"></div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Target Persona</label>
-                        <div className="h-10 bg-black/50 rounded-md border border-gray-800/60"></div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Tone Analysis</label>
-                        <div className="h-10 bg-black/50 rounded-md border border-gray-800/60"></div>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="px-6 py-4 bg-black/20 border-t border-gray-800/60 relative z-10">
-                      <Button
-                        className="w-full bg-gray-800/80 text-gray-500 cursor-not-allowed"
-                        disabled={true}
-                      >
-                        <Sparkles className="mr-2 h-4 w-4" />
-                        Generate Content
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </div>
-                
-                {/* Right Column: Generated Content Preview */}
-                <div className="xl:col-span-2">
-                  <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] opacity-60 h-full">
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                    <CardHeader className="pb-3 border-b border-gray-800/60 relative z-10">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-3">
-                            <FileText className="h-5 w-5 text-[#74d1ea]" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-lg font-semibold text-white">Generated Content</CardTitle>
-                            <CardDescription className="text-gray-400">
-                              Your content will appear here
-                            </CardDescription>
-                          </div>
-                        </div>
-                        <div className="flex space-x-3">
-                          <div className="h-10 w-[100px] bg-black/50 rounded-md border border-gray-800/60"></div>
-                          <div className="h-10 w-[100px] bg-black/50 rounded-md border border-gray-800/60"></div>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-6 flex flex-col items-center justify-center h-64 text-center">
-                      <FileText className="h-12 w-12 text-gray-700 mb-4" />
-                      <h3 className="text-lg font-medium text-gray-600 mb-2">Your content will appear here</h3>
-                      <p className="text-gray-500 max-w-md">
-                        After completing tone analysis, you'll be able to generate LinkedIn posts and cold emails
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </Layout>
@@ -576,56 +369,15 @@ export default function ContentGeneratorPage() {
             </div>
           </div>
           
-          {/* Content Generator Promo Banner */}
-          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
-            
-            <div className="relative z-10 flex items-start">
-              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                <Sparkles className="h-6 w-6 text-[#74d1ea]" />
-              </div>
-              
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold text-white mb-3">AI-Powered Content Generation</h2>
-                <p className="text-gray-300 mb-6 max-w-3xl">
-                  Create compelling, personalized content with our AI engine. Generate precisely targeted LinkedIn posts and cold emails that combine your brand's unique tone with tailored audience personas.
-                </p>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
-                    <span className="text-gray-300">Persona-targeted content to engage specific audience segments</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
-                    <span className="text-gray-300">Tone-matched writing that perfectly reflects your brand voice</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
-                    <span className="text-gray-300">LinkedIn posts and cold emails optimized for high engagement</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* Left Column: Content Generation Form */}
             <div className="xl:col-span-1">
-              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] h-full">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <CardHeader className="pb-3 border-b border-gray-800/60 relative z-10">
-                  <div className="flex items-center">
-                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-3">
-                      <Send className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg font-semibold text-white">Generate New Content</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        Create professional content based on your tone and target audience
-                      </CardDescription>
-                    </div>
-                  </div>
+              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden h-full">
+                <CardHeader className="pb-3 border-b border-gray-800">
+                  <CardTitle className="text-lg font-medium text-white">Generate New Content</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Create professional content based on your tone and target audience
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6 space-y-5">
                   {/* Content Type Selection */}
@@ -642,7 +394,7 @@ export default function ContentGeneratorPage() {
                           value="linkedin_post" 
                           className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
                         >
-                          <FaLinkedin className="h-4 w-4 mr-2" />
+                          <LinkedIn className="h-4 w-4 mr-2" />
                           LinkedIn Post
                         </TabsTrigger>
                         <TabsTrigger 
@@ -664,7 +416,7 @@ export default function ContentGeneratorPage() {
                       placeholder="E.g., New product launch, Industry trend, etc."
                       value={topic}
                       onChange={(e) => setTopic(e.target.value)}
-                      className="bg-black border-gray-700 text-white"
+                      className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                     />
                     <p className="text-xs text-gray-500">
                       Enter the main subject or theme of your content
@@ -678,7 +430,7 @@ export default function ContentGeneratorPage() {
                       value={selectedPersonaId?.toString() || ""}
                       onValueChange={(value) => setSelectedPersonaId(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-black border-gray-700 text-white">
+                      <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                         <SelectValue placeholder="Select a persona" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#111] border-gray-800">
@@ -710,7 +462,7 @@ export default function ContentGeneratorPage() {
                       value={selectedToneAnalysisId?.toString() || ""}
                       onValueChange={(value) => setSelectedToneAnalysisId(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-black border-gray-700 text-white">
+                      <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                         <SelectValue placeholder="Select tone analysis" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#111] border-gray-800">
@@ -767,20 +519,14 @@ export default function ContentGeneratorPage() {
             
             {/* Right Column: Generated Content */}
             <div className="xl:col-span-2">
-              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] h-full">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <CardHeader className="pb-3 border-b border-gray-800/60 relative z-10">
+              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden h-full">
+                <CardHeader className="pb-3 border-b border-gray-800">
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)] mr-3">
-                        <FileText className="h-5 w-5 text-[#74d1ea]" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg font-semibold text-white">Generated Content</CardTitle>
-                        <CardDescription className="text-gray-400">
-                          Your recent content ready to use
-                        </CardDescription>
-                      </div>
+                    <div>
+                      <CardTitle className="text-lg font-medium text-white">Generated Content</CardTitle>
+                      <CardDescription className="text-gray-400">
+                        Your recent content ready to use
+                      </CardDescription>
                     </div>
                     <div className="flex space-x-3">
                       <div className="relative">
@@ -789,7 +535,7 @@ export default function ContentGeneratorPage() {
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Search content..."
-                          className="pl-10 bg-black border-gray-800 text-gray-300 w-[220px]"
+                          className="pl-10 bg-black border-gray-800 text-gray-300 w-[220px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                         />
                       </div>
                       <Select
@@ -802,7 +548,7 @@ export default function ContentGeneratorPage() {
                           }
                         }}
                       >
-                        <SelectTrigger className="bg-black border-gray-800 text-gray-300 w-[150px]">
+                        <SelectTrigger className="bg-black border-gray-800 text-gray-300 w-[150px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                           <SelectValue placeholder="Filter type" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#111] border-gray-800">
@@ -826,18 +572,17 @@ export default function ContentGeneratorPage() {
                         const persona = personas.find(p => p.id === content.persona_id);
                         
                         return (
-                          <Card key={content.id} className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                            <CardHeader className="py-3 px-5 border-b border-gray-800/60 relative z-10">
+                          <Card key={content.id} className="bg-black border-gray-800 rounded-lg overflow-hidden">
+                            <CardHeader className="py-3 px-5 bg-black/40 border-b border-gray-800">
                               <div className="flex justify-between items-center">
                                 <div className="flex items-center">
                                   <Badge className={`mr-2 ${
                                     content.type === "linkedin_post" 
-                                      ? "bg-[#74d1ea]/20 text-[#74d1ea]" 
-                                      : "bg-[#74d1ea]/20 text-[#74d1ea]"
+                                      ? "bg-blue-500/20 text-blue-400" 
+                                      : "bg-green-500/20 text-green-400"
                                   } border-0`}>
                                     {content.type === "linkedin_post" ? (
-                                      <FaLinkedin className="h-3 w-3 mr-1" />
+                                      <LinkedIn className="h-3 w-3 mr-1" />
                                     ) : (
                                       <Mail className="h-3 w-3 mr-1" />
                                     )}
@@ -894,12 +639,12 @@ export default function ContentGeneratorPage() {
                                 </div>
                               </div>
                             </CardHeader>
-                            <CardContent className="py-4 px-5 relative z-10">
+                            <CardContent className="py-4 px-5">
                               <div className="whitespace-pre-wrap text-gray-300 text-sm">
                                 {content.content_text}
                               </div>
                             </CardContent>
-                            <CardFooter className="py-3 px-5 bg-black/20 border-t border-gray-800/60 flex justify-between relative z-10">
+                            <CardFooter className="py-3 px-5 bg-black/40 border-t border-gray-800 flex justify-between">
                               <div className="flex items-center space-x-4">
                                 <Button
                                   variant="outline"
@@ -916,7 +661,7 @@ export default function ContentGeneratorPage() {
                                     size="sm"
                                     className="h-8 border-gray-700 text-gray-400 hover:text-white"
                                   >
-                                    <FaLinkedin className="h-3.5 w-3.5 mr-1" />
+                                    <LinkedIn className="h-3.5 w-3.5 mr-1" />
                                     Post to LinkedIn
                                   </Button>
                                 )}
