@@ -11,7 +11,8 @@ import {
   HelpCircle,
   Book,
   UserCog,
-  ShieldAlert
+  ShieldAlert,
+  CreditCard
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
@@ -38,8 +39,20 @@ export default function Sidebar() {
   // Determine if the current user is an admin
   const isAdmin = user?.role === "admin";
   
+  // Get subscription plan details to display in the menu
+  const subscriptionPlan = user?.subscription_plan || 'free';
+  const formatPlanName = (plan: string) => {
+    return plan.charAt(0).toUpperCase() + plan.slice(1);
+  };
+  
   const bottomMenuItems = [
     { href: "/account", icon: <UserCog className="h-5 w-5" />, label: "Account" },
+    { 
+      href: "/pricing", 
+      icon: <CreditCard className="h-5 w-5" />, 
+      label: `Plan: ${formatPlanName(subscriptionPlan)}`,
+      badge: subscriptionPlan === 'free' ? 'Upgrade' : null
+    },
     { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" },
     ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : [])
   ];
@@ -87,16 +100,23 @@ export default function Sidebar() {
                 <Link 
                   key={item.href} 
                   href={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                  className={`group flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md ${
                     isActive 
                       ? "bg-[#74d1ea]/10 text-[#74d1ea]" 
                       : "text-gray-300 hover:bg-gray-900 hover:text-white"
                   }`}
                 >
-                  <span className={`mr-3 ${isActive ? "text-[#74d1ea]" : "text-gray-400 group-hover:text-white"}`}>
-                    {item.icon}
-                  </span>
-                  {item.label}
+                  <div className="flex items-center">
+                    <span className={`mr-3 ${isActive ? "text-[#74d1ea]" : "text-gray-400 group-hover:text-white"}`}>
+                      {item.icon}
+                    </span>
+                    {item.label}
+                  </div>
+                  {item.badge && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea] text-black">
+                      {item.badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}
