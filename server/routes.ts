@@ -36,7 +36,212 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Stripe payment routes
   
-  // Create a payment intent for subscription
+  // Stripe Checkout endpoint - Creates a session that redirects to Stripe's hosted checkout page
+  // This can be used without being logged in and will auto-create an account
+  app.post("/api/create-checkout-session", async (req: Request, res: Response) => {
+    try {
+      const schema = z.object({
+        plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
+      });
+      
+      const { plan } = schema.parse(req.body);
+      
+      if (plan === 'free') {
+        return res.status(400).json({ error: "Cannot create checkout for free plan" });
+      }
+      
+      const planInfo = subscriptionPlans[plan];
+      if (!planInfo) {
+        return res.status(400).json({ error: "Invalid plan selected" });
+      }
+      
+      // Calculate the amount in cents
+      const amountInCents = Math.round(planInfo.price * 100);
+      
+      // Build the success and cancel URLs
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${baseUrl}/pricing`;
+      
+      // Create metadata about the customer
+      const metadata: Record<string, string> = {
+        planId: plan,
+      };
+      
+      // Add user ID to metadata if user is authenticated
+      if (req.isAuthenticated() && req.user) {
+        metadata.userId = req.user.id.toString();
+      }
+
+      // Create a Checkout Session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: `${planInfo.name} Plan`,
+                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
+                images: [],
+              },
+              unit_amount: amountInCents,
+              recurring: {
+                interval: 'month',
+              },
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata,
+        customer_email: req.isAuthenticated() ? req.user?.email : undefined,
+        billing_address_collection: 'required', // Collect billing address
+        // Auto capture customer details for account creation
+        customer_creation: 'always',
+      });
+      
+      res.status(200).json({ url: session.url });
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+      res.status(400).json({ error: error.message || "Failed to create checkout session" });
+    }
+  });
+  
+  // Webhook to handle Stripe events, including automatic account creation
+  app.post("/webhook/stripe", async (req, res) => {
+    const sig = req.headers['stripe-signature'] as string;
+    let event;
+
+    // Verify webhook signature using your webhook secret
+    try {
+      // TODO: Replace with your actual webhook secret from Stripe dashboard
+      const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      if (!endpointSecret) {
+        return res.status(400).send('Webhook secret not configured');
+      }
+      
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig,
+        endpointSecret
+      );
+    } catch (err) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    // Handle specific events
+    try {
+      if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        // Check if we need to create a user account
+        if (!session.metadata.userId) {
+          // Auto-create an account using the customer email
+          const customer = await stripe.customers.retrieve(session.customer as string);
+          
+          if (customer && customer.email) {
+            // Generate a random secure password
+            const tempPassword = Math.random().toString(36).slice(-10);
+            
+            // Create a new user account
+            const newUser = await storage.createUser({
+              username: customer.email.split('@')[0], // Use part of email as username
+              email: customer.email,
+              password: tempPassword, // This will be hashed by the createUser method
+              role: 'user',
+              subscription_plan: session.metadata.planId as SubscriptionPlanType,
+              personas_used: 0,
+              tone_analyses_used: 0,
+              content_generated: 0,
+              stripe_customer_id: session.customer as string,
+              stripe_subscription_id: session.subscription as string,
+              subscription_status: 'active',
+              // Set subscription end date to 30 days from now
+              subscription_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+            
+            // TODO: Send welcome email with password reset instructions
+            if (newUser) {
+              try {
+                await sendEmail({
+                  to: newUser.email,
+                  subject: "Welcome to Tovably - Your Account Has Been Created",
+                  html: `
+                    <h1>Welcome to Tovably!</h1>
+                    <p>Your account has been created with the email: ${newUser.email}</p>
+                    <p>Your temporary password is: <strong>${tempPassword}</strong></p>
+                    <p>Please log in and change your password immediately.</p>
+                    <p>Thank you for subscribing to our ${session.metadata.planId} plan!</p>
+                  `,
+                  text: `
+                    Welcome to Tovably!
+                    Your account has been created with the email: ${newUser.email}
+                    Your temporary password is: ${tempPassword}
+                    Please log in and change your password immediately.
+                    Thank you for subscribing to our ${session.metadata.planId} plan!
+                  `
+                });
+              } catch (emailError) {
+                console.error("Failed to send welcome email:", emailError);
+              }
+            }
+          }
+        } else {
+          // Update existing user's subscription details
+          const userId = parseInt(session.metadata.userId);
+          if (userId) {
+            await storage.updateUserSubscription(userId, {
+              plan: session.metadata.planId as SubscriptionPlanType,
+              stripeSubscriptionId: session.subscription as string,
+              status: 'active',
+              // Set subscription end date to 30 days from now
+              periodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+          }
+        }
+      }
+      
+      // Handle subscription updated events
+      if (event.type === 'customer.subscription.updated') {
+        const subscription = event.data.object;
+        // Find user by customer ID
+        const user = await storage.getUserByStripeCustomerId(subscription.customer as string);
+        if (user) {
+          // Update subscription details
+          await storage.updateUserSubscription(user.id, {
+            status: subscription.status,
+            // Use actual period end from Stripe
+            periodEnd: new Date(subscription.current_period_end * 1000)
+          });
+        }
+      }
+      
+      // Handle subscription deleted events
+      if (event.type === 'customer.subscription.deleted') {
+        const subscription = event.data.object;
+        // Find user by customer ID
+        const user = await storage.getUserByStripeCustomerId(subscription.customer as string);
+        if (user) {
+          // Downgrade to free plan
+          await storage.updateUserSubscription(user.id, {
+            plan: 'free',
+            status: 'inactive',
+            periodEnd: new Date()
+          });
+        }
+      }
+
+      res.json({ received: true });
+    } catch (err) {
+      console.error(`Error processing webhook: ${err.message}`);
+      res.status(500).send(`Server Error: ${err.message}`);
+    }
+  });
+  
+  // Legacy payment intent endpoint - kept for backward compatibility
   app.post("/api/create-payment-intent", async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ error: "Unauthorized" });

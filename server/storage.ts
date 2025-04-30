@@ -37,13 +37,19 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserRole(id: number, role: string): Promise<User>;
-  updateUserSubscription(id: number, plan: SubscriptionPlanType): Promise<User>;
+  updateUserSubscription(id: number, updates: { 
+    plan?: SubscriptionPlanType;
+    stripeSubscriptionId?: string;
+    status?: string;
+    periodEnd?: Date;
+  }): Promise<User>;
   updateUserStripeInfo(id: number, customerInfo: { 
     customerId: string; 
     subscriptionId?: string; 
     status?: string; 
     periodEnd?: Date; 
   }): Promise<User>;
+  getUserByStripeCustomerId(customerId: string): Promise<User | undefined>;
   incrementPersonaUsage(id: number): Promise<User>;
   incrementToneAnalysisUsage(id: number): Promise<User>;
   incrementContentUsage(id: number): Promise<User>;
@@ -188,7 +194,12 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
   
-  async updateUserSubscription(id: number, plan: SubscriptionPlanType): Promise<User> {
+  async updateUserSubscription(id: number, updates: { 
+    plan?: SubscriptionPlanType;
+    stripeSubscriptionId?: string;
+    status?: string;
+    periodEnd?: Date;
+  }): Promise<User> {
     const user = this.users.get(id);
     if (!user) {
       throw new Error(`User with id ${id} not found`);
@@ -196,11 +207,20 @@ export class MemStorage implements IStorage {
     
     const updatedUser = {
       ...user,
-      subscription_plan: plan
+      subscription_plan: updates.plan || user.subscription_plan,
+      stripe_subscription_id: updates.stripeSubscriptionId || user.stripe_subscription_id,
+      subscription_status: updates.status || user.subscription_status,
+      subscription_period_end: updates.periodEnd || user.subscription_period_end
     };
     
     this.users.set(id, updatedUser);
     return updatedUser;
+  }
+  
+  async getUserByStripeCustomerId(customerId: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.stripe_customer_id === customerId
+    );
   }
   
   async updateUserStripeInfo(id: number, customerInfo: { 
