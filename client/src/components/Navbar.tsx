@@ -122,7 +122,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                               <p className="text-xs text-gray-500">News and updates</p>
                             </div>
                           </Link>
-                          <Link href="/guides" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                          <Link href="/guides-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
                             <BookOpen className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
                               <p className="font-medium">Guides</p>
@@ -232,7 +232,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   <Link href="/blog" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
                     Blog
                   </Link>
-                  <Link href="/guides" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/guides-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
                     Guides
                   </Link>
                 </div>

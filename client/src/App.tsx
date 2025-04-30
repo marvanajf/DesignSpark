@@ -51,6 +51,7 @@ function Router() {
       <Route path="/tone-analysis-info" component={ToneAnalysisMarketingPage} />
       <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
       <Route path="/personas-info" component={PersonasMarketingPage} />
+      <Route path="/guides-info" component={GuidesMarketingPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:id" component={BlogPostPage} />
@@ -59,7 +60,7 @@ function Router() {
       <ProtectedRoute path="/personas" component={PersonaSelectionPage} />
       <ProtectedRoute path="/content-generator" component={ContentGeneratorPage} />
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
-      <Route path="/guides" component={GuidesPage} />
+      <ProtectedRoute path="/guides" component={GuidesPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
       <ProtectedRoute path="/support" component={SupportPage} />
       <ProtectedRoute path="/admin" component={AdminPage} />
