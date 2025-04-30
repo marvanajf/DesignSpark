@@ -417,7 +417,7 @@ export default function ContentGeneratorPage() {
                       placeholder="E.g., New product launch, Industry trend, etc."
                       value={topic}
                       onChange={(e) => setTopic(e.target.value)}
-                      className="bg-black border-gray-700 text-white"
+                      className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                     />
                     <p className="text-xs text-gray-500">
                       Enter the main subject or theme of your content
@@ -431,7 +431,7 @@ export default function ContentGeneratorPage() {
                       value={selectedPersonaId?.toString() || ""}
                       onValueChange={(value) => setSelectedPersonaId(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-black border-gray-700 text-white">
+                      <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                         <SelectValue placeholder="Select a persona" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#111] border-gray-800">
@@ -463,7 +463,7 @@ export default function ContentGeneratorPage() {
                       value={selectedToneAnalysisId?.toString() || ""}
                       onValueChange={(value) => setSelectedToneAnalysisId(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-black border-gray-700 text-white">
+                      <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                         <SelectValue placeholder="Select tone analysis" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#111] border-gray-800">
@@ -536,7 +536,7 @@ export default function ContentGeneratorPage() {
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Search content..."
-                          className="pl-10 bg-black border-gray-800 text-gray-300 w-[220px]"
+                          className="pl-10 bg-black border-gray-800 text-gray-300 w-[220px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                         />
                       </div>
                       <Select
