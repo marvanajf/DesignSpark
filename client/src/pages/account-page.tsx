@@ -26,12 +26,14 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useUserAvatar } from "@/contexts/user-avatar-context";
 
 export default function AccountPage() {
   const { user } = useAuth();
   const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
-  const [currentAvatar, setCurrentAvatar] = useState<string>('bg-[#182030]');
+  const { avatarColor, setAvatarColor } = useUserAvatar();
+  const [currentAvatar, setCurrentAvatar] = useState<string>(avatarColor);
   const { toast } = useToast();
   
   // Helper function to format the plan name (same as in sidebar)
@@ -489,6 +491,8 @@ export default function AccountPage() {
                 onClick={() => {
                   if (selectedAvatar) {
                     setCurrentAvatar(selectedAvatar);
+                    // Update the context for global state
+                    setAvatarColor(selectedAvatar);
                     toast({
                       title: "Colour Updated",
                       description: "Your profile colour has been updated successfully.",
