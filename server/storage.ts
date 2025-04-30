@@ -5,6 +5,7 @@ import {
   generatedContent,
   blogCategories,
   blogPosts,
+  leadContacts,
   type User, 
   type InsertUser, 
   type ToneAnalysis, 
@@ -17,6 +18,9 @@ import {
   type InsertBlogCategory,
   type BlogPost,
   type InsertBlogPost,
+  type LeadContact,
+  type InsertLeadContact,
+  type SubscriptionPlanType,
   predefinedPersonas
 } from "@shared/schema";
 import session from "express-session";
@@ -184,7 +188,7 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
   
-  async updateUserSubscription(id: number, plan: string): Promise<User> {
+  async updateUserSubscription(id: number, plan: SubscriptionPlanType): Promise<User> {
     const user = this.users.get(id);
     if (!user) {
       throw new Error(`User with id ${id} not found`);
@@ -193,6 +197,29 @@ export class MemStorage implements IStorage {
     const updatedUser = {
       ...user,
       subscription_plan: plan
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async updateUserStripeInfo(id: number, customerInfo: { 
+    customerId: string; 
+    subscriptionId?: string; 
+    status?: string; 
+    periodEnd?: Date; 
+  }): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    const updatedUser = {
+      ...user,
+      stripe_customer_id: customerInfo.customerId,
+      stripe_subscription_id: customerInfo.subscriptionId || null,
+      subscription_status: customerInfo.status || 'inactive',
+      subscription_period_end: customerInfo.periodEnd || null
     };
     
     this.users.set(id, updatedUser);
