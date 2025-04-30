@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
-import { subscriptionPlans, type SubscriptionPlanType } from "../shared/schema";
+import { subscriptionPlans, type SubscriptionPlanType, users } from "../shared/schema";
 import { 
   analyzeTone, 
   generateLinkedInPost, 
@@ -14,6 +14,8 @@ import { sendEmail, formatContactEmailHtml, formatContactEmailText } from "./ema
 import { registerAdminRoutes } from "./admin-routes";
 import { registerBlogRoutes } from "./blog-routes";
 import Stripe from "stripe";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 // Initialize Stripe with the secret key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -33,6 +35,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Set up blog routes
   registerBlogRoutes(app);
+  
+  // User profile update endpoint
+  app.patch("/api/user/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const userId = parseInt(req.params.id, 10);
+      
+      // Security check: Users can only update their own profile
+      if (req.user?.id !== userId) {
+        return res.status(403).json({ error: "Forbidden: You can only update your own profile" });
+      }
+      
+      // Validate update data
+      const schema = z.object({
+        username: z.string().min(3).optional(),
+        email: z.string().email().optional(),
+        company: z.string().nullable().optional(),
+      });
+      
+      const validatedData = schema.parse(req.body);
+      
+      // Check if username already exists (if being changed)
+      if (validatedData.username && validatedData.username !== req.user.username) {
+        const existingUser = await storage.getUserByUsername(validatedData.username);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(400).json({ error: "Username already taken" });
+        }
+      }
+      
+      // Check if email already exists (if being changed)
+      if (validatedData.email && validatedData.email !== req.user.email) {
+        const existingUser = await storage.getUserByEmail(validatedData.email);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(400).json({ error: "Email already in use" });
+        }
+      }
+      
+      // Update user profile
+      const [updatedUser] = await db
+        .update(users)
+        .set(validatedData)
+        .where(eq(users.id, userId))
+        .returning();
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors });
+      }
+      res.status(500).json({ error: "Failed to update profile" });
+    }
+  });
   
   // GET endpoint for direct Stripe redirect - much simpler approach
   app.get("/api/direct-stripe-redirect", async (req: Request, res: Response) => {
