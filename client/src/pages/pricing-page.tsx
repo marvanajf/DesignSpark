@@ -98,13 +98,19 @@ export default function PricingPage() {
                     'from-[#74d1ea] via-[#53b0c9] to-[#40a3bd]'
                   }`}></div>
                   
-                  {/* Popular tag - more prominent and wider */}
+                  {/* Professional plan highlighted styling with extra glow */}
                   {isProPlan && (
-                    <div className="absolute -top-3 left-0 right-0 mx-auto text-center z-10">
-                      <div className="inline-block bg-[#74d1ea] text-black text-xs font-bold px-8 py-1.5 rounded-full shadow-[0_0_15px_rgba(116,209,234,0.6)] whitespace-nowrap w-auto transform scale-105">
-                        <span className="tracking-wider">POPULAR CHOICE</span>
-                      </div>
-                    </div>
+                    <>
+                      {/* Top glow bar */}
+                      <div className="absolute -top-1 -left-1 -right-1 h-1 bg-gradient-to-r from-[#74d1ea]/30 via-[#74d1ea] to-[#74d1ea]/30 blur-md"></div>
+                      
+                      {/* Subtle corner glows */}
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#74d1ea]/20 rounded-full blur-md"></div>
+                      <div className="absolute -top-2 -left-2 w-8 h-8 bg-[#74d1ea]/20 rounded-full blur-md"></div>
+                      
+                      {/* Extra border brightness */}
+                      <div className="absolute inset-0 border border-[#74d1ea]/30 rounded-[7px] pointer-events-none"></div>
+                    </>
                   )}
                   
                   <div className="p-6 text-center mt-2">
