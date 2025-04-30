@@ -1,0 +1,104 @@
+Stripe Checkout Debug Page
+Session Created Successfully
+
+Session ID: cs_test_a1oVAdl0lYJnQDD8Yzmf4QKyBBIIdA8OHi5SvuUMNocgHTJd4ULqrDvrtp
+
+Please click the link below to go to Stripe:
+
+Continue to Stripe Checkout
+{
+  "id": "cs_test_a1oVAdl0lYJnQDD8Yzmf4QKyBBIIdA8OHi5SvuUMNocgHTJd4ULqrDvrtp",
+  "object": "checkout.session",
+  "adaptive_pricing": {
+    "enabled": true
+  },
+  "after_expiration": null,
+  "allow_promotion_codes": null,
+  "amount_subtotal": 999,
+  "amount_total": 999,
+  "automatic_tax": {
+    "enabled": false,
+    "liability": null,
+    "provider": null,
+    "status": null
+  },
+  "billing_address_collection": null,
+  "cancel_url": "https://ea040bed-f51c-4dde-9262-c820f3ddcce1-00-35ee3pax4lte8.riker.replit.dev/pricing",
+  "client_reference_id": null,
+  "client_secret": null,
+  "collected_information": null,
+  "consent": null,
+  "consent_collection": null,
+  "created": 1746037542,
+  "currency": "gbp",
+  "currency_conversion": null,
+  "custom_fields": [],
+  "custom_text": {
+    "after_submit": null,
+    "shipping_address": null,
+    "submit": null,
+    "terms_of_service_acceptance": null
+  },
+  "customer": null,
+  "customer_creation": "if_required",
+  "customer_details": null,
+  "customer_email": null,
+  "discounts": [],
+  "expires_at": 1746123942,
+  "invoice": null,
+  "invoice_creation": {
+    "enabled": false,
+    "invoice_data": {
+      "account_tax_ids": null,
+      "custom_fields": null,
+      "description": null,
+      "footer": null,
+      "issuer": null,
+      "metadata": {},
+      "rendering_options": null
+    }
+  },
+  "livemode": false,
+  "locale": null,
+  "metadata": {
+    "create_subscription": "true",
+    "planId": "standard"
+  },
+  "mode": "payment",
+  "payment_intent": null,
+  "payment_link": null,
+  "payment_method_collection": "if_required",
+  "payment_method_configuration_details": null,
+  "payment_method_options": {
+    "card": {
+      "request_three_d_secure": "automatic"
+    }
+  },
+  "payment_method_types": [
+    "card"
+  ],
+  "payment_status": "unpaid",
+  "permissions": null,
+  "phone_number_collection": {
+    "enabled": false
+  },
+  "recovered_from": null,
+  "saved_payment_method_options": null,
+  "setup_intent": null,
+  "shipping_address_collection": null,
+  "shipping_cost": null,
+  "shipping_details": null,
+  "shipping_options": [],
+  "status": "open",
+  "submit_type": null,
+  "subscription": null,
+  "success_url": "https://ea040bed-f51c-4dde-9262-c820f3ddcce1-00-35ee3pax4lte8.riker.replit.dev/payment-success?plan=standard&session_id={CHECKOUT_SESSION_ID}",
+  "total_details": {
+    "amount_discount": 0,
+    "amount_shipping": 0,
+    "amount_tax": 0
+  },
+  "ui_mode": "hosted",
+  "url": "https://checkout.stripe.com/c/pay/cs_test_a1oVAdl0lYJnQDD8Yzmf4QKyBBIIdA8OHi5SvuUMNocgHTJd4ULqrDvrtp#fidkdWxOYHwnPyd1blpxYHZxWjA0V0BjN0RCY1c3TFExVndAXXxgc3dmPDBKdlZpSzMxVEFDQE5RbFVSNmxST31tcm1uYmg2THI9VkE1Rn02S3UxNFNIbEZnYn1Vcn9qNHYyQkMzVXJDT21iNTVJX0ZBMVVDMScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl",
+  "wallet_options": null
+}

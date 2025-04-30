@@ -107,32 +107,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const session = await stripe.checkout.sessions.create(sessionOptions);
         console.log("Stripe session created successfully with ID:", session.id);
         console.log("Session URL:", session.url);
-        console.log("Full session object:", JSON.stringify(session, null, 2));
         
         if (session.url) {
           console.log("Redirecting to:", session.url);
-          // For debugging, let's return HTML instead of redirecting
-          const debugHtml = `
+          
+          // Create a simple redirect HTML with improved JavaScript (window.location.href with a fallback for window.location.replace)
+          const redirectHtml = `
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Stripe Debug</title>
+  <title>Redirecting to Stripe...</title>
+  <script type="text/javascript">
+    // We use this multi-layered approach for maximum compatibility
+    try {
+      console.log("Attempting to redirect to Stripe with session URL:", "${session.url}");
+      // First try window.location.href (most compatible)
+      window.location.href = "${session.url}";
+      
+      // If that doesn't immediately work, try location.replace as a backup after a small delay
+      setTimeout(function() {
+        console.log("Attempting fallback redirect to Stripe...");
+        window.location.replace("${session.url}");
+      }, 500);
+    } catch(e) {
+      console.error("Redirect error:", e);
+    }
+  </script>
+  <meta http-equiv="refresh" content="2;url=${session.url}">
 </head>
-<body>
-  <h1>Stripe Checkout Debug Page</h1>
-  <p>Session Created Successfully</p>
-  <p>Session ID: ${session.id}</p>
-  <p>Please click the link below to go to Stripe:</p>
-  <a href="${session.url}" style="display:block; padding:10px; background:#74d1ea; color:#000; text-decoration:none; margin:20px 0; text-align:center;">
-    Continue to Stripe Checkout
+<body style="font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 20px; text-align: center; background-color: #1a1a1a; color: white;">
+  <h1>Redirecting to Stripe Checkout...</h1>
+  <p>You should be automatically redirected in a few seconds.</p>
+  <p>If you are not redirected, please click the button below:</p>
+  <a href="${session.url}" style="display: inline-block; padding: 12px 24px; margin-top: 20px; background-color: #74d1ea; color: black; text-decoration: none; border-radius: 4px; font-weight: bold;">
+    Go to Stripe Checkout
   </a>
-  <pre>${JSON.stringify(session, null, 2)}</pre>
 </body>
 </html>
           `;
           
           res.setHeader('Content-Type', 'text/html');
-          return res.send(debugHtml);
+          return res.send(redirectHtml);
         } else {
           return res.status(500).send("Failed to create Stripe checkout URL");
         }
@@ -145,10 +160,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 <head>
   <title>Stripe Error</title>
 </head>
-<body>
+<body style="font-family: system-ui, sans-serif; padding: 20px; background-color: #1a1a1a; color: white;">
   <h1>Stripe Checkout Error</h1>
   <p>Error: ${stripeError.message || 'Unknown error'}</p>
-  <pre>${JSON.stringify(stripeError, null, 2)}</pre>
+  <pre style="background: #333; padding: 15px; overflow: auto; border-radius: 5px;">${JSON.stringify(stripeError, null, 2)}</pre>
+  <p>Please try again or contact support if the issue persists.</p>
+  <a href="/pricing" style="display: inline-block; padding: 10px 20px; margin-top: 20px; background-color: #74d1ea; color: black; text-decoration: none; border-radius: 4px;">
+    Return to Pricing Page
+  </a>
 </body>
 </html>
         `;
