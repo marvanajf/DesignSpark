@@ -74,6 +74,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Create a Checkout Session
+      // We'll use payment mode with automatic customer creation
+      // After payment, we'll create a subscription in our webhook
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
@@ -81,41 +83,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price_data: {
               currency: 'gbp',
               product_data: {
-                name: `${planInfo.name} Plan`,
+                name: `${planInfo.name} Plan - Monthly Subscription`,
                 description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
                 images: [],
               },
               unit_amount: amountInCents,
-              recurring: {
-                interval: 'month',
-              },
             },
             quantity: 1,
           },
         ],
-        mode: 'subscription',
+        mode: 'payment',  // Using payment mode instead of subscription
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
-        billing_address_collection: 'required', // Collect billing address
+        billing_address_collection: 'required',
+        payment_intent_data: {
+          // Set up metadata to create subscription after payment
+          metadata: {
+            create_subscription: 'true',
+            subscription_plan: plan
+          },
+          // Save payment method for future usage
+          setup_future_usage: 'off_session',
+        },
+        // This parameter is now allowed since we're in payment mode
+        customer_creation: 'always'
       };
       
-      // For subscription mode, we can't use customer_creation
-      // Instead, we'll collect the email on the checkout page
+      // If user is already logged in, use their customer info
       if (req.isAuthenticated() && req.user) {
-        // If user is already logged in, use their customer ID if available
         if (req.user.stripe_customer_id) {
           sessionOptions.customer = req.user.stripe_customer_id;
         } else {
           sessionOptions.customer_email = req.user.email;
         }
       }
-      
-      // For all sessions, ensure we capture customer email
-      // This isn't strictly needed as Stripe collects it anyway
-      sessionOptions.payment_intent_data = {
-        setup_future_usage: 'off_session',
-      };
       
       const session = await stripe.checkout.sessions.create(sessionOptions);
       
@@ -191,34 +193,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
+        // Get payment intent for additional metadata
+        const paymentIntent = session.payment_intent ? 
+          await stripe.paymentIntents.retrieve(session.payment_intent as string) : null;
+        
+        // Check payment mode flag for subscription creation
+        const shouldCreateSubscription = 
+          paymentIntent?.metadata?.create_subscription === 'true' || session.metadata?.create_subscription === 'true';
+        const planId = paymentIntent?.metadata?.subscription_plan || session.metadata?.planId;
+        
         // Check if we need to create a user account
-        if (!session.metadata.userId) {
+        if (!session.metadata?.userId) {
           // Auto-create an account using the customer email
-          const customer = await stripe.customers.retrieve(session.customer as string);
-          
-          if (customer && customer.email) {
-            // Generate a random secure password
-            const tempPassword = Math.random().toString(36).slice(-10);
+          try {
+            const customer = await stripe.customers.retrieve(session.customer as string);
+            const customerEmail = typeof customer === 'object' && !('deleted' in customer) ? customer.email : null;
             
-            // Create a new user account
-            const newUser = await storage.createUser({
-              username: customer.email.split('@')[0], // Use part of email as username
-              email: customer.email,
-              password: tempPassword, // This will be hashed by the createUser method
-              role: 'user',
-              subscription_plan: session.metadata.planId as SubscriptionPlanType,
-              personas_used: 0,
-              tone_analyses_used: 0,
-              content_generated: 0,
-              stripe_customer_id: session.customer as string,
-              stripe_subscription_id: session.subscription as string,
-              subscription_status: 'active',
-              // Set subscription end date to 30 days from now
-              subscription_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-            });
-            
-            // TODO: Send welcome email with password reset instructions
-            if (newUser) {
+            if (customerEmail) {
+              // Generate a random secure password
+              const tempPassword = Math.random().toString(36).slice(-10);
+              
+              // Create a new user account
+              const newUser = await storage.createUser({
+                username: customerEmail.split('@')[0], // Use part of email as username
+                email: customerEmail,
+                password: tempPassword, // This will be hashed by the createUser method
+                role: 'user',
+                subscription_plan: planId as SubscriptionPlanType || 'standard',
+                personas_used: 0,
+                tone_analyses_used: 0,
+                content_generated: 0,
+                stripe_customer_id: session.customer as string,
+                stripe_subscription_id: null, // Will be updated later if we create a subscription
+                subscription_status: 'active',
+                // Set subscription end date to 30 days from now
+                subscription_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+              });
+              
+              // If we're in payment mode, create a subscription manually
+              if (shouldCreateSubscription && newUser) {
+                try {
+                  // Use Stripe API to create a subscription for this customer
+                  const subscription = await stripe.subscriptions.create({
+                    customer: session.customer as string,
+                    items: [
+                      {
+                        price_data: {
+                          currency: 'gbp',
+                          product_data: {
+                            name: `${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
+                            description: `Monthly subscription to Tovably ${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
+                          },
+                          unit_amount: Math.round(subscriptionPlans[planId as SubscriptionPlanType].price * 100),
+                          recurring: {
+                            interval: 'month',
+                          },
+                        },
+                      },
+                    ],
+                    metadata: {
+                      userId: newUser.id.toString(),
+                      planId: planId,
+                    },
+                  });
+                  
+                  // Update user with subscription ID
+                  await storage.updateUserStripeInfo(newUser.id, {
+                    subscriptionId: subscription.id,
+                    status: subscription.status,
+                    periodEnd: new Date(subscription.current_period_end * 1000)
+                  });
+                } catch (subError) {
+                  console.error("Failed to create subscription:", subError);
+                }
+              }
+              
+              // Send welcome email with password reset instructions
               try {
                 await sendEmail({
                   to: newUser.email,
@@ -228,32 +278,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     <p>Your account has been created with the email: ${newUser.email}</p>
                     <p>Your temporary password is: <strong>${tempPassword}</strong></p>
                     <p>Please log in and change your password immediately.</p>
-                    <p>Thank you for subscribing to our ${session.metadata.planId} plan!</p>
+                    <p>Thank you for subscribing to our ${planId || 'premium'} plan!</p>
                   `,
                   text: `
                     Welcome to Tovably!
                     Your account has been created with the email: ${newUser.email}
                     Your temporary password is: ${tempPassword}
                     Please log in and change your password immediately.
-                    Thank you for subscribing to our ${session.metadata.planId} plan!
+                    Thank you for subscribing to our ${planId || 'premium'} plan!
                   `
                 });
               } catch (emailError) {
                 console.error("Failed to send welcome email:", emailError);
               }
             }
+          } catch (customerError) {
+            console.error("Failed to retrieve customer:", customerError);
           }
         } else {
           // Update existing user's subscription details
           const userId = parseInt(session.metadata.userId);
           if (userId) {
-            await storage.updateUserSubscription(userId, {
-              plan: session.metadata.planId as SubscriptionPlanType,
-              stripeSubscriptionId: session.subscription as string,
-              status: 'active',
-              // Set subscription end date to 30 days from now
-              periodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-            });
+            if (session.mode === 'subscription') {
+              // For subscription mode, update with the subscription ID from the session
+              await storage.updateUserSubscription(userId, {
+                plan: planId as SubscriptionPlanType,
+                stripeSubscriptionId: session.subscription as string,
+                status: 'active',
+                // Set subscription end date from subscription data
+                periodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+              });
+            } else if (shouldCreateSubscription) {
+              // For payment mode, create a subscription manually
+              try {
+                const subscription = await stripe.subscriptions.create({
+                  customer: session.customer as string,
+                  items: [
+                    {
+                      price_data: {
+                        currency: 'gbp',
+                        product_data: {
+                          name: `${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
+                          description: `Monthly subscription to Tovably ${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
+                        },
+                        unit_amount: Math.round(subscriptionPlans[planId as SubscriptionPlanType].price * 100),
+                        recurring: {
+                          interval: 'month',
+                        },
+                      },
+                    },
+                  ],
+                  metadata: {
+                    userId: userId.toString(),
+                    planId: planId,
+                  },
+                });
+                
+                await storage.updateUserSubscription(userId, {
+                  plan: planId as SubscriptionPlanType,
+                  stripeSubscriptionId: subscription.id,
+                  status: subscription.status,
+                  periodEnd: new Date(subscription.current_period_end * 1000)
+                });
+              } catch (subError) {
+                console.error("Failed to create subscription for existing user:", subError);
+              }
+            }
           }
         }
       }
