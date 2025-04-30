@@ -24,9 +24,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserAvatar } from "@/contexts/user-avatar-context";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function AccountPage() {
   const { user } = useAuth();
@@ -35,6 +36,49 @@ export default function AccountPage() {
   const { avatarColor, setAvatarColor } = useUserAvatar();
   const [currentAvatar, setCurrentAvatar] = useState<string>(avatarColor);
   const { toast } = useToast();
+  
+  // Refs for form inputs
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const companyRef = useRef<HTMLInputElement>(null);
+  
+  // Loading state for the save button
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Handle profile update
+  const handleProfileUpdate = async () => {
+    if (!user) return;
+    
+    setIsSaving(true);
+    
+    try {
+      const updateData = {
+        username: usernameRef.current?.value || user.username,
+        email: emailRef.current?.value || user.email,
+        company: companyRef.current?.value || ''
+      };
+      
+      // Make API call to update user profile
+      await apiRequest('PATCH', `/api/user/${user.id}`, updateData);
+      
+      // Invalidate user data to refresh
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+      
+      toast({
+        title: "Profile Updated",
+        description: "Your profile information has been updated successfully.",
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Update Failed",
+        description: "There was an error updating your profile. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
   
   // Helper function to format the plan name (same as in sidebar)
   const formatPlanName = (plan: string) => {
@@ -170,6 +214,7 @@ export default function AccountPage() {
                           </span>
                           <Input
                             id="username"
+                            ref={usernameRef}
                             className="rounded-l-none bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20 text-white"
                             defaultValue={user?.username}
                           />
@@ -186,6 +231,7 @@ export default function AccountPage() {
                           </span>
                           <Input
                             id="email"
+                            ref={emailRef}
                             type="email"
                             className="rounded-l-none bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20 text-white"
                             defaultValue={user?.email}
@@ -204,6 +250,7 @@ export default function AccountPage() {
                         </span>
                         <Input
                           id="company"
+                          ref={companyRef}
                           className="rounded-l-none bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20 text-white"
                           placeholder="Your company name"
                         />
@@ -217,8 +264,19 @@ export default function AccountPage() {
                       >
                         Cancel
                       </Button>
-                      <Button className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]">
-                        Save Changes
+                      <Button 
+                        onClick={handleProfileUpdate}
+                        disabled={isSaving}
+                        className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                      >
+                        {isSaving ? (
+                          <>
+                            <span className="animate-spin mr-2">⋯</span>
+                            Saving...
+                          </>
+                        ) : (
+                          'Save Changes'
+                        )}
                       </Button>
                     </div>
                   </div>
