@@ -10,6 +10,7 @@ import {
   generateColdEmail,
   generatePersona
 } from "./openai";
+import { sendEmail, formatContactEmailHtml, formatContactEmailText } from "./email";
 import { registerAdminRoutes } from "./admin-routes";
 import { registerBlogRoutes } from "./blog-routes";
 
@@ -35,6 +36,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { name, email, company, message } = schema.parse(req.body);
       
+      // Store lead contact in database
       const leadContact = await storage.createLeadContact({
         name,
         email,
@@ -43,6 +45,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "new",
         notes: null
       });
+
+      // Send email notification to sales@tovably.com
+      try {
+        const emailHtml = formatContactEmailHtml({
+          name,
+          email,
+          company,
+          message
+        });
+        
+        const emailText = formatContactEmailText({
+          name,
+          email,
+          company,
+          message
+        });
+
+        const emailSent = await sendEmail({
+          to: 'sales@tovably.com',
+          subject: `New Contact Form Submission from ${name}`,
+          text: emailText,
+          html: emailHtml
+        });
+
+        if (!emailSent) {
+          console.warn('Failed to send notification email, but contact was saved to database');
+        }
+      } catch (emailError) {
+        // Log the email error but don't fail the request
+        console.error("Error sending notification email:", emailError);
+      }
 
       res.status(201).json({
         success: true,
