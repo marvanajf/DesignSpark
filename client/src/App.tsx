@@ -22,6 +22,7 @@ import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
 import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
 import PersonasMarketingPage from "@/pages/personas-marketing-page";
 import LandingPage from "@/pages/landing-page";
+import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
@@ -53,7 +54,7 @@ function Router() {
       <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
       <Route path="/personas-info" component={PersonasMarketingPage} />
       <Route path="/guides-info" component={GuidesMarketingPage} />
-      <Route path="/contact" component={LandingPage} />
+      <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:id" component={BlogPostPage} />
