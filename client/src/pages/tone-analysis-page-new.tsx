@@ -7,9 +7,6 @@ import { formatDistanceToNow } from "date-fns";
 import { 
   Loader2, 
   BarChart2,
-  Calendar,
-  ChevronDown,
-  Filter,
   Upload,
   Link as LinkIcon,
   FileText,
@@ -218,7 +215,7 @@ export default function ToneAnalysisPage() {
     <Layout showSidebar={true}>
       <div className="flex-1 overflow-y-auto bg-black">
         <div className="p-6">
-          {/* Header Section with Breadcrumbs - Exactly like dashboard */}
+          {/* Header Section with Breadcrumbs */}
           <div className="mb-6">
             <div className="flex justify-between items-center">
               <div>
@@ -229,21 +226,10 @@ export default function ToneAnalysisPage() {
                 </div>
                 <h1 className="text-2xl font-semibold text-white mt-1">Analyze Your Brand's Tone</h1>
               </div>
-              <div className="flex space-x-3">
-                <div className="flex items-center space-x-2 bg-[#111] border border-gray-800 rounded-md px-3 py-1.5 text-sm text-gray-300">
-                  <Calendar className="h-4 w-4 text-gray-400" />
-                  <span>Last 24 hours</span>
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
-                </div>
-                <Button variant="outline" className="text-sm h-9 border-gray-800 bg-[#111] hover:bg-gray-900">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <span>Filter</span>
-                </Button>
-              </div>
             </div>
           </div>
 
-          {/* Dashboard Overview Section Title - Exactly like dashboard */}
+          {/* Tone Analysis Section Title */}
           <div className="mb-6">
             <h2 className="text-xl font-bold text-white">Tone Analysis</h2>
             <p className="text-sm text-gray-400 mt-1">Analyze your brand's unique communication style</p>
