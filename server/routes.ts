@@ -34,6 +34,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set up blog routes
   registerBlogRoutes(app);
   
+  // Direct form handler that redirects to Stripe
+  app.post("/api/checkout-redirect", async (req: Request, res: Response) => {
+    try {
+      console.log("Checkout redirect request received:", req.body);
+      
+      const schema = z.object({
+        plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
+      });
+      
+      const { plan } = schema.parse(req.body);
+      
+      if (plan === 'free') {
+        return res.status(400).send('Cannot create checkout for free plan');
+      }
+      
+      const planInfo = subscriptionPlans[plan];
+      if (!planInfo) {
+        return res.status(400).send('Invalid plan selected');
+      }
+      
+      // Calculate the amount in cents
+      const amountInCents = Math.round(planInfo.price * 100);
+      
+      // Build the success and cancel URLs
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${baseUrl}/pricing`;
+      
+      // Create metadata about the customer
+      const metadata: Record<string, string> = {
+        planId: plan,
+        create_subscription: 'true'
+      };
+      
+      // Add user ID to metadata if user is authenticated
+      if (req.isAuthenticated() && req.user) {
+        metadata.userId = req.user.id.toString();
+      }
+
+      // Create simplified session options for Stripe checkout
+      const sessionOptions: Stripe.Checkout.SessionCreateParams = {
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: `${planInfo.name} Plan - First Month`,
+                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
+              },
+              unit_amount: amountInCents,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata,
+      };
+      
+      console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
+      
+      try {
+        const session = await stripe.checkout.sessions.create(sessionOptions);
+        console.log("Stripe session created successfully, redirecting to:", session.url);
+        
+        // Redirect directly to Stripe
+        return res.redirect(303, session.url);
+      } catch (stripeError) {
+        console.error("Stripe error:", stripeError);
+        return res.status(400).send('Stripe checkout session creation failed: ' + 
+          (stripeError instanceof Error ? stripeError.message : 'Unknown error'));
+      }
+    } catch (error) {
+      console.error("Error processing checkout redirect request:", error);
+      return res.status(400).send('Failed to process checkout request: ' + 
+        (error instanceof Error ? error.message : 'Unknown error'));
+    }
+  });
+  
   // Stripe payment routes
   
   // Enhanced debugging for one-time payment checkout
@@ -105,7 +186,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const session = await stripe.checkout.sessions.create(sessionOptions);
         console.log("Stripe session created successfully, URL:", session.url);
         
-        return res.status(200).json({ url: session.url });
+        // Set explicit headers to ensure we return JSON
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).send(JSON.stringify({ url: session.url }));
       } catch (stripeError) {
         console.error("Stripe error:", stripeError);
         return res.status(400).json({ 

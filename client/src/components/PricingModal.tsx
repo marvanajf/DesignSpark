@@ -38,71 +38,42 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
   const { toast } = useToast();
   const { user } = useAuth();
   
-  // Create Stripe Checkout mutation
-  const checkoutMutation = useMutation({
-    mutationFn: () => {
+  // Create a direct request to Stripe (skipping JSON parsing)
+  const handleCheckout = async () => {
+    try {
       setIsLoading(true);
-      console.log("Making payment checkout request for plan:", planId);
-      return apiRequest("POST", "/api/payment-checkout", { 
-        plan: planId,
-      })
-        .then(async res => {
-          console.log("Response status:", res.status, res.statusText);
-          console.log("Response headers:", [...res.headers.entries()]);
-          
-          // Clone the response before reading its body
-          const resClone = res.clone();
-          
-          // Read the raw response text
-          const rawText = await resClone.text();
-          console.log("Raw response:", rawText);
-          
-          if (!res.ok) {
-            if (res.status === 401) {
-              throw new Error("Authentication required. Please log in to continue.");
-            }
-            
-            // Try to get detailed error message from response
-            if (rawText.startsWith("<!DOCTYPE") || rawText.startsWith("<html")) {
-              // This is an HTML response, not JSON
-              throw new Error(`Server error: ${res.status} ${res.statusText}`);
-            }
-            
-            try {
-              const errorObj = JSON.parse(rawText);
-              console.error("Checkout error response:", errorObj);
-              throw new Error(errorObj.error || "Failed to create checkout session");
-            } catch (jsonError) {
-              // If we can't parse JSON, use the raw text
-              throw new Error(`Checkout failed: ${rawText.substring(0, 100)}`);
-            }
-          }
-          
-          try {
-            return JSON.parse(rawText);
-          } catch (e) {
-            throw new Error(`Invalid JSON response: ${rawText.substring(0, 100)}`);
-          }
-        });
-    },
-    onSuccess: (data) => {
-      // Redirect to Stripe Checkout page
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error("No checkout URL returned");
-      }
-    },
-    onError: (error: Error) => {
-      setError(error.message || "Failed to start checkout process");
+      setError("");
+      
+      console.log("Creating direct form submission to Stripe for plan:", planId);
+      
+      // Create a form to submit directly to the backend
+      const form = document.createElement('form');
+      form.method = 'post';
+      form.action = '/api/checkout-redirect';
+      
+      // Add the plan ID as a hidden field
+      const planInput = document.createElement('input');
+      planInput.type = 'hidden';
+      planInput.name = 'plan';
+      planInput.value = planId;
+      form.appendChild(planInput);
+      
+      // Append the form to the document body and submit it
+      document.body.appendChild(form);
+      form.submit();
+      
+      // The form will redirect the page, so no need to set loading to false
+    } catch (err) {
+      console.error("Checkout error:", err);
+      setError(err instanceof Error ? err.message : "Failed to start checkout process");
       toast({
         title: "Checkout Failed",
-        description: error.message || "Could not initialize checkout. Please try again.",
+        description: "Could not initialize checkout. Please try again.",
         variant: "destructive",
       });
       setIsLoading(false);
     }
-  });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
@@ -148,7 +119,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
                   Cancel
                 </Button>
                 <Button
-                  onClick={() => checkoutMutation.mutate()}
+                  onClick={handleCheckout}
                   disabled={isLoading}
                   className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                 >
