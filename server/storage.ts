@@ -631,12 +631,32 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUserSubscription(id: number, plan: string): Promise<User> {
+  async updateUserSubscription(id: number, plan: SubscriptionPlanType): Promise<User> {
     const [user] = await db
       .update(users)
-      .set({ subscription: plan })
+      .set({ subscription_plan: plan })
       .where(eq(users.id, id))
       .returning();
+    return user;
+  }
+  
+  async updateUserStripeInfo(id: number, customerInfo: { 
+    customerId: string; 
+    subscriptionId?: string; 
+    status?: string; 
+    periodEnd?: Date; 
+  }): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        stripe_customer_id: customerInfo.customerId,
+        stripe_subscription_id: customerInfo.subscriptionId || null,
+        subscription_status: customerInfo.status || 'inactive',
+        subscription_period_end: customerInfo.periodEnd || null
+      })
+      .where(eq(users.id, id))
+      .returning();
+    
     return user;
   }
 
@@ -644,7 +664,7 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ 
-        personas_count: sql`${users.personas_count} + 1` 
+        personas_used: sql`${users.personas_used} + 1` 
       })
       .where(eq(users.id, id))
       .returning();
@@ -655,7 +675,7 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ 
-        tone_analyses_count: sql`${users.tone_analyses_count} + 1` 
+        tone_analyses_used: sql`${users.tone_analyses_used} + 1` 
       })
       .where(eq(users.id, id))
       .returning();
@@ -666,7 +686,7 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ 
-        content_count: sql`${users.content_count} + 1` 
+        content_generated: sql`${users.content_generated} + 1` 
       })
       .where(eq(users.id, id))
       .returning();

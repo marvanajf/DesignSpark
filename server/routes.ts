@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
-import { subscriptionPlans } from "../shared/schema";
+import { subscriptionPlans, type SubscriptionPlanType } from "../shared/schema";
 import { 
   analyzeTone, 
   generateLinkedInPost, 
@@ -13,6 +13,16 @@ import {
 import { sendEmail, formatContactEmailHtml, formatContactEmailText } from "./email";
 import { registerAdminRoutes } from "./admin-routes";
 import { registerBlogRoutes } from "./blog-routes";
+import Stripe from "stripe";
+
+// Initialize Stripe with the secret key
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("STRIPE_SECRET_KEY environment variable is required");
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16" as any, // Using type assertion to avoid version compatibility error
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
@@ -23,6 +33,129 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Set up blog routes
   registerBlogRoutes(app);
+  
+  // Stripe payment routes
+  
+  // Create a payment intent for subscription
+  app.post("/api/create-payment-intent", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const schema = z.object({
+        plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
+        amount: z.number().positive(),
+      });
+      
+      const { plan, amount } = schema.parse(req.body);
+      
+      if (plan === 'free') {
+        return res.status(400).json({ error: "Cannot create payment for free plan" });
+      }
+      
+      const planInfo = subscriptionPlans[plan];
+      if (!planInfo) {
+        return res.status(400).json({ error: "Invalid plan selected" });
+      }
+      
+      // Create a customer for the user if they don't have one
+      let customer;
+      if (req.user?.stripe_customer_id) {
+        customer = await stripe.customers.retrieve(req.user.stripe_customer_id);
+      } else {
+        customer = await stripe.customers.create({
+          email: req.user?.email,
+          name: req.user?.username,
+          metadata: {
+            userId: req.user?.id.toString()
+          }
+        });
+        
+        // Update user with the customer ID
+        await storage.updateUserStripeInfo(req.user!.id, {
+          customerId: customer.id
+        });
+      }
+      
+      // Calculate the amount in cents
+      const amountInCents = Math.round(amount * 100);
+      
+      // Create a payment intent
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amountInCents,
+        currency: "gbp", // Using GBP as currency based on the pricing
+        customer: typeof customer === 'string' ? customer : customer.id,
+        metadata: {
+          planId: plan,
+          userId: req.user?.id?.toString() || ''
+        },
+        description: `Subscription to ${planInfo?.name || plan} plan`
+      });
+      
+      res.status(200).json({
+        clientSecret: paymentIntent.client_secret
+      });
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      res.status(400).json({ 
+        error: error instanceof Error ? error.message : "Failed to create payment intent" 
+      });
+    }
+  });
+  
+  // Update user subscription after payment
+  app.post("/api/update-subscription", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const schema = z.object({
+        plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
+        customerId: z.string()
+      });
+      
+      const { plan, customerId } = schema.parse(req.body);
+      
+      if (plan === 'free') {
+        return res.status(400).json({ error: "Cannot subscribe to free plan" });
+      }
+      
+      const planInfo = subscriptionPlans[plan];
+      if (!planInfo) {
+        return res.status(400).json({ error: "Invalid plan selected" });
+      }
+      
+      // Simulate a subscription by updating the user's plan
+      // In a production app, you would create a proper subscription in Stripe
+      // Convert plan string to a valid subscription plan type
+      const subscriptionPlan = plan as SubscriptionPlanType;
+      const user = await storage.updateUserSubscription(req.user!.id, subscriptionPlan);
+      
+      // Set subscription status to active
+      const periodEnd = new Date();
+      periodEnd.setMonth(periodEnd.getMonth() + 1); // 1 month subscription
+      
+      await storage.updateUserStripeInfo(req.user!.id, {
+        customerId: customerId,
+        subscriptionId: `sub_${Date.now()}`, // Simulated subscription ID
+        status: 'active',
+        periodEnd: periodEnd
+      });
+      
+      res.status(200).json({
+        message: "Subscription updated successfully",
+        plan: plan,
+        user: user
+      });
+    } catch (error) {
+      console.error("Error updating subscription:", error);
+      res.status(400).json({ 
+        error: error instanceof Error ? error.message : "Failed to update subscription" 
+      });
+    }
+  });
   
   // Lead contact submission endpoint
   app.post("/api/lead-contact", async (req: Request, res: Response) => {
@@ -100,8 +233,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Check if user has reached their subscription limit for tone analyses
       const userData = await storage.getUser(req.user!.id);
-      const userPlan = userData.subscription_plan;
-      const toneAnalysisLimit = subscriptionPlans[userPlan].toneAnalyses;
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const toneAnalysisLimit = subscriptionPlans[userPlan]?.toneAnalyses || 0;
       
       if (userData.tone_analyses_used >= toneAnalysisLimit) {
         return res.status(402).json({ 
@@ -246,8 +383,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Check if user has reached their subscription limit for personas
       const userData = await storage.getUser(req.user!.id);
-      const userPlan = userData.subscription_plan;
-      const personaLimit = subscriptionPlans[userPlan].personas;
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const personaLimit = subscriptionPlans[userPlan]?.personas || 0;
       
       if (userData.personas_used >= personaLimit) {
         return res.status(402).json({ 
@@ -377,8 +518,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "User not found" });
       }
       
-      const userPlan = userData.subscription_plan;
-      const contentLimit = subscriptionPlans[userPlan].contentGeneration;
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const contentLimit = subscriptionPlans[userPlan]?.contentGeneration || 0;
       
       if (userData.content_generated >= contentLimit) {
         return res.status(402).json({ 
@@ -515,8 +656,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "User not found" });
       }
       
-      const userPlan = userData.subscription_plan;
-      const personaLimit = subscriptionPlans[userPlan].personas;
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const personaLimit = subscriptionPlans[userPlan]?.personas || 0;
       
       if (userData.personas_used >= personaLimit) {
         return res.status(402).json({ 
@@ -579,8 +720,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const existingPersonas = await storage.getPersonasByUserId(userId);
       
       // Check subscription limits
-      const userPlan = userData.subscription_plan;
-      const personaLimit = subscriptionPlans[userPlan].personas;
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const personaLimit = subscriptionPlans[userPlan]?.personas || 0;
       
       // Calculate how many more personas can be added
       const remainingSlots = personaLimit - userData.personas_used;

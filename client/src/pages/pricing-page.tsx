@@ -1,538 +1,199 @@
-import { Check, HelpCircle } from "lucide-react";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import Layout from "@/components/Layout";
-import { subscriptionPlans } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import PricingModal from "@/components/PricingModal";
+import { subscriptionPlans } from "@shared/schema";
+import { SubscriptionPlanType } from "@shared/schema";
 
-export default function PricingPage() {
-  const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("monthly");
+const PricingPage: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
-  
-  // 20% discount for yearly
-  const yearlyDiscount = 0.8;
-  
-  // These would be realistic usage amounts for each subscription tier
-  const featuresByPlan = {
-    // Display prices
-    free: "Free",
-    standard: billingInterval === "monthly" ? "£9.99/mo" : `£${Math.round(9.99 * 12 * yearlyDiscount)}/yr`,
-    professional: billingInterval === "monthly" ? "£24.99/mo" : `£${Math.round(24.99 * 12 * yearlyDiscount)}/yr`,
-    premium: billingInterval === "monthly" ? "£39.99/mo" : `£${Math.round(39.99 * 12 * yearlyDiscount)}/yr`,
-    agency: "Coming Soon",
-    enterprise: "Contact us"
-  };
-  
-  // Feature availability by plan
-  const featureAvailability = {
-    free: {
-      advancedAnalytics: false,
-      teamAccess: false,
-      apiAccess: false,
-      customBranding: false,
-      prioritySupport: false,
-      bulkGeneration: false
-    },
-    standard: {
-      advancedAnalytics: false,
-      teamAccess: false,
-      apiAccess: false,
-      customBranding: false,
-      prioritySupport: false,
-      bulkGeneration: false
-    },
-    professional: {
-      advancedAnalytics: true,
-      teamAccess: true,
-      apiAccess: false,
-      customBranding: false,
-      prioritySupport: true,
-      bulkGeneration: true
-    },
-    premium: {
-      advancedAnalytics: true,
-      teamAccess: true,
-      apiAccess: true,
-      customBranding: true,
-      prioritySupport: true,
-      bulkGeneration: true
-    },
-    agency: {
-      advancedAnalytics: true,
-      teamAccess: true,
-      apiAccess: true,
-      customBranding: true,
-      prioritySupport: true,
-      bulkGeneration: true
-    },
-    enterprise: {
-      advancedAnalytics: true,
-      teamAccess: true,
-      apiAccess: true,
-      customBranding: true,
-      prioritySupport: true,
-      bulkGeneration: true
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlanType | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleSelectPlan = (planId: SubscriptionPlanType) => {
+    if (planId === 'free') {
+      toast({
+        title: "Free Plan Selected",
+        description: "You're already on the free plan. Enjoy your experience with Tovably!",
+      });
+      return;
     }
-  };
-  
-  const handleUpgrade = (plan: string) => {
-    toast({
-      title: "Upgrade Initiated",
-      description: `We'll redirect you to complete your upgrade to the ${plan} plan shortly.`,
-    });
     
-    // In a real implementation, this would redirect to a payment page
+    setSelectedPlan(planId);
+    setIsModalOpen(true);
   };
-  
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedPlan(null);
+  };
+
   return (
-    <Layout>
-      <div className="mt-12 px-4 md:px-6 lg:px-8 max-w-6xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">Simple, Transparent Pricing</h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Choose the plan that works best for you. All plans include core features like tone analysis, audience personas, and content generation.
+    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      {/* Heading with glow effect */}
+      <div className="text-center mb-12">
+        <motion.h1 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-4xl font-bold tracking-tight text-white mb-3"
+        >
+          Choose Your Subscription Plan
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-muted-foreground max-w-2xl mx-auto"
+        >
+          Select the plan that best fits your needs. All plans include access to our core features,
+          with higher tiers offering more usage allowances and premium features.
+        </motion.p>
+      </div>
+
+      {/* Pricing cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        {Object.entries(subscriptionPlans).map(([planId, plan], index) => (
+          <motion.div
+            key={planId}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 * (index + 1) }}
+          >
+            <Card className={`flex flex-col h-full ${user?.subscription_plan === planId ? 'border-primary border-2' : ''}`}>
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-center">
+                  {plan.name}
+                  {user?.subscription_plan === planId && (
+                    <span className="ml-2 text-xs px-2 py-1 bg-primary text-black rounded-full">Current</span>
+                  )}
+                </CardTitle>
+                <div className="text-center mt-2">
+                  <span className="text-3xl font-bold text-white">{plan.displayPrice}</span>
+                  {planId !== 'free' && <span className="text-sm text-muted-foreground">/month</span>}
+                </div>
+                <CardDescription className="text-center mt-1">
+                  {planId === 'free' ? 'Get started with basic features' : 
+                   planId === 'standard' ? 'Perfect for professionals' : 
+                   planId === 'professional' ? 'Ideal for growing businesses' : 
+                   'For demanding content creators'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <ul className="space-y-3 text-sm">
+                  <li className="flex items-center">
+                    <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                    <span>{plan.personas} AI Personas</span>
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                    <span>{plan.toneAnalyses} Tone Analyses</span>
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                    <span>{plan.contentGeneration} Content Pieces</span>
+                  </li>
+                  <li className="flex items-center">
+                    {planId === 'free' ? (
+                      <X className="mr-2 h-4 w-4 text-red-500" />
+                    ) : (
+                      <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                    )}
+                    <span>Email Support</span>
+                  </li>
+                  <li className="flex items-center">
+                    {['free', 'standard'].includes(planId) ? (
+                      <X className="mr-2 h-4 w-4 text-red-500" />
+                    ) : (
+                      <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                    )}
+                    <span>Priority Support</span>
+                  </li>
+                  <li className="flex items-center">
+                    {planId === 'premium' ? (
+                      <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                    ) : (
+                      <X className="mr-2 h-4 w-4 text-red-500" />
+                    )}
+                    <span>API Access</span>
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  variant={planId !== 'free' ? "default" : "outline"}
+                  disabled={user?.subscription_plan === planId}
+                  onClick={() => handleSelectPlan(planId as SubscriptionPlanType)}
+                >
+                  {user?.subscription_plan === planId 
+                    ? "Current Plan" 
+                    : planId === 'free' 
+                      ? "Get Started" 
+                      : "Subscribe"}
+                </Button>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {selectedPlan && (
+        <PricingModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+          plan={subscriptionPlans[selectedPlan]}
+          planId={selectedPlan}
+        />
+      )}
+
+      {/* Guarantee section */}
+      <div className="mt-16 text-center">
+        <div className="rounded-xl border border-border p-6 max-w-3xl mx-auto">
+          <h3 className="text-xl font-semibold mb-3">
+            <span className="mr-2">💯</span> 14-Day Money-Back Guarantee
+          </h3>
+          <p className="text-muted-foreground">
+            Not satisfied with our service? Get a full refund within 14 days of your subscription.
+            No questions asked. We're confident you'll love Tovably.
           </p>
-          
-          <div className="mt-6">
-            <Tabs defaultValue="monthly" className="inline-flex mx-auto bg-black border border-gray-700/60 rounded-md p-1">
-              <TabsList className="bg-black">
-                <TabsTrigger 
-                  value="monthly" 
-                  className="text-sm data-[state=active]:bg-gray-800 data-[state=active]:text-white"
-                  onClick={() => setBillingInterval("monthly")}
-                >
-                  Monthly
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="yearly" 
-                  className="text-sm data-[state=active]:bg-gray-800 data-[state=active]:text-white"
-                  onClick={() => setBillingInterval("yearly")}
-                >
-                  Yearly <span className="ml-1 px-1.5 py-0.5 text-xs bg-[#74d1ea]/20 text-[#74d1ea] rounded-sm">Save 20%</span>
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
         </div>
+      </div>
+
+      {/* FAQ section */}
+      <div className="mt-16 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {/* Free Plan */}
-          <Card className="bg-black border border-gray-700/60 hover:border-[#74d1ea]/40 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)] transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="text-xl text-white">{subscriptionPlans.free.name}</CardTitle>
-              <div className="mt-1">
-                <span className="text-2xl font-bold text-white">{featuresByPlan["free"]}</span>
-              </div>
-              <CardDescription className="text-gray-400">For individuals just getting started</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm font-medium text-gray-300 mb-2">Includes:</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.free.personas}</span> audience personas</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.free.toneAnalyses}</span> tone analyses per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.free.contentGeneration}</span> content generations per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Basic email support</span>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full bg-[#74d1ea]/10 hover:bg-[#74d1ea]/20 text-[#74d1ea] border border-[#74d1ea]/30"
-                disabled={user?.subscription_plan === "free"}
-              >
-                {user?.subscription_plan === "free" ? "Current Plan" : "Get Started"}
-              </Button>
-            </CardFooter>
-          </Card>
-          
-          {/* Standard Plan */}
-          <Card className="bg-black border border-gray-700/60 hover:border-[#74d1ea]/40 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)] transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="text-xl text-white">{subscriptionPlans.standard.name}</CardTitle>
-              <div className="mt-1">
-                <span className="text-2xl font-bold text-white">{featuresByPlan["standard"]}</span>
-                {billingInterval === "yearly" && (
-                  <span className="ml-2 text-sm text-gray-400 line-through">£119.88/yr</span>
-                )}
-              </div>
-              <CardDescription className="text-gray-400">For individuals and small projects</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm font-medium text-gray-300 mb-2">Everything in Free, plus:</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.standard.personas}</span> audience personas</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.standard.toneAnalyses}</span> tone analyses per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.standard.contentGeneration}</span> content generations per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Email support</span>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full bg-[#74d1ea]/10 hover:bg-[#74d1ea]/20 text-[#74d1ea] border border-[#74d1ea]/30"
-                onClick={() => handleUpgrade("Standard")}
-                disabled={user?.subscription_plan === "standard"}
-              >
-                {user?.subscription_plan === "standard" ? "Current Plan" : "Choose Plan"}
-              </Button>
-            </CardFooter>
-          </Card>
-          
-          {/* Professional Plan */}
-          <Card className="bg-black border border-[#74d1ea]/30 shadow-[0_0_20px_rgba(116,209,234,0.2)] hover:shadow-[0_0_25px_rgba(116,209,234,0.3)] transition-all duration-300">
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-xl text-white">{subscriptionPlans.professional.name}</CardTitle>
-                <span className="px-2 py-1 rounded-full bg-[#74d1ea]/10 text-[#74d1ea] text-xs font-medium">Popular</span>
-              </div>
-              <div className="mt-1">
-                <span className="text-2xl font-bold text-white">{featuresByPlan["professional"]}</span>
-                {billingInterval === "yearly" && (
-                  <span className="ml-2 text-sm text-gray-400 line-through">£299.88/yr</span>
-                )}
-              </div>
-              <CardDescription className="text-gray-400">For professionals and growing businesses</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm font-medium text-gray-300 mb-2">Everything in Standard, plus:</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.professional.personas}</span> audience personas</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.professional.toneAnalyses}</span> tone analyses per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.professional.contentGeneration}</span> content generations per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Priority email support</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Advanced analytics</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Team access (up to 3 users)</span>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-                onClick={() => handleUpgrade("Professional")}
-                disabled={user?.subscription_plan === "professional"}
-              >
-                {user?.subscription_plan === "professional" ? "Current Plan" : "Choose Plan"}
-              </Button>
-            </CardFooter>
-          </Card>
-          
-          {/* Premium Plan */}
-          <Card className="bg-black border border-gray-700/60 hover:border-[#74d1ea]/40 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)] transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="text-xl text-white">{subscriptionPlans.premium.name}</CardTitle>
-              <div className="mt-1">
-                <span className="text-2xl font-bold text-white">{featuresByPlan["premium"]}</span>
-                {billingInterval === "yearly" && (
-                  <span className="ml-2 text-sm text-gray-400 line-through">£479.88/yr</span>
-                )}
-              </div>
-              <CardDescription className="text-gray-400">For power users and larger teams</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm font-medium text-gray-300 mb-2">Everything in Professional, plus:</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.premium.personas}</span> audience personas</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.premium.toneAnalyses}</span> tone analyses per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">{subscriptionPlans.premium.contentGeneration}</span> content generations per month</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Dedicated support</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Team access (up to 10 users)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="h-4 w-4 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span>API access</span>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full bg-[#74d1ea]/10 hover:bg-[#74d1ea]/20 text-[#74d1ea] border border-[#74d1ea]/30"
-                onClick={() => handleUpgrade("Premium")}
-                disabled={user?.subscription_plan === "premium"}
-              >
-                {user?.subscription_plan === "premium" ? "Current Plan" : "Choose Plan"}
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-        
-        <div className="max-w-3xl mx-auto mb-20">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-2 text-white">Compare All Features</h2>
-            <p className="text-gray-400">See exactly what's included in each plan</p>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-medium mb-2">Can I upgrade or downgrade my plan?</h3>
+            <p className="text-muted-foreground">Yes, you can upgrade or downgrade your subscription at any time. Changes will take effect at the beginning of your next billing cycle.</p>
           </div>
           
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-gray-700/60">
-                  <th className="py-4 px-6 font-medium text-white">Features</th>
-                  <th className="py-4 px-6 font-medium text-white text-center">Free</th>
-                  <th className="py-4 px-6 font-medium text-white text-center">Standard</th>
-                  <th className="py-4 px-6 font-medium text-white text-center">Professional</th>
-                  <th className="py-4 px-6 font-medium text-white text-center">Premium</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700/60">
-                <tr>
-                  <td className="py-4 px-6 text-gray-300">Audience Personas</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.free.personas}</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.standard.personas}</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.professional.personas}</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.premium.personas}</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-6 text-gray-300">Tone Analyses</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.free.toneAnalyses}/mo</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.standard.toneAnalyses}/mo</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.professional.toneAnalyses}/mo</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.premium.toneAnalyses}/mo</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-6 text-gray-300">Content Generations</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.free.contentGeneration}/mo</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.standard.contentGeneration}/mo</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.professional.contentGeneration}/mo</td>
-                  <td className="py-4 px-6 text-center">{subscriptionPlans.premium.contentGeneration}/mo</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-6 text-gray-300 flex items-center">
-                    Advanced Analytics
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className="h-4 w-4 text-gray-500 ml-2" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="w-[200px] text-xs">Detailed insights about your audience and content performance with exportable reports.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.free.advancedAnalytics ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.standard.advancedAnalytics ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.professional.advancedAnalytics ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.premium.advancedAnalytics ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-6 text-gray-300">Team Access</td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.free.teamAccess ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.standard.teamAccess ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">Up to 3 users</td>
-                  <td className="py-4 px-6 text-center">Up to 10 users</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-6 text-gray-300">API Access</td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.free.apiAccess ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.standard.apiAccess ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.professional.apiAccess ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.premium.apiAccess ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-6 text-gray-300">Priority Support</td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.free.prioritySupport ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.standard.prioritySupport ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {featureAvailability.professional.prioritySupport ? (
-                      <Check className="h-5 w-5 text-[#74d1ea] mx-auto" />
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 text-center">Dedicated</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-[#121212] via-black to-[#121212] border border-gray-700/60 rounded-lg p-8 mb-16">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <h2 className="text-2xl font-bold text-white">Need a custom plan for your enterprise?</h2>
-              <p className="text-gray-400 mt-2">Contact us to discuss a tailored solution for your organization's needs.</p>
-            </div>
-            <Button 
-              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-              onClick={() => {
-                toast({
-                  title: "Enterprise Inquiry",
-                  description: "We'll be in touch shortly to discuss your enterprise needs."
-                });
-              }}
-            >
-              Contact Sales
-            </Button>
-          </div>
-        </div>
-        
-        <div className="max-w-3xl mx-auto mb-20">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold mb-2 text-white">Frequently Asked Questions</h2>
-            <p className="text-gray-400">Have questions? We've got answers.</p>
+          <div>
+            <h3 className="text-lg font-medium mb-2">How does billing work?</h3>
+            <p className="text-muted-foreground">Your subscription is billed monthly. You'll be charged on the same date each month. If you upgrade mid-cycle, we'll prorate the cost.</p>
           </div>
           
-          <div className="space-y-6">
-            <div className="border-b border-gray-700/60 pb-6">
-              <h3 className="text-lg font-medium text-white mb-2">Can I change my plan later?</h3>
-              <p className="text-gray-400">Yes, you can upgrade or downgrade your plan at any time. Changes to your subscription will take effect on your next billing cycle.</p>
-            </div>
-            <div className="border-b border-gray-700/60 pb-6">
-              <h3 className="text-lg font-medium text-white mb-2">How do the monthly limits work?</h3>
-              <p className="text-gray-400">Your plan includes a set number of tone analyses, content generations, and audience personas per month. These limits reset on your billing date. Unused quota does not roll over to the next month.</p>
-            </div>
-            <div className="border-b border-gray-700/60 pb-6">
-              <h3 className="text-lg font-medium text-white mb-2">Is there a refund policy?</h3>
-              <p className="text-gray-400">We offer a 14-day money-back guarantee for all paid plans. If you're not satisfied with our service, contact us within 14 days of your purchase for a full refund.</p>
-            </div>
-            <div className="border-b border-gray-700/60 pb-6">
-              <h3 className="text-lg font-medium text-white mb-2">Do you offer custom enterprise solutions?</h3>
-              <p className="text-gray-400">Absolutely! Our enterprise solutions include custom features, dedicated support, and flexible billing options. Contact our sales team to discuss your specific requirements.</p>
-            </div>
-            <div className="pb-6">
-              <h3 className="text-lg font-medium text-white mb-2">How secure is my data?</h3>
-              <p className="text-gray-400">Security is our top priority. We use industry-standard encryption to protect your data and never share your information with third parties without your consent. For more information, please see our Privacy Policy.</p>
-            </div>
+          <div>
+            <h3 className="text-lg font-medium mb-2">What happens if I exceed my plan limits?</h3>
+            <p className="text-muted-foreground">You'll need to upgrade to a higher tier or wait until your next billing cycle when your usage limits are reset.</p>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-medium mb-2">Is there an enterprise option?</h3>
+            <p className="text-muted-foreground">Yes, for organizations with more extensive needs, contact us at <a href="mailto:sales@tovably.com" className="text-primary hover:underline">sales@tovably.com</a> for custom pricing and features.</p>
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
-}
+};
+
+export default PricingPage;
