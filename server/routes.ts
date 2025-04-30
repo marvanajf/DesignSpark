@@ -100,17 +100,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         billing_address_collection: 'required', // Collect billing address
       };
       
-      // If user is logged in, use their existing customer record
+      // For subscription mode, we can't use customer_creation
+      // Instead, we'll collect the email on the checkout page
       if (req.isAuthenticated() && req.user) {
+        // If user is already logged in, use their customer ID if available
         if (req.user.stripe_customer_id) {
           sessionOptions.customer = req.user.stripe_customer_id;
         } else {
           sessionOptions.customer_email = req.user.email;
         }
-      } else {
-        // For non-logged in users, collect email address on the checkout page
-        sessionOptions.customer_creation = 'always';
       }
+      
+      // For all sessions, ensure we capture customer email
+      // This isn't strictly needed as Stripe collects it anyway
+      sessionOptions.payment_intent_data = {
+        setup_future_usage: 'off_session',
+      };
       
       const session = await stripe.checkout.sessions.create(sessionOptions);
       
