@@ -2,7 +2,18 @@ import { pgTable, text, serial, integer, jsonb, timestamp, boolean } from "drizz
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const subscriptionPlans = {
+export type SubscriptionPlanType = 'free' | 'standard' | 'professional' | 'premium';
+
+export const subscriptionPlans: Record<SubscriptionPlanType, {
+  name: string;
+  personas: number;
+  toneAnalyses: number;
+  contentGeneration: number;
+  price: number;
+  currency: string;
+  displayPrice: string;
+  stripePrice?: string; // Stripe price ID
+}> = {
   free: {
     name: "Free",
     personas: 5,
@@ -19,7 +30,8 @@ export const subscriptionPlans = {
     contentGeneration: 100,
     price: 9.99,
     currency: "GBP",
-    displayPrice: "£9.99/month"
+    displayPrice: "£9.99/month",
+    stripePrice: "price_standard" // Replace with actual Stripe price ID
   },
   professional: {
     name: "Professional",
@@ -28,7 +40,8 @@ export const subscriptionPlans = {
     contentGeneration: 200,
     price: 24.99,
     currency: "GBP",
-    displayPrice: "£24.99/month"
+    displayPrice: "£24.99/month",
+    stripePrice: "price_professional" // Replace with actual Stripe price ID
   },
   premium: {
     name: "Premium",
@@ -37,7 +50,8 @@ export const subscriptionPlans = {
     contentGeneration: 500,
     price: 39.99,
     currency: "GBP",
-    displayPrice: "£39.99/month"
+    displayPrice: "£39.99/month",
+    stripePrice: "price_premium" // Replace with actual Stripe price ID
   }
 };
 
@@ -51,6 +65,10 @@ export const users = pgTable("users", {
   personas_used: integer("personas_used").default(0).notNull(),
   tone_analyses_used: integer("tone_analyses_used").default(0).notNull(),
   content_generated: integer("content_generated").default(0).notNull(),
+  stripe_customer_id: text("stripe_customer_id"),
+  stripe_subscription_id: text("stripe_subscription_id"),
+  subscription_status: text("subscription_status").default("inactive"),
+  subscription_period_end: timestamp("subscription_period_end"),
   created_at: timestamp("created_at").defaultNow().notNull()
 });
 

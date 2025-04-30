@@ -33,7 +33,13 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserRole(id: number, role: string): Promise<User>;
-  updateUserSubscription(id: number, plan: string): Promise<User>;
+  updateUserSubscription(id: number, plan: SubscriptionPlanType): Promise<User>;
+  updateUserStripeInfo(id: number, customerInfo: { 
+    customerId: string; 
+    subscriptionId?: string; 
+    status?: string; 
+    periodEnd?: Date; 
+  }): Promise<User>;
   incrementPersonaUsage(id: number): Promise<User>;
   incrementToneAnalysisUsage(id: number): Promise<User>;
   incrementContentUsage(id: number): Promise<User>;
