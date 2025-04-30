@@ -498,7 +498,7 @@ export default function PersonaSelectionPage() {
                               id="name"
                               name="name"
                               placeholder="E.g., Chief Marketing Officer"
-                              className="bg-black border-gray-700 text-white"
+                              className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                             />
                           </div>
                           <div className="space-y-2">
@@ -507,7 +507,7 @@ export default function PersonaSelectionPage() {
                               id="description"
                               name="description"
                               placeholder="Describe the persona's priorities, challenges, and goals"
-                              className="h-20 bg-black border-gray-700 text-white"
+                              className="h-20 bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                             />
                           </div>
                         </div>
