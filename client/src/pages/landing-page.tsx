@@ -18,8 +18,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "wouter";
+import Layout from "@/components/Layout";
 import { 
-  CheckCircle2, 
+  CheckCircle, 
   Sparkles, 
   BarChart3, 
   User, 
@@ -90,197 +91,231 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      {/* Hero section */}
-      <div className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_50%_at_50%_50%,rgba(25,232,181,0.15),transparent)]" />
-        <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left -rotate-[30deg] bg-background skew-x-12" />
-        
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
-            <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
-              <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:col-span-2 xl:col-auto">
-                Transform Your Professional Communication
-              </h1>
-              <div className="mt-6 max-w-xl">
-                <p className="text-lg leading-8 text-muted-foreground">
+    <Layout>
+      {/* Hero Section */}
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="max-w-xl">
+                <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl">
+                  <span className="block text-white">Transform Your</span>
+                  <span className="block text-[#74d1ea]">Professional Communication</span>
+                </h1>
+                <p className="mt-6 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                   Tovably is an AI-powered platform for intelligent content generation and tone analysis. Create engaging, on-brand content that resonates with your audience.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-x-6 gap-y-4">
                   <Link href="/auth">
-                    <Button className="text-white bg-primary hover:bg-primary/90 px-6">
+                    <Button className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]">
                       Get started
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                   <Link href="/pricing">
-                    <Button variant="outline">
+                    <Button variant="outline" className="border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white">
                       View pricing
                     </Button>
                   </Link>
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 border border-border p-8 rounded-xl bg-card shadow-lg lg:mt-0 xl:col-start-2 xl:row-span-2">
-              {submitted ? (
-                <div className="flex flex-col items-center justify-center h-full py-12">
-                  <div className="rounded-full bg-primary/10 p-4 mb-6">
-                    <CheckCheck className="h-16 w-16 text-primary" />
-                  </div>
-                  <h2 className="text-2xl font-bold mb-4 text-center">Message Received!</h2>
-                  <p className="text-muted-foreground text-center mb-8">
-                    Thank you for reaching out. Our team will be in touch with you shortly.
-                  </p>
-                  <Button onClick={() => setSubmitted(false)} variant="outline">
-                    Send another message
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <div className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-2">Contact Us</h2>
-                    <p className="text-muted-foreground">
-                      Interested in learning more? Fill out the form below and we'll be in touch.
+              <div className="border border-gray-700/60 rounded-lg p-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] bg-black">
+                {submitted ? (
+                  <div className="flex flex-col items-center justify-center h-full py-12">
+                    <div className="rounded-full bg-[#74d1ea]/20 p-4 mb-6 border border-[#74d1ea]/30">
+                      <CheckCheck className="h-16 w-16 text-[#74d1ea]" />
+                    </div>
+                    <h2 className="text-2xl font-bold mb-4 text-center text-white">Message Received!</h2>
+                    <p className="text-gray-400 text-center mb-8">
+                      Thank you for reaching out. Our team will be in touch with you shortly.
                     </p>
+                    <Button 
+                      onClick={() => setSubmitted(false)} 
+                      variant="outline" 
+                      className="border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white"
+                    >
+                      Send another message
+                    </Button>
                   </div>
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Your name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input placeholder="your.email@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="company"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Company (Optional)</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Your company" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="message"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Message</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="How can we help you?"
-                                className="min-h-32"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button 
-                        type="submit" 
-                        className="w-full"
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? "Sending..." : "Send Message"}
-                      </Button>
-                    </form>
-                  </Form>
-                </>
-              )}
+                ) : (
+                  <>
+                    <div className="mb-6">
+                      <h2 className="text-2xl font-semibold mb-2 text-white">Contact Us</h2>
+                      <p className="text-gray-400">
+                        Interested in learning more? Fill out the form below and we'll be in touch.
+                      </p>
+                    </div>
+                    <Form {...form}>
+                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-gray-300">Name</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  placeholder="Your name" 
+                                  {...field} 
+                                  className="bg-gray-900 border-gray-700 text-white"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-gray-300">Email</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  placeholder="your.email@example.com" 
+                                  {...field} 
+                                  className="bg-gray-900 border-gray-700 text-white"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="company"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-gray-300">Company (Optional)</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  placeholder="Your company" 
+                                  {...field} 
+                                  className="bg-gray-900 border-gray-700 text-white"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="message"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-gray-300">Message</FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="How can we help you?"
+                                  className="min-h-32 bg-gray-900 border-gray-700 text-white"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button 
+                          type="submit" 
+                          className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? "Sending..." : "Send Message"}
+                        </Button>
+                      </form>
+                    </Form>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Features section */}
-      <div className="mx-auto max-w-7xl px-6 mt-8 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Powerful Features
-          </h2>
-          <p className="mt-4 text-lg leading-8 text-muted-foreground">
-            Discover how Tovably can transform your professional communication.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-border pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {/* Feature 1 */}
-          <div className="flex flex-col items-start">
-            <div className="rounded-md bg-primary/10 p-3 mb-4">
-              <BarChart3 className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-lg font-semibold">Advanced Tone Analysis</h3>
-            <p className="mt-2 leading-7 text-muted-foreground">
-              Get detailed insights into your communication style. Analyze tone, sentiment, and engagement potential of your content.
+      {/* Platform Features Sections */}
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Powerful Features
+            </h2>
+            <p className="mt-4 text-lg leading-8 text-gray-400">
+              Discover how Tovably can transform your professional communication.
             </p>
           </div>
 
-          {/* Feature 2 */}
-          <div className="flex flex-col items-start">
-            <div className="rounded-md bg-primary/10 p-3 mb-4">
-              <Sparkles className="h-6 w-6 text-primary" />
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mt-10">
+            {/* Feature 1 */}
+            <div className="flex flex-col items-start">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                <BarChart3 className="h-6 w-6 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Advanced Tone Analysis</h3>
+              <p className="text-gray-400">
+                Get detailed insights into your communication style. Analyze tone, sentiment, and engagement potential of your content.
+              </p>
+              <ul className="space-y-3 mt-4">
+                <li className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Quantitative tone metrics across 5 key dimensions</span>
+                </li>
+              </ul>
             </div>
-            <h3 className="text-lg font-semibold">AI Content Generation</h3>
-            <p className="mt-2 leading-7 text-muted-foreground">
-              Create professional content that matches your brand voice. Generate LinkedIn posts, emails, and more with our AI-powered tools.
-            </p>
-          </div>
 
-          {/* Feature 3 */}
-          <div className="flex flex-col items-start">
-            <div className="rounded-md bg-primary/10 p-3 mb-4">
-              <User className="h-6 w-6 text-primary" />
+            {/* Feature 2 */}
+            <div className="flex flex-col items-start">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">AI Content Generation</h3>
+              <p className="text-gray-400">
+                Create professional content that matches your brand voice. Generate LinkedIn posts, emails, and more with our AI-powered tools.
+              </p>
+              <ul className="space-y-3 mt-4">
+                <li className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Generate content based on your unique brand voice</span>
+                </li>
+              </ul>
             </div>
-            <h3 className="text-lg font-semibold">Persona Management</h3>
-            <p className="mt-2 leading-7 text-muted-foreground">
-              Create and save multiple personas to tailor your communication for different audiences and purposes.
-            </p>
+
+            {/* Feature 3 */}
+            <div className="flex flex-col items-start">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                <User className="h-6 w-6 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Persona Management</h3>
+              <p className="text-gray-400">
+                Create and save multiple personas to tailor your communication for different audiences and purposes.
+              </p>
+              <ul className="space-y-3 mt-4">
+                <li className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Target specific audiences with customized messaging</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Testimonials */}
-      <div className="relative isolate mt-16 sm:mt-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:max-w-4xl">
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-              What Our Users Say
-            </h2>
-            <div className="mt-16 space-y-10">
-              <div className="flex flex-col items-center">
-                <div className="rounded-xl bg-card p-8 text-center shadow-sm ring-1 ring-border">
-                  <p className="text-lg font-semibold text-foreground">
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
+            <div className="px-8 py-10">
+              <h2 className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl mb-8">
+                What Our Users Say
+              </h2>
+              <div className="max-w-3xl mx-auto">
+                <div className="text-center">
+                  <p className="text-lg text-white">
                     "Tovably has transformed the way our marketing team communicates. The tone analysis helps us maintain brand consistency, and the content generation saves us hours of work."
                   </p>
                   <div className="mt-6">
-                    <p className="font-semibold text-foreground">Sarah Johnson</p>
-                    <p className="text-sm text-muted-foreground">Marketing Director, TechCorp</p>
+                    <p className="font-semibold text-white">Sarah Johnson</p>
+                    <p className="text-sm text-gray-400">Marketing Director, TechCorp</p>
                   </div>
                 </div>
               </div>
@@ -290,23 +325,23 @@ export default function LandingPage() {
       </div>
 
       {/* CTA section */}
-      <div className="mt-16 sm:mt-24 mb-16">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+      <div className="py-6 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg py-10 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
               Ready to transform your communication?
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
               Join thousands of professionals who are elevating their communication with Tovably.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="flex flex-wrap justify-center gap-4">
               <Link href="/auth">
-                <Button className="text-white px-6">
+                <Button className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]">
                   Get started for free
                 </Button>
               </Link>
-              <Link href="/guides">
-                <Button variant="outline">
+              <Link href="/guides-info">
+                <Button variant="outline" className="px-8 py-3 md:py-4 md:text-lg md:px-10 border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white">
                   Learn more
                 </Button>
               </Link>
@@ -314,6 +349,6 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
