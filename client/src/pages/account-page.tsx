@@ -14,20 +14,43 @@ import {
   ShieldCheck,
   Bell,
   Key,
-  CreditCard
+  CreditCard,
+  Camera,
+  X,
+  ImageIcon
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AccountPage() {
   const { user } = useAuth();
+  const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+  const [currentAvatar, setCurrentAvatar] = useState<string>('bg-[#182030]');
+  const { toast } = useToast();
   
   // Helper function to format the plan name (same as in sidebar)
   const formatPlanName = (plan: string) => {
     return plan.charAt(0).toUpperCase() + plan.slice(1);
   };
+  
+  // Avatar colors
+  const avatarColors = [
+    'bg-[#74d1ea]', // Mint Blue (Brand)
+    'bg-purple-500',
+    'bg-pink-500',
+    'bg-amber-500',
+    'bg-emerald-500',
+    'bg-rose-500',
+    'bg-indigo-500',
+    'bg-cyan-500',
+    'bg-orange-500'
+  ];
   
   return (
     <Layout showSidebar={true}>
@@ -110,7 +133,7 @@ export default function AccountPage() {
                   
                   <div className="space-y-8">
                     <div className="flex items-center space-x-4">
-                      <div className="h-24 w-24 rounded-xl bg-[#182030] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.1)] flex items-center justify-center text-[#74d1ea] text-xl font-medium">
+                      <div className={`h-24 w-24 rounded-xl ${currentAvatar} border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.1)] flex items-center justify-center text-white text-xl font-medium transition-all duration-300`}>
                         {user?.username?.slice(0, 2).toUpperCase() || "U"}
                       </div>
                       <div>
@@ -124,6 +147,7 @@ export default function AccountPage() {
                             variant="outline" 
                             size="sm" 
                             className="h-8 border-gray-700/60 text-gray-300 text-xs hover:text-white hover:bg-[#0e131f]"
+                            onClick={() => setAvatarDialogOpen(true)}
                           >
                             Change Avatar
                           </Button>
@@ -413,6 +437,80 @@ export default function AccountPage() {
           </Tabs>
         </div>
       </div>
+      
+      {/* Avatar Selection Dialog */}
+      <Dialog open={avatarDialogOpen} onOpenChange={setAvatarDialogOpen}>
+        <DialogContent className="bg-[#0a0c10] border border-gray-800/60 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center">
+              <Camera className="h-5 w-5 text-[#74d1ea] mr-2" />
+              Change Avatar
+            </DialogTitle>
+            <DialogClose className="absolute right-4 top-4 text-gray-400 hover:text-white">
+              <X className="h-4 w-4" />
+            </DialogClose>
+          </DialogHeader>
+          
+          <div className="py-4 space-y-6">
+            <div className="grid grid-cols-3 gap-4">
+              {avatarColors.map((color, index) => (
+                <div 
+                  key={index}
+                  className={`h-16 w-16 rounded-xl ${color} border border-gray-800/30 flex items-center justify-center text-white text-lg font-medium cursor-pointer transition-all duration-200 hover:scale-105 ${selectedAvatar === color ? 'ring-2 ring-[#74d1ea] ring-offset-2 ring-offset-[#0a0c10]' : ''}`}
+                  onClick={() => setSelectedAvatar(color)}
+                >
+                  {user?.username?.slice(0, 2).toUpperCase() || "U"}
+                </div>
+              ))}
+              
+              <div 
+                className="h-16 w-16 rounded-xl bg-[#182030] border border-gray-800/60 flex items-center justify-center text-gray-400 cursor-pointer hover:text-white hover:border-gray-600 transition-all duration-200"
+                onClick={() => setSelectedAvatar('custom')}
+              >
+                <ImageIcon className="h-6 w-6" />
+              </div>
+            </div>
+            
+            <div className="pt-2 flex justify-end space-x-3">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-gray-700/60 text-gray-300 hover:text-white hover:bg-[#0e131f]"
+                onClick={() => {
+                  setSelectedAvatar(null);
+                  setAvatarDialogOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_15px_rgba(116,209,234,0.25)]"
+                size="sm"
+                onClick={() => {
+                  if (selectedAvatar) {
+                    setCurrentAvatar(selectedAvatar);
+                    toast({
+                      title: "Avatar Updated",
+                      description: "Your profile avatar has been updated successfully.",
+                    });
+                    setAvatarDialogOpen(false);
+                    // Reset the selection for next time
+                    setSelectedAvatar(null);
+                  } else {
+                    toast({
+                      title: "Please Select an Avatar",
+                      description: "Choose a color or custom avatar to continue.",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+              >
+                Save Avatar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
