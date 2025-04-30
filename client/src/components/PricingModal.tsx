@@ -42,7 +42,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
   const checkoutMutation = useMutation({
     mutationFn: () => {
       setIsLoading(true);
-      return apiRequest("POST", "/api/create-checkout-session", { 
+      return apiRequest("POST", "/api/payment-checkout", { 
         plan: planId,
       })
         .then(res => {

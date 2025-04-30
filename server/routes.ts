@@ -36,6 +36,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Stripe payment routes
   
+  // New endpoint for one-time payment checkout
+  app.post("/api/payment-checkout", async (req: Request, res: Response) => {
+    try {
+      const schema = z.object({
+        plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
+      });
+      
+      const { plan } = schema.parse(req.body);
+      
+      if (plan === 'free') {
+        return res.status(400).json({ error: "Cannot create checkout for free plan" });
+      }
+      
+      const planInfo = subscriptionPlans[plan];
+      if (!planInfo) {
+        return res.status(400).json({ error: "Invalid plan selected" });
+      }
+      
+      // Calculate the amount in cents
+      const amountInCents = Math.round(planInfo.price * 100);
+      
+      // Build the success and cancel URLs
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${baseUrl}/pricing`;
+      
+      // Create metadata about the customer
+      const metadata: Record<string, string> = {
+        planId: plan,
+        create_subscription: 'true'
+      };
+      
+      // Add user ID to metadata if user is authenticated
+      if (req.isAuthenticated() && req.user) {
+        metadata.userId = req.user.id.toString();
+      }
+
+      // Create a Checkout Session in payment mode
+      const sessionOptions: Stripe.Checkout.SessionCreateParams = {
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: `${planInfo.name} Plan - First Month`,
+                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
+                images: [],
+              },
+              unit_amount: amountInCents,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata,
+        billing_address_collection: 'required',
+      };
+      
+      // In payment mode, we can use customer_creation for non-logged in users
+      if (!req.isAuthenticated() || !req.user?.stripe_customer_id) {
+        sessionOptions.customer_creation = 'always';
+      }
+      
+      // If user is already logged in, use their customer info
+      if (req.isAuthenticated() && req.user) {
+        if (req.user.stripe_customer_id) {
+          sessionOptions.customer = req.user.stripe_customer_id;
+        } else {
+          sessionOptions.customer_email = req.user.email;
+        }
+      }
+      
+      const session = await stripe.checkout.sessions.create(sessionOptions);
+      
+      res.status(200).json({ url: session.url });
+    } catch (error) {
+      console.error("Error creating payment checkout session:", error);
+      res.status(400).json({ error: error.message || "Failed to create checkout session" });
+    }
+  });
+
   // Stripe Checkout endpoint - Creates a session that redirects to Stripe's hosted checkout page
   // This can be used without being logged in and will auto-create an account
   app.post("/api/create-checkout-session", async (req: Request, res: Response) => {
