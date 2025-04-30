@@ -99,12 +99,14 @@ export class MemStorage implements IStorage {
   private generatedContents: Map<number, GeneratedContent>;
   private blogCategories: Map<number, BlogCategory>;
   private blogPosts: Map<number, BlogPost>;
+  private leadContacts: Map<number, LeadContact>;
   private userIdCounter: number;
   private toneAnalysisIdCounter: number;
   private personaIdCounter: number;
   private contentIdCounter: number;
   private blogCategoryIdCounter: number;
   private blogPostIdCounter: number;
+  private leadContactIdCounter: number;
   sessionStore: session.Store;
 
   constructor() {
@@ -114,12 +116,14 @@ export class MemStorage implements IStorage {
     this.generatedContents = new Map();
     this.blogCategories = new Map();
     this.blogPosts = new Map();
+    this.leadContacts = new Map();
     this.userIdCounter = 1;
     this.toneAnalysisIdCounter = 1;
     this.personaIdCounter = 1;
     this.contentIdCounter = 1;
     this.blogCategoryIdCounter = 1;
     this.blogPostIdCounter = 1;
+    this.leadContactIdCounter = 1;
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000 // prune expired entries every 24h
     });
@@ -488,6 +492,63 @@ export class MemStorage implements IStorage {
     }
     this.blogPosts.delete(id);
   }
+  
+  // Lead contact methods
+  async createLeadContact(contact: InsertLeadContact): Promise<LeadContact> {
+    const id = this.leadContactIdCounter++;
+    const now = new Date();
+    const newContact: LeadContact = {
+      ...contact,
+      id,
+      created_at: now
+    };
+    this.leadContacts.set(id, newContact);
+    return newContact;
+  }
+
+  async getLeadContact(id: number): Promise<LeadContact | undefined> {
+    return this.leadContacts.get(id);
+  }
+
+  async getAllLeadContacts(options?: {
+    status?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<LeadContact[]> {
+    let contacts = Array.from(this.leadContacts.values());
+    
+    // Filter by status if specified
+    if (options?.status !== undefined) {
+      contacts = contacts.filter(contact => contact.status === options.status);
+    }
+    
+    // Sort by created date, newest first
+    contacts = contacts.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+    
+    // Apply pagination if specified
+    if (options?.offset !== undefined || options?.limit !== undefined) {
+      const offset = options?.offset || 0;
+      const limit = options?.limit || contacts.length;
+      contacts = contacts.slice(offset, offset + limit);
+    }
+    
+    return contacts;
+  }
+
+  async updateLeadContact(id: number, updates: Partial<InsertLeadContact>): Promise<LeadContact> {
+    const contact = this.leadContacts.get(id);
+    if (!contact) {
+      throw new Error(`Lead contact with id ${id} not found`);
+    }
+    
+    const updatedContact = {
+      ...contact,
+      ...updates
+    };
+    
+    this.leadContacts.set(id, updatedContact);
+    return updatedContact;
+  }
 }
 
 import { eq, and, desc, sql } from "drizzle-orm";
@@ -848,6 +909,61 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(blogPosts)
       .where(eq(blogPosts.id, id));
+  }
+  
+  // Lead contact methods
+  async createLeadContact(contact: InsertLeadContact): Promise<LeadContact> {
+    const [newContact] = await db
+      .insert(leadContacts)
+      .values(contact)
+      .returning();
+    return newContact;
+  }
+
+  async getLeadContact(id: number): Promise<LeadContact | undefined> {
+    const [contact] = await db
+      .select()
+      .from(leadContacts)
+      .where(eq(leadContacts.id, id));
+    return contact;
+  }
+
+  async getAllLeadContacts(options?: {
+    status?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<LeadContact[]> {
+    let query = db.select().from(leadContacts);
+    
+    if (options?.status !== undefined) {
+      query = query.where(eq(leadContacts.status, options.status));
+    }
+    
+    query = query.orderBy(desc(leadContacts.created_at));
+    
+    if (options?.limit !== undefined) {
+      query = query.limit(options.limit);
+    }
+    
+    if (options?.offset !== undefined) {
+      query = query.offset(options.offset);
+    }
+    
+    return query;
+  }
+
+  async updateLeadContact(id: number, updates: Partial<InsertLeadContact>): Promise<LeadContact> {
+    const [contact] = await db
+      .update(leadContacts)
+      .set(updates)
+      .where(eq(leadContacts.id, id))
+      .returning();
+    
+    if (!contact) {
+      throw new Error(`Lead contact with id ${id} not found`);
+    }
+    
+    return contact;
   }
 }
 

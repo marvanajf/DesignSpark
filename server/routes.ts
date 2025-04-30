@@ -22,6 +22,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Set up blog routes
   registerBlogRoutes(app);
+  
+  // Lead contact submission endpoint
+  app.post("/api/lead-contact", async (req: Request, res: Response) => {
+    try {
+      const schema = z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().email("Please enter a valid email address"),
+        company: z.string().optional(),
+        message: z.string().min(1, "Message is required"),
+      });
+
+      const { name, email, company, message } = schema.parse(req.body);
+      
+      const leadContact = await storage.createLeadContact({
+        name,
+        email,
+        company: company || null,
+        message,
+        status: "new",
+        notes: null
+      });
+
+      res.status(201).json({
+        success: true,
+        message: "Thank you for your message. We will be in touch soon."
+      });
+    } catch (error) {
+      console.error("Error processing lead contact:", error);
+      res.status(400).json({ 
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error" 
+      });
+    }
+  });
 
   // API routes
   // Prefixing all routes with /api
