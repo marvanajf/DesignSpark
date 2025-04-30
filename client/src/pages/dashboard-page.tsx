@@ -8,9 +8,6 @@ import {
   Archive, 
   BarChart2, 
   Mail, 
-  Filter,
-  Calendar,
-  ChevronDown,
   Copy,
   Edit
 } from "lucide-react";
@@ -110,7 +107,7 @@ export default function DashboardPage() {
     <Layout showSidebar={true}>
       <div className="flex-1 overflow-y-auto bg-black">
         <div className="p-6">
-          {/* Header Section with Filters */}
+          {/* Header Section */}
           <div className="mb-6">
             <div className="flex justify-between items-center">
               <div>
@@ -120,17 +117,6 @@ export default function DashboardPage() {
                   <span>Dashboard</span>
                 </div>
                 <h1 className="text-2xl font-semibold text-white mt-1">Dashboard</h1>
-              </div>
-              <div className="flex space-x-3">
-                <div className="flex items-center space-x-2 bg-[#111] border border-gray-800 rounded-md px-3 py-1.5 text-sm text-gray-300">
-                  <Calendar className="h-4 w-4 text-gray-400" />
-                  <span>Last 24 hours</span>
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
-                </div>
-                <Button variant="outline" className="text-sm h-9 border-gray-800 bg-[#111] hover:bg-gray-900">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <span>Filter</span>
-                </Button>
               </div>
             </div>
           </div>
