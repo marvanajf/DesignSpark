@@ -49,40 +49,70 @@ export default function PricingPage() {
           </div>
 
           {/* Pricing cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {Object.entries(subscriptionPlans).map(([planId, plan]) => (
-              <div key={planId} className="bg-black border border-gray-700/60 rounded-md overflow-hidden h-full">
-                <div className="p-6 text-center">
-                  <h3 className="text-lg font-semibold text-white mb-1">{plan.name}</h3>
-                  <div className="text-center mb-2">
-                    <span className="text-3xl font-bold text-white">{plan.displayPrice}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {Object.entries(subscriptionPlans).map(([planId, plan], index) => (
+              <div 
+                key={planId} 
+                className={`relative group transform transition-all duration-300 hover:scale-105 bg-black rounded-lg overflow-hidden h-full ${
+                  planId === 'professional' 
+                    ? 'border-2 border-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.3)]' 
+                    : 'border border-gray-700/60'
+                }`}
+              >
+                {/* Accent top border */}
+                <div className={`h-1 w-full bg-gradient-to-r ${
+                  planId === 'free' ? 'from-gray-700 to-gray-600' :
+                  planId === 'standard' ? 'from-[#53b0c9] to-[#74d1ea]' :
+                  planId === 'professional' ? 'from-[#74d1ea] to-[#53b0c9]' :
+                  'from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]'
+                }`}></div>
+                
+                {planId === 'professional' && (
+                  <div className="absolute -top-3 left-0 right-0 mx-auto text-center">
+                    <span className="bg-[#74d1ea] text-black text-xs font-bold px-3 py-1 rounded-full">
+                      MOST POPULAR
+                    </span>
+                  </div>
+                )}
+                
+                <div className="p-6 text-center mt-2">
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    {plan.name}
+                    {user?.subscription_plan === planId && (
+                      <span className="ml-2 text-xs px-2 py-1 bg-[#74d1ea] text-black rounded-full">Current</span>
+                    )}
+                  </h3>
+                  
+                  <div className="text-center mb-3">
+                    <span className="text-4xl font-bold text-white">{plan.displayPrice}</span>
                     {planId !== 'free' && <span className="text-sm text-gray-400">/month</span>}
                   </div>
-                  <p className="text-gray-400 text-sm mb-4">
+                  
+                  <p className="text-gray-400 text-sm mb-5 pb-2 border-b border-gray-800">
                     {planId === 'free' ? 'Get started with basic features' : 
                      planId === 'standard' ? 'Perfect for professionals' : 
                      planId === 'professional' ? 'Ideal for growing businesses' : 
                      'For demanding content creators'}
                   </p>
 
-                  <ul className="space-y-3 text-sm text-left">
+                  <ul className="space-y-3 text-sm text-left mb-6">
                     <li className="flex items-center">
-                      <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                      <Check className={`mr-2 h-4 w-4 ${planId !== 'free' ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
                       <span className="text-gray-300">{plan.personas} AI Personas</span>
                     </li>
                     <li className="flex items-center">
-                      <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                      <Check className={`mr-2 h-4 w-4 ${planId !== 'free' ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
                       <span className="text-gray-300">{plan.toneAnalyses} Tone Analyses</span>
                     </li>
                     <li className="flex items-center">
-                      <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                      <Check className={`mr-2 h-4 w-4 ${planId !== 'free' ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
                       <span className="text-gray-300">{plan.contentGeneration} Content Pieces</span>
                     </li>
                     <li className="flex items-center">
                       {planId === 'free' ? (
                         <X className="mr-2 h-4 w-4 text-red-500" />
                       ) : (
-                        <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                        <Check className="mr-2 h-4 w-4 text-[#74d1ea]" />
                       )}
                       <span className="text-gray-300">Email Support</span>
                     </li>
@@ -90,13 +120,13 @@ export default function PricingPage() {
                       {['free', 'standard'].includes(planId) ? (
                         <X className="mr-2 h-4 w-4 text-red-500" />
                       ) : (
-                        <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                        <Check className="mr-2 h-4 w-4 text-[#74d1ea]" />
                       )}
                       <span className="text-gray-300">Priority Support</span>
                     </li>
                     <li className="flex items-center">
                       {planId === 'premium' ? (
-                        <Check className="mr-2 h-4 w-4 text-emerald-500" />
+                        <Check className="mr-2 h-4 w-4 text-[#74d1ea]" />
                       ) : (
                         <X className="mr-2 h-4 w-4 text-red-500" />
                       )}
@@ -105,17 +135,15 @@ export default function PricingPage() {
                   </ul>
                 </div>
 
-                <div className="px-6 pb-6 mt-2">
+                <div className="px-6 pb-6">
                   <Button 
-                    className="w-full"
-                    variant={planId === 'free' ? "outline" : "default"}
+                    className={`w-full transition-all duration-300 ${
+                      planId !== 'free' 
+                        ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.3)] hover:shadow-[0_0_15px_rgba(116,209,234,0.5)]' 
+                        : 'border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white'
+                    }`}
                     disabled={user?.subscription_plan === planId}
                     onClick={() => handleSelectPlan(planId as SubscriptionPlanType)}
-                    style={{
-                      backgroundColor: planId !== 'free' ? '#74d1ea' : 'transparent',
-                      color: planId !== 'free' ? 'black' : '#e4e4e7',
-                      borderColor: planId === 'free' ? '#52525b' : 'transparent'
-                    }}
                   >
                     {user?.subscription_plan === planId 
                       ? "Current Plan" 
