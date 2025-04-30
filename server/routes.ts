@@ -110,6 +110,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Endpoint to get checkout session data for payment success page
+  app.get("/api/checkout-sessions/:sessionId", async (req: Request, res: Response) => {
+    try {
+      const { sessionId } = req.params;
+      
+      if (!sessionId) {
+        return res.status(400).json({ error: "Missing session ID" });
+      }
+      
+      // Retrieve the checkout session from Stripe
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      // Check if this session created a new user account
+      // In a real implementation, we could retrieve temporary credentials from a secure store
+      // For now, we'll just use metadata from the session
+      const accountCreated = !session.metadata?.userId;
+      const email = session.customer_details?.email || null;
+      
+      // For security reasons, we wouldn't actually return a real password here
+      // This is just for demonstration - in production we'd use a secure token system
+      // or send credentials via email
+      const password = accountCreated ? '********' : null;
+      
+      res.json({
+        status: session.status,
+        accountCreated,
+        email,
+        password,
+        plan: session.metadata?.planId
+      });
+    } catch (error) {
+      console.error("Error retrieving checkout session:", error);
+      res.status(400).json({ 
+        error: error instanceof Error ? error.message : "Failed to retrieve checkout session" 
+      });
+    }
+  });
+  
   // Webhook to handle Stripe events, including automatic account creation
   app.post("/webhook/stripe", async (req, res) => {
     const sig = req.headers['stripe-signature'] as string;

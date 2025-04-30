@@ -24,6 +24,7 @@ import PersonasMarketingPage from "@/pages/personas-marketing-page";
 import LandingPage from "@/pages/landing-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
+import PaymentSuccessPage from "@/pages/payment-success-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import AdminPage from "@/pages/admin-page";
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/guides-info" component={GuidesMarketingPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
+      <Route path="/payment-success" component={PaymentSuccessPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:id" component={BlogPostPage} />
       <ProtectedRoute path="/tone-analysis" component={ToneAnalysisPage} />
