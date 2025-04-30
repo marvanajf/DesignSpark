@@ -24,6 +24,11 @@ import { Badge } from "@/components/ui/badge";
 export default function AccountPage() {
   const { user } = useAuth();
   
+  // Helper function to format the plan name (same as in sidebar)
+  const formatPlanName = (plan: string) => {
+    return plan.charAt(0).toUpperCase() + plan.slice(1);
+  };
+  
   return (
     <Layout showSidebar={true}>
       <div className="flex-1 overflow-y-auto bg-black">
@@ -112,7 +117,7 @@ export default function AccountPage() {
                         <p className="text-white font-medium">{user?.username}</p>
                         <p className="text-gray-400 text-sm">{user?.email}</p>
                         <Badge className="bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/30 mt-2 hover:bg-[#74d1ea]/20">
-                          {user?.subscription || 'Free Plan'}
+                          {formatPlanName(user?.subscription_plan || 'free')}
                         </Badge>
                         <div className="mt-3">
                           <Button 
@@ -342,13 +347,13 @@ export default function AccountPage() {
                           <h4 className="text-white font-medium">Current Plan</h4>
                           <p className="text-gray-400 text-sm">Your subscription details</p>
                         </div>
-                        <Badge className="bg-[#74d1ea] text-black">{user?.subscription || 'Free Plan'}</Badge>
+                        <Badge className="bg-[#74d1ea] text-black">{formatPlanName(user?.subscription_plan || 'free')}</Badge>
                       </div>
                       
                       <div className="mt-4 space-y-3 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-400">Plan Price</span>
-                          <span className="text-white font-medium">{user?.subscription === 'Free Plan' ? 'Free' : '£24.99/month'}</span>
+                          <span className="text-white font-medium">{user?.subscription_plan === 'free' ? 'Free' : '£24.99/month'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-400">Billing Cycle</span>
@@ -362,7 +367,7 @@ export default function AccountPage() {
                       
                       <div className="mt-6 flex">
                         <Button className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)] w-full">
-                          {user?.subscription === 'Free Plan' ? 'Upgrade Plan' : 'Manage Subscription'}
+                          {user?.subscription_plan === 'free' ? 'Upgrade Plan' : 'Manage Subscription'}
                         </Button>
                       </div>
                     </div>
@@ -370,7 +375,7 @@ export default function AccountPage() {
                     <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-5 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
                       <h4 className="text-white font-medium mb-4">Payment Method</h4>
                       
-                      {user?.subscription !== 'Free Plan' ? (
+                      {user?.subscription_plan !== 'free' ? (
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div className="w-10 h-6 bg-white rounded flex items-center justify-center mr-3">
