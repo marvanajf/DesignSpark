@@ -101,19 +101,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
       
       try {
+        console.log("About to call stripe.checkout.sessions.create with these options:", JSON.stringify(sessionOptions, null, 2));
+        console.log("Using Stripe API key:", process.env.STRIPE_SECRET_KEY ? process.env.STRIPE_SECRET_KEY.substring(0, 10) + "..." : "NOT SET");
+        
         const session = await stripe.checkout.sessions.create(sessionOptions);
-        console.log("Stripe session created successfully, redirecting to:", session.url);
+        console.log("Stripe session created successfully with ID:", session.id);
+        console.log("Session URL:", session.url);
+        console.log("Full session object:", JSON.stringify(session, null, 2));
         
         if (session.url) {
-          // Perform a direct browser redirect to Stripe's checkout page
-          return res.redirect(session.url);
+          console.log("Redirecting to:", session.url);
+          // For debugging, let's return HTML instead of redirecting
+          const debugHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stripe Debug</title>
+</head>
+<body>
+  <h1>Stripe Checkout Debug Page</h1>
+  <p>Session Created Successfully</p>
+  <p>Session ID: ${session.id}</p>
+  <p>Please click the link below to go to Stripe:</p>
+  <a href="${session.url}" style="display:block; padding:10px; background:#74d1ea; color:#000; text-decoration:none; margin:20px 0; text-align:center;">
+    Continue to Stripe Checkout
+  </a>
+  <pre>${JSON.stringify(session, null, 2)}</pre>
+</body>
+</html>
+          `;
+          
+          res.setHeader('Content-Type', 'text/html');
+          return res.send(debugHtml);
         } else {
           return res.status(500).send("Failed to create Stripe checkout URL");
         }
       } catch (stripeError: any) {
         console.error("Stripe error:", stripeError);
-        return res.status(400).send('Stripe checkout session creation failed: ' + 
-          (stripeError.message || 'Unknown error'));
+        // For debugging, let's return HTML instead of plain text
+        const errorHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stripe Error</title>
+</head>
+<body>
+  <h1>Stripe Checkout Error</h1>
+  <p>Error: ${stripeError.message || 'Unknown error'}</p>
+  <pre>${JSON.stringify(stripeError, null, 2)}</pre>
+</body>
+</html>
+        `;
+        
+        res.setHeader('Content-Type', 'text/html');
+        return res.status(400).send(errorHtml);
       }
     } catch (error: any) {
       console.error("Error processing direct stripe redirect request:", error);
