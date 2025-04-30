@@ -17,6 +17,7 @@ import SavedContentPage from "@/pages/saved-content-page";
 import AccountPage from "@/pages/account-page";
 import SupportPage from "@/pages/support-page";
 import GuidesPage from "@/pages/guides-page";
+import GuidesMarketingPage from "@/pages/guides-marketing-page";
 import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
 import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
 import PersonasMarketingPage from "@/pages/personas-marketing-page";
