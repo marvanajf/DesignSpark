@@ -141,7 +141,7 @@ export default function PricingPage() {
           <div className="mb-16">
             <div className="border border-gray-700/60 rounded-lg p-6 max-w-3xl mx-auto text-center">
               <h3 className="text-xl font-semibold mb-3 text-white">
-                <span className="mr-2">💯</span> 14-Day Money-Back Guarantee
+                14-Day Money-Back Guarantee
               </h3>
               <p className="text-gray-400">
                 Not satisfied with our service? Get a full refund within 14 days of your subscription.
