@@ -73,9 +73,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create a Checkout Session
-      // We'll use payment mode with automatic customer creation
-      // After payment, we'll create a subscription in our webhook
+      // Create a Checkout Session for one-time payment
+      // We'll handle subscription creation in the webhook
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
@@ -83,7 +82,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price_data: {
               currency: 'gbp',
               product_data: {
-                name: `${planInfo.name} Plan - Monthly Subscription`,
+                name: `${planInfo.name} Plan - Monthly Payment`,
                 description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
                 images: [],
               },
@@ -92,22 +91,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
             quantity: 1,
           },
         ],
-        mode: 'payment',  // Using payment mode instead of subscription
+        mode: 'payment',
         success_url: successUrl,
         cancel_url: cancelUrl,
-        metadata,
+        metadata: {
+          ...metadata,
+          create_subscription: 'true'
+        },
         billing_address_collection: 'required',
         payment_intent_data: {
-          // Set up metadata to create subscription after payment
-          metadata: {
-            create_subscription: 'true',
-            subscription_plan: plan
-          },
           // Save payment method for future usage
           setup_future_usage: 'off_session',
-        },
-        // This parameter is now allowed since we're in payment mode
-        customer_creation: 'always'
+        }
       };
       
       // If user is already logged in, use their customer info
