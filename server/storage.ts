@@ -637,6 +637,11 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async getUserByStripeCustomerId(customerId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.stripe_customer_id, customerId));
+    return user;
+  }
+
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
@@ -651,10 +656,34 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUserSubscription(id: number, plan: SubscriptionPlanType): Promise<User> {
+  async updateUserSubscription(id: number, updates: { 
+    plan?: SubscriptionPlanType;
+    stripeSubscriptionId?: string;
+    status?: string;
+    periodEnd?: Date;
+  }): Promise<User> {
+    // Prepare update data based on which fields are provided
+    const updateData: any = {};
+    
+    if (updates.plan !== undefined) {
+      updateData.subscription_plan = updates.plan;
+    }
+    
+    if (updates.stripeSubscriptionId !== undefined) {
+      updateData.stripe_subscription_id = updates.stripeSubscriptionId;
+    }
+    
+    if (updates.status !== undefined) {
+      updateData.subscription_status = updates.status;
+    }
+    
+    if (updates.periodEnd !== undefined) {
+      updateData.subscription_period_end = updates.periodEnd;
+    }
+    
     const [user] = await db
       .update(users)
-      .set({ subscription_plan: plan })
+      .set(updateData)
       .where(eq(users.id, id))
       .returning();
     return user;
