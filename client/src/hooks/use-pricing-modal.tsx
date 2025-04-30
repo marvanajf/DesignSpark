@@ -38,11 +38,23 @@ export function PricingModalProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-      <PricingModal 
-        isOpen={isPricingModalOpen} 
-        onClose={closePricingModal} 
-        limitType={currentLimitType} 
-      />
+      {isPricingModalOpen && (
+        <PricingModal 
+          isOpen={isPricingModalOpen} 
+          onClose={closePricingModal} 
+          plan={{
+            name: "Professional",
+            personas: 25,
+            toneAnalyses: 30,
+            contentGeneration: 200,
+            price: 24.99,
+            currency: "GBP",
+            displayPrice: "£24.99/month",
+            stripePrice: "price_professional"
+          }}
+          planId="professional"
+        />
+      )}
     </PricingModalContext.Provider>
   );
 }
