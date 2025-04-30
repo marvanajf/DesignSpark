@@ -42,15 +42,25 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
   const checkoutMutation = useMutation({
     mutationFn: () => {
       setIsLoading(true);
+      console.log("Making payment checkout request for plan:", planId);
       return apiRequest("POST", "/api/payment-checkout", { 
         plan: planId,
       })
-        .then(res => {
+        .then(async res => {
           if (!res.ok) {
             if (res.status === 401) {
               throw new Error("Authentication required. Please log in to continue.");
             }
-            throw new Error("Failed to create checkout session");
+            
+            // Try to get detailed error message from response
+            try {
+              const errorData = await res.json();
+              console.error("Checkout error response:", errorData);
+              throw new Error(errorData.error || "Failed to create checkout session");
+            } catch (jsonError) {
+              // If we can't parse JSON, just use status text
+              throw new Error(`Checkout failed: ${res.statusText}`);
+            }
           }
           return res.json();
         });

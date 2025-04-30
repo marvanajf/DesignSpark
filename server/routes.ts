@@ -36,14 +36,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Stripe payment routes
   
-  // New endpoint for one-time payment checkout
+  // Enhanced debugging for one-time payment checkout
   app.post("/api/payment-checkout", async (req: Request, res: Response) => {
     try {
+      console.log("Payment checkout request received:", req.body);
+      
       const schema = z.object({
         plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
       });
       
       const { plan } = schema.parse(req.body);
+      console.log("Plan selected:", plan);
       
       if (plan === 'free') {
         return res.status(400).json({ error: "Cannot create checkout for free plan" });
@@ -56,6 +59,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Calculate the amount in cents
       const amountInCents = Math.round(planInfo.price * 100);
+      console.log("Amount in cents:", amountInCents);
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
@@ -73,7 +77,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create a Checkout Session in payment mode
+      // Create simplified session options for Stripe checkout
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
@@ -83,7 +87,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               product_data: {
                 name: `${planInfo.name} Plan - First Month`,
                 description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
-                images: [],
               },
               unit_amount: amountInCents,
             },
@@ -94,29 +97,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
-        billing_address_collection: 'required',
       };
       
-      // In payment mode, we can use customer_creation for non-logged in users
-      if (!req.isAuthenticated() || !req.user?.stripe_customer_id) {
-        sessionOptions.customer_creation = 'always';
+      console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
+      
+      try {
+        const session = await stripe.checkout.sessions.create(sessionOptions);
+        console.log("Stripe session created successfully, URL:", session.url);
+        
+        return res.status(200).json({ url: session.url });
+      } catch (stripeError) {
+        console.error("Stripe error:", stripeError);
+        return res.status(400).json({ 
+          error: stripeError.message || "Stripe checkout session creation failed",
+          details: stripeError
+        });
       }
-      
-      // If user is already logged in, use their customer info
-      if (req.isAuthenticated() && req.user) {
-        if (req.user.stripe_customer_id) {
-          sessionOptions.customer = req.user.stripe_customer_id;
-        } else {
-          sessionOptions.customer_email = req.user.email;
-        }
-      }
-      
-      const session = await stripe.checkout.sessions.create(sessionOptions);
-      
-      res.status(200).json({ url: session.url });
     } catch (error) {
-      console.error("Error creating payment checkout session:", error);
-      res.status(400).json({ error: error.message || "Failed to create checkout session" });
+      console.error("Error processing payment checkout request:", error);
+      return res.status(400).json({ 
+        error: error instanceof Error ? error.message : "Failed to process checkout request",
+        details: error 
+      });
     }
   });
 
