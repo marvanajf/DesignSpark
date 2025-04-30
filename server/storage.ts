@@ -78,6 +78,16 @@ export interface IStorage {
   updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPost>;
   deleteBlogPost(id: number): Promise<void>;
   
+  // Lead contact methods
+  createLeadContact(contact: InsertLeadContact): Promise<LeadContact>;
+  getLeadContact(id: number): Promise<LeadContact | undefined>;
+  getAllLeadContacts(options?: {
+    status?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<LeadContact[]>;
+  updateLeadContact(id: number, updates: Partial<InsertLeadContact>): Promise<LeadContact>;
+  
   // Session store
   sessionStore: session.Store;
 }

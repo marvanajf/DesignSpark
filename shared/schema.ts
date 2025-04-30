@@ -107,6 +107,17 @@ export const blogPosts = pgTable("blog_posts", {
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
 
+export const leadContacts = pgTable("lead_contacts", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  company: text("company"),
+  message: text("message").notNull(),
+  status: text("status").default("new").notNull(), // new, contacted, qualified, converted
+  notes: text("notes"),
+  created_at: timestamp("created_at").defaultNow().notNull()
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -156,6 +167,15 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
   publish_date: true
 });
 
+export const insertLeadContactSchema = createInsertSchema(leadContacts).pick({
+  name: true,
+  email: true,
+  company: true,
+  message: true,
+  status: true,
+  notes: true
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -174,6 +194,9 @@ export type InsertBlogCategory = z.infer<typeof insertBlogCategorySchema>;
 
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+
+export type LeadContact = typeof leadContacts.$inferSelect;
+export type InsertLeadContact = z.infer<typeof insertLeadContactSchema>;
 
 // Create predefined personas for seed data
 export const predefinedPersonas = [
