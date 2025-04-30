@@ -24,7 +24,18 @@ export default function PricingPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleSelectPlan = (planId: SubscriptionPlanType) => {
-    if (planId === 'free') {
+    // Check if user is trying to downgrade to free plan
+    if (planId === 'free' && user?.subscription_plan !== 'free') {
+      // TODO: Implement actual downgrade to free plan API call
+      toast({
+        title: "Downgrade to Free Plan",
+        description: "This would cancel your current subscription and downgrade to free plan. The feature will be available soon.",
+      });
+      return;
+    }
+
+    // If they're already on the free plan and selecting free plan again
+    if (planId === 'free' && user?.subscription_plan === 'free') {
       toast({
         title: "Free Plan Selected",
         description: "You're already on the free plan. Enjoy your experience with Tovably!",
@@ -32,7 +43,7 @@ export default function PricingPage() {
       return;
     }
     
-    // Allow any user to select a plan, whether logged in or not
+    // Allow any user to select a paid plan, whether logged in or not
     setSelectedPlan(planId);
     setIsModalOpen(true);
   };
