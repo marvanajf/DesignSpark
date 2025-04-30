@@ -17,6 +17,7 @@ import { subscriptionPlans } from "@shared/schema";
 import { SubscriptionPlanType } from "@shared/schema";
 import Layout from "@/components/Layout";
 import { queryClient } from "@/lib/queryClient";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 export default function PricingPage() {
   const { toast } = useToast();
@@ -24,53 +25,13 @@ export default function PricingPage() {
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlanType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
 
   const handleSelectPlan = (planId: SubscriptionPlanType) => {
     // Check if user is trying to downgrade to free plan
     if (planId === 'free' && user?.subscription_plan !== 'free') {
-      const cancelSubscription = async () => {
-        try {
-          setIsLoading(true);
-          
-          // Call our new API endpoint
-          const response = await fetch('/api/cancel-subscription', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            credentials: 'include'
-          });
-          
-          const data = await response.json();
-          
-          if (!response.ok) {
-            throw new Error(data.message || 'Failed to cancel subscription');
-          }
-          
-          // Success - refresh the user query to get updated plan info
-          await queryClient.invalidateQueries({ queryKey: ['/api/user'] });
-          
-          toast({
-            title: "Subscription Canceled",
-            description: "Your subscription has been canceled and you have been downgraded to the free plan.",
-            variant: "success",
-          });
-        } catch (error) {
-          console.error("Error canceling subscription:", error);
-          toast({
-            title: "Error",
-            description: error instanceof Error ? error.message : "Failed to cancel subscription",
-            variant: "destructive",
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      
-      // Show confirmation dialog
-      if (confirm("Are you sure you want to cancel your subscription and downgrade to the free plan?")) {
-        cancelSubscription();
-      }
+      // Open the confirmation modal instead of using the browser's confirm
+      setIsCancelModalOpen(true);
       return;
     }
 
@@ -91,6 +52,52 @@ export default function PricingPage() {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedPlan(null);
+  };
+  
+  const closeCancelModal = () => {
+    setIsCancelModalOpen(false);
+  };
+  
+  const handleCancelSubscription = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Call our API endpoint
+      const response = await fetch('/api/cancel-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to cancel subscription');
+      }
+      
+      // Success - refresh the user query to get updated plan info
+      await queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+      
+      // Close the modal
+      setIsCancelModalOpen(false);
+      
+      toast({
+        title: "Subscription Canceled",
+        description: "Your subscription has been canceled and you have been downgraded to the free plan.",
+        variant: "success",
+      });
+    } catch (error) {
+      console.error("Error canceling subscription:", error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to cancel subscription",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -297,6 +304,18 @@ export default function PricingPage() {
               planId={selectedPlan}
             />
           )}
+          
+          {/* Confirmation modal for subscription cancellation */}
+          <ConfirmationModal
+            isOpen={isCancelModalOpen}
+            onClose={closeCancelModal}
+            onConfirm={handleCancelSubscription}
+            title="Cancel Subscription"
+            description="Are you sure you want to cancel your subscription and downgrade to the free plan? You will lose access to premium features and your usage limits will be reduced."
+            confirmText="Yes, Cancel Subscription"
+            cancelText="No, Keep My Plan"
+            isLoading={isLoading}
+          />
 
           {/* Feature promo sections */}
           <div className="mb-20">
