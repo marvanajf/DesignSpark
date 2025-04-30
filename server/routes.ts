@@ -37,21 +37,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Direct form handler that redirects to Stripe
   app.post("/api/checkout-redirect", async (req: Request, res: Response) => {
     try {
-      console.log("Checkout redirect request received:", req.body);
+      console.log("Checkout redirect request received with body:", req.body);
+      console.log("Request headers:", req.headers);
       
-      const schema = z.object({
-        plan: z.enum(['free', 'standard', 'professional', 'premium'] as const),
-      });
+      // Check if we got the plan parameter in the request
+      if (!req.body.plan) {
+        console.error("No plan parameter in request body");
+        return res.status(400).send('Missing plan parameter');
+      }
       
-      const { plan } = schema.parse(req.body);
+      const plan = req.body.plan;
+      console.log("Plan value from form:", plan);
       
       if (plan === 'free') {
         return res.status(400).send('Cannot create checkout for free plan');
       }
       
-      const planInfo = subscriptionPlans[plan];
+      const planInfo = subscriptionPlans[plan as SubscriptionPlanType];
       if (!planInfo) {
-        return res.status(400).send('Invalid plan selected');
+        return res.status(400).send(`Invalid plan selected: ${plan}`);
       }
       
       // Calculate the amount in cents
@@ -99,10 +103,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       try {
         const session = await stripe.checkout.sessions.create(sessionOptions);
-        console.log("Stripe session created successfully, redirecting to:", session.url);
+        console.log("Stripe session created successfully, URL:", session.url);
         
-        // Redirect directly to Stripe
-        return res.redirect(303, session.url);
+        // Instead of redirecting, send a simple HTML page that performs the redirect via JavaScript
+        const redirectHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting to Stripe...</title>
+  <meta http-equiv="refresh" content="0;url=${session.url}">
+  <script type="text/javascript">
+    window.location.href = "${session.url}";
+  </script>
+</head>
+<body>
+  <h1>Redirecting to Stripe...</h1>
+  <p>If you are not redirected automatically, please <a href="${session.url}">click here</a>.</p>
+</body>
+</html>
+        `;
+        
+        res.setHeader('Content-Type', 'text/html');
+        return res.send(redirectHtml);
       } catch (stripeError) {
         console.error("Stripe error:", stripeError);
         return res.status(400).send('Stripe checkout session creation failed: ' + 
