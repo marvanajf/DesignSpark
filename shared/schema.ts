@@ -30,7 +30,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     contentGeneration: 100,
     price: 9.99,
     currency: "GBP",
-    displayPrice: "£9.99/month",
+    displayPrice: "£9.99",
     stripePrice: "price_standard" // Replace with actual Stripe price ID
   },
   professional: {
@@ -40,7 +40,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     contentGeneration: 200,
     price: 24.99,
     currency: "GBP",
-    displayPrice: "£24.99/month",
+    displayPrice: "£24.99",
     stripePrice: "price_professional" // Replace with actual Stripe price ID
   },
   premium: {
@@ -50,7 +50,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     contentGeneration: 500,
     price: 39.99,
     currency: "GBP",
-    displayPrice: "£39.99/month",
+    displayPrice: "£39.99",
     stripePrice: "price_premium" // Replace with actual Stripe price ID
   }
 };
