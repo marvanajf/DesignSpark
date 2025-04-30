@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useStripe, useElements, CardElement, Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,10 +13,6 @@ import { apiRequest } from '@/lib/queryClient';
 import { useMutation } from '@tanstack/react-query';
 import { SubscriptionPlanType } from '@shared/schema';
 import { useAuth } from '@/hooks/use-auth';
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 interface PlanInfo {
   name: string;
@@ -38,202 +32,47 @@ interface PricingModalProps {
   planId: SubscriptionPlanType;
 }
 
-const CheckoutForm = ({ 
-  planId, 
-  plan, 
-  clientSecret, 
-  onClose 
-}: { 
-  planId: SubscriptionPlanType; 
-  plan: PlanInfo; 
-  clientSecret: string; 
-  onClose: () => void;
-}) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { user } = useAuth();
-  
-  const subscriptionMutation = useMutation({
-    mutationFn: (data: { plan: SubscriptionPlanType, customerId: string }) => {
-      return apiRequest("POST", "/api/update-subscription", data)
-        .then(res => {
-          if (!res.ok) throw new Error("Failed to update subscription");
-          return res.json();
-        });
-    },
-    onSuccess: () => {
-      // Close modal and show success message
-      onClose();
-    },
-    onError: (error: Error) => {
-      setErrorMessage(`Subscription update failed: ${error.message}`);
-    }
-  });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!stripe || !elements) {
-      return;
-    }
-    
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
-      setErrorMessage("Card element not found");
-      return;
-    }
-    
-    setIsProcessing(true);
-    setErrorMessage(null);
-    
-    try {
-      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: user?.username,
-            email: user?.email
-          }
-        }
-      });
-
-      if (error) {
-        setErrorMessage(error.message || "Payment failed. Please try again.");
-      } else if (paymentIntent.status === "succeeded") {
-        // Payment succeeded, update user subscription in our database
-        // Use payment ID as identifier for the subscription
-        subscriptionMutation.mutate({ 
-          plan: planId, 
-          customerId: paymentIntent.id
-        });
-      }
-    } catch (err) {
-      setErrorMessage("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="border border-border rounded-md p-4">
-        <CardElement 
-          options={{
-            style: {
-              base: {
-                fontSize: '16px',
-                color: '#FFFFFF',
-                '::placeholder': {
-                  color: '#8F8F8F',
-                },
-              },
-              invalid: {
-                color: '#EF4444',
-              },
-            },
-          }}
-        />
-      </div>
-      
-      {errorMessage && (
-        <div className="text-red-500 text-sm">{errorMessage}</div>
-      )}
-      
-      <div className="flex gap-2 justify-end">
-        <Button type="button" variant="outline" onClick={onClose} disabled={isProcessing}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={!stripe || isProcessing}>
-          {isProcessing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Processing
-            </>
-          ) : (
-            `Pay ${plan.displayPrice}`
-          )}
-        </Button>
-      </div>
-    </form>
-  );
-};
-
 const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, planId }) => {
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); 
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
-
   const { user } = useAuth();
   
-  useEffect(() => {
-    if (isOpen && planId !== 'free') {
+  // Create Stripe Checkout mutation
+  const checkoutMutation = useMutation({
+    mutationFn: () => {
       setIsLoading(true);
-      setError(null);
-      
-      // Check if user is authenticated
-      if (!user) {
-        setError("You need to be logged in to subscribe to a plan");
-        setIsLoading(false);
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to subscribe to a plan",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Create a payment intent when the modal opens
-      apiRequest("POST", "/api/create-payment-intent", { 
+      return apiRequest("POST", "/api/create-checkout-session", { 
         plan: planId,
-        amount: plan.price,
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
-            // If we get a 401 Unauthorized, show a specific error message
             if (res.status === 401) {
               throw new Error("Authentication required. Please log in to continue.");
             }
-            throw new Error("Failed to initiate payment process");
+            throw new Error("Failed to create checkout session");
           }
           return res.json();
-        })
-        .then((data) => {
-          setClientSecret(data.clientSecret);
-        })
-        .catch((err) => {
-          setError(err.message || "Failed to initiate payment. Please try again.");
-          toast({
-            title: "Payment Initialization Failed",
-            description: err.message || "Failed to initiate payment. Please try again.",
-            variant: "destructive",
-          });
-        })
-        .finally(() => {
-          setIsLoading(false);
         });
+    },
+    onSuccess: (data) => {
+      // Redirect to Stripe Checkout page
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    },
+    onError: (error: Error) => {
+      setError(error.message || "Failed to start checkout process");
+      toast({
+        title: "Checkout Failed",
+        description: error.message || "Could not initialize checkout. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
     }
-  }, [isOpen, planId, plan.price, toast, user]);
-
-  if (!stripePromise) {
-    return (
-      <Dialog open={isOpen} onOpenChange={() => onClose()}>
-        <DialogContent className="sm:max-w-[425px] border border-border">
-          <DialogHeader>
-            <DialogTitle>Stripe Configuration Missing</DialogTitle>
-            <DialogDescription>
-              The Stripe public key is missing. Please contact the administrator.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="text-center">
-            <Button onClick={onClose}>Close</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
@@ -245,30 +84,57 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
           </DialogDescription>
         </DialogHeader>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="space-y-4 py-4">
+          <div className="rounded-md bg-black/20 p-4 border border-border/50">
+            <h3 className="font-medium text-white mb-2">Plan Details:</h3>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li>• {plan.personas} AI Personas</li>
+              <li>• {plan.toneAnalyses} Tone Analyses</li>
+              <li>• {plan.contentGeneration} Content Pieces per month</li>
+              {planId !== 'free' && <li>• Premium email support</li>}
+              {['professional', 'premium'].includes(planId) && <li>• Priority support</li>}
+              {planId === 'premium' && <li>• API Access</li>}
+            </ul>
           </div>
-        ) : error ? (
-          <div className="text-center py-4">
-            <div className="text-red-500 mb-4">{error}</div>
-            <Button onClick={onClose}>Close</Button>
-          </div>
-        ) : clientSecret ? (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <CheckoutForm 
-              planId={planId} 
-              plan={plan} 
-              clientSecret={clientSecret} 
-              onClose={onClose} 
-            />
-          </Elements>
-        ) : (
-          <div className="text-center py-4">
-            <div className="text-red-500 mb-4">Unable to initialize payment. Please try again.</div>
-            <Button onClick={onClose}>Close</Button>
-          </div>
-        )}
+          
+          {isLoading ? (
+            <div className="flex justify-center items-center py-4">
+              <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+            </div>
+          ) : error ? (
+            <div className="text-center">
+              <div className="text-red-500 mb-4">{error}</div>
+              <Button onClick={onClose}>Close</Button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <p className="text-sm text-gray-400">
+                You'll be redirected to our secure payment provider to complete your subscription.
+                {!user && " An account will be automatically created for you after payment."}
+              </p>
+              
+              <div className="flex gap-3 justify-end">
+                <Button variant="outline" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => checkoutMutation.mutate()}
+                  disabled={isLoading}
+                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    `Continue to Checkout`
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
