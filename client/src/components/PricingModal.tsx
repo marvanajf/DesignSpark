@@ -47,22 +47,42 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
         plan: planId,
       })
         .then(async res => {
+          console.log("Response status:", res.status, res.statusText);
+          console.log("Response headers:", [...res.headers.entries()]);
+          
+          // Clone the response before reading its body
+          const resClone = res.clone();
+          
+          // Read the raw response text
+          const rawText = await resClone.text();
+          console.log("Raw response:", rawText);
+          
           if (!res.ok) {
             if (res.status === 401) {
               throw new Error("Authentication required. Please log in to continue.");
             }
             
             // Try to get detailed error message from response
+            if (rawText.startsWith("<!DOCTYPE") || rawText.startsWith("<html")) {
+              // This is an HTML response, not JSON
+              throw new Error(`Server error: ${res.status} ${res.statusText}`);
+            }
+            
             try {
-              const errorData = await res.json();
-              console.error("Checkout error response:", errorData);
-              throw new Error(errorData.error || "Failed to create checkout session");
+              const errorObj = JSON.parse(rawText);
+              console.error("Checkout error response:", errorObj);
+              throw new Error(errorObj.error || "Failed to create checkout session");
             } catch (jsonError) {
-              // If we can't parse JSON, just use status text
-              throw new Error(`Checkout failed: ${res.statusText}`);
+              // If we can't parse JSON, use the raw text
+              throw new Error(`Checkout failed: ${rawText.substring(0, 100)}`);
             }
           }
-          return res.json();
+          
+          try {
+            return JSON.parse(rawText);
+          } catch (e) {
+            throw new Error(`Invalid JSON response: ${rawText.substring(0, 100)}`);
+          }
         });
     },
     onSuccess: (data) => {
