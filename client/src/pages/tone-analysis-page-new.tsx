@@ -592,7 +592,7 @@ export default function ToneAnalysisPage() {
                                     <Input 
                                       id="website-url"
                                       placeholder="e.g., example.com"
-                                      className="pl-10 bg-black/70 border-gray-800 text-white"
+                                      className="pl-10 bg-black/70 border-gray-800 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                                       value={websiteUrl}
                                       onChange={(e) => setWebsiteUrl(e.target.value)}
                                     />
@@ -631,7 +631,7 @@ export default function ToneAnalysisPage() {
                                   <Textarea 
                                     id="sample-text"
                                     placeholder="Paste your text content here..."
-                                    className="min-h-[200px] bg-black/70 border-gray-800 text-white"
+                                    className="min-h-[200px] bg-black/70 border-gray-800 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                                     value={sampleText}
                                     onChange={(e) => setSampleText(e.target.value)}
                                   />
@@ -741,7 +741,7 @@ export default function ToneAnalysisPage() {
               placeholder="E.g., Company Website Analysis"
               value={analysisName}
               onChange={(e) => setAnalysisName(e.target.value)}
-              className="bg-black border-gray-700 text-white"
+              className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
             />
           </div>
           

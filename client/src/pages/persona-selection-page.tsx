@@ -320,7 +320,7 @@ export default function PersonaSelectionPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search personas..."
-                    className="pl-10 bg-[#111] border-gray-800 text-gray-300 w-[220px]"
+                    className="pl-10 bg-[#111] border-gray-800 text-gray-300 w-[220px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                   />
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function PersonaSelectionPage() {
                           value={personaDescription}
                           onChange={(e) => setPersonaDescription(e.target.value)}
                           placeholder="E.g., Founder of a 50-person SaaS startup in the HR tech industry, focused on enterprise clients"
-                          className="h-36 bg-black border-gray-700 text-white"
+                          className="h-36 bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
                         />
                         <p className="mt-2 text-xs text-gray-500">
                           The more specific your description, the better the AI-generated persona will be.
