@@ -34,6 +34,94 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set up blog routes
   registerBlogRoutes(app);
   
+  // GET endpoint for direct Stripe redirect - much simpler approach
+  app.get("/api/direct-stripe-redirect", async (req: Request, res: Response) => {
+    try {
+      console.log("Direct stripe redirect request received:", req.query);
+      
+      // Check if we got the plan parameter in the request
+      if (!req.query.plan) {
+        console.error("No plan parameter in request query");
+        return res.status(400).send('Missing plan parameter');
+      }
+      
+      const plan = req.query.plan as string;
+      console.log("Plan value from query:", plan);
+      
+      if (plan === 'free') {
+        return res.status(400).send('Cannot create checkout for free plan');
+      }
+      
+      const planInfo = subscriptionPlans[plan as SubscriptionPlanType];
+      if (!planInfo) {
+        return res.status(400).send(`Invalid plan selected: ${plan}`);
+      }
+      
+      // Calculate the amount in cents
+      const amountInCents = Math.round(planInfo.price * 100);
+      
+      // Build the success and cancel URLs
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${baseUrl}/pricing`;
+      
+      // Create metadata about the customer
+      const metadata: Record<string, string> = {
+        planId: plan,
+        create_subscription: 'true'
+      };
+      
+      // Add user ID to metadata if user is authenticated
+      if (req.isAuthenticated() && req.user) {
+        metadata.userId = req.user.id.toString();
+      }
+
+      // Create simplified session options for Stripe checkout
+      const sessionOptions: Stripe.Checkout.SessionCreateParams = {
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: `${planInfo.name} Plan - First Month`,
+                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
+              },
+              unit_amount: amountInCents,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata,
+      };
+      
+      console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
+      
+      try {
+        const session = await stripe.checkout.sessions.create(sessionOptions);
+        console.log("Stripe session created successfully, redirecting to:", session.url);
+        
+        if (session.url) {
+          // Perform a direct browser redirect to Stripe's checkout page
+          return res.redirect(session.url);
+        } else {
+          return res.status(500).send("Failed to create Stripe checkout URL");
+        }
+      } catch (stripeError: any) {
+        console.error("Stripe error:", stripeError);
+        return res.status(400).send('Stripe checkout session creation failed: ' + 
+          (stripeError.message || 'Unknown error'));
+      }
+    } catch (error: any) {
+      console.error("Error processing direct stripe redirect request:", error);
+      return res.status(400).send('Failed to process checkout request: ' + 
+        (error.message || 'Unknown error'));
+    }
+  });
+  
   // Direct form handler that redirects to Stripe
   app.post("/api/checkout-redirect", async (req: Request, res: Response) => {
     try {

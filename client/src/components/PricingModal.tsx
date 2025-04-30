@@ -38,31 +38,19 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
   const { toast } = useToast();
   const { user } = useAuth();
   
-  // Create a direct request to Stripe (skipping JSON parsing)
+  // Create a simplified request to Stripe via a GET request
   const handleCheckout = async () => {
     try {
       setIsLoading(true);
       setError("");
       
-      console.log("Creating direct form submission to Stripe for plan:", planId);
+      console.log("Creating direct checkout request for plan:", planId);
       
-      // Create a form to submit directly to the backend
-      const form = document.createElement('form');
-      form.method = 'post';
-      form.action = '/api/checkout-redirect';
+      // Use a simpler approach - create a direct GET endpoint that redirects to Stripe
+      // This avoids form submission issues
+      window.location.href = `/api/direct-stripe-redirect?plan=${planId}`;
       
-      // Add the plan ID as a hidden field
-      const planInput = document.createElement('input');
-      planInput.type = 'hidden';
-      planInput.name = 'plan';
-      planInput.value = planId;
-      form.appendChild(planInput);
-      
-      // Append the form to the document body and submit it
-      document.body.appendChild(form);
-      form.submit();
-      
-      // The form will redirect the page, so no need to set loading to false
+      // The page will redirect, so no need to set loading to false
     } catch (err) {
       console.error("Checkout error:", err);
       setError(err instanceof Error ? err.message : "Failed to start checkout process");
