@@ -101,7 +101,7 @@ export default function PricingPage() {
                   {/* Popular tag */}
                   {isProPlan && (
                     <div className="absolute -top-3 left-0 right-0 mx-auto text-center">
-                      <span className="bg-[#74d1ea] text-black text-xs font-bold px-4 py-1 rounded-full shadow-[0_0_10px_rgba(116,209,234,0.5)]">
+                      <span className="inline-block bg-[#74d1ea] text-black text-xs font-bold px-6 py-1 rounded-full shadow-[0_0_10px_rgba(116,209,234,0.5)] whitespace-nowrap">
                         MOST POPULAR
                       </span>
                     </div>
@@ -154,8 +154,8 @@ export default function PricingPage() {
                       </li>
                       <li className="flex items-center">
                         {isFreePlan ? (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-red-500/20">
-                            <X className="h-3 w-3 text-red-500" />
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-gray-700/50">
+                            <X className="h-3 w-3 text-gray-400" />
                           </div>
                         ) : (
                           <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
@@ -166,8 +166,8 @@ export default function PricingPage() {
                       </li>
                       <li className="flex items-center">
                         {['free', 'standard'].includes(planId) ? (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-red-500/20">
-                            <X className="h-3 w-3 text-red-500" />
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-gray-700/50">
+                            <X className="h-3 w-3 text-gray-400" />
                           </div>
                         ) : (
                           <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
@@ -182,8 +182,8 @@ export default function PricingPage() {
                             <Check className="h-3 w-3 text-[#74d1ea]" />
                           </div>
                         ) : (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-red-500/20">
-                            <X className="h-3 w-3 text-red-500" />
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-gray-700/50">
+                            <X className="h-3 w-3 text-gray-400" />
                           </div>
                         )}
                         <span className="text-gray-300">API Access</span>
@@ -196,7 +196,7 @@ export default function PricingPage() {
                       className={`w-full font-medium transition-all duration-300 ${
                         !isFreePlan 
                           ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)]' 
-                          : 'border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white'
+                          : 'bg-transparent border border-[#74d1ea]/30 hover:border-[#74d1ea] text-[#74d1ea] hover:text-white hover:shadow-[0_0_15px_rgba(116,209,234,0.3)]'
                       }`}
                       disabled={user?.subscription_plan === planId}
                       onClick={() => handleSelectPlan(planId as SubscriptionPlanType)}
@@ -235,47 +235,62 @@ export default function PricingPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Feature 1: AI Personas */}
-              <div className="bg-black border border-gray-700/60 rounded-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(116,209,234,0.2)]">
-                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-[#74d1ea]" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">AI Personas</h3>
-                <p className="text-gray-400 mb-4">
-                  Create and customize AI personas tailored to your target audience. Generate content that resonates with specific demographics and communication styles.
-                </p>
-                <div className="flex items-center text-[#74d1ea]">
-                  <span className="text-sm font-medium">Learn more</span>
-                  <Zap className="ml-2 h-4 w-4" />
+              <div className="relative bg-gradient-to-b from-black via-black to-black/90 border border-gray-700/60 rounded-lg p-8 overflow-hidden transform transition-all duration-300 hover:scale-105 group">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#74d1ea]/5"></div>
+                <div className="absolute -inset-1 opacity-0 group-hover:opacity-30 blur-xl bg-[#74d1ea]/20 group-hover:animate-pulse transition-opacity duration-700"></div>
+                
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-5 group-hover:shadow-[0_0_15px_rgba(116,209,234,0.4)] transition-all duration-300">
+                    <Users className="h-7 w-7 text-[#74d1ea] group-hover:animate-pulse" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#74d1ea] transition-colors duration-300">AI Personas</h3>
+                  <p className="text-gray-400 mb-6">
+                    Create and customize AI personas tailored to your target audience. Generate content that resonates with specific demographics and communication styles.
+                  </p>
+                  <div className="flex items-center text-[#74d1ea] group-hover:translate-x-1 transition-transform duration-300">
+                    <span className="text-sm font-medium">Learn more</span>
+                    <Zap className="ml-2 h-4 w-4 group-hover:animate-pulse" />
+                  </div>
                 </div>
               </div>
               
               {/* Feature 2: Tone Analysis */}
-              <div className="bg-black border border-gray-700/60 rounded-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(116,209,234,0.2)]">
-                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
-                  <BarChart4 className="h-6 w-6 text-[#74d1ea]" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">Tone Analysis</h3>
-                <p className="text-gray-400 mb-4">
-                  Analyze and optimize your content's tone for maximum impact. Identify key characteristics and patterns to ensure your message connects effectively.
-                </p>
-                <div className="flex items-center text-[#74d1ea]">
-                  <span className="text-sm font-medium">Learn more</span>
-                  <Zap className="ml-2 h-4 w-4" />
+              <div className="relative bg-gradient-to-b from-black via-black to-black/90 border border-gray-700/60 rounded-lg p-8 overflow-hidden transform transition-all duration-300 hover:scale-105 group">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#74d1ea]/5"></div>
+                <div className="absolute -inset-1 opacity-0 group-hover:opacity-30 blur-xl bg-[#74d1ea]/20 group-hover:animate-pulse transition-opacity duration-700"></div>
+                
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-5 group-hover:shadow-[0_0_15px_rgba(116,209,234,0.4)] transition-all duration-300">
+                    <BarChart4 className="h-7 w-7 text-[#74d1ea] group-hover:animate-pulse" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#74d1ea] transition-colors duration-300">Tone Analysis</h3>
+                  <p className="text-gray-400 mb-6">
+                    Analyze and optimize your content's tone for maximum impact. Identify key characteristics and patterns to ensure your message connects effectively.
+                  </p>
+                  <div className="flex items-center text-[#74d1ea] group-hover:translate-x-1 transition-transform duration-300">
+                    <span className="text-sm font-medium">Learn more</span>
+                    <Zap className="ml-2 h-4 w-4 group-hover:animate-pulse" />
+                  </div>
                 </div>
               </div>
               
               {/* Feature 3: Content Generation */}
-              <div className="bg-black border border-gray-700/60 rounded-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(116,209,234,0.2)]">
-                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
-                  <MessagesSquare className="h-6 w-6 text-[#74d1ea]" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">Content Generation</h3>
-                <p className="text-gray-400 mb-4">
-                  Generate professional content instantly based on your tone analysis and personas. Create emails, posts, and more tailored to your brand voice.
-                </p>
-                <div className="flex items-center text-[#74d1ea]">
-                  <span className="text-sm font-medium">Learn more</span>
-                  <Zap className="ml-2 h-4 w-4" />
+              <div className="relative bg-gradient-to-b from-black via-black to-black/90 border border-gray-700/60 rounded-lg p-8 overflow-hidden transform transition-all duration-300 hover:scale-105 group">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#74d1ea]/5"></div>
+                <div className="absolute -inset-1 opacity-0 group-hover:opacity-30 blur-xl bg-[#74d1ea]/20 group-hover:animate-pulse transition-opacity duration-700"></div>
+                
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-5 group-hover:shadow-[0_0_15px_rgba(116,209,234,0.4)] transition-all duration-300">
+                    <MessagesSquare className="h-7 w-7 text-[#74d1ea] group-hover:animate-pulse" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#74d1ea] transition-colors duration-300">Content Generation</h3>
+                  <p className="text-gray-400 mb-6">
+                    Generate professional content instantly based on your tone analysis and personas. Create emails, posts, and more tailored to your brand voice.
+                  </p>
+                  <div className="flex items-center text-[#74d1ea] group-hover:translate-x-1 transition-transform duration-300">
+                    <span className="text-sm font-medium">Learn more</span>
+                    <Zap className="ml-2 h-4 w-4 group-hover:animate-pulse" />
+                  </div>
                 </div>
               </div>
             </div>
