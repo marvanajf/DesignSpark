@@ -149,7 +149,7 @@ export default function AccountPage() {
                             className="h-8 border-gray-700/60 text-gray-300 text-xs hover:text-white hover:bg-[#0e131f]"
                             onClick={() => setAvatarDialogOpen(true)}
                           >
-                            Change Avatar
+                            Change Colour
                           </Button>
                         </div>
                       </div>
@@ -444,7 +444,7 @@ export default function AccountPage() {
           <DialogHeader>
             <DialogTitle className="text-white flex items-center">
               <Camera className="h-5 w-5 text-[#74d1ea] mr-2" />
-              Change Avatar
+              Change Colour
             </DialogTitle>
             <DialogClose className="absolute right-4 top-4 text-gray-400 hover:text-white">
               <X className="h-4 w-4" />
@@ -490,22 +490,22 @@ export default function AccountPage() {
                   if (selectedAvatar) {
                     setCurrentAvatar(selectedAvatar);
                     toast({
-                      title: "Avatar Updated",
-                      description: "Your profile avatar has been updated successfully.",
+                      title: "Colour Updated",
+                      description: "Your profile colour has been updated successfully.",
                     });
                     setAvatarDialogOpen(false);
                     // Reset the selection for next time
                     setSelectedAvatar(null);
                   } else {
                     toast({
-                      title: "Please Select an Avatar",
-                      description: "Choose a color or custom avatar to continue.",
+                      title: "Please Select a Colour",
+                      description: "Choose a colour to continue.",
                       variant: "destructive",
                     });
                   }
                 }}
               >
-                Save Avatar
+                Save Colour
               </Button>
             </div>
           </div>

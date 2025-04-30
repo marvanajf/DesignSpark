@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
+import { useContext } from "react";
+import { UserAvatarContext } from "@/contexts/user-avatar-context";
 
 export default function Sidebar() {
   const [location] = useLocation();
