@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import PricingModal from "@/components/PricingModal";
@@ -36,69 +35,48 @@ export default function PricingPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        {/* Heading with glow effect */}
-        <div className="text-center mb-12">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl font-bold tracking-tight text-white mb-3"
-          >
-            Choose Your Subscription Plan
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-muted-foreground max-w-2xl mx-auto"
-          >
-            Select the plan that best fits your needs. All plans include access to our core features,
-            with higher tiers offering more usage allowances and premium features.
-          </motion.p>
-        </div>
+      <div className="py-12 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Heading section */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold tracking-tight text-white mb-3">
+              Choose Your Subscription Plan
+            </h1>
+            <p className="text-gray-400 max-w-3xl mx-auto">
+              Select the plan that best fits your needs. All plans include access to our core features, with
+              higher tiers offering more usage allowances and premium features.
+            </p>
+          </div>
 
-        {/* Pricing cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {Object.entries(subscriptionPlans).map(([planId, plan], index) => (
-            <motion.div
-              key={planId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 * (index + 1) }}
-            >
-              <Card className={`flex flex-col h-full ${user?.subscription_plan === planId ? 'border-primary border-2' : ''}`}>
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-center">
-                    {plan.name}
-                    {user?.subscription_plan === planId && (
-                      <span className="ml-2 text-xs px-2 py-1 bg-primary text-black rounded-full">Current</span>
-                    )}
-                  </CardTitle>
-                  <div className="text-center mt-2">
+          {/* Pricing cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {Object.entries(subscriptionPlans).map(([planId, plan]) => (
+              <div key={planId} className="bg-black border border-gray-700/60 rounded-md overflow-hidden h-full">
+                <div className="p-6 text-center">
+                  <h3 className="text-lg font-semibold text-white mb-1">{plan.name}</h3>
+                  <div className="text-center mb-2">
                     <span className="text-3xl font-bold text-white">{plan.displayPrice}</span>
-                    {planId !== 'free' && <span className="text-sm text-muted-foreground">/month</span>}
+                    {planId !== 'free' && <span className="text-sm text-gray-400">/month</span>}
                   </div>
-                  <CardDescription className="text-center mt-1">
+                  <p className="text-gray-400 text-sm mb-4">
                     {planId === 'free' ? 'Get started with basic features' : 
                      planId === 'standard' ? 'Perfect for professionals' : 
                      planId === 'professional' ? 'Ideal for growing businesses' : 
                      'For demanding content creators'}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <ul className="space-y-3 text-sm">
+                  </p>
+
+                  <ul className="space-y-3 text-sm text-left">
                     <li className="flex items-center">
                       <Check className="mr-2 h-4 w-4 text-emerald-500" />
-                      <span>{plan.personas} AI Personas</span>
+                      <span className="text-gray-300">{plan.personas} AI Personas</span>
                     </li>
                     <li className="flex items-center">
                       <Check className="mr-2 h-4 w-4 text-emerald-500" />
-                      <span>{plan.toneAnalyses} Tone Analyses</span>
+                      <span className="text-gray-300">{plan.toneAnalyses} Tone Analyses</span>
                     </li>
                     <li className="flex items-center">
                       <Check className="mr-2 h-4 w-4 text-emerald-500" />
-                      <span>{plan.contentGeneration} Content Pieces</span>
+                      <span className="text-gray-300">{plan.contentGeneration} Content Pieces</span>
                     </li>
                     <li className="flex items-center">
                       {planId === 'free' ? (
@@ -106,7 +84,7 @@ export default function PricingPage() {
                       ) : (
                         <Check className="mr-2 h-4 w-4 text-emerald-500" />
                       )}
-                      <span>Email Support</span>
+                      <span className="text-gray-300">Email Support</span>
                     </li>
                     <li className="flex items-center">
                       {['free', 'standard'].includes(planId) ? (
@@ -114,7 +92,7 @@ export default function PricingPage() {
                       ) : (
                         <Check className="mr-2 h-4 w-4 text-emerald-500" />
                       )}
-                      <span>Priority Support</span>
+                      <span className="text-gray-300">Priority Support</span>
                     </li>
                     <li className="flex items-center">
                       {planId === 'premium' ? (
@@ -122,17 +100,22 @@ export default function PricingPage() {
                       ) : (
                         <X className="mr-2 h-4 w-4 text-red-500" />
                       )}
-                      <span>API Access</span>
+                      <span className="text-gray-300">API Access</span>
                     </li>
                   </ul>
-                </CardContent>
-                <CardFooter>
+                </div>
+
+                <div className="px-6 pb-6 mt-2">
                   <Button 
-                    className="w-full" 
-                    size="lg"
-                    variant={planId !== 'free' ? "default" : "outline"}
+                    className="w-full"
+                    variant={planId === 'free' ? "outline" : "default"}
                     disabled={user?.subscription_plan === planId}
                     onClick={() => handleSelectPlan(planId as SubscriptionPlanType)}
+                    style={{
+                      backgroundColor: planId !== 'free' ? '#74d1ea' : 'transparent',
+                      color: planId !== 'free' ? 'black' : '#e4e4e7',
+                      borderColor: planId === 'free' ? '#52525b' : 'transparent'
+                    }}
                   >
                     {user?.subscription_plan === planId 
                       ? "Current Plan" 
@@ -140,57 +123,59 @@ export default function PricingPage() {
                         ? "Get Started" 
                         : "Subscribe"}
                   </Button>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        {selectedPlan && (
-          <PricingModal 
-            isOpen={isModalOpen} 
-            onClose={closeModal} 
-            plan={subscriptionPlans[selectedPlan]}
-            planId={selectedPlan}
-          />
-        )}
-
-        {/* Guarantee section */}
-        <div className="mt-16 text-center">
-          <div className="rounded-xl border border-border p-6 max-w-3xl mx-auto">
-            <h3 className="text-xl font-semibold mb-3">
-              <span className="mr-2">💯</span> 14-Day Money-Back Guarantee
-            </h3>
-            <p className="text-muted-foreground">
-              Not satisfied with our service? Get a full refund within 14 days of your subscription.
-              No questions asked. We're confident you'll love Tovably.
-            </p>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
 
-        {/* FAQ section */}
-        <div className="mt-16 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
-          
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium mb-2">Can I upgrade or downgrade my plan?</h3>
-              <p className="text-muted-foreground">Yes, you can upgrade or downgrade your subscription at any time. Changes will take effect at the beginning of your next billing cycle.</p>
+          {selectedPlan && (
+            <PricingModal 
+              isOpen={isModalOpen} 
+              onClose={closeModal} 
+              plan={subscriptionPlans[selectedPlan]}
+              planId={selectedPlan}
+            />
+          )}
+
+          {/* Guarantee section */}
+          <div className="mb-16">
+            <div className="border border-gray-700/60 rounded-lg p-6 max-w-3xl mx-auto text-center">
+              <h3 className="text-xl font-semibold mb-3 text-white">
+                <span className="mr-2">💯</span> 14-Day Money-Back Guarantee
+              </h3>
+              <p className="text-gray-400">
+                Not satisfied with our service? Get a full refund within 14 days of your subscription.
+                No questions asked. We're confident you'll love Tovably.
+              </p>
             </div>
+          </div>
+
+          {/* FAQ section */}
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-8 text-white">Frequently Asked Questions</h2>
             
-            <div>
-              <h3 className="text-lg font-medium mb-2">How does billing work?</h3>
-              <p className="text-muted-foreground">Your subscription is billed monthly. You'll be charged on the same date each month. If you upgrade mid-cycle, we'll prorate the cost.</p>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-medium mb-2">What happens if I exceed my plan limits?</h3>
-              <p className="text-muted-foreground">You'll need to upgrade to a higher tier or wait until your next billing cycle when your usage limits are reset.</p>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-medium mb-2">Is there an enterprise option?</h3>
-              <p className="text-muted-foreground">Yes, for organizations with more extensive needs, contact us at <a href="mailto:sales@tovably.com" className="text-primary hover:underline">sales@tovably.com</a> for custom pricing and features.</p>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-white">Can I upgrade or downgrade my plan?</h3>
+                <p className="text-gray-400">Yes, you can upgrade or downgrade your subscription at any time. Changes will take effect at the beginning of your next billing cycle.</p>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-white">How does billing work?</h3>
+                <p className="text-gray-400">Your subscription is billed monthly. You'll be charged on the same date each month. If you upgrade mid-cycle, we'll prorate the cost.</p>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-white">What happens if I exceed my plan limits?</h3>
+                <p className="text-gray-400">You'll need to upgrade to a higher tier or wait until your next billing cycle when your usage limits are reset.</p>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-white">Is there an enterprise option?</h3>
+                <p className="text-gray-400">
+                  Yes, for organizations with more extensive needs, contact us at <a href="mailto:sales@tovably.com" className="text-[#74d1ea] hover:underline">sales@tovably.com</a> for custom pricing and features.
+                </p>
+              </div>
             </div>
           </div>
         </div>
