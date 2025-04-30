@@ -98,12 +98,12 @@ export default function PricingPage() {
                     'from-[#74d1ea] via-[#53b0c9] to-[#40a3bd]'
                   }`}></div>
                   
-                  {/* Popular tag */}
+                  {/* Popular tag - more prominent and wider */}
                   {isProPlan && (
-                    <div className="absolute -top-3 left-0 right-0 mx-auto text-center">
-                      <span className="inline-block bg-[#74d1ea] text-black text-xs font-bold px-6 py-1 rounded-full shadow-[0_0_10px_rgba(116,209,234,0.5)] whitespace-nowrap">
-                        MOST POPULAR
-                      </span>
+                    <div className="absolute -top-3 left-0 right-0 mx-auto text-center z-10">
+                      <div className="inline-block bg-[#74d1ea] text-black text-xs font-bold px-8 py-1.5 rounded-full shadow-[0_0_15px_rgba(116,209,234,0.6)] whitespace-nowrap w-auto transform scale-105">
+                        <span className="tracking-wider">POPULAR CHOICE</span>
+                      </div>
                     </div>
                   )}
                   
