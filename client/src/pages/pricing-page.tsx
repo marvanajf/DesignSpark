@@ -32,18 +32,7 @@ export default function PricingPage() {
       return;
     }
     
-    // Check if user is authenticated before showing subscription modal
-    if (!user && planId !== 'free') {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to subscribe to a plan",
-        variant: "destructive",
-      });
-      // Navigate to auth page after a short delay to allow toast to be seen
-      setTimeout(() => window.location.href = '/auth', 1500);
-      return;
-    }
-    
+    // Allow any user to select a plan, whether logged in or not
     setSelectedPlan(planId);
     setIsModalOpen(true);
   };

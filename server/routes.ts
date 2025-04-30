@@ -74,7 +74,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Create a Checkout Session
-      const session = await stripe.checkout.sessions.create({
+      const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
@@ -97,11 +97,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
-        customer_email: req.isAuthenticated() ? req.user?.email : undefined,
         billing_address_collection: 'required', // Collect billing address
-        // Auto capture customer details for account creation
-        customer_creation: 'always',
-      });
+      };
+      
+      // If user is logged in, use their existing customer record
+      if (req.isAuthenticated() && req.user) {
+        if (req.user.stripe_customer_id) {
+          sessionOptions.customer = req.user.stripe_customer_id;
+        } else {
+          sessionOptions.customer_email = req.user.email;
+        }
+      } else {
+        // For non-logged in users, collect email address on the checkout page
+        sessionOptions.customer_creation = 'always';
+      }
+      
+      const session = await stripe.checkout.sessions.create(sessionOptions);
       
       res.status(200).json({ url: session.url });
     } catch (error) {
