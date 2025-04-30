@@ -16,21 +16,61 @@ import PricingModal from "@/components/PricingModal";
 import { subscriptionPlans } from "@shared/schema";
 import { SubscriptionPlanType } from "@shared/schema";
 import Layout from "@/components/Layout";
+import { queryClient } from "@/lib/queryClient";
 
 export default function PricingPage() {
   const { toast } = useToast();
   const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlanType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSelectPlan = (planId: SubscriptionPlanType) => {
     // Check if user is trying to downgrade to free plan
     if (planId === 'free' && user?.subscription_plan !== 'free') {
-      // TODO: Implement actual downgrade to free plan API call
-      toast({
-        title: "Downgrade to Free Plan",
-        description: "This would cancel your current subscription and downgrade to free plan. The feature will be available soon.",
-      });
+      const cancelSubscription = async () => {
+        try {
+          setIsLoading(true);
+          
+          // Call our new API endpoint
+          const response = await fetch('/api/cancel-subscription', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+          });
+          
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.message || 'Failed to cancel subscription');
+          }
+          
+          // Success - refresh the user query to get updated plan info
+          await queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+          
+          toast({
+            title: "Subscription Canceled",
+            description: "Your subscription has been canceled and you have been downgraded to the free plan.",
+            variant: "success",
+          });
+        } catch (error) {
+          console.error("Error canceling subscription:", error);
+          toast({
+            title: "Error",
+            description: error instanceof Error ? error.message : "Failed to cancel subscription",
+            variant: "destructive",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      // Show confirmation dialog
+      if (confirm("Are you sure you want to cancel your subscription and downgrade to the free plan?")) {
+        cancelSubscription();
+      }
       return;
     }
 

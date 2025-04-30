@@ -36,6 +36,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set up blog routes
   registerBlogRoutes(app);
   
+  // Cancel subscription and downgrade to free plan
+  app.post("/api/cancel-subscription", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const user = req.user as User;
+      
+      // Validate that user has an active subscription
+      if (user.subscription_plan === 'free' || !user.stripe_subscription_id) {
+        return res.status(400).json({ 
+          error: "No active subscription to cancel",
+          message: "You don't have an active subscription to cancel."
+        });
+      }
+      
+      // Cancel the subscription in Stripe
+      const subscription = await stripe.subscriptions.cancel(user.stripe_subscription_id);
+      
+      // Update the user in our database
+      const updatedUser = await storage.updateUserSubscription(user.id, {
+        plan: 'free',
+        status: 'canceled',
+        periodEnd: new Date()
+      });
+      
+      return res.status(200).json({
+        message: "Your subscription has been canceled successfully.",
+        user: updatedUser
+      });
+    } catch (error) {
+      console.error("Error canceling subscription:", error);
+      return res.status(500).json({ 
+        error: "Failed to cancel subscription",
+        message: "There was a problem canceling your subscription. Please try again or contact support."
+      });
+    }
+  });
+  
   // User profile update endpoint
   app.patch("/api/user/:id", async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
