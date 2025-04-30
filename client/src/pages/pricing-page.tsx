@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, X } from "lucide-react";
+import { 
+  Check, 
+  X, 
+  MessagesSquare, 
+  Zap, 
+  LineChart, 
+  BarChart4, 
+  Users 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
@@ -127,26 +135,20 @@ export default function PricingPage() {
                     {/* Features list */}
                     <ul className="space-y-3 text-sm text-left mb-8">
                       <li className="flex items-center">
-                        <div className={`flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center ${
-                          isPaidPlan ? 'bg-[#74d1ea]/20' : 'bg-emerald-500/20'
-                        }`}>
-                          <Check className={`h-3 w-3 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
                         </div>
                         <span className="text-gray-300">{plan.personas} AI Personas</span>
                       </li>
                       <li className="flex items-center">
-                        <div className={`flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center ${
-                          isPaidPlan ? 'bg-[#74d1ea]/20' : 'bg-emerald-500/20'
-                        }`}>
-                          <Check className={`h-3 w-3 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
                         </div>
                         <span className="text-gray-300">{plan.toneAnalyses} Tone Analyses</span>
                       </li>
                       <li className="flex items-center">
-                        <div className={`flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center ${
-                          isPaidPlan ? 'bg-[#74d1ea]/20' : 'bg-emerald-500/20'
-                        }`}>
-                          <Check className={`h-3 w-3 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-emerald-500'}`} />
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
                         </div>
                         <span className="text-gray-300">{plan.contentGeneration} Content Pieces</span>
                       </li>
@@ -220,6 +222,65 @@ export default function PricingPage() {
             />
           )}
 
+          {/* Feature promo sections */}
+          <div className="mb-20">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Master <span className="text-[#74d1ea]">AI-powered</span> communication
+              </h2>
+              <p className="text-gray-400 max-w-3xl mx-auto">
+                Leverage advanced AI technologies for more effective content creation, audience targeting, and professional communication.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Feature 1: AI Personas */}
+              <div className="bg-black border border-gray-700/60 rounded-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(116,209,234,0.2)]">
+                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
+                  <Users className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">AI Personas</h3>
+                <p className="text-gray-400 mb-4">
+                  Create and customize AI personas tailored to your target audience. Generate content that resonates with specific demographics and communication styles.
+                </p>
+                <div className="flex items-center text-[#74d1ea]">
+                  <span className="text-sm font-medium">Learn more</span>
+                  <Zap className="ml-2 h-4 w-4" />
+                </div>
+              </div>
+              
+              {/* Feature 2: Tone Analysis */}
+              <div className="bg-black border border-gray-700/60 rounded-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(116,209,234,0.2)]">
+                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
+                  <BarChart4 className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Tone Analysis</h3>
+                <p className="text-gray-400 mb-4">
+                  Analyze and optimize your content's tone for maximum impact. Identify key characteristics and patterns to ensure your message connects effectively.
+                </p>
+                <div className="flex items-center text-[#74d1ea]">
+                  <span className="text-sm font-medium">Learn more</span>
+                  <Zap className="ml-2 h-4 w-4" />
+                </div>
+              </div>
+              
+              {/* Feature 3: Content Generation */}
+              <div className="bg-black border border-gray-700/60 rounded-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(116,209,234,0.2)]">
+                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mb-4">
+                  <MessagesSquare className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Content Generation</h3>
+                <p className="text-gray-400 mb-4">
+                  Generate professional content instantly based on your tone analysis and personas. Create emails, posts, and more tailored to your brand voice.
+                </p>
+                <div className="flex items-center text-[#74d1ea]">
+                  <span className="text-sm font-medium">Learn more</span>
+                  <Zap className="ml-2 h-4 w-4" />
+                </div>
+              </div>
+            </div>
+          </div>
+          
           {/* Guarantee section */}
           <div className="mb-16">
             <div className="border border-gray-700/60 rounded-lg p-6 max-w-3xl mx-auto text-center">
