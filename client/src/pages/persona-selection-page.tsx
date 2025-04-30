@@ -6,7 +6,6 @@ import { useLocation } from "wouter";
 import { 
   Loader2, 
   Info, 
-  Filter,
   UserCircle,
   Plus,
   X,
@@ -303,7 +302,7 @@ export default function PersonaSelectionPage() {
     <Layout showSidebar={true}>
       <div className="flex-1 overflow-y-auto bg-black">
         <div className="p-6">
-          {/* Header Section with Filters */}
+          {/* Header Section with Search */}
           <div className="mb-6">
             <div className="flex justify-between items-center">
               <div>
@@ -324,10 +323,6 @@ export default function PersonaSelectionPage() {
                     className="pl-10 bg-[#111] border-gray-800 text-gray-300 w-[220px]"
                   />
                 </div>
-                <Button variant="outline" className="text-sm h-9 border-gray-800 bg-[#111] hover:bg-gray-900">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <span>Filter</span>
-                </Button>
               </div>
             </div>
           </div>
