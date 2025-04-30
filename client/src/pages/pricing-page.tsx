@@ -128,7 +128,7 @@ export default function PricingPage() {
                     {/* Price display */}
                     <div className="text-center mb-3">
                       <span className="text-4xl font-bold text-white">{plan.displayPrice}</span>
-                      {!isFreePlan && <span className="text-sm text-gray-400">/month</span>}
+                      {!isFreePlan && <span className="text-xl text-gray-400 ml-1">/month</span>}
                     </div>
                     
                     {/* Plan description */}
@@ -210,9 +210,27 @@ export default function PricingPage() {
                     >
                       {user?.subscription_plan === planId 
                         ? "Current Plan" 
-                        : isFreePlan 
-                          ? "Get Started" 
-                          : "Subscribe"}
+                        : (() => {
+                            // No user or on free plan trying to upgrade
+                            if (!user || user.subscription_plan === 'free') {
+                              return isFreePlan ? "Get Started" : "Upgrade to " + plan.name;
+                            }
+                            
+                            // User on paid plan
+                            if (isFreePlan) {
+                              return "Go Back to Free";
+                            }
+                            
+                            // User changing between paid plans - determine if upgrade or downgrade
+                            const currentPlanIndex = Object.keys(subscriptionPlans).indexOf(user.subscription_plan);
+                            const targetPlanIndex = Object.keys(subscriptionPlans).indexOf(planId);
+                            
+                            if (targetPlanIndex > currentPlanIndex) {
+                              return "Upgrade to " + plan.name;
+                            } else {
+                              return "Downgrade to " + plan.name;
+                            }
+                          })()}
                     </Button>
                   </div>
                 </div>
