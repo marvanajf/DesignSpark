@@ -32,6 +32,18 @@ export default function PricingPage() {
       return;
     }
     
+    // Check if user is authenticated before showing subscription modal
+    if (!user && planId !== 'free') {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to subscribe to a plan",
+        variant: "destructive",
+      });
+      // Navigate to auth page after a short delay to allow toast to be seen
+      setTimeout(() => window.location.href = '/auth', 1500);
+      return;
+    }
+    
     setSelectedPlan(planId);
     setIsModalOpen(true);
   };

@@ -166,10 +166,24 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const { user } = useAuth();
+  
   useEffect(() => {
     if (isOpen && planId !== 'free') {
       setIsLoading(true);
       setError(null);
+      
+      // Check if user is authenticated
+      if (!user) {
+        setError("You need to be logged in to subscribe to a plan");
+        setIsLoading(false);
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to subscribe to a plan",
+          variant: "destructive",
+        });
+        return;
+      }
 
       // Create a payment intent when the modal opens
       apiRequest("POST", "/api/create-payment-intent", { 
@@ -178,6 +192,10 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
       })
         .then((res) => {
           if (!res.ok) {
+            // If we get a 401 Unauthorized, show a specific error message
+            if (res.status === 401) {
+              throw new Error("Authentication required. Please log in to continue.");
+            }
             throw new Error("Failed to initiate payment process");
           }
           return res.json();
@@ -197,7 +215,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
           setIsLoading(false);
         });
     }
-  }, [isOpen, planId, plan.price, toast]);
+  }, [isOpen, planId, plan.price, toast, user]);
 
   if (!stripePromise) {
     return (
