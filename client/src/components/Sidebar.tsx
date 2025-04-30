@@ -16,12 +16,12 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
-import { useContext } from "react";
-import { UserAvatarContext } from "@/contexts/user-avatar-context";
+import { useUserAvatar } from "@/contexts/user-avatar-context";
 
 export default function Sidebar() {
   const [location] = useLocation();
   const { user, logoutMutation } = useAuth();
+  const { avatarColor } = useUserAvatar();
 
   const initials = user ? user.username.slice(0, 2).toUpperCase() : "?";
 
@@ -132,7 +132,7 @@ export default function Sidebar() {
           <div className="flex items-center">
             <div>
               <Avatar className="border border-gray-700/60">
-                <AvatarFallback className="bg-[#74d1ea]/20 text-[#74d1ea]">{initials}</AvatarFallback>
+                <AvatarFallback className={`${avatarColor} text-white`}>{initials}</AvatarFallback>
               </Avatar>
             </div>
             <div className="ml-3 flex flex-col">
