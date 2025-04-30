@@ -59,6 +59,7 @@ import {
 } from "@shared/schema";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Layout from "@/components/Layout";
+import { SiLinkedin } from "react-icons/si";
 
 export default function ContentGeneratorPage() {
   const { toast } = useToast();
@@ -394,7 +395,7 @@ export default function ContentGeneratorPage() {
                           value="linkedin_post" 
                           className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
                         >
-                          <LinkedIn className="h-4 w-4 mr-2" />
+                          <SiLinkedin className="h-4 w-4 mr-2" />
                           LinkedIn Post
                         </TabsTrigger>
                         <TabsTrigger 
@@ -582,7 +583,7 @@ export default function ContentGeneratorPage() {
                                       : "bg-green-500/20 text-green-400"
                                   } border-0`}>
                                     {content.type === "linkedin_post" ? (
-                                      <LinkedIn className="h-3 w-3 mr-1" />
+                                      <SiLinkedin className="h-3 w-3 mr-1" />
                                     ) : (
                                       <Mail className="h-3 w-3 mr-1" />
                                     )}
@@ -661,7 +662,7 @@ export default function ContentGeneratorPage() {
                                     size="sm"
                                     className="h-8 border-gray-700 text-gray-400 hover:text-white"
                                   >
-                                    <LinkedIn className="h-3.5 w-3.5 mr-1" />
+                                    <SiLinkedin className="h-3.5 w-3.5 mr-1" />
                                     Post to LinkedIn
                                   </Button>
                                 )}
