@@ -43,7 +43,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     try {
-      const user = req.user as User;
+      const user = req.user;
       
       // Validate that user has an active subscription
       if (user.subscription_plan === 'free' || !user.stripe_subscription_id) {
@@ -67,11 +67,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: "Your subscription has been canceled successfully.",
         user: updatedUser
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error canceling subscription:", error);
       return res.status(500).json({ 
         error: "Failed to cancel subscription",
-        message: "There was a problem canceling your subscription. Please try again or contact support."
+        message: error.message || "There was a problem canceling your subscription. Please try again or contact support."
       });
     }
   });
