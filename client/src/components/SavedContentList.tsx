@@ -10,7 +10,9 @@ import {
   Search,
   FolderSearch,
   CheckCheck,
-  Send
+  Send,
+  Video,
+  ClipboardList
 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -190,10 +192,20 @@ export default function SavedContentList() {
                     <Badge className={`mr-2 bg-[#74d1ea]/20 text-[#74d1ea] border-0`}>
                       {content.type === 'linkedin_post' ? (
                         <FaLinkedin className="h-3 w-3 mr-1" />
-                      ) : (
+                      ) : content.type === 'email' ? (
                         <Mail className="h-3 w-3 mr-1" />
+                      ) : content.type === 'webinar' ? (
+                        <Video className="h-3 w-3 mr-1" />
+                      ) : (
+                        <ClipboardList className="h-3 w-3 mr-1" />
                       )}
-                      {content.type === 'linkedin_post' ? 'LinkedIn Post' : 'Cold Email'}
+                      {content.type === 'linkedin_post' 
+                        ? 'LinkedIn Post' 
+                        : content.type === 'email' 
+                        ? 'Cold Email'
+                        : content.type === 'webinar'
+                        ? 'Webinar'
+                        : 'Workshop'}
                     </Badge>
                     <span className="text-sm font-medium text-white">{content.topic}</span>
                   </div>
@@ -280,6 +292,26 @@ export default function SavedContentList() {
                     >
                       <Mail className="h-3.5 w-3.5 mr-1" />
                       Send Email
+                    </Button>
+                  )}
+                  {content.type === 'webinar' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 border-gray-700 text-gray-400 hover:text-white"
+                    >
+                      <Video className="h-3.5 w-3.5 mr-1" />
+                      Create Slides
+                    </Button>
+                  )}
+                  {content.type === 'workshop' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 border-gray-700 text-gray-400 hover:text-white"
+                    >
+                      <ClipboardList className="h-3.5 w-3.5 mr-1" />
+                      Export Plan
                     </Button>
                   )}
                 </div>
