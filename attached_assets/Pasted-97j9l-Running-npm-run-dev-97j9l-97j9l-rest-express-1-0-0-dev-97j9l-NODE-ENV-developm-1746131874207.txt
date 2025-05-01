@@ -1,0 +1,201 @@
+97j9l
+==> Running 'npm run dev'
+97j9l
+97j9l
+> rest-express@1.0.0 dev
+97j9l
+> NODE_ENV=development tsx server/index.ts
+97j9l
+97j9l
+Running in development mode
+97j9l
+Connecting to database: postgres://****:****@dpg-d07rtkqdbo4c73brf3rg-a/designsparkdb?sslmode=require
+97j9l
+Using direct PostgreSQL connections (standard pg driver) - NO WebSockets
+97j9l
+Configuring database connection with proper SSL settings...
+97j9l
+Detected Render PostgreSQL database - applying specialized configuration
+97j9l
+CRITICAL: Using Render-specific PostgreSQL configuration for self-signed certificates
+97j9l
+Running Stripe fields migration...
+97j9l
+(node:123) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+97j9l
+(Use `node --trace-warnings ...` to show where the warning was created)
+97j9l
+Database connection test successful: { now: 2025-05-01T20:37:02.257Z }
+97j9l
+Database connection pool initialized successfully
+97j9l
+Database operation failed (attempt 1/5): relation "users" does not exist
+97j9l
+Retrying in 1000ms...
+97j9l
+Retrying in 2000ms...
+97j9l
+Database operation failed (attempt 2/5): relation "users" does not exist
+97j9l
+Database operation failed (attempt 3/5): relation "users" does not exist
+97j9l
+Retrying in 4000ms...
+97j9l
+Retrying in 8000ms...
+97j9l
+Database operation failed (attempt 4/5): relation "users" does not exist
+xqqlt
+Circuit breaker open (40s/120s), skipping ping
+97j9l
+Database operation failed (attempt 5/5): relation "users" does not exist
+97j9l
+Database operation failed after 5 attempts: error: relation "users" does not exist
+97j9l
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+97j9l
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+97j9l
+    at async withRetry (/opt/render/project/src/server/db.ts:118:14)
+97j9l
+    at async migrateStripeFields (/opt/render/project/src/server/migrations.ts:20:7)
+97j9l
+    at async <anonymous> (/opt/render/project/src/server/index.ts:98:5) {
+97j9l
+  length: 103,
+97j9l
+  severity: 'ERROR',
+97j9l
+  code: '42P01',
+97j9l
+  detail: undefined,
+97j9l
+  hint: undefined,
+97j9l
+  position: undefined,
+97j9l
+  internalPosition: undefined,
+97j9l
+  internalQuery: undefined,
+97j9l
+  where: undefined,
+97j9l
+  schema: undefined,
+97j9l
+  table: undefined,
+97j9l
+  column: undefined,
+97j9l
+  dataType: undefined,
+97j9l
+  constraint: undefined,
+97j9l
+  file: 'namespace.c',
+97j9l
+  line: '434',
+97j9l
+  routine: 'RangeVarGetRelidExtended'
+97j9l
+}
+97j9l
+Error during Stripe fields migration: relation "users" does not exist
+97j9l
+Stack trace: error: relation "users" does not exist
+97j9l
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+97j9l
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+97j9l
+    at async withRetry (/opt/render/project/src/server/db.ts:118:14)
+97j9l
+    at async migrateStripeFields (/opt/render/project/src/server/migrations.ts:20:7)
+97j9l
+    at async <anonymous> (/opt/render/project/src/server/index.ts:98:5)
+97j9l
+Gmail credentials not found. Email functionality will be disabled.
+97j9l
+8:37:17 PM [express] serving on port 5000
+97j9l
+Database operation failed (attempt 1/3): relation "users" does not exist
+97j9l
+Retrying in 1000ms...
+97j9l
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+97j9l
+  npx update-browserslist-db@latest
+97j9l
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+97j9l
+Database operation failed (attempt 2/3): relation "users" does not exist
+97j9l
+Retrying in 2000ms...
+97j9l
+Sending database ping to keep connection alive
+97j9l
+Database operation failed (attempt 3/3): relation "users" does not exist
+97j9l
+Database operation failed after 3 attempts: error: relation "users" does not exist
+97j9l
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+97j9l
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+97j9l
+    at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+97j9l
+    at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+97j9l
+    at async withRetry (/opt/render/project/src/server/db.ts:118:14)
+97j9l
+    at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26) {
+97j9l
+  length: 105,
+97j9l
+  severity: 'ERROR',
+97j9l
+  code: '42P01',
+97j9l
+  detail: undefined,
+97j9l
+  hint: undefined,
+97j9l
+  position: '276',
+97j9l
+  internalPosition: undefined,
+97j9l
+  internalQuery: undefined,
+97j9l
+  where: undefined,
+97j9l
+  schema: undefined,
+97j9l
+  table: undefined,
+97j9l
+  column: undefined,
+97j9l
+  dataType: undefined,
+97j9l
+  constraint: undefined,
+97j9l
+  file: 'parse_relation.c',
+97j9l
+  line: '1449',
+97j9l
+  routine: 'parserOpenTable'
+97j9l
+}
+97j9l
+Error creating default user: relation "users" does not exist
+97j9l
+Stack trace: error: relation "users" does not exist
+97j9l
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+97j9l
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+97j9l
+    at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+97j9l
+    at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+97j9l
+    at async withRetry (/opt/render/project/src/server/db.ts:118:14)
+97j9l
+    at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26)
+     ==> Your service is live 🎉
