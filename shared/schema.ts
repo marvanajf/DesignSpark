@@ -57,9 +57,11 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  email: text("email").notNull().unique(),
+  username: text("username").notNull().unique(), // Keeping for backward compatibility, but will deprecate in favor of email
+  email: text("email").notNull().unique(), // Primary identifier moving forward
   password: text("password").notNull(),
+  full_name: text("full_name"), // Added field
+  company: text("company"), // Added field
   role: text("role").default("user").notNull(),
   subscription_plan: text("subscription_plan").default("free").notNull(),
   personas_used: integer("personas_used").default(0).notNull(),
@@ -140,7 +142,9 @@ export const leadContacts = pgTable("lead_contacts", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   email: true,
-  password: true
+  password: true,
+  full_name: true,
+  company: true
 });
 
 export const insertToneAnalysisSchema = createInsertSchema(toneAnalyses).pick({
