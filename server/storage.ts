@@ -580,6 +580,115 @@ export class MemStorage implements IStorage {
     this.blogPosts.delete(id);
   }
   
+  // Campaign methods
+  async createCampaign(campaign: InsertCampaign): Promise<Campaign> {
+    const id = this.campaignIdCounter++;
+    const now = new Date();
+    const newCampaign: Campaign = {
+      ...campaign,
+      id,
+      created_at: now
+    };
+    this.campaigns.set(id, newCampaign);
+    return newCampaign;
+  }
+
+  async getCampaign(id: number): Promise<Campaign | undefined> {
+    return this.campaigns.get(id);
+  }
+
+  async getCampaignsByUserId(userId: number): Promise<Campaign[]> {
+    return Array.from(this.campaigns.values())
+      .filter(campaign => campaign.user_id === userId)
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+  }
+
+  async updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign> {
+    const campaign = this.campaigns.get(id);
+    if (!campaign) {
+      throw new Error(`Campaign with id ${id} not found`);
+    }
+    
+    const updatedCampaign = {
+      ...campaign,
+      ...updates
+    };
+    
+    this.campaigns.set(id, updatedCampaign);
+    return updatedCampaign;
+  }
+  
+  async deleteCampaign(id: number): Promise<void> {
+    if (!this.campaigns.has(id)) {
+      throw new Error(`Campaign with id ${id} not found`);
+    }
+    this.campaigns.delete(id);
+  }
+  
+  // Campaign content methods
+  async addContentToCampaign(campaignContent: InsertCampaignContent): Promise<CampaignContent> {
+    const { campaign_id, content_id } = campaignContent;
+    
+    // Check if the relation already exists to avoid duplicates
+    const existingRelation = Array.from(this.campaignContents.values()).find(
+      cc => cc.campaign_id === campaign_id && cc.content_id === content_id
+    );
+    
+    if (existingRelation) {
+      return existingRelation;
+    }
+    
+    const id = this.campaignContentIdCounter++;
+    const now = new Date();
+    const newRelation: CampaignContent = {
+      id,
+      campaign_id,
+      content_id,
+      created_at: now
+    };
+    
+    this.campaignContents.set(id, newRelation);
+    return newRelation;
+  }
+  
+  async getCampaignContents(campaignId: number): Promise<GeneratedContent[]> {
+    // First, get all campaign-content relations for this campaign
+    const relations = Array.from(this.campaignContents.values())
+      .filter(cc => cc.campaign_id === campaignId);
+    
+    // Then, fetch the actual content items
+    const contentIds = relations.map(r => r.content_id);
+    const contents = Array.from(this.generatedContents.values())
+      .filter(content => contentIds.includes(content.id))
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+    
+    return contents;
+  }
+  
+  async removeContentFromCampaign(campaignId: number, contentId: number): Promise<void> {
+    // Find the relation to remove
+    const relationToRemove = Array.from(this.campaignContents.values()).find(
+      cc => cc.campaign_id === campaignId && cc.content_id === contentId
+    );
+    
+    if (!relationToRemove) {
+      throw new Error(`Content with id ${contentId} is not associated with campaign ${campaignId}`);
+    }
+    
+    this.campaignContents.delete(relationToRemove.id);
+  }
+  
+  async deleteCampaignContents(campaignId: number): Promise<void> {
+    // Find all relations for this campaign
+    const relationsToRemove = Array.from(this.campaignContents.values())
+      .filter(cc => cc.campaign_id === campaignId);
+    
+    // Delete each relation
+    for (const relation of relationsToRemove) {
+      this.campaignContents.delete(relation.id);
+    }
+  }
+  
   // Lead contact methods
   async createLeadContact(contact: InsertLeadContact): Promise<LeadContact> {
     const id = this.leadContactIdCounter++;
@@ -1129,6 +1238,134 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(leadContacts)
       .where(eq(leadContacts.id, id));
+  }
+  
+  // Campaign methods
+  async createCampaign(campaign: InsertCampaign): Promise<Campaign> {
+    const [newCampaign] = await db
+      .insert(campaigns)
+      .values(campaign)
+      .returning();
+    return newCampaign;
+  }
+
+  async getCampaign(id: number): Promise<Campaign | undefined> {
+    const [campaign] = await db
+      .select()
+      .from(campaigns)
+      .where(eq(campaigns.id, id));
+    return campaign;
+  }
+
+  async getCampaignsByUserId(userId: number): Promise<Campaign[]> {
+    return db
+      .select()
+      .from(campaigns)
+      .where(eq(campaigns.user_id, userId))
+      .orderBy(desc(campaigns.created_at));
+  }
+
+  async updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign> {
+    const [campaign] = await db
+      .update(campaigns)
+      .set(updates)
+      .where(eq(campaigns.id, id))
+      .returning();
+    
+    if (!campaign) {
+      throw new Error(`Campaign with id ${id} not found`);
+    }
+    
+    return campaign;
+  }
+  
+  async deleteCampaign(id: number): Promise<void> {
+    const [campaignToDelete] = await db
+      .select()
+      .from(campaigns)
+      .where(eq(campaigns.id, id));
+      
+    if (!campaignToDelete) {
+      throw new Error(`Campaign with id ${id} not found`);
+    }
+    
+    await db
+      .delete(campaigns)
+      .where(eq(campaigns.id, id));
+  }
+  
+  // Campaign content methods
+  async addContentToCampaign(campaignContent: InsertCampaignContent): Promise<CampaignContent> {
+    // Check if relation already exists to avoid duplicates
+    const existing = await db
+      .select()
+      .from(campaignContents)
+      .where(
+        and(
+          eq(campaignContents.campaign_id, campaignContent.campaign_id),
+          eq(campaignContents.content_id, campaignContent.content_id)
+        )
+      );
+    
+    if (existing.length > 0) {
+      return existing[0];
+    }
+    
+    const [relation] = await db
+      .insert(campaignContents)
+      .values(campaignContent)
+      .returning();
+    
+    return relation;
+  }
+  
+  async getCampaignContents(campaignId: number): Promise<GeneratedContent[]> {
+    // Get content items that are associated with this campaign
+    const contents = await db
+      .select({
+        content: generatedContent
+      })
+      .from(campaignContents)
+      .innerJoin(
+        generatedContent,
+        eq(campaignContents.content_id, generatedContent.id)
+      )
+      .where(eq(campaignContents.campaign_id, campaignId))
+      .orderBy(desc(generatedContent.created_at));
+    
+    // Extract the content objects from the join result
+    return contents.map(item => item.content);
+  }
+  
+  async removeContentFromCampaign(campaignId: number, contentId: number): Promise<void> {
+    const relation = await db
+      .select()
+      .from(campaignContents)
+      .where(
+        and(
+          eq(campaignContents.campaign_id, campaignId),
+          eq(campaignContents.content_id, contentId)
+        )
+      );
+      
+    if (relation.length === 0) {
+      throw new Error(`Content with id ${contentId} is not associated with campaign ${campaignId}`);
+    }
+    
+    await db
+      .delete(campaignContents)
+      .where(
+        and(
+          eq(campaignContents.campaign_id, campaignId),
+          eq(campaignContents.content_id, contentId)
+        )
+      );
+  }
+  
+  async deleteCampaignContents(campaignId: number): Promise<void> {
+    await db
+      .delete(campaignContents)
+      .where(eq(campaignContents.campaign_id, campaignId));
   }
 }
 
