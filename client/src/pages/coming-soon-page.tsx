@@ -375,10 +375,27 @@ export default function ComingSoonPage() {
               <p className="text-zinc-400 text-sm mb-5">
                 Join our early access list to receive exclusive launch discounts and benefits.
               </p>
-              <Button onClick={() => document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-normal">
+              <Button 
+                onClick={() => {
+                  const form = document.querySelector('form');
+                  if (form) {
+                    // Add a subtle highlight effect to the form to draw attention
+                    form.classList.add('ring-4', 'ring-[#74d1ea]/30');
+                    setTimeout(() => form.classList.remove('ring-4', 'ring-[#74d1ea]/30'), 2000);
+                    
+                    // Scroll to the form
+                    form.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'center' 
+                    });
+                  }
+                }} 
+                className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-normal"
+              >
                 <div className="flex items-center">
                   <BellRing className="mr-2 h-4 w-4" />
-                  <span>Join the waiting list</span>
+                  <span>Fill in the form above</span>
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </div>
               </Button>
             </div>
