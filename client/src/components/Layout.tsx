@@ -48,6 +48,11 @@ export default function Layout({ children, showSidebar = false }: LayoutProps) {
                   Contact
                 </a>
               </div>
+              <div className="px-5 py-2">
+                <a href="/privacy-policy" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                  Privacy Policy
+                </a>
+              </div>
             </nav>
             <div className="mt-8 flex justify-center space-x-6">
               <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
