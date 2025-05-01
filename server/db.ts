@@ -3,28 +3,91 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import ws from "ws";
 import * as schema from "@shared/schema";
 
-// Configure Neon database connection
+// Determine environment
+const isProd = process.env.NODE_ENV === 'production';
+console.log(`Running in ${isProd ? 'production' : 'development'} mode`);
+
+// Configure Neon database connection with enhanced reliability
 neonConfig.webSocketConstructor = ws;
-// Increase WebSocket timeout for Neon connections
+
+// Enhanced WebSocket connection with detailed error handling
 neonConfig.wsProxy = (url) => {
   console.log(`Establishing WebSocket connection to: ${url} with enhanced settings`);
-  return url;
+  
+  // The URL passed here can be just the host or complete URL
+  try {
+    // Just return the URL as-is - don't modify it
+    // This is important as Neon's internal code expects specific formatting
+    console.log(`Using WebSocket URL as provided: ${url}`);
+    
+    // Return the URL directly
+    return url;
+  } catch (err) {
+    console.error('Error processing WebSocket URL:', err);
+    // Fallback to default behavior
+    return url;
+  }
 };
+
+// Optimize Neon connection settings for improved reliability
 neonConfig.pipelineTLS = true;
 neonConfig.useSecureWebSocket = true;
-neonConfig.forceDisablePgSSL = true; // We'll handle SSL in the Pool config
-// Set up a regular ping to keep the websocket connection alive
-const PING_INTERVAL = 15000; // 15 seconds
-setInterval(() => {
+
+// Different SSL handling strategy based on environment
+if (isProd) {
+  console.log('Using production-optimized database connection settings');
+  neonConfig.forceDisablePgSSL = false; // Use both WebSocket and regular SSL in production
+  neonConfig.connectionTimeoutMillis = 60000; // 60 seconds timeout
+} else {
+  console.log('Using development-optimized database connection settings');
+  neonConfig.forceDisablePgSSL = true; // We'll handle SSL in the Pool config for dev
+  neonConfig.connectionTimeoutMillis = 30000; // 30 seconds timeout
+}
+
+// Set up a more robust ping mechanism that adapts to connection failures
+const PING_INTERVAL = isProd ? 10000 : 15000; // More frequent pings in production
+let pingFailureCount = 0;
+let pingIntervalId = setInterval(doPing, PING_INTERVAL);
+
+// This function performs a database ping and tracks failures
+async function doPing() {
   try {
     console.log("Sending websocket ping to keep connection alive");
-    // This is a workaround since webSocketPingInterval isn't directly supported
-    // The pool.query will ensure the connection stays active
-    pool?.query('SELECT 1').catch(err => console.log("Ping error (can be ignored):", err.message));
+    // Use proper async/await pattern for error handling
+    await pool?.query('SELECT 1');
+    
+    // Reset failure count on success
+    if (pingFailureCount > 0) {
+      console.log(`Ping succeeded after ${pingFailureCount} previous failures`);
+      pingFailureCount = 0;
+    }
   } catch (err) {
-    // Ignore errors during ping
+    pingFailureCount++;
+    console.log(`Ping error (attempt ${pingFailureCount}):`, err instanceof Error ? err.message : String(err));
+    
+    // If we've had multiple consecutive failures, try recreating the interval with a different frequency
+    if (pingFailureCount === 5) {
+      console.log("Multiple ping failures detected, adjusting ping strategy");
+      clearInterval(pingIntervalId);
+      
+      // Use a different ping interval after failures (try to find a working cadence)
+      const newInterval = PING_INTERVAL + (2000 * (pingFailureCount % 5));
+      console.log(`Setting new ping interval to ${newInterval}ms`);
+      pingIntervalId = setInterval(doPing, newInterval);
+    }
+    
+    // If we have persistent failures, try emergency recovery
+    if (pingFailureCount === 10) {
+      console.log("Critical: Multiple ping failures, attempting connection recovery");
+      // After 10 failures, attempt to recreate the pool
+      try {
+        recreatePool();
+      } catch (recoveryErr) {
+        console.error("Failed to recover connection:", recoveryErr);
+      }
+    }
   }
-}, PING_INTERVAL);
+}
 
 // Check for DATABASE_URL environment variable
 if (!process.env.DATABASE_URL) {
@@ -109,6 +172,54 @@ async function testConnection() {
   }
 }
 
+// Pool recreation function to recover from persistent connection failures
+async function recreatePool() {
+  console.log("Emergency connection recovery: Attempting to recreate database pool");
+  
+  try {
+    // End the existing pool
+    await pool.end();
+    console.log("Successfully closed existing pool connections");
+  } catch (endError) {
+    console.warn("Error while closing existing pool (continuing anyway):", endError);
+  }
+  
+  try {
+    // Short pause before recreating
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Create a new pool with the same configuration but with more conservative settings
+    const emergencyPool = new Pool({
+      connectionString: connectionString,
+      max: 5, // Less connections for recovery mode
+      idleTimeoutMillis: 30000, // Shorter idle timeout
+      connectionTimeoutMillis: 30000, // Longer timeout for initial connection
+      ssl: {
+        rejectUnauthorized: false,
+      },
+      keepAlive: true,
+    });
+    
+    // Test if the new pool works
+    const testResult = await emergencyPool.query('SELECT 1');
+    console.log("Emergency pool test successful:", testResult.rows[0]);
+    
+    // Replace the original pool with the emergency one
+    // @ts-ignore - We need dynamic replacement
+    Object.assign(pool, emergencyPool);
+    
+    console.log("Database pool successfully recreated");
+    
+    // Reset failures
+    pingFailureCount = 0;
+    
+    return true;
+  } catch (recreateError) {
+    console.error("Failed to recreate database pool:", recreateError);
+    return false;
+  }
+}
+
 // Export the pool, db, and testConnection function for use in other modules
 export { pool, db, withRetry, testConnection };
 
@@ -119,6 +230,14 @@ testConnection()
       console.log("Database connection pool initialized successfully");
     } else {
       console.error("Database connection pool initialization FAILED");
+      
+      // In production, attempt immediate recovery
+      if (isProd) {
+        console.log("Attempting immediate connection recovery due to initial failure");
+        recreatePool().catch(err => {
+          console.error("Emergency connection recovery also failed:", err);
+        });
+      }
     }
   })
   .catch(err => {
