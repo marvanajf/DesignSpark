@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, Express } from "express";
 import { storage } from "./storage";
 import { z } from "zod";
+import { SubscriptionPlanType } from "@shared/schema";
 
 // Middleware to check if user is an admin
 export function requireAdmin(req: Request, res: Response, next: NextFunction) {
@@ -50,7 +51,11 @@ export function registerAdminRoutes(app: Express) {
       
       const { subscription_plan } = schema.parse(req.body);
       
-      const updatedUser = await storage.updateUserSubscription(userId, subscription_plan);
+      // Call the updateUserSubscription method with the plan parameter
+      const updatedUser = await storage.updateUserSubscription(userId, {
+        plan: subscription_plan as SubscriptionPlanType
+      });
+      
       res.json(updatedUser);
     } catch (error) {
       console.error("Error updating user subscription:", error);
