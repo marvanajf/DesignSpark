@@ -181,7 +181,7 @@ export default function CampaignPage() {
     <div className="container py-6">
       {/* Header section */}
       <div className="mb-8">
-        <Button variant="ghost" className="mb-4 -ml-3 gap-1 text-primary hover:text-primary/90 hover:bg-primary/5" asChild>
+        <Button variant="ghost" className="mb-4 -ml-3 gap-1 hover:bg-[#181c25]" asChild>
           <Link href="/saved-content">
             <ArrowLeft className="h-4 w-4" /> Back to Saved Content
           </Link>
@@ -190,8 +190,10 @@ export default function CampaignPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              <span className="flex items-center justify-center p-2 rounded-full bg-primary/10">
-                <Folder className="h-6 w-6 text-primary" />
+              <span className="flex items-center justify-center h-10 w-10 rounded-full bg-[#181c25]">
+                <span className="text-base font-medium uppercase text-[#74d1ea]">
+                  {campaign.name.substring(0, 2)}
+                </span>
               </span>
               {campaign.name}
             </h1>
@@ -199,40 +201,53 @@ export default function CampaignPage() {
               <p className="text-muted-foreground mt-2 max-w-2xl">{campaign.description}</p>
             )}
           </div>
-          <Button className="gap-1 bg-primary hover:bg-primary/90" onClick={() => setIsAddContentDialogOpen(true)}>
+          <Button 
+            className="gap-1" 
+            style={{ backgroundColor: "#74d1ea", color: "black" }}
+            onClick={() => setIsAddContentDialogOpen(true)}
+          >
             <Plus className="h-4 w-4" /> Add Content
           </Button>
         </div>
       </div>
 
       {/* Campaign overview card */}
-      <div className="mb-8 p-6 rounded-xl bg-background border-0 shadow-md">
-        <div className="flex flex-col md:flex-row gap-6">
+      <div className="mb-8 p-6 rounded-xl bg-[#0e1015] border-0">
+        <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">Campaign Details</h3>
-            <div className="grid gap-2">
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Created:</span>
-                <span>{new Date(campaign.created_at).toLocaleDateString()}</span>
+            <h3 className="text-lg font-semibold mb-3">Campaign Details</h3>
+            <div className="space-y-2 mt-2">
+              <div className="text-sm">
+                <span className="text-xs uppercase font-semibold text-[#74d1ea] block mb-2">KEY DETAILS</span>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Content items:</span>
-                <span>{campaignContents?.length || 0}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Status:</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                  {campaign.status || 'Active'}
-                </span>
+              <div className="grid gap-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">Created:</span>
+                  <span>{new Date(campaign.created_at).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">Content items:</span>
+                  <span>{campaignContents?.length || 0}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">Status:</span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#181c25] text-[#74d1ea]">
+                    {campaign.status || 'Active'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">Campaign Organization</h3>
-            <p className="text-sm text-muted-foreground mb-3">
+            <h3 className="text-lg font-semibold mb-3">Campaign Organization</h3>
+            <p className="text-muted-foreground mb-6">
               Campaigns allow you to organize related content into collections for easier management and access.
             </p>
-            <Button variant="outline" className="gap-1 text-primary border-primary/30 hover:bg-primary/5" onClick={() => setIsAddContentDialogOpen(true)}>
+            <Button 
+              variant="outline" 
+              className="gap-1 border-[#74d1ea]/30" 
+              onClick={() => setIsAddContentDialogOpen(true)}
+            >
               <Plus className="h-4 w-4" /> Add More Content
             </Button>
           </div>
@@ -251,7 +266,7 @@ export default function CampaignPage() {
           <div className="py-4">
             {isLoadingAllContents ? (
               <div className="flex justify-center items-center h-[200px]">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
               </div>
             ) : availableContents.length === 0 ? (
               <div className="text-center py-8">
@@ -267,7 +282,7 @@ export default function CampaignPage() {
                   {availableContents.map(content => (
                     <div
                       key={content.id}
-                      className="flex items-start space-x-4 p-4 rounded-lg border border-border/40 hover:bg-accent/5"
+                      className="flex items-start space-x-4 p-4 rounded-lg border border-[#1a1e29] bg-[#0e1015] hover:bg-[#181c25]"
                     >
                       <Checkbox
                         id={`content-${content.id}`}
@@ -283,7 +298,7 @@ export default function CampaignPage() {
                           <span className="font-medium truncate">
                             {content.topic || 'Untitled Content'}
                           </span>
-                          <span className="text-xs text-muted-foreground capitalize">
+                          <span className="text-xs text-[#74d1ea] capitalize">
                             {content.type.replace('_', ' ')}
                           </span>
                           <div className="mt-1 text-sm line-clamp-2 text-muted-foreground">
@@ -307,7 +322,7 @@ export default function CampaignPage() {
             <Button
               onClick={handleAddSelectedContent}
               disabled={selectedContentIds.length === 0 || batchAddContentMutation.isPending}
-              className="bg-primary hover:bg-primary/90"
+              style={{ backgroundColor: "#74d1ea", color: "black" }}
             >
               {batchAddContentMutation.isPending ? (
                 <>
@@ -323,10 +338,10 @@ export default function CampaignPage() {
 
       {/* Campaign Content */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4">Campaign Content</h2>
+        <h2 className="text-2xl font-bold mb-4">Campaign Content</h2>
         
         {!campaignContents || campaignContents.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 space-y-4 border border-border/40 bg-background/50 rounded-xl overflow-hidden">
+          <div className="flex flex-col items-center justify-center py-12 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
             <FileText className="h-14 w-14 text-muted-foreground" />
             <h2 className="text-xl font-semibold">No content in this campaign</h2>
             <p className="text-muted-foreground text-center max-w-md">
@@ -334,7 +349,7 @@ export default function CampaignPage() {
             </p>
             <Button 
               onClick={() => setIsAddContentDialogOpen(true)}
-              className="bg-primary hover:bg-primary/90"
+              style={{ backgroundColor: "#74d1ea", color: "black" }}
             >
               <Plus className="mr-2 h-4 w-4" /> Add Content
             </Button>

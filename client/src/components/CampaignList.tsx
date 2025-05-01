@@ -200,18 +200,20 @@ export function CampaignList() {
 
   return (
     <div className="space-y-6">
-      {/* Campaign header section */}
-      <div className="flex flex-col space-y-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Your Campaigns</h2>
-          <Button onClick={openCreateDialog} className="gap-1 bg-primary hover:bg-primary/90">
-            <Plus className="h-4 w-4" /> New Campaign
-          </Button>
-        </div>
-        <p className="text-muted-foreground">
-          Create campaigns to organize related content pieces for better workflow management
-        </p>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Your Campaigns</h2>
+        <Button 
+          onClick={openCreateDialog} 
+          className="gap-1"
+          style={{ backgroundColor: "#74d1ea", color: "black" }}
+        >
+          <Plus className="h-4 w-4" /> New Campaign
+        </Button>
       </div>
+      
+      <p className="text-muted-foreground">
+        Custom campaigns you've created for your specific content organization
+      </p>
 
       {/* Create Campaign Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -251,7 +253,7 @@ export function CampaignList() {
             <Button 
               onClick={handleCreateCampaign} 
               disabled={createCampaignMutation.isPending}
-              className="bg-primary hover:bg-primary/90"
+              style={{ backgroundColor: "#74d1ea", color: "black" }}
             >
               {createCampaignMutation.isPending ? (
                 <>
@@ -303,7 +305,7 @@ export function CampaignList() {
             <Button 
               onClick={handleUpdateCampaign} 
               disabled={updateCampaignMutation.isPending}
-              className="bg-primary hover:bg-primary/90"
+              style={{ backgroundColor: "#74d1ea", color: "black" }}
             >
               {updateCampaignMutation.isPending ? (
                 <>
@@ -318,96 +320,107 @@ export function CampaignList() {
       </Dialog>
 
       {/* Campaign cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {campaigns && campaigns.length > 0 ? (
-          campaigns.map((campaign) => (
-            <Card key={campaign.id} className="overflow-hidden bg-background border-0 shadow-md">
-              <CardHeader className="p-5 pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <CardTitle className="flex items-center gap-2 text-xl">
-                      <span className="flex items-center justify-center p-1.5 rounded-full bg-primary/10">
-                        <Folder className="h-5 w-5 text-primary" />
+      {campaigns && campaigns.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {campaigns.map((campaign) => (
+            <div key={campaign.id} className="relative group overflow-hidden">
+              <Card className="overflow-hidden bg-[#0e1015] border-0 h-full flex flex-col">
+                <CardHeader className="p-5 pb-3">
+                  <div className="flex items-start space-x-2">
+                    <div className="flex-shrink-0 flex items-center justify-center h-9 w-9 rounded-full bg-[#181c25]">
+                      <span className="text-base font-medium uppercase text-[#74d1ea]">
+                        {campaign.name.substring(0, 2)}
                       </span>
-                      <span className="truncate">{campaign.name}</span>
-                    </CardTitle>
-                    <CardDescription className="line-clamp-2 text-sm">
-                      {campaign.description || "No description provided"}
-                    </CardDescription>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg font-semibold truncate">
+                        {campaign.name}
+                      </CardTitle>
+                      <CardDescription className="line-clamp-2 text-sm">
+                        {campaign.description || "No description provided"}
+                      </CardDescription>
+                    </div>
+                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => openEditDialog(campaign)}
+                        className="h-8 w-8"
+                      >
+                        <Pencil className="h-4 w-4" />
+                        <span className="sr-only">Edit</span>
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Trash2 className="h-4 w-4" />
+                            <span className="sr-only">Delete</span>
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Campaign</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this campaign? This action cannot be undone
+                              and will remove all content associations.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(campaign.id)}
+                              className="bg-destructive hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
-                  <div className="flex space-x-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => openEditDialog(campaign)}
-                      className="h-8 w-8 opacity-70 hover:opacity-100"
-                    >
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
-                    </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 opacity-70 hover:opacity-100">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Campaign</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete this campaign? This action cannot be undone
-                            and will remove all content associations.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDelete(campaign.id)}
-                            className="bg-destructive hover:bg-destructive/90"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                </CardHeader>
+                <CardContent className="flex-1 px-5 py-3">
+                  <div className="text-sm text-muted-foreground mb-2">
+                    <span className="text-xs uppercase font-semibold text-[#74d1ea]">KEY DETAILS</span>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="px-5 pt-3 pb-4">
-                <div className="text-sm text-muted-foreground">
-                  Created: {new Date(campaign.created_at).toLocaleDateString()}
-                </div>
-              </CardContent>
-              <CardFooter className="border-t border-border/10 bg-background/5 p-3">
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="w-full bg-primary hover:bg-primary/90"
-                  asChild
-                >
-                  <a href={`/campaign/${campaign.id}`}>View Campaign</a>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))
-        ) : (
-          <div className="col-span-full border border-border/40 bg-background/50 rounded-xl overflow-hidden p-10 text-center">
-            <Folder className="h-14 w-14 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No campaigns yet</h3>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Create your first campaign to organize your content into focused collections for specific initiatives or themes.
-            </p>
-            <Button 
-              onClick={openCreateDialog}
-              className="bg-primary hover:bg-primary/90"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create Your First Campaign
-            </Button>
-          </div>
-        )}
-      </div>
+                  <div className="space-y-1">
+                    <div className="text-sm">
+                      <span className="text-muted-foreground">Created: </span>
+                      <span>{new Date(campaign.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="border-t border-[#1a1e29] p-3 mt-auto">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="w-full"
+                    style={{ backgroundColor: "#74d1ea", color: "black" }}
+                    asChild
+                  >
+                    <a href={`/campaign/${campaign.id}`}>Select</a>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden p-10 text-center">
+          <Folder className="h-14 w-14 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-xl font-semibold mb-2">No campaigns yet</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            Create your first campaign to organize your content into focused collections for specific initiatives or themes.
+          </p>
+          <Button 
+            onClick={openCreateDialog}
+            style={{ backgroundColor: "#74d1ea", color: "black" }}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Create Your First Campaign
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
