@@ -32,9 +32,11 @@ const loginSchema = z.object({
 });
 
 const registerSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
   email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  username: z.string().min(1, "Username is required"), // We'll keep this for now for compatibility
+  full_name: z.string().optional(),
+  company: z.string().optional(),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -60,9 +62,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
+      username: "",
+      full_name: "",
+      company: "",
     },
   });
 
@@ -166,13 +170,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                   <FormField
                     control={registerForm.control}
-                    name="username"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Username</FormLabel>
+                        <FormLabel className="text-white">Email</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Choose a username"
+                            type="email"
+                            placeholder="Enter your email"
                             {...field}
                             className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
                           />
@@ -183,14 +188,47 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   />
                   <FormField
                     control={registerForm.control}
-                    name="email"
+                    name="full_name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Email</FormLabel>
+                        <FormLabel className="text-white">Full Name</FormLabel>
                         <FormControl>
                           <Input
-                            type="email"
-                            placeholder="Enter your email"
+                            placeholder="Enter your full name"
+                            {...field}
+                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="company"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Company (Optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your company name"
+                            {...field}
+                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Choose a username"
                             {...field}
                             className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
                           />
