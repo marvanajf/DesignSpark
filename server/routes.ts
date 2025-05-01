@@ -1420,7 +1420,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                       customerId: customerStripeId, // Make sure to pass the customer ID again
                       subscriptionId: subscription.id,
                       status: subscription.status,
-                      periodEnd: new Date(subscription.current_period_end * 1000)
+                      periodEnd: new Date((subscription as any).current_period_end * 1000)
                     });
                     console.log("Updated user with subscription info");
                   }
@@ -1499,7 +1499,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   plan: planId as SubscriptionPlanType,
                   stripeSubscriptionId: subscription.id,
                   status: subscription.status,
-                  periodEnd: new Date(subscription.current_period_end * 1000)
+                  periodEnd: new Date((subscription as any).current_period_end * 1000)
                 });
               } catch (subError) {
                 console.error("Failed to create subscription for existing user:", subError);
@@ -1519,7 +1519,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           await storage.updateUserSubscription(user.id, {
             status: subscription.status,
             // Use actual period end from Stripe
-            periodEnd: new Date(subscription.current_period_end * 1000)
+            periodEnd: new Date((subscription as any).current_period_end * 1000)
           });
         }
       }
