@@ -24,12 +24,12 @@ export default function Layout({ children, showSidebar = false }: LayoutProps) {
           <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
             <nav className="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
               <div className="px-5 py-2">
-                <a href="#" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                <a href="/about" className="text-base text-gray-400 hover:text-[#74d1ea]">
                   About
                 </a>
               </div>
               <div className="px-5 py-2">
-                <a href="#" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                <a href="/features" className="text-base text-gray-400 hover:text-[#74d1ea]">
                   Features
                 </a>
               </div>

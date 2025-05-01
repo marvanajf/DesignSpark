@@ -28,6 +28,8 @@ import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
 import PaymentSuccessPage from "@/pages/payment-success-page";
 import PrivacyPolicyPage from "@/pages/privacy-policy-page";
+import AboutPage from "@/pages/about-page";
+import FeaturesPage from "@/pages/features-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import CampaignPage from "@/pages/campaign-page";
@@ -65,6 +67,8 @@ function Router() {
       <Route path="/pricing" component={PricingPage} />
       <Route path="/payment-success" component={PaymentSuccessPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/features" component={FeaturesPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:id" component={BlogPostPage} />
       <ProtectedRoute path="/tone-analysis" component={ToneAnalysisPage} />
