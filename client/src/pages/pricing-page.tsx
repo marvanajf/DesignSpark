@@ -427,7 +427,7 @@ export default function PricingPage() {
               <div>
                 <h3 className="text-lg font-medium mb-2 text-white">Is there an enterprise option?</h3>
                 <p className="text-gray-400">
-                  Yes, for organizations with more extensive needs, contact us at <a href="mailto:sales@tovably.com" className="text-[#74d1ea] hover:underline">sales@tovably.com</a> for custom pricing and features.
+                  Yes, for organizations with more extensive needs, <a href="/contact" className="text-[#74d1ea] hover:underline">contact us</a> for custom pricing and features.
                 </p>
               </div>
             </div>

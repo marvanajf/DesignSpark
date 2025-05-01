@@ -44,7 +44,7 @@ export default function Layout({ children, showSidebar = false }: LayoutProps) {
                 </a>
               </div>
               <div className="px-5 py-2">
-                <a href="#" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                <a href="/contact" className="text-base text-gray-400 hover:text-[#74d1ea]">
                   Contact
                 </a>
               </div>
