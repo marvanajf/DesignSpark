@@ -956,9 +956,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: z.string().email("Please enter a valid email address"),
         company: z.string().optional(),
         message: z.string().min(1, "Message is required"),
+        status: z.string().optional(),
       });
 
-      const { name, email, company, message } = schema.parse(req.body);
+      const { name, email, company, message, status = "new" } = schema.parse(req.body);
       
       // Store lead contact in database
       const leadContact = await storage.createLeadContact({
@@ -966,7 +967,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email,
         company: company || null,
         message,
-        status: "new",
+        status,
         notes: null
       });
 
