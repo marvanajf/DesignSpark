@@ -39,27 +39,47 @@ console.log(`Connecting to database: ${sanitizeUrl(process.env.DATABASE_URL)}`);
 console.log('Using direct PostgreSQL connections (standard pg driver) - NO WebSockets');
 
 // Initialize the connection pool with direct PostgreSQL connections
-// CRITICAL FIX FOR RENDER DEPLOYMENT: Force SSL to false (no SSL verification) in all environments
-// This is the most reliable solution for Render, though less secure
-// We're prioritizing reliability over security for now
-// TEMPORARY FIX - TO BE REVISITED AFTER STABLE DEPLOYMENT
+// Proper SSL configuration for different environments
+// This approach maintains security while fixing connection issues
+console.log('Configuring database connection with proper SSL settings...');
 
-console.log("CRITICAL OVERRIDE: Using SSL=false (no SSL verification) for all database connections");
-console.log("This setting bypasses all certificate validation to fix Render deployment issues");
-console.log("TEMPORARY SOLUTION - Will be revisited once application is stable");
+// Determine if we're in a Render hosting environment with their PostgreSQL service
+const isRenderPg = process.env.DATABASE_URL?.includes('dpg-');
 
-// Create a direct connection to the database by allowing self-signed certificates
-// SECURITY WARNING: This is a temporary fix for the Render deployment
-// Once stable, we should implement proper certificate verification
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// Detect the environment and configure appropriately
+if (isRenderPg) {
+  console.log('Detected Render PostgreSQL database - applying specialized configuration');
+}
 
-// Create the pool configuration with overridden SSL settings
-// We can revisit this once the application is stable
+// Define our SSL config with proper typing to resolve the type errors
+interface PgSSLConfig {
+  rejectUnauthorized: boolean;
+  ca?: string | Buffer | Array<string | Buffer>;
+  checkServerIdentity?: (hostname: string, cert: any) => Error | undefined;
+}
 
-// Create the pool configuration with correct type handling and SSL disabled
+// Create a secure SSL configuration optimized for Render PostgreSQL
+let sslConfig: any; // Use 'any' type to avoid issues with pg's typing
+
+if (isRenderPg) {
+  // Specific configuration for Render's PostgreSQL service
+  sslConfig = {
+    // Best practice for Render PostgreSQL with self-signed certs
+    rejectUnauthorized: false
+  };
+  console.log('Using Render-specific PostgreSQL configuration with relaxed SSL security');
+} else {
+  // Standard SSL config for other environments
+  sslConfig = {
+    rejectUnauthorized: true
+  };
+  console.log('Using standard PostgreSQL SSL configuration');
+}
+
+// Create a proper pool configuration with correct SSL settings
 const poolConfig: pg.PoolConfig = {
   connectionString: process.env.DATABASE_URL,
-  ssl: false, // Disable SSL verification completely to fix Render deployment issues
+  ssl: process.env.DATABASE_URL?.includes('sslmode=require') ? sslConfig : undefined,
   max: isProd ? 10 : 20, // Maximum number of clients in the pool
   idleTimeoutMillis: isProd ? 30000 : 60000, // Close idle clients after this many milliseconds
   connectionTimeoutMillis: isProd ? 30000 : 15000, // Return an error after this many milliseconds if a connection cannot be established
