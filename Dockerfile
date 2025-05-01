@@ -34,6 +34,8 @@ NODE_ENV=production tsx server/index.ts\n\
 # Make sure TSX is installed globally
 RUN npm install -g tsx
 
+# Port 5000 is used by the server
+ENV PORT=5000
 EXPOSE 5000
 
 CMD ["/app/entrypoint.sh"]
