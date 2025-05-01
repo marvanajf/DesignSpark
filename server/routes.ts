@@ -16,7 +16,7 @@ import { sendEmail, formatContactEmailHtml, formatContactEmailText } from "./ema
 import { registerAdminRoutes } from "./admin-routes";
 import { registerBlogRoutes } from "./blog-routes";
 import Stripe from "stripe";
-import { db } from "./db";
+import { db, pool, withRetry } from "./db";
 import { eq, sql } from "drizzle-orm";
 
 // Initialize Stripe with the secret key
@@ -29,30 +29,50 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Database health check endpoint
+  // Database health check endpoint with automatic retry capability
   app.get("/api/db-health", async (req: Request, res: Response) => {
     try {
-      // Simple query to test database connection
-      const result = await db.execute(sql`SELECT NOW() as now`);
+      // Import testConnection function from db module
+      const { testConnection } = await import('./db');
       
-      // Log the result for debugging
-      console.log("Database health check result:", JSON.stringify(result));
+      // Test connection with automatic retries
+      const connectionSuccess = await testConnection();
       
-      return res.json({ 
-        status: "healthy", 
-        message: "Database connection successful", 
-        timestamp: result[0]?.now || new Date().toISOString(),
-        connection_string: process.env.DATABASE_URL 
-          ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]}` 
-          : "Not set",
-        result: result
-      });
+      if (connectionSuccess) {
+        // If successful, perform a simple query
+        const result = await withRetry(() => db.execute(sql`SELECT NOW() as now`));
+        
+        // Log the result for debugging
+        console.log("Database health check result:", JSON.stringify(result));
+        
+        return res.json({ 
+          status: "healthy", 
+          message: "Database connection successful", 
+          timestamp: result?.[0]?.now || new Date().toISOString(),
+          connection_string: process.env.DATABASE_URL 
+            ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+            : "Not set",
+          connectionPoolDetails: {
+            totalCount: pool.totalCount,
+            idleCount: pool.idleCount,
+            waitingCount: pool.waitingCount
+          }
+        });
+      } else {
+        throw new Error("Database connection test failed");
+      }
     } catch (error) {
       console.error("Database health check failed:", error);
+      
+      // Detailed error response for better debugging
       return res.status(500).json({ 
         status: "unhealthy", 
         message: "Database connection failed", 
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? {
+          name: error.name,
+          message: error.message,
+          stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        } : String(error),
         connection_string: process.env.DATABASE_URL 
           ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]}` 
           : "Not set"
