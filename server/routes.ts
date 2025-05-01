@@ -29,53 +29,255 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Database health check endpoint with automatic retry capability
+  // Advanced database health check with diagnostics and recovery options
   app.get("/api/db-health", async (req: Request, res: Response) => {
     try {
-      // Import testConnection function from db module
-      const { testConnection } = await import('./db');
+      // Import DB functions and monitoring variables
+      const { 
+        testConnection, 
+        recreatePool,
+        pingFailureCount, 
+        consecutiveSuccessCount,
+        circuitBreakerOpen, 
+        circuitBreakerLastOpenTime,
+        circuitBreakerResetTimeout 
+      } = await import('./db');
       
+      // Check if a manual recovery was requested via query parameter
+      if (req.query.recover === 'true') {
+        console.log("Manual database recovery requested via API");
+        
+        try {
+          // Attempt pool recreation
+          const recoveryResult = await recreatePool();
+          const recoveryTimestamp = new Date().toISOString();
+          
+          if (recoveryResult) {
+            // Test to confirm recovery worked
+            const connectionResult = await testConnection();
+            const postRecoverySuccess = connectionResult === true;
+            
+            // Measure latency after recovery
+            const startLatency = Date.now();
+            const query = postRecoverySuccess ? 
+              await withRetry(() => db.execute(sql`SELECT NOW() as now`)) : null;
+            const latencyMs = Date.now() - startLatency;
+            
+            // Get updated pool statistics after recovery
+            const poolStats = {
+              total_connections: pool.totalCount,
+              idle_connections: pool.idleCount,
+              waiting_clients: pool.waitingCount
+            };
+            
+            if (postRecoverySuccess) {
+              return res.json({
+                status: "healthy",
+                recovery: {
+                  status: "success",
+                  message: "Database connection pool recreated successfully",
+                  timestamp: recoveryTimestamp
+                },
+                connection_manager: {
+                  ping_failures: pingFailureCount,
+                  consecutive_successes: consecutiveSuccessCount,
+                  circuit_breaker: {
+                    open: circuitBreakerOpen,
+                    reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+                    last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+                  }
+                },
+                latency_ms: latencyMs,
+                pool_stats: poolStats,
+                timestamp: query && query[0]?.now ? query[0].now : recoveryTimestamp,
+                connection_string: process.env.DATABASE_URL 
+                  ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+                  : "Not set"
+              });
+            } else {
+              // Recovery seemed to work but connection test failed
+              return res.status(503).json({
+                status: "degraded",
+                recovery: {
+                  status: "partial",
+                  message: "Pool recreation succeeded but follow-up connection test failed",
+                  timestamp: recoveryTimestamp
+                },
+                connection_manager: {
+                  ping_failures: pingFailureCount,
+                  consecutive_successes: consecutiveSuccessCount,
+                  circuit_breaker: {
+                    open: circuitBreakerOpen,
+                    reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+                    last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+                  }
+                },
+                timestamp: recoveryTimestamp,
+                connection_string: process.env.DATABASE_URL 
+                  ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+                  : "Not set"
+              });
+            }
+          } else {
+            // Pool recreation explicitly failed
+            return res.status(500).json({
+              status: "error",
+              recovery: {
+                status: "failed",
+                message: "Database connection pool recreation failed",
+                timestamp: new Date().toISOString()
+              },
+              connection_manager: {
+                ping_failures: pingFailureCount,
+                consecutive_successes: consecutiveSuccessCount,
+                circuit_breaker: {
+                  open: circuitBreakerOpen,
+                  reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+                  last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+                }
+              },
+              error: "Failed to recreate connection pool",
+              connection_string: process.env.DATABASE_URL 
+                ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+                : "Not set"
+            });
+          }
+        } catch (recoveryError) {
+          // Exception during recovery attempt
+          return res.status(500).json({
+            status: "error",
+            recovery: {
+              status: "error",
+              message: "Exception during database recovery attempt",
+              timestamp: new Date().toISOString()
+            },
+            connection_manager: {
+              ping_failures: pingFailureCount,
+              consecutive_successes: consecutiveSuccessCount,
+              circuit_breaker: {
+                open: circuitBreakerOpen,
+                reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+                last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+              }
+            },
+            error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+            stack: process.env.NODE_ENV === 'development' ? 
+              recoveryError instanceof Error ? recoveryError.stack : undefined : undefined,
+            connection_string: process.env.DATABASE_URL 
+              ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+              : "Not set"
+          });
+        }
+      }
+      
+      // Standard health check without recovery
       // Test connection with automatic retries
       const connectionSuccess = await testConnection();
       
       if (connectionSuccess) {
-        // If successful, perform a simple query
+        // If successful, perform a simple query and measure latency
+        const startLatency = Date.now();
         const result = await withRetry(() => db.execute(sql`SELECT NOW() as now`));
+        const latencyMs = Date.now() - startLatency;
         
         // Log the result for debugging
         console.log("Database health check result:", JSON.stringify(result));
         
-        return res.json({ 
+        return res.json({
           status: "healthy", 
           message: "Database connection successful", 
           timestamp: result?.[0]?.now || new Date().toISOString(),
+          connection_manager: {
+            ping_failures: pingFailureCount,
+            consecutive_successes: consecutiveSuccessCount,
+            circuit_breaker: {
+              open: circuitBreakerOpen,
+              reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+              last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+            }
+          },
+          latency_ms: latencyMs,
+          pool_stats: {
+            total_connections: pool.totalCount,
+            idle_connections: pool.idleCount,
+            waiting_clients: pool.waitingCount
+          },
           connection_string: process.env.DATABASE_URL 
             ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
             : "Not set",
-          connectionPoolDetails: {
-            totalCount: pool.totalCount,
-            idleCount: pool.idleCount,
-            waitingCount: pool.waitingCount
-          }
+          recovery_available: true,
+          recovery_url: `${req.protocol}://${req.get('host')}/api/db-health?recover=true`
         });
       } else {
-        throw new Error("Database connection test failed");
+        // Connection test failed but we can offer recovery
+        return res.status(503).json({ 
+          status: "unhealthy", 
+          message: "Database connection test failed",
+          connection_manager: {
+            ping_failures: pingFailureCount,
+            consecutive_successes: consecutiveSuccessCount,
+            circuit_breaker: {
+              open: circuitBreakerOpen,
+              reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+              last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+            }
+          },
+          connection_string: process.env.DATABASE_URL 
+            ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+            : "Not set",
+          recovery_available: true,
+          recovery_url: `${req.protocol}://${req.get('host')}/api/db-health?recover=true`
+        });
       }
     } catch (error) {
+      // Exception during health check
       console.error("Database health check failed:", error);
       
-      // Detailed error response for better debugging
+      // Try to get connection manager info even during errors
+      let connectionManagerInfo = {};
+      try {
+        const { 
+          pingFailureCount, 
+          consecutiveSuccessCount,
+          circuitBreakerOpen, 
+          circuitBreakerLastOpenTime,
+          circuitBreakerResetTimeout 
+        } = await import('./db');
+        
+        connectionManagerInfo = {
+          ping_failures: pingFailureCount,
+          consecutive_successes: consecutiveSuccessCount,
+          circuit_breaker: {
+            open: circuitBreakerOpen,
+            reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000),
+            last_open: circuitBreakerLastOpenTime ? new Date(circuitBreakerLastOpenTime).toISOString() : null
+          }
+        };
+      } catch (infoError) {
+        console.error("Failed to get connection manager info:", infoError);
+      }
+      
+      // Determine if this is likely a connection error
+      const isConnectionError = error instanceof Error && 
+        (error.message.includes('ECONNREFUSED') || 
+         error.message.includes('connection') ||
+         error.message.includes('timeout'));
+      
       return res.status(500).json({ 
-        status: "unhealthy", 
+        status: "error", 
         message: "Database connection failed", 
         error: error instanceof Error ? {
           name: error.name,
           message: error.message,
-          stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+          stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+          is_connection_error: isConnectionError
         } : String(error),
         connection_string: process.env.DATABASE_URL 
-          ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]}` 
-          : "Not set"
+          ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]?.split('?')[0]}` 
+          : "Not set",
+        connection_manager: connectionManagerInfo,
+        recovery_available: true,
+        recovery_url: `${req.protocol}://${req.get('host')}/api/db-health?recover=true`
       });
     }
   });
