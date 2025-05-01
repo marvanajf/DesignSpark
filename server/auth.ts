@@ -7,7 +7,7 @@ import { promisify } from "util";
 import { storage } from "./storage";
 import { User as SelectUser, insertUserSchema } from "@shared/schema";
 import { z } from "zod";
-import { withRetry, recreatePool } from "./db";
+import { withRetry } from "./db";
 
 declare global {
   namespace Express {

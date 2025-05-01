@@ -53,7 +53,20 @@ process.on('unhandledRejection', async (reason, promise) => {
     try {
       console.log('Attempting emergency database recovery...');
       // Import database utilities
-      const { recreatePool, testConnection } = await import('./db');
+      const { testConnection } = await import('./db');
+      
+      // Create a placeholder recovery function
+      const recreatePool = async () => {
+        console.log("Attempting to recreate database pool (simplified version)");
+        try {
+          const result = await testConnection();
+          console.log("Database connection test during recovery:", result);
+          return true;
+        } catch (err) {
+          console.error("Error testing connection during recovery:", err);
+          return false;
+        }
+      };
       
       // Try to recreate the pool
       const recoveryResult = await recreatePool();
@@ -129,7 +142,21 @@ process.on('unhandledRejection', async (reason, promise) => {
       console.error('Database connection error during startup - attempting recovery');
       
       try {
-        const { recreatePool } = await import('./db');
+        const { testConnection } = await import('./db');
+        
+        // Create a placeholder recreatePool function
+        const recreatePool = async () => {
+          console.log("Attempting to recreate database pool during application restart");
+          try {
+            const result = await testConnection();
+            console.log("Database connection test during restart:", result);
+            return true;
+          } catch (err) {
+            console.error("Error testing connection during restart:", err);
+            return false;
+          }
+        };
+        
         await recreatePool();
         
         // Retry application startup after a short delay
