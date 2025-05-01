@@ -1,6 +1,7 @@
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+// We're no longer using WebSockets
+// import ws from "ws";
 import * as schema from "@shared/schema";
 
 // Determine environment
@@ -10,8 +11,23 @@ console.log(`Running in ${isProd ? 'production' : 'development'} mode`);
 // Define fallback database host for emergency recovery
 const FALLBACK_DB_HOST = "ep-falling-frog-a45g83oy.us-east-1.aws.neon.tech";
 
-// Configure Neon database connection with enhanced reliability
-neonConfig.webSocketConstructor = ws;
+// COMPLETELY DISABLE WEBSOCKETS - FORCE DIRECT POSTGRES CONNECTIONS
+// This prevents ECONNREFUSED errors with 10.202.x.x IP addresses on Render
+console.log('Disabling WebSockets and forcing direct PostgreSQL connections for Render compatibility');
+
+// Completely disable WebSocket functionality by setting webSocketConstructor to null
+neonConfig.webSocketConstructor = null;
+// Force direct PostgreSQL connections (no WebSockets)
+try {
+  // @ts-ignore - These might not be in typings but they exist in the library
+  neonConfig.useDirectConnection = true;
+  // @ts-ignore
+  neonConfig.usePoolConnections = true;
+  // @ts-ignore
+  neonConfig.forceDisablePgSSL = false; // We'll handle SSL in the pool config
+} catch (e) {
+  console.log('Warning: Some connection settings could not be applied:', e);
+}
 
 // Enhanced WebSocket connection with detailed error handling and more fallback options
 neonConfig.wsProxy = (url) => {
@@ -367,9 +383,19 @@ if (process.env.DEBUG_DB === 'true') {
   };
 }
 
-console.log("Initializing database connection pool with optimized settings");
-// Initialize the connection pool
-const pool = new Pool(poolOptions);
+console.log("Initializing database connection pool with DIRECT connections (NO WebSockets)");
+// Initialize the connection pool with direct PostgreSQL connections - NO WebSockets
+// This is crucial for Render hosting compatibility - completely bypass WebSocket connection attempts
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  },
+  // Standard Pool options without any WebSocket dependencies
+  max: isProd ? 10 : 20,
+  idleTimeoutMillis: isProd ? 30000 : 60000,
+  connectionTimeoutMillis: isProd ? 30000 : 15000,
+});
 
 // Setup error handler for connection pool
 pool.on('error', (err) => {
