@@ -57,11 +57,15 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
   // Add content to campaign mutation
   const batchAddContentMutation = useMutation({
     mutationFn: async (contentIds: number[]) => {
-      const payload = contentIds.map(contentId => ({
-        campaign_id: campaignId,
-        content_id: contentId
-      }));
-      return await apiRequest("POST", "/api/campaign-contents", payload);
+      // Create an array of promises that add each content one by one
+      const promises = contentIds.map(contentId => 
+        apiRequest("POST", "/api/campaign-contents", {
+          campaign_id: campaignId,
+          content_id: contentId
+        })
+      );
+      // Wait for all promises to complete
+      return await Promise.all(promises);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}/contents`] });
