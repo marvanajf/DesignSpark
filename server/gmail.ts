@@ -62,9 +62,6 @@ export async function sendGmailEmail(params: EmailParams): Promise<boolean> {
 
 // Template for sending thank you emails to contacts
 export function createThankYouEmailHtml(name: string): string {
-  // Base64 encoded Tovably logo (you can replace this with your actual logo)
-  const logoBase64 = `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`;
-  
   return `
 <!DOCTYPE html>
 <html>
@@ -92,12 +89,19 @@ export function createThankYouEmailHtml(name: string): string {
     }
     .header {
       background-color: #1a1a27;
-      padding: 20px;
+      padding: 30px;
       text-align: center;
     }
-    .header img {
-      max-width: 150px;
-      height: auto;
+    .logo-text {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      color: #ffffff;
+      text-transform: lowercase;
+      letter-spacing: 1px;
+    }
+    .logo-accent {
+      color: #74d1ea;
     }
     .content {
       padding: 30px;
@@ -146,8 +150,8 @@ export function createThankYouEmailHtml(name: string): string {
 <body>
   <div class="container">
     <div class="header">
-      <!-- Using embedded Base64 logo instead of external URL -->
-      <img src="data:image/png;base64,${logoBase64}" alt="Tovably Logo" />
+      <!-- Text-based logo instead of image -->
+      <div class="logo-text">tov<span class="logo-accent">ably</span></div>
     </div>
     <div class="content">
       <h1>Thank you for reaching out, <span class="accent">${name}</span></h1>
