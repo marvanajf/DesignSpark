@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { createContext, useState, useContext, type ReactNode } from 'react';
 
 type UserAvatarContextType = {
   avatarColor: string;
@@ -16,7 +16,7 @@ type UserAvatarProviderProps = {
   children: ReactNode;
 };
 
-export const UserAvatarProvider: React.FC<UserAvatarProviderProps> = ({ children }) => {
+export const UserAvatarProvider = ({ children }: UserAvatarProviderProps) => {
   const [avatarColor, setAvatarColor] = useState<string>('bg-[#74d1ea]/20');
 
   return (
