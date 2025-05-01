@@ -50,6 +50,15 @@ export async function sendGmailEmail(params: EmailParams): Promise<boolean> {
       subject: params.subject,
       text: params.text || '',
       html: params.html || '',
+      // Adding headers to help prevent email clipping and improve rendering
+      headers: {
+        'X-Entity-Ref-ID': `tovably-contact-${Date.now()}`, // Unique reference ID
+        'X-Auto-Response-Suppress': 'OOF, AutoReply',
+        'Precedence': 'bulk',
+        'Importance': 'high',
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High'
+      }
     });
     
     console.log('Email sent successfully via Gmail');
@@ -68,6 +77,7 @@ export function createThankYouEmailHtml(name: string): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="x-apple-disable-message-reformatting">
   <title>Thank You for Contacting Tovably</title>
   <!-- Import Open Sans font -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -99,9 +109,6 @@ export function createThankYouEmailHtml(name: string): string {
       color: #ffffff;
       text-transform: lowercase;
       letter-spacing: 1px;
-    }
-    .logo-accent {
-      color: #74d1ea;
     }
     .content {
       padding: 30px;
@@ -148,10 +155,15 @@ export function createThankYouEmailHtml(name: string): string {
   </style>
 </head>
 <body>
+  <!-- Preheader text that will be shown in email previews -->
+  <div style="display: none; max-height: 0px; overflow: hidden;">
+    Thank you for contacting Tovably. We've received your message and will get back to you within 24-48 hours.
+  </div>
+  
   <div class="container">
     <div class="header">
       <!-- Text-based logo instead of image -->
-      <div class="logo-text">tov<span class="logo-accent">ably</span></div>
+      <div class="logo-text">tovably</div>
     </div>
     <div class="content">
       <h1>Thank you for reaching out, <span class="accent">${name}</span></h1>
