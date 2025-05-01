@@ -42,7 +42,49 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
-import { Loader2, UserIcon, Search, Mail, Trash2, FileText } from "lucide-react";
+import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download } from "lucide-react";
+
+// Utility function to convert data to CSV
+function convertToCSV<T extends Record<string, any>>(data: T[], headers: Record<string, string>): string {
+  // Create header row
+  const headerRow = Object.values(headers).join(',');
+  
+  // Create data rows
+  const rows = data.map(item => 
+    Object.keys(headers)
+      .map(key => {
+        // Handle values that might contain commas or quotes
+        const value = item[key] === null || item[key] === undefined ? '' : String(item[key]);
+        if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+          return `"${value.replace(/"/g, '""')}"`;
+        }
+        return value;
+      })
+      .join(',')
+  );
+  
+  // Combine header row and data rows
+  return [headerRow, ...rows].join('\n');
+}
+
+// Function to download CSV
+function downloadCSV(csvContent: string, fileName: string) {
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  // Create download URL
+  const url = URL.createObjectURL(blob);
+  link.href = url;
+  link.setAttribute('download', fileName);
+  
+  // Trigger download
+  document.body.appendChild(link);
+  link.click();
+  
+  // Clean up
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
 import { Redirect } from "wouter";
 
 interface LeadContact {
@@ -175,6 +217,34 @@ export default function AdminPage() {
       toast({
         title: "User role updated",
         description: "The user role has been updated successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Update failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  
+  // Update user subscription plan mutation
+  const updateUserSubscriptionMutation = useMutation({
+    mutationFn: async ({ id, subscription_plan }: { id: number; subscription_plan: string }) => {
+      const res = await fetch(`/api/admin/users/${id}/subscription`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subscription_plan }),
+      });
+      
+      if (!res.ok) throw new Error("Failed to update subscription plan");
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+      toast({
+        title: "Subscription plan updated",
+        description: "The user's subscription plan has been updated successfully.",
       });
     },
     onError: (error) => {
@@ -352,7 +422,24 @@ export default function AdminPage() {
             
             <div className="space-y-2">
               <Label className="text-zinc-400">Subscription Plan</Label>
-              <div className="text-white font-medium">{selectedUser.subscription_plan}</div>
+              <Select defaultValue={selectedUser.subscription_plan} onValueChange={(plan) => {
+                if (selectedUser) {
+                  updateUserSubscriptionMutation.mutate({ 
+                    id: selectedUser.id, 
+                    subscription_plan: plan 
+                  });
+                }
+              }}>
+                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-900 border-zinc-800">
+                  <SelectItem value="free">Free</SelectItem>
+                  <SelectItem value="standard">Standard</SelectItem>
+                  <SelectItem value="professional">Professional</SelectItem>
+                  <SelectItem value="premium">Premium</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="space-y-2">
@@ -424,14 +511,51 @@ export default function AdminPage() {
         
         <TabsContent value="leads">
           <Card className="bg-zinc-950 border-zinc-800">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Mail className="mr-2 h-5 w-5 text-[#74d1ea]" />
-                <span>Lead Contacts</span>
-              </CardTitle>
-              <CardDescription>
-                Manage leads who've signed up to learn more about Tovably
-              </CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="flex items-center">
+                  <Mail className="mr-2 h-5 w-5 text-[#74d1ea]" />
+                  <span>Lead Contacts</span>
+                </CardTitle>
+                <CardDescription className="mt-1.5">
+                  Manage leads who've signed up to learn more about Tovably
+                </CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-zinc-900 hover:bg-zinc-800 border-zinc-800"
+                onClick={() => {
+                  if (filteredLeads.length > 0) {
+                    const headers = {
+                      name: 'Name',
+                      email: 'Email',
+                      company: 'Company',
+                      message: 'Message',
+                      status: 'Status',
+                      notes: 'Notes',
+                      created_at: 'Created At'
+                    };
+                    
+                    const csvContent = convertToCSV(filteredLeads, headers);
+                    downloadCSV(csvContent, 'tovably-lead-contacts.csv');
+                    
+                    toast({
+                      title: "Export successful",
+                      description: `${filteredLeads.length} lead contacts exported to CSV.`,
+                    });
+                  } else {
+                    toast({
+                      title: "Export failed",
+                      description: "No lead contacts to export.",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
             </CardHeader>
             <CardContent>
               {isLeadsLoading ? (
@@ -500,14 +624,52 @@ export default function AdminPage() {
         
         <TabsContent value="users">
           <Card className="bg-zinc-950 border-zinc-800">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <UserIcon className="mr-2 h-5 w-5 text-[#74d1ea]" />
-                <span>Users</span>
-              </CardTitle>
-              <CardDescription>
-                Manage user accounts, subscriptions, and roles
-              </CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="flex items-center">
+                  <UserIcon className="mr-2 h-5 w-5 text-[#74d1ea]" />
+                  <span>Users</span>
+                </CardTitle>
+                <CardDescription className="mt-1.5">
+                  Manage user accounts, subscriptions, and roles
+                </CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-zinc-900 hover:bg-zinc-800 border-zinc-800"
+                onClick={() => {
+                  if (filteredUsers.length > 0) {
+                    const headers = {
+                      username: 'Username',
+                      email: 'Email',
+                      role: 'Role',
+                      subscription_plan: 'Subscription Plan',
+                      personas_used: 'Personas Used',
+                      tone_analyses_used: 'Tone Analyses Used',
+                      content_generated: 'Content Generated',
+                      created_at: 'Created At'
+                    };
+                    
+                    const csvContent = convertToCSV(filteredUsers, headers);
+                    downloadCSV(csvContent, 'tovably-users.csv');
+                    
+                    toast({
+                      title: "Export successful",
+                      description: `${filteredUsers.length} users exported to CSV.`,
+                    });
+                  } else {
+                    toast({
+                      title: "Export failed",
+                      description: "No users to export.",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
             </CardHeader>
             <CardContent>
               {isUsersLoading ? (

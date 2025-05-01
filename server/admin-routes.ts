@@ -39,6 +39,24 @@ export function registerAdminRoutes(app: Express) {
       res.status(500).json({ error: "Failed to update user role" });
     }
   });
+  
+  // Update user subscription plan
+  app.patch("/api/admin/users/:id/subscription", requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const userId = Number(req.params.id);
+      const schema = z.object({
+        subscription_plan: z.enum(["free", "standard", "professional", "premium"])
+      });
+      
+      const { subscription_plan } = schema.parse(req.body);
+      
+      const updatedUser = await storage.updateUserSubscription(userId, subscription_plan);
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user subscription:", error);
+      res.status(500).json({ error: "Failed to update user subscription" });
+    }
+  });
 
   // Get all lead contacts
   app.get("/api/admin/lead-contacts", requireAdmin, async (_req: Request, res: Response) => {
