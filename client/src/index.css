@@ -85,3 +85,8 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+/* Custom utilities */
+.hide-close-button [data-radix-collection-item] {
+  display: none !important;
+}

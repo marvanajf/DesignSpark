@@ -3,11 +3,11 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { CustomDialogContent } from '@/components/ui/custom-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { useMutation } from '@tanstack/react-query';
@@ -65,7 +65,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[425px] border border-border" closeButton={false}>
+      <CustomDialogContent hideCloseButton={true} className="sm:max-w-[425px] border border-border">
         <DialogHeader>
           <DialogTitle>Subscribe to {plan.name} Plan</DialogTitle>
           <DialogDescription>
@@ -124,7 +124,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
             </div>
           )}
         </div>
-      </DialogContent>
+      </CustomDialogContent>
     </Dialog>
   );
 };

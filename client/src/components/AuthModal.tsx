@@ -5,16 +5,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { Loader2 } from "lucide-react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
+import { CustomDialogContent } from "@/components/ui/custom-dialog";
 
 import {
   Form,
@@ -93,8 +91,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-black border border-gray-700/60 text-white overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
-        <DialogPrimitive.Close className="hidden" />
+      <CustomDialogContent hideCloseButton={true} className="sm:max-w-md bg-black border border-gray-700/60 text-white overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
       
         {/* Remove background grid pattern per user request */}
         
@@ -274,7 +271,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
           </div>
         </div>
-      </DialogContent>
+      </CustomDialogContent>
     </Dialog>
   );
 }
