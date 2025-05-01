@@ -87,6 +87,7 @@ function Router() {
 }
 
 function App() {
+  // Get the modal state and close function
   const { isAuthModalOpen, closeAuthModal } = useAuthModal();
 
   return (
@@ -96,7 +97,9 @@ function App() {
           <PricingModalProvider>
             <UserAvatarProvider>
               <Toaster />
-              <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+              {isAuthModalOpen && (
+                <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+              )}
               <CookieConsent />
               <Router />
             </UserAvatarProvider>

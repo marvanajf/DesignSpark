@@ -47,6 +47,7 @@ const registerSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+// Define the props for the AuthModal component
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
