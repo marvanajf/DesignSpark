@@ -171,6 +171,11 @@ if (filteredParams.length > 0) {
   connectionString += '?' + filteredParams.join('&');
 }
 
+// Ensure we're using the correct SSL mode for Neon Database
+if (!connectionString.includes('sslmode=')) {
+  connectionString += connectionString.includes('?') ? '&sslmode=require' : '?sslmode=require';
+}
+
 // Log connection attempt (without sensitive details)
 const sanitizedHost = connectionString.split('@')[1]?.split('/')[0] || 'unknown host';
 console.log(`Attempting database connection to: ${sanitizedHost}`);

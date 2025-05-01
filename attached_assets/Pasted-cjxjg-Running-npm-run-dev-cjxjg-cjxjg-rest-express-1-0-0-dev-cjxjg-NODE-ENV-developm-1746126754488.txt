@@ -1,0 +1,1397 @@
+cjxjg
+==> Running 'npm run dev'
+cjxjg
+cjxjg
+> rest-express@1.0.0 dev
+cjxjg
+> NODE_ENV=development tsx server/index.ts
+cjxjg
+cjxjg
+Running in development mode
+cjxjg
+Using development-optimized database connection settings
+cjxjg
+Attempting database connection to: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Initializing database connection pool with optimized settings
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Running Stripe fields migration...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 1/3): [object Object]
+cjxjg
+Retrying in 1000ms...
+cjxjg
+Database operation failed (attempt 1/3): [object Object]
+cjxjg
+Retrying in 1000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Database operation failed (attempt 2/3): [object Object]
+cjxjg
+Database operation failed (attempt 2/3): [object Object]
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 3/3): [object Object]
+cjxjg
+Database operation failed after 3 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Database connection test failed: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Database connection pool initialization FAILED
+cjxjg
+Database operation failed (attempt 3/3): [object Object]
+cjxjg
+Database operation failed after 3 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Error during Stripe fields migration: [object Object]
+cjxjg
+Stack trace: No stack trace available
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Gmail credentials not found. Email functionality will be disabled.
+cjxjg
+Retrying in 1000ms...
+cjxjg
+Database operation failed (attempt 1/3): [object Object]
+cjxjg
+7:09:27 PM [express] serving on port 5000
+cjxjg
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+cjxjg
+  npx update-browserslist-db@latest
+cjxjg
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 2/3): [object Object]
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 3/3): [object Object]
+cjxjg
+Database operation failed after 3 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Error creating default user: [object Object]
+     ==> Your service is live 🎉
+9kz2s
+Sending websocket ping to keep connection alive
+9kz2s
+Ping error (attempt 42): Cannot use a pool after calling end on the pool
+cjxjg
+Sending websocket ping to keep connection alive
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Ping error (attempt 1): [object Object]
+cjxjg
+User not authenticated for /api/user
+cjxjg
+7:09:48 PM [express] GET /api/user 401 in 2ms
+cjxjg
+Sending websocket ping to keep connection alive
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Ping error (attempt 2): [object Object]
+9kz2s
+Sending websocket ping to keep connection alive
+9kz2s
+Ping error (attempt 43): Cannot use a pool after calling end on the pool
+cjxjg
+Registration attempt starting, validating input data...
+cjxjg
+Data validation successful for email: jack@gomarvana.com
+cjxjg
+Checking if email already exists: jack@gomarvana.com
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Database operation failed (attempt 1/5): [object Object]
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 4000ms...
+cjxjg
+Database operation failed (attempt 2/5): [object Object]
+cjxjg
+Sending websocket ping to keep connection alive
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Ping error (attempt 3): [object Object]
+cjxjg
+Multiple ping failures detected, adjusting ping strategy
+cjxjg
+Setting new ping interval to 21000ms
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 3/5): [object Object]
+cjxjg
+Retrying in 8000ms...
+cjxjg
+Starting comprehensive system health check
+cjxjg
+Checking database health...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 1000ms...
+cjxjg
+Database operation failed (attempt 1/3): [object Object]
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 2/3): [object Object]
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 3/3): [object Object]
+cjxjg
+Database operation failed after 3 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Database connection test failed: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+Checking email service health...
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+Checking session health...
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+Checking Stripe health...
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Checking OpenAI health...
+cjxjg
+Checking network connectivity...
+cjxjg
+System health check complete. Status: unhealthy
+cjxjg
+7:10:15 PM [express] GET /api/system-health 500 in 3325ms :: {"status":"unhealthy","timestamp":"2025…
+9kz2s
+Sending websocket ping to keep connection alive
+9kz2s
+Ping error (attempt 44): Cannot use a pool after calling end on the pool
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 16000ms...
+cjxjg
+Database operation failed (attempt 4/5): [object Object]
+cjxjg
+Starting comprehensive system health check
+cjxjg
+Checking database health...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 1000ms...
+cjxjg
+Database operation failed (attempt 1/3): [object Object]
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 2/3): [object Object]
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 3/3): [object Object]
+cjxjg
+Database operation failed after 3 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Database connection test failed: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+Checking email service health...
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+Checking session health...
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+Checking Stripe health...
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Checking OpenAI health...
+cjxjg
+Checking network connectivity...
+cjxjg
+System health check complete. Status: unhealthy
+cjxjg
+7:10:23 PM [express] GET /api/system-health 500 in 3252ms :: {"status":"unhealthy","timestamp":"2025…
+cjxjg
+Registration attempt starting, validating input data...
+cjxjg
+Data validation successful for email: jack@gomarvana.com
+cjxjg
+Checking if email already exists: jack@gomarvana.com
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Database operation failed (attempt 1/5): [object Object]
+cjxjg
+Sending websocket ping to keep connection alive
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Ping error (attempt 4): [object Object]
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 2/5): [object Object]
+cjxjg
+Retrying in 4000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 5/5): [object Object]
+cjxjg
+Database operation failed after 5 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Error checking existing email: [object Object]
+cjxjg
+7:10:35 PM [express] POST /api/register 500 in 30031ms :: {"message":"Server error during email veri…
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 8000ms...
+cjxjg
+Database operation failed (attempt 3/5): [object Object]
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 4/5): [object Object]
+cjxjg
+Retrying in 16000ms...
+cjxjg
+User not authenticated for /api/user
+cjxjg
+7:10:45 PM [express] GET /api/user 401 in 1ms
+cjxjg
+Sending websocket ping to keep connection alive
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Ping error (attempt 5): [object Object]
+cjxjg
+Critical: Multiple ping failures, attempting connection recovery
+cjxjg
+Emergency connection recovery: Attempting to recreate database pool
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Stage 1 recovery failed: [object Object]
+cjxjg
+Proceeding to Stage 2 recovery with more conservative settings...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Stage 2 recovery also failed: [object Object]
+cjxjg
+All recovery stages failed, circuit breaker opened to prevent connection storms
+cjxjg
+Will attempt connection again in 60 seconds
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 5/5): [object Object]
+cjxjg
+Database operation failed after 5 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Error checking existing email: [object Object]
+cjxjg
+7:10:59 PM [express] POST /api/register 500 in 30020ms :: {"message":"Server error during email veri…
+cjxjg
+Circuit breaker open (16s/60s), skipping ping
+cjxjg
+Registration attempt starting, validating input data...
+cjxjg
+Data validation successful for email: jack@gomarvana.com
+cjxjg
+Checking if email already exists: jack@gomarvana.com
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 1/5): [object Object]
+cjxjg
+Retrying in 2000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 2/5): [object Object]
+cjxjg
+Retrying in 4000ms...
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Retrying in 8000ms...
+cjxjg
+Database operation failed (attempt 3/5): [object Object]
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 4/5): [object Object]
+cjxjg
+Retrying in 16000ms...
+cjxjg
+Circuit breaker open (37s/60s), skipping ping
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Database operation failed (attempt 5/5): [object Object]
+cjxjg
+Database operation failed after 5 attempts: ErrorEvent {
+cjxjg
+  [Symbol(kTarget)]: WebSocket {
+cjxjg
+    _events: [Object: null prototype] {
+cjxjg
+      error: [Function],
+cjxjg
+      message: [Function],
+cjxjg
+      close: [Function],
+cjxjg
+      open: [Function]
+cjxjg
+    },
+cjxjg
+    _eventsCount: 4,
+cjxjg
+    _maxListeners: undefined,
+cjxjg
+    _binaryType: 'arraybuffer',
+cjxjg
+    _closeCode: 1006,
+cjxjg
+    _closeFrameReceived: false,
+cjxjg
+    _closeFrameSent: false,
+cjxjg
+    _closeMessage: <Buffer >,
+cjxjg
+    _closeTimer: null,
+cjxjg
+    _errorEmitted: true,
+cjxjg
+    _extensions: {},
+cjxjg
+    _paused: false,
+cjxjg
+    _protocol: '',
+cjxjg
+    _readyState: 3,
+cjxjg
+    _receiver: null,
+cjxjg
+    _sender: null,
+cjxjg
+    _socket: null,
+cjxjg
+    _bufferedAmount: 0,
+cjxjg
+    _isServer: false,
+cjxjg
+    _redirects: 0,
+cjxjg
+    _autoPong: true,
+cjxjg
+    _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+cjxjg
+    _req: null,
+cjxjg
+    [Symbol(shapeMode)]: false,
+cjxjg
+    [Symbol(kCapture)]: false
+cjxjg
+  },
+cjxjg
+  [Symbol(kType)]: 'error',
+cjxjg
+  [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+cjxjg
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+cjxjg
+    errno: -111,
+cjxjg
+    code: 'ECONNREFUSED',
+cjxjg
+    syscall: 'connect',
+cjxjg
+    address: '10.202.114.25',
+cjxjg
+    port: 443
+cjxjg
+  },
+cjxjg
+  [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+cjxjg
+}
+cjxjg
+Error checking existing email: [object Object]
+cjxjg
+7:11:42 PM [express] POST /api/register 500 in 30020ms :: {"message":"Server error during email veri…
+cjxjg
+Circuit breaker open (58s/60s), skipping ping
+cjxjg
+Circuit breaker reset, attempting to reestablish database connection
+cjxjg
+Sending websocket ping to keep connection alive
+cjxjg
+Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+cjxjg
+Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+cjxjg
+Ping error (attempt 6): [object Object]
