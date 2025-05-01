@@ -88,8 +88,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set up blog routes
   registerBlogRoutes(app);
   
-  // System health check endpoint for comprehensive diagnostics
+  // Enhanced system health check endpoint for comprehensive diagnostics
   app.get("/api/system-health", async (req, res) => {
+    console.log("Starting comprehensive system health check");
+    
     const healthStatus = {
       status: "checking",
       timestamp: new Date().toISOString(),
@@ -97,25 +99,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
         database: { status: "checking" },
         email: { status: "checking" },
         sessions: { status: "checking" },
-        stripe: { status: "checking" }
+        stripe: { status: "checking" },
+        openai: { status: "checking" },
+        network: { status: "checking" }
       },
       environment: {
         node_env: process.env.NODE_ENV || "not_set",
         platform: process.platform,
         node_version: process.version,
+        uptime_seconds: process.uptime(),
+        memory: process.memoryUsage(),
+        hostname: process.env.HOSTNAME || "unknown"
       }
     };
     
-    // Check database health
+    // Check database health with more detailed diagnostics
     try {
-      const { testConnection } = await import('./db');
-      const dbSuccess = await testConnection();
+      console.log("Checking database health...");
+      const { testConnection, pool } = await import('./db');
+      
+      // Comprehensive test with timeout protection
+      const dbPromise = testConnection();
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Database connection timed out after 5 seconds")), 5000)
+      );
+      
+      // Race between a normal test and a timeout
+      const dbSuccess = await Promise.race([dbPromise, timeoutPromise]);
       
       if (dbSuccess) {
-        healthStatus.components.database = { 
-          status: "healthy", 
-          message: "Database connection successful" 
-        };
+        // If successful, perform a simple query to ensure end-to-end connectivity
+        try {
+          const result = await withRetry(() => db.execute(sql`SELECT NOW() as now`));
+          
+          healthStatus.components.database = { 
+            status: "healthy", 
+            message: "Database connection successful",
+            timestamp: result?.[0]?.now || new Date().toISOString(),
+            pool_stats: {
+              total_connections: pool.totalCount,
+              idle_connections: pool.idleCount,
+              waiting_clients: pool.waitingCount
+            },
+            db_type: "PostgreSQL via Neon"
+          };
+        } catch (queryError) {
+          console.error("Database query error:", queryError);
+          healthStatus.components.database = {
+            status: "degraded",
+            message: "Database connected but query failed",
+            error: queryError instanceof Error ? queryError.message : String(queryError)
+          };
+        }
       } else {
         healthStatus.components.database = { 
           status: "unhealthy", 
@@ -127,31 +162,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
       healthStatus.components.database = {
         status: "error",
         message: "Error checking database health",
-        error: dbError instanceof Error ? dbError.message : String(dbError)
+        error: dbError instanceof Error ? dbError.message : String(dbError),
+        stack: process.env.NODE_ENV === 'development' ? 
+          dbError instanceof Error ? dbError.stack : undefined : undefined
       };
     }
     
-    // Check email service
+    // Check email service with more detailed diagnostics
     try {
-      // Just verify if email configuration exists
+      console.log("Checking email service health...");
+      // Build a more comprehensive assessment of email configuration
+      const emailProviders = [];
+      const emailStatus = {
+        status: "checking",
+        providers: emailProviders,
+        message: ""
+      };
+      
+      // Check Gmail configuration
       if (process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD) {
-        healthStatus.components.email = {
+        emailProviders.push({
+          name: "Gmail",
           status: "configured",
-          provider: "gmail",
-          message: "Email credentials are configured"
-        };
-      } else if (process.env.SENDGRID_API_KEY) {
-        healthStatus.components.email = {
-          status: "configured",
-          provider: "sendgrid",
-          message: "Email credentials are configured"
-        };
-      } else {
-        healthStatus.components.email = {
-          status: "unconfigured",
-          message: "No email provider credentials found"
-        };
+          address: process.env.GMAIL_EMAIL?.replace(/^(.{3}).*@(.*)$/, "$1***@$2") // Mask email
+        });
       }
+      
+      // Check SendGrid configuration
+      if (process.env.SENDGRID_API_KEY) {
+        emailProviders.push({
+          name: "SendGrid",
+          status: "configured",
+          api_key_preview: "***" + process.env.SENDGRID_API_KEY.slice(-5) // Show only last 5 chars
+        });
+      }
+      
+      // Determine overall email status based on providers
+      if (emailProviders.length > 0) {
+        emailStatus.status = "healthy";
+        emailStatus.message = `${emailProviders.length} email provider(s) configured`;
+      } else {
+        emailStatus.status = "unconfigured";
+        emailStatus.message = "No email providers configured";
+      }
+      
+      healthStatus.components.email = emailStatus;
     } catch (emailError) {
       console.error("Email health check error:", emailError);
       healthStatus.components.email = {
@@ -161,19 +216,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
     }
     
-    // Check session configuration
+    // Check session configuration with more detailed diagnostics
     try {
-      if (process.env.SESSION_SECRET) {
-        healthStatus.components.sessions = {
-          status: "configured",
-          message: "Session secret is configured"
-        };
+      console.log("Checking session health...");
+      const sessionStatus = {
+        status: "checking",
+        message: "",
+        security_level: "unknown"
+      };
+      
+      if (!process.env.SESSION_SECRET) {
+        sessionStatus.status = "unconfigured";
+        sessionStatus.message = "Session secret is not configured";
+        sessionStatus.security_level = "none";
+      } else if (process.env.SESSION_SECRET.length < 12) {
+        sessionStatus.status = "degraded";
+        sessionStatus.message = "Session secret is too short (security risk)";
+        sessionStatus.security_level = "low";
+      } else if (process.env.SESSION_SECRET === "development-secret-key") {
+        sessionStatus.status = "degraded";
+        sessionStatus.message = "Using default development session secret (security risk)";
+        sessionStatus.security_level = "low";
+      } else if (process.env.SESSION_SECRET.length < 32) {
+        sessionStatus.status = "configured";
+        sessionStatus.message = "Session secret is configured but could be stronger";
+        sessionStatus.security_level = "medium";
       } else {
-        healthStatus.components.sessions = {
-          status: "unconfigured",
-          message: "Session secret is not configured"
-        };
+        sessionStatus.status = "healthy";
+        sessionStatus.message = "Session secret is properly configured with good strength";
+        sessionStatus.security_level = "high";
       }
+      
+      // Check if session store is database backed
+      if (process.env.DATABASE_URL) {
+        sessionStatus.storage = "database";
+        sessionStatus.message += " with database persistence";
+      } else {
+        sessionStatus.storage = "memory";
+        if (process.env.NODE_ENV === "production") {
+          sessionStatus.message += " (warning: using in-memory store in production)";
+          sessionStatus.status = sessionStatus.status === "healthy" ? "degraded" : sessionStatus.status;
+        }
+      }
+      
+      healthStatus.components.sessions = sessionStatus;
     } catch (sessionError) {
       console.error("Session health check error:", sessionError);
       healthStatus.components.sessions = {
@@ -183,38 +269,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
     }
     
-    // Check Stripe configuration
+    // Check Stripe configuration with more detailed diagnostics
     try {
-      if (process.env.STRIPE_SECRET_KEY) {
-        if (process.env.VITE_STRIPE_PUBLIC_KEY) {
-          // Test Stripe API key by making a simple request
+      console.log("Checking Stripe health...");
+      const stripeStatus = {
+        status: "checking",
+        message: "",
+        mode: "unknown"
+      };
+      
+      // First check if keys exist
+      if (!process.env.STRIPE_SECRET_KEY) {
+        stripeStatus.status = "unconfigured";
+        stripeStatus.message = "Stripe secret key is not configured";
+      } else if (!process.env.VITE_STRIPE_PUBLIC_KEY) {
+        stripeStatus.status = "partial";
+        stripeStatus.message = "Stripe secret key is configured but public key is missing";
+        stripeStatus.mode = process.env.STRIPE_SECRET_KEY.includes('_test_') ? 'test' : 'live';
+      } else {
+        // Basic validation of key formats
+        const secretKeyValid = process.env.STRIPE_SECRET_KEY.startsWith('sk_');
+        const publicKeyValid = process.env.VITE_STRIPE_PUBLIC_KEY.startsWith('pk_');
+        stripeStatus.mode = process.env.STRIPE_SECRET_KEY.includes('_test_') ? 'test' : 'live';
+        
+        if (!secretKeyValid || !publicKeyValid) {
+          stripeStatus.status = "invalid";
+          stripeStatus.message = "One or more Stripe API keys have invalid format";
+          stripeStatus.secretKeyValid = secretKeyValid;
+          stripeStatus.publicKeyValid = publicKeyValid;
+        } else {
+          // If keys look valid, try a simple API request with error handling
           try {
-            const balance = await withRetry(() => stripe.balance.retrieve());
-            healthStatus.components.stripe = {
-              status: "healthy",
-              message: "Stripe API keys are configured and working",
-              available: balance.available.map(b => `${b.amount} ${b.currency}`).join(', ')
-            };
+            // Time-limited request to Stripe (5 second timeout)
+            const balancePromise = withRetry(() => stripe.balance.retrieve());
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error("Stripe API request timed out after 5 seconds")), 5000)
+            );
+            
+            const balance = await Promise.race([balancePromise, timeoutPromise]);
+            
+            stripeStatus.status = "healthy";
+            stripeStatus.message = "Stripe API keys are valid and API is responding";
+            stripeStatus.available = balance.available.map(b => `${b.amount} ${b.currency}`).join(', ');
           } catch (stripeApiError) {
             console.error("Stripe API error:", stripeApiError);
-            healthStatus.components.stripe = {
-              status: "error",
-              message: "Stripe API keys are configured but API test failed",
-              error: stripeApiError instanceof Error ? stripeApiError.message : String(stripeApiError)
-            };
+            stripeStatus.status = "unhealthy";
+            stripeStatus.message = "Stripe API keys are configured but API test failed";
+            stripeStatus.error = stripeApiError instanceof Error ? stripeApiError.message : String(stripeApiError);
           }
-        } else {
-          healthStatus.components.stripe = {
-            status: "partial",
-            message: "Stripe Secret key is configured but Public key is missing"
-          };
         }
-      } else {
-        healthStatus.components.stripe = {
-          status: "unconfigured",
-          message: "Stripe API keys are not configured"
-        };
       }
+      
+      healthStatus.components.stripe = stripeStatus;
     } catch (stripeError) {
       console.error("Stripe health check error:", stripeError);
       healthStatus.components.stripe = {
@@ -224,17 +330,187 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
     }
     
-    // Determine overall system health
-    const componentStatuses = Object.values(healthStatus.components).map(c => c.status);
-    if (componentStatuses.includes("error") || componentStatuses.includes("unhealthy")) {
-      healthStatus.status = "unhealthy";
-    } else if (componentStatuses.includes("partial") || componentStatuses.includes("unconfigured")) {
-      healthStatus.status = "degraded";
-    } else {
-      healthStatus.status = "healthy";
+    // Check OpenAI configuration
+    try {
+      console.log("Checking OpenAI health...");
+      const openaiStatus = {
+        status: "checking",
+        message: ""
+      };
+      
+      if (!process.env.OPENAI_API_KEY) {
+        openaiStatus.status = "unconfigured";
+        openaiStatus.message = "OpenAI API key is not configured";
+      } else {
+        // Basic validation of key format
+        const openaiKeyValid = process.env.OPENAI_API_KEY.startsWith('sk-') && process.env.OPENAI_API_KEY.length > 30;
+        
+        if (!openaiKeyValid) {
+          openaiStatus.status = "invalid";
+          openaiStatus.message = "OpenAI API key has invalid format";
+        } else {
+          // We won't make a real API call to OpenAI to avoid consuming credits
+          openaiStatus.status = "configured";
+          openaiStatus.message = "OpenAI API key is properly configured";
+          openaiStatus.api_key_preview = "sk-..."+process.env.OPENAI_API_KEY.slice(-5); // Show last 5 chars
+        }
+      }
+      
+      healthStatus.components.openai = openaiStatus;
+    } catch (openaiError) {
+      console.error("OpenAI health check error:", openaiError);
+      healthStatus.components.openai = {
+        status: "error",
+        message: "Error checking OpenAI configuration",
+        error: openaiError instanceof Error ? openaiError.message : String(openaiError)
+      };
     }
     
-    return res.json(healthStatus);
+    // Test network connectivity to key external services
+    try {
+      console.log("Checking network connectivity...");
+      const networkStatus = {
+        status: "checking",
+        message: "",
+        tests: {}
+      };
+      
+      // Only add these tests in production
+      if (process.env.NODE_ENV === 'production') {
+        // We'll add a quick DNS resolution test for key services
+        const testHosts = [
+          { name: 'stripe', host: 'api.stripe.com' },
+          { name: 'openai', host: 'api.openai.com' },
+          { name: 'production_db', host: 'ep-falling-frog-a45g83oy.us-east-1.aws.neon.tech' },
+          { name: 'general_dns', host: 'example.com' }
+        ];
+        
+        // We'll use the dns.lookup function to test name resolution
+        const dns = require('dns');
+        const lookupPromise = (host: string) => {
+          return new Promise<{address: string, family: number}>((resolve, reject) => {
+            dns.lookup(host, (err, address, family) => {
+              if (err) reject(err);
+              else resolve({ address, family });
+            });
+          });
+        };
+        
+        // Run DNS tests with timeouts
+        for (const test of testHosts) {
+          try {
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error(`DNS lookup for ${test.host} timed out`)), 3000)
+            );
+            
+            const result = await Promise.race([lookupPromise(test.host), timeoutPromise]);
+            networkStatus.tests[test.name] = {
+              status: 'success',
+              host: test.host,
+              resolved_ip: result.address,
+              ip_version: `IPv${result.family}`
+            };
+          } catch (error) {
+            networkStatus.tests[test.name] = {
+              status: 'failed',
+              host: test.host,
+              error: error instanceof Error ? error.message : String(error)
+            };
+          }
+        }
+        
+        // Determine overall network status based on test results
+        const failedTests = Object.values(networkStatus.tests).filter(t => t.status === 'failed');
+        if (failedTests.length === 0) {
+          networkStatus.status = 'healthy';
+          networkStatus.message = 'All network connectivity tests passed';
+        } else if (failedTests.length < testHosts.length) {
+          networkStatus.status = 'degraded';
+          networkStatus.message = `${failedTests.length} out of ${testHosts.length} network tests failed`;
+        } else {
+          networkStatus.status = 'unhealthy';
+          networkStatus.message = 'All network connectivity tests failed';
+        }
+      } else {
+        // Skip detailed network tests in development
+        networkStatus.status = 'skipped';
+        networkStatus.message = 'Network tests skipped in development environment';
+      }
+      
+      healthStatus.components.network = networkStatus;
+    } catch (networkError) {
+      console.error("Network health check error:", networkError);
+      healthStatus.components.network = {
+        status: "error",
+        message: "Error checking network connectivity",
+        error: networkError instanceof Error ? networkError.message : String(networkError)
+      };
+    }
+    
+    // Determine overall system health with more nuanced scoring
+    let criticalErrors = 0;
+    let warnings = 0;
+    let healthy = 0;
+    
+    const criticalComponents = ['database', 'network']; // Components that must be healthy
+    const statusMap = {
+      'healthy': 0,
+      'configured': 0, // Treated as healthy
+      'degraded': 1,   // Treated as warning
+      'partial': 1,    // Treated as warning
+      'unconfigured': 1, // Treated as warning
+      'invalid': 2,    // Treated as error
+      'error': 2,      // Treated as error
+      'unhealthy': 2   // Treated as error
+    };
+    
+    for (const [component, status] of Object.entries(healthStatus.components)) {
+      const componentStatus = (status as any).status;
+      
+      // Skip components marked as "skipped" or "checking"
+      if (componentStatus === 'skipped' || componentStatus === 'checking') continue;
+      
+      if (statusMap[componentStatus] === 0) {
+        healthy++;
+      } else if (statusMap[componentStatus] === 1) {
+        warnings++;
+      } else if (statusMap[componentStatus] === 2) {
+        criticalErrors++;
+        
+        // For critical components, immediately mark system as unhealthy
+        if (criticalComponents.includes(component)) {
+          healthStatus.status = "unhealthy";
+          healthStatus.critical_failure = component;
+        }
+      }
+    }
+    
+    // If we haven't already determined the status based on critical components
+    if (healthStatus.status === "checking") {
+      if (criticalErrors > 0) {
+        healthStatus.status = "unhealthy";
+      } else if (warnings > 0) {
+        healthStatus.status = "degraded";
+      } else {
+        healthStatus.status = "healthy";
+      }
+    }
+    
+    // Add summary statistics
+    healthStatus.summary = {
+      critical_errors: criticalErrors,
+      warnings: warnings,
+      healthy_components: healthy,
+      total_components: Object.keys(healthStatus.components).length
+    };
+    
+    console.log(`System health check complete. Status: ${healthStatus.status}`);
+    
+    // Determine response code based on status
+    // We still return 200 for degraded as the API is working, just not all components
+    const statusCode = healthStatus.status === "unhealthy" ? 500 : 200;
+    
+    return res.status(statusCode).json(healthStatus);
   });
   
   // Cancel subscription and downgrade to free plan

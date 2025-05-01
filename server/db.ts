@@ -116,19 +116,71 @@ if (filteredParams.length > 0) {
 const sanitizedHost = connectionString.split('@')[1]?.split('/')[0] || 'unknown host';
 console.log(`Attempting database connection to: ${sanitizedHost}`);
 
-// Initialize database connection pool with comprehensive configuration for production
-const pool = new Pool({ 
+// Create environment-specific connection pool options
+let poolOptions: any = {
   connectionString: connectionString,
-  max: 20, // Increased maximum number of clients in the pool
-  idleTimeoutMillis: 60000, // Increased idle timeout to 1 minute
-  connectionTimeoutMillis: 20000, // Increased connection timeout to 20 seconds
   ssl: {
     rejectUnauthorized: false, // Important for cloud hosting providers like Render
-    // We're using the WebSocket connection for Neon, so we don't need additional SSL parameters
   },
-  keepAlive: true, // Enable TCP keepalive
-  keepAliveInitialDelayMillis: 10000, // 10 second delay before starting keepalive
-});
+  keepAlive: true // Enable TCP keepalive
+};
+
+// Different settings for development vs production
+if (isProd) {
+  console.log("Using production-specific connection pool settings");
+  
+  // Enhanced settings for production to work around possible firewall issues
+  poolOptions = {
+    ...poolOptions,
+    max: 10, // Fewer connections in production to avoid overwhelming resources
+    idleTimeoutMillis: 30000, // Shorter idle timeout in production
+    connectionTimeoutMillis: 30000, // Longer connection timeout for initial connection
+    allowExitOnIdle: false, // Don't exit when pool is idle
+    // Try to connect directly to the IP if possible (this can bypass some DNS issues)
+    keepAliveInitialDelayMillis: 5000, // More aggressive keep-alive
+    
+    // Add production-specific error handling
+    async onError(err: any) {
+      console.error("Production database pool error:", err);
+      
+      // If we're seeing ECONNREFUSED errors repeatedly, try to take recovery actions
+      if (err.message?.includes("ECONNREFUSED") || err.code === "ECONNREFUSED") {
+        console.error("Critical: Connection refused error detected in production");
+        console.error("Attempting to refresh database pool on next connection attempt");
+        
+        // Flag for pool refresh
+        pingFailureCount += 5; // Accelerate toward recovery mode
+      }
+    }
+  };
+} else {
+  // Development settings - more lenient
+  poolOptions = {
+    ...poolOptions,
+    max: 20, // More connections for development
+    idleTimeoutMillis: 60000, // Longer idle timeout for development
+    connectionTimeoutMillis: 15000, // Standard connection timeout
+    keepAliveInitialDelayMillis: 10000, // Standard keep-alive delay
+  };
+}
+
+// Add node-postgres instrumentation for better debugging
+if (process.env.DEBUG_DB === 'true') {
+  console.log("Database debugging enabled");
+  
+  // Log all queries if debugging enabled
+  const oldQuery = Pool.prototype.query;
+  // @ts-ignore - Override the query method
+  Pool.prototype.query = function() {
+    console.log("QUERY:", arguments[0]);
+    // @ts-ignore - Call the original method
+    return oldQuery.apply(this, arguments);
+  };
+}
+
+console.log("Initializing database connection pool with optimized settings");
+// Initialize the connection pool
+const pool = new Pool(poolOptions);
 
 // Setup error handler for connection pool
 pool.on('error', (err) => {
