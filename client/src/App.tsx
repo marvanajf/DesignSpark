@@ -51,8 +51,8 @@ function Router() {
 
   return (
     <Switch>
-      <Route path="/" component={ComingSoonPage} />
-      <Route path="/app" component={HomePage} />
+      <Route path="/" component={HomePage} />
+      <Route path="/coming-soon" component={ComingSoonPage} />
       <ProtectedRoute path="/dashboard" component={DashboardPage} />
       <Route path="/tone-analysis-info" component={ToneAnalysisMarketingPage} />
       <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
