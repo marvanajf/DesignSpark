@@ -1,0 +1,70 @@
+2025-05-01T21:15:46.052063149Z ==> Cloning from https://github.com/marvanajf/DesignSpark
+2025-05-01T21:15:48.004985467Z ==> Checking out commit 9862db9f684ae03d9c02c515329e65e6ba307690 in branch main
+2025-05-01T21:18:09.025904396Z ==> Using Node.js version 22.14.0 (default)
+2025-05-01T21:18:09.072727001Z ==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+2025-05-01T21:18:11.68515219Z ==> Using Bun version 1.1.0 (default)
+2025-05-01T21:18:11.685184545Z ==> Docs on specifying a bun version: https://render.com/docs/bun-version
+2025-05-01T21:18:11.779535694Z ==> Running build command 'npm install'...
+2025-05-01T21:18:13.122907017Z (node:126) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+2025-05-01T21:18:13.122928517Z (Use `node --trace-warnings ...` to show where the warning was created)
+2025-05-01T21:18:26.582128731Z 
+2025-05-01T21:18:26.582166057Z added 525 packages, and audited 526 packages in 15s
+2025-05-01T21:18:26.582207101Z 
+2025-05-01T21:18:26.582250004Z 66 packages are looking for funding
+2025-05-01T21:18:26.582267527Z   run `npm fund` for details
+2025-05-01T21:18:26.637990294Z 
+2025-05-01T21:18:26.638015154Z 7 moderate severity vulnerabilities
+2025-05-01T21:18:26.638020602Z 
+2025-05-01T21:18:26.63802701Z To address issues that do not require attention, run:
+2025-05-01T21:18:26.638032138Z   npm audit fix
+2025-05-01T21:18:26.638037186Z 
+2025-05-01T21:18:26.638041934Z To address all issues (including breaking changes), run:
+2025-05-01T21:18:26.638047871Z   npm audit fix --force
+2025-05-01T21:18:26.63805236Z 
+2025-05-01T21:18:26.638057598Z Run `npm audit` for details.
+2025-05-01T21:19:28.033224026Z ==> Uploading build...
+2025-05-01T21:19:40.619707623Z ==> Uploaded in 8.4s. Compression took 4.2s
+2025-05-01T21:19:40.691172184Z ==> Build successful 🎉
+2025-05-01T21:19:43.871682616Z ==> Deploying...
+2025-05-01T21:20:03.994610515Z ==> Running 'node -r tsx/register server/init-db.ts && node -r tsx/register create-admin-fixed.js && NODE_ENV=production tsx server/index.ts'
+2025-05-01T21:20:04.073378545Z node:internal/modules/cjs/loader:646
+2025-05-01T21:20:04.073396876Z       throw e;
+2025-05-01T21:20:04.073399936Z       ^
+2025-05-01T21:20:04.073402426Z 
+2025-05-01T21:20:04.073405767Z Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './register' is not defined by "exports" in /opt/render/project/src/node_modules/tsx/package.json
+2025-05-01T21:20:04.073409167Z     at exportsNotFound (node:internal/modules/esm/resolve:314:10)
+2025-05-01T21:20:04.073411597Z     at packageExportsResolve (node:internal/modules/esm/resolve:661:9)
+2025-05-01T21:20:04.073414867Z     at resolveExports (node:internal/modules/cjs/loader:639:36)
+2025-05-01T21:20:04.073417668Z     at Function._findPath (node:internal/modules/cjs/loader:728:31)
+2025-05-01T21:20:04.073420398Z     at Function._resolveFilename (node:internal/modules/cjs/loader:1211:27)
+2025-05-01T21:20:04.073423388Z     at Function._load (node:internal/modules/cjs/loader:1055:27)
+2025-05-01T21:20:04.073426018Z     at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+2025-05-01T21:20:04.073428368Z     at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+2025-05-01T21:20:04.073430829Z     at Module.require (node:internal/modules/cjs/loader:1311:12)
+2025-05-01T21:20:04.073433319Z     at node:internal/modules/cjs/loader:1856:12 {
+2025-05-01T21:20:04.073435899Z   code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+2025-05-01T21:20:04.073438569Z }
+2025-05-01T21:20:04.073441149Z 
+2025-05-01T21:20:04.07344382Z Node.js v22.14.0
+2025-05-01T21:20:10.021079275Z ==> Exited with status 1
+2025-05-01T21:20:10.164753565Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+2025-05-01T21:20:10.495825265Z ==> Running 'node -r tsx/register server/init-db.ts && node -r tsx/register create-admin-fixed.js && NODE_ENV=production tsx server/index.ts'
+2025-05-01T21:20:10.576416838Z node:internal/modules/cjs/loader:646
+2025-05-01T21:20:10.57643636Z       throw e;
+2025-05-01T21:20:10.57643934Z       ^
+2025-05-01T21:20:10.57644146Z 
+2025-05-01T21:20:10.57644418Z Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './register' is not defined by "exports" in /opt/render/project/src/node_modules/tsx/package.json
+2025-05-01T21:20:10.57644699Z     at exportsNotFound (node:internal/modules/esm/resolve:314:10)
+2025-05-01T21:20:10.576449331Z     at packageExportsResolve (node:internal/modules/esm/resolve:661:9)
+2025-05-01T21:20:10.576452631Z     at resolveExports (node:internal/modules/cjs/loader:639:36)
+2025-05-01T21:20:10.576454641Z     at Function._findPath (node:internal/modules/cjs/loader:728:31)
+2025-05-01T21:20:10.576456711Z     at Function._resolveFilename (node:internal/modules/cjs/loader:1211:27)
+2025-05-01T21:20:10.576458751Z     at Function._load (node:internal/modules/cjs/loader:1055:27)
+2025-05-01T21:20:10.576460782Z     at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+2025-05-01T21:20:10.576463052Z     at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+2025-05-01T21:20:10.576465092Z     at Module.require (node:internal/modules/cjs/loader:1311:12)
+2025-05-01T21:20:10.576467572Z     at node:internal/modules/cjs/loader:1856:12 {
+2025-05-01T21:20:10.576469702Z   code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+2025-05-01T21:20:10.576471742Z }
+2025-05-01T21:20:10.576473563Z 
+2025-05-01T21:20:10.576475803Z Node.js v22.14.0

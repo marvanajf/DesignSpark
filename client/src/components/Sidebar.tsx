@@ -56,7 +56,14 @@ export default function Sidebar() {
       badge: subscriptionPlan === 'free' ? 'Upgrade' : null
     },
     { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" },
-    ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : [])
+    ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : []),
+    // Add logout as a menu item for better visibility
+    { 
+      href: "#", 
+      icon: <LogOut className="h-5 w-5" />, 
+      label: "Logout",
+      onClick: () => logoutMutation.mutate()
+    }
   ];
 
   return (
