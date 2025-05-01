@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -61,6 +61,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       email: "",
       password: "",
     },
+    mode: "onChange",
   });
 
   const registerForm = useForm<RegisterFormValues>({
@@ -71,7 +72,44 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       full_name: "",
       company: "",
     },
+    mode: "onChange",
   });
+
+  // Reset forms when modal is opened/closed
+  useEffect(() => {
+    if (isOpen) {
+      // When modal opens, reset both forms with explicit default values
+      loginForm.reset({
+        email: "",
+        password: "",
+      });
+      registerForm.reset({
+        email: "",
+        password: "",
+        full_name: "",
+        company: "",
+      });
+    }
+  }, [isOpen, loginForm, registerForm]);
+
+  // Reset the appropriate form when switching between login and signup
+  useEffect(() => {
+    if (isLogin) {
+      // Reset signup form when switching to login
+      registerForm.reset({
+        email: "",
+        password: "",
+        full_name: "",
+        company: "",
+      });
+    } else {
+      // Reset login form when switching to signup
+      loginForm.reset({
+        email: "",
+        password: "",
+      });
+    }
+  }, [isLogin, loginForm, registerForm]);
 
   const onLoginSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data, {
@@ -261,7 +299,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <div className="mt-4 text-center">
               <Button
                 variant="link"
-                onClick={() => setIsLogin(!isLogin)}
+                onClick={() => {
+                  // First reset the forms with explicit default values
+                  if (isLogin) {
+                    // If switching from login to signup, reset the signup form
+                    registerForm.reset({
+                      email: "",
+                      password: "",
+                      full_name: "",
+                      company: "",
+                    });
+                  } else {
+                    // If switching from signup to login, reset the login form
+                    loginForm.reset({
+                      email: "",
+                      password: "",
+                    });
+                  }
+                  // Then toggle the mode
+                  setIsLogin(!isLogin);
+                }}
                 className="text-[#74d1ea] hover:text-[#5db8d0]"
               >
                 {isLogin
