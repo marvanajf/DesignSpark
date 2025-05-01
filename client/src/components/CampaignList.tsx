@@ -3,6 +3,7 @@ import { Campaign, InsertCampaign } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2, Plus, Folder, Pencil, Trash2 } from "lucide-react";
+import { CampaignModal } from "./CampaignModal";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,9 @@ export function CampaignList() {
   const { user } = useAuth();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
   const [currentCampaign, setCurrentCampaign] = useState<Campaign | null>(null);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -396,9 +399,12 @@ export function CampaignList() {
                     size="sm"
                     className="w-full"
                     style={{ backgroundColor: "#74d1ea", color: "black" }}
-                    asChild
+                    onClick={() => {
+                      setSelectedCampaignId(campaign.id);
+                      setIsCampaignModalOpen(true);
+                    }}
                   >
-                    <a href={`/campaign/${campaign.id}`}>Select</a>
+                    Select
                   </Button>
                 </CardFooter>
               </Card>
@@ -420,6 +426,15 @@ export function CampaignList() {
             Create Your First Campaign
           </Button>
         </div>
+      )}
+
+      {/* Campaign Modal */}
+      {selectedCampaignId && (
+        <CampaignModal
+          campaignId={selectedCampaignId}
+          isOpen={isCampaignModalOpen}
+          onClose={() => setIsCampaignModalOpen(false)}
+        />
       )}
     </div>
   );
