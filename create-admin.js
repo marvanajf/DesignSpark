@@ -21,17 +21,18 @@ async function hashPassword(password) {
 
 async function createAdminUser() {
   try {
+    const adminEmail = "admin@tovably.com";
     // Check if the admin user already exists
     const checkResult = await pool.query(
-      "SELECT * FROM users WHERE username = $1",
-      ["admin"]
+      "SELECT * FROM users WHERE email = $1",
+      [adminEmail]
     );
 
     if (checkResult.rows.length > 0) {
       console.log("Admin user already exists. Updating role to 'admin'...");
       await pool.query(
-        "UPDATE users SET role = 'admin' WHERE username = $1",
-        ["admin"]
+        "UPDATE users SET role = 'admin' WHERE email = $1",
+        [adminEmail]
       );
       console.log("Admin role updated.");
     } else {
@@ -45,7 +46,7 @@ async function createAdminUser() {
         RETURNING id`,
         [
           "admin", 
-          "admin@tovably.com", 
+          adminEmail, 
           hashedPassword, 
           "admin", 
           "professional", 
@@ -64,7 +65,7 @@ async function createAdminUser() {
     }
 
     console.log("\nYou can now log in with:");
-    console.log("Username: admin");
+    console.log("Email: admin@tovably.com");
     console.log("Password: admin123");
     
   } catch (error) {
