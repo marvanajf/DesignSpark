@@ -89,9 +89,10 @@ export default function ComingSoonPage() {
             </div>
             
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-6">
-              <span className="text-white">Revolutionize your </span>
-              <span className="text-[#74d1ea]">communication</span>
-              <span className="text-white"> with <br />AI-powered insights</span>
+              <span className="text-white">Revolutionise your comms. </span>
+              <span className="text-[#74d1ea]">Analyse brand TOV</span>
+              <span className="text-white">, create personas, <br />and generate perfectly tailored content. </span>
+              <span className="text-[#74d1ea]">Every time.</span>
             </h1>
             
             <p className="text-zinc-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
