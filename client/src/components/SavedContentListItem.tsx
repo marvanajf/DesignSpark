@@ -1,8 +1,9 @@
-import { GeneratedContent } from "@shared/schema";
-import { useMutation } from "@tanstack/react-query";
+import { GeneratedContent, Campaign } from "@shared/schema";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 import { 
   Copy, 
   Trash2, 
@@ -71,6 +72,63 @@ export default function SavedContentListItem({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showAddToCampaignDialog, setShowAddToCampaignDialog] = useState(false);
   const [selectedCampaignIds, setSelectedCampaignIds] = useState<number[]>([]);
+  
+  // Fetch campaigns for add to campaign dialog
+  const { data: campaigns, isLoading: isLoadingCampaigns } = useQuery({
+    queryKey: ["/api/campaigns"],
+    staleTime: 1000 * 60, // 1 minute
+    enabled: showAddToCampaignDialog, // Only fetch when dialog is open
+  });
+  
+  // Add content to selected campaigns
+  const addToCampaignMutation = useMutation({
+    mutationFn: async (campaignId: number) => {
+      const res = await apiRequest("POST", "/api/campaign-contents", {
+        campaign_id: campaignId,
+        content_id: content.id,
+      });
+      return await res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Content added to campaign",
+        description: "The content has been added to the selected campaign",
+      });
+      setShowAddToCampaignDialog(false);
+      setSelectedCampaignIds([]);
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to add to campaign",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  
+  const handleAddToCampaigns = () => {
+    if (selectedCampaignIds.length === 0) {
+      toast({
+        title: "No campaign selected",
+        description: "Please select at least one campaign",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Add to each selected campaign
+    selectedCampaignIds.forEach(campaignId => {
+      addToCampaignMutation.mutate(campaignId);
+    });
+  };
+
+  const handleCampaignSelect = (campaignId: number, checked: boolean) => {
+    if (checked) {
+      setSelectedCampaignIds(prev => [...prev, campaignId]);
+    } else {
+      setSelectedCampaignIds(prev => prev.filter(id => id !== campaignId));
+    }
+  };
   
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -267,18 +325,58 @@ export default function SavedContentListItem({
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <div className="text-center py-8">
-              {/* This will be populated with campaign list when we implement the feature */}
-              <FolderPlus className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">Coming Soon</h3>
-              <p className="text-sm text-muted-foreground">
-                Campaign functionality is currently being implemented.
-              </p>
-            </div>
+            {isLoadingCampaigns ? (
+              <div className="flex justify-center items-center h-[200px]">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : campaigns && campaigns.length > 0 ? (
+              <ScrollArea className="h-[300px]">
+                <div className="space-y-2">
+                  {campaigns.map((campaign: any) => (
+                    <div key={campaign.id} className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent/5">
+                      <Checkbox
+                        id={`campaign-${campaign.id}`}
+                        checked={selectedCampaignIds.includes(campaign.id)}
+                        onCheckedChange={(checked) => handleCampaignSelect(campaign.id, checked === true)}
+                      />
+                      <Label htmlFor={`campaign-${campaign.id}`} className="flex-1 cursor-pointer">
+                        <div className="font-medium">{campaign.name}</div>
+                        {campaign.description && (
+                          <div className="text-sm text-muted-foreground line-clamp-1">{campaign.description}</div>
+                        )}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            ) : (
+              <div className="text-center py-8">
+                <FolderPlus className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium">No campaigns found</h3>
+                <p className="text-sm text-muted-foreground">
+                  Create a campaign first before adding content to it.
+                </p>
+              </div>
+            )}
           </div>
-          <DialogFooter>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <div className="mr-auto text-sm text-muted-foreground">
+              {selectedCampaignIds.length} campaign{selectedCampaignIds.length !== 1 ? 's' : ''} selected
+            </div>
             <Button variant="outline" onClick={() => setShowAddToCampaignDialog(false)}>
-              Close
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddToCampaigns}
+              disabled={selectedCampaignIds.length === 0 || addToCampaignMutation.isPending}
+            >
+              {addToCampaignMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Adding...
+                </>
+              ) : (
+                "Add to Campaigns"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
