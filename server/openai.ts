@@ -247,7 +247,7 @@ export async function generateColdEmail(
         },
         {
           role: "user",
-          content: `Generate a cold email about ${topic} that would appeal to a ${personaName}.`
+          content: `Generate a cold email about ${topic} that would appeal to a ${personaName}.${furtherDetailsPrompt}`
         }
       ],
       temperature: 0.7
