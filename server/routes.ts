@@ -1360,38 +1360,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let contentText = "";
       
       try {
-        // Prepare the topic with any additional details
-        const fullTopic = furtherDetails 
-          ? `${topic}\n\nAdditional Details: ${furtherDetails}` 
-          : topic;
-            
         if (type === 'linkedin_post') {
           contentText = await generateLinkedInPost(
-            fullTopic, 
+            topic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
-            persona.description || ""
+            persona.description || "",
+            furtherDetails
           );
         } else if (type === 'email') {
           contentText = await generateColdEmail(
-            fullTopic, 
+            topic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
-            persona.description || ""
+            persona.description || "",
+            furtherDetails
           );
         } else if (type === 'webinar') {
           contentText = await generateWebinar(
-            fullTopic, 
+            topic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
-            persona.description || ""
+            persona.description || "",
+            furtherDetails
           );
         } else if (type === 'workshop') {
           contentText = await generateWorkshop(
-            fullTopic, 
+            topic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
-            persona.description || ""
+            persona.description || "",
+            furtherDetails
           );
         }
       } catch (error: any) {

@@ -142,7 +142,8 @@ export async function generateLinkedInPost(
   topic: string, 
   toneResults: ToneAnalysisResult, 
   personaName: string, 
-  personaDescription: string
+  personaDescription: string,
+  furtherDetails?: string
 ): Promise<string> {
   try {
     // Check if OpenAI is initialized
@@ -156,6 +157,10 @@ export async function generateLinkedInPost(
       .slice(0, 2)
       .map(([key, value]) => `${key} (${value}%)`)
       .join(", ");
+    
+    const furtherDetailsPrompt = furtherDetails 
+      ? `\n\nAdditional details to consider: ${furtherDetails}`
+      : '';
     
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -206,7 +211,8 @@ export async function generateColdEmail(
   topic: string, 
   toneResults: ToneAnalysisResult, 
   personaName: string, 
-  personaDescription: string
+  personaDescription: string,
+  furtherDetails?: string
 ): Promise<string> {
   try {
     // Check if OpenAI is initialized
@@ -220,6 +226,10 @@ export async function generateColdEmail(
       .slice(0, 2)
       .map(([key, value]) => `${key} (${value}%)`)
       .join(", ");
+    
+    const furtherDetailsPrompt = furtherDetails 
+      ? `\n\nAdditional details to consider: ${furtherDetails}`
+      : '';
     
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -260,7 +270,8 @@ export async function generateWebinar(
   topic: string, 
   toneResults: ToneAnalysisResult, 
   personaName: string, 
-  personaDescription: string
+  personaDescription: string,
+  furtherDetails?: string
 ): Promise<string> {
   try {
     // Check if OpenAI is initialized
@@ -274,6 +285,10 @@ export async function generateWebinar(
       .slice(0, 2)
       .map(([key, value]) => `${key} (${value}%)`)
       .join(", ");
+    
+    const furtherDetailsPrompt = furtherDetails 
+      ? `\n\nAdditional details to consider: ${furtherDetails}`
+      : '';
     
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -304,7 +319,7 @@ export async function generateWebinar(
         },
         {
           role: "user",
-          content: `Create a webinar outline about ${topic} that would appeal to a ${personaName}.`
+          content: `Create a webinar outline about ${topic} that would appeal to a ${personaName}.${furtherDetailsPrompt}`
         }
       ],
       temperature: 0.7
@@ -327,7 +342,8 @@ export async function generateWorkshop(
   topic: string, 
   toneResults: ToneAnalysisResult, 
   personaName: string, 
-  personaDescription: string
+  personaDescription: string,
+  furtherDetails?: string
 ): Promise<string> {
   try {
     // Check if OpenAI is initialized
@@ -341,6 +357,10 @@ export async function generateWorkshop(
       .slice(0, 2)
       .map(([key, value]) => `${key} (${value}%)`)
       .join(", ");
+    
+    const furtherDetailsPrompt = furtherDetails 
+      ? `\n\nAdditional details to consider: ${furtherDetails}`
+      : '';
     
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -374,7 +394,7 @@ export async function generateWorkshop(
         },
         {
           role: "user",
-          content: `Design a workshop plan about ${topic} for ${personaName} participants.`
+          content: `Design a workshop plan about ${topic} for ${personaName} participants.${furtherDetailsPrompt}`
         }
       ],
       temperature: 0.7
