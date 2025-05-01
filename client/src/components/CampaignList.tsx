@@ -42,6 +42,7 @@ import { cn } from "@/lib/utils";
 
 export function CampaignList() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentCampaign, setCurrentCampaign] = useState<Campaign | null>(null);
@@ -129,9 +130,20 @@ export function CampaignList() {
       return;
     }
 
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "You must be logged in to create a campaign",
+        variant: "destructive",
+      });
+      return;
+    }
+
     createCampaignMutation.mutate({
       name,
       description: description || null,
+      user_id: user.id,
+      status: "active",
     });
   };
 

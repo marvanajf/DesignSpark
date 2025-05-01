@@ -1509,14 +1509,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
         return res.status(403).json({ error: "Not authorized to access this campaign" });
       }
+      
+      res.json(campaign);
+    } catch (error) {
+      console.error("Error fetching campaign:", error);
+      res.status(500).json({ error: "Failed to fetch campaign" });
+    }
+  });
+  
+  app.get("/api/campaigns/:id/contents", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaign(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to access this campaign" });
+      }
 
       // Get content associated with this campaign
       const campaignContents = await storage.getCampaignContents(id);
       
-      res.json({ campaign, contents: campaignContents });
+      res.json(campaignContents);
     } catch (error) {
-      console.error("Error fetching campaign:", error);
-      res.status(500).json({ error: "Failed to fetch campaign" });
+      console.error("Error fetching campaign contents:", error);
+      res.status(500).json({ error: "Failed to fetch campaign contents" });
     }
   });
 
