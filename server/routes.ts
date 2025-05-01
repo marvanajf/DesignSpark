@@ -88,6 +88,155 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set up blog routes
   registerBlogRoutes(app);
   
+  // System health check endpoint for comprehensive diagnostics
+  app.get("/api/system-health", async (req, res) => {
+    const healthStatus = {
+      status: "checking",
+      timestamp: new Date().toISOString(),
+      components: {
+        database: { status: "checking" },
+        email: { status: "checking" },
+        sessions: { status: "checking" },
+        stripe: { status: "checking" }
+      },
+      environment: {
+        node_env: process.env.NODE_ENV || "not_set",
+        platform: process.platform,
+        node_version: process.version,
+      }
+    };
+    
+    // Check database health
+    try {
+      const { testConnection } = await import('./db');
+      const dbSuccess = await testConnection();
+      
+      if (dbSuccess) {
+        healthStatus.components.database = { 
+          status: "healthy", 
+          message: "Database connection successful" 
+        };
+      } else {
+        healthStatus.components.database = { 
+          status: "unhealthy", 
+          message: "Database connection test failed" 
+        };
+      }
+    } catch (dbError) {
+      console.error("Database health check error:", dbError);
+      healthStatus.components.database = {
+        status: "error",
+        message: "Error checking database health",
+        error: dbError instanceof Error ? dbError.message : String(dbError)
+      };
+    }
+    
+    // Check email service
+    try {
+      // Just verify if email configuration exists
+      if (process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD) {
+        healthStatus.components.email = {
+          status: "configured",
+          provider: "gmail",
+          message: "Email credentials are configured"
+        };
+      } else if (process.env.SENDGRID_API_KEY) {
+        healthStatus.components.email = {
+          status: "configured",
+          provider: "sendgrid",
+          message: "Email credentials are configured"
+        };
+      } else {
+        healthStatus.components.email = {
+          status: "unconfigured",
+          message: "No email provider credentials found"
+        };
+      }
+    } catch (emailError) {
+      console.error("Email health check error:", emailError);
+      healthStatus.components.email = {
+        status: "error",
+        message: "Error checking email configuration",
+        error: emailError instanceof Error ? emailError.message : String(emailError)
+      };
+    }
+    
+    // Check session configuration
+    try {
+      if (process.env.SESSION_SECRET) {
+        healthStatus.components.sessions = {
+          status: "configured",
+          message: "Session secret is configured"
+        };
+      } else {
+        healthStatus.components.sessions = {
+          status: "unconfigured",
+          message: "Session secret is not configured"
+        };
+      }
+    } catch (sessionError) {
+      console.error("Session health check error:", sessionError);
+      healthStatus.components.sessions = {
+        status: "error",
+        message: "Error checking session configuration",
+        error: sessionError instanceof Error ? sessionError.message : String(sessionError)
+      };
+    }
+    
+    // Check Stripe configuration
+    try {
+      if (process.env.STRIPE_SECRET_KEY) {
+        if (process.env.VITE_STRIPE_PUBLIC_KEY) {
+          // Test Stripe API key by making a simple request
+          try {
+            const balance = await withRetry(() => stripe.balance.retrieve());
+            healthStatus.components.stripe = {
+              status: "healthy",
+              message: "Stripe API keys are configured and working",
+              available: balance.available.map(b => `${b.amount} ${b.currency}`).join(', ')
+            };
+          } catch (stripeApiError) {
+            console.error("Stripe API error:", stripeApiError);
+            healthStatus.components.stripe = {
+              status: "error",
+              message: "Stripe API keys are configured but API test failed",
+              error: stripeApiError instanceof Error ? stripeApiError.message : String(stripeApiError)
+            };
+          }
+        } else {
+          healthStatus.components.stripe = {
+            status: "partial",
+            message: "Stripe Secret key is configured but Public key is missing"
+          };
+        }
+      } else {
+        healthStatus.components.stripe = {
+          status: "unconfigured",
+          message: "Stripe API keys are not configured"
+        };
+      }
+    } catch (stripeError) {
+      console.error("Stripe health check error:", stripeError);
+      healthStatus.components.stripe = {
+        status: "error",
+        message: "Error checking Stripe configuration",
+        error: stripeError instanceof Error ? stripeError.message : String(stripeError)
+      };
+    }
+    
+    // Determine overall system health
+    const componentStatuses = Object.values(healthStatus.components).map(c => c.status);
+    if (componentStatuses.includes("error") || componentStatuses.includes("unhealthy")) {
+      healthStatus.status = "unhealthy";
+    } else if (componentStatuses.includes("partial") || componentStatuses.includes("unconfigured")) {
+      healthStatus.status = "degraded";
+    } else {
+      healthStatus.status = "healthy";
+    }
+    
+    return res.json(healthStatus);
+  });
+  
   // Cancel subscription and downgrade to free plan
   app.post("/api/cancel-subscription", async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {

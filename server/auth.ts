@@ -115,20 +115,42 @@ export function setupAuth(app: Express) {
       const validatedData = extendedSchema.parse(req.body);
       console.log("Data validation successful for email:", validatedData.email);
 
-      // Check if email already exists
+      // Check if email already exists with improved error handling
       try {
-        console.log("Checking if email already exists...");
-        const existingEmail = await storage.getUserByEmail(validatedData.email);
+        console.log("Checking if email already exists:", validatedData.email);
+        
+        // Import the withRetry utility for database operations
+        const { withRetry } = await import('./db');
+        
+        // Use withRetry for database operation with 5 retries and longer timeout
+        const existingEmail = await withRetry(
+          async () => storage.getUserByEmail(validatedData.email),
+          5, // 5 retries
+          2000 // 2 seconds initial delay with exponential backoff
+        );
+        
         if (existingEmail) {
           console.log("Email already exists:", validatedData.email);
           return res.status(400).json({ message: "Email already exists" });
         }
+        
         console.log("Email check passed, email is unique");
       } catch (emailCheckError) {
-        console.error("Error checking existing email:", emailCheckError);
+        // More detailed error logging
+        console.error("Error checking existing email:", 
+          emailCheckError instanceof Error ? emailCheckError.message : String(emailCheckError));
+        
+        if (emailCheckError instanceof Error && emailCheckError.stack) {
+          console.error("Stack trace:", emailCheckError.stack);
+        }
+        
         return res.status(500).json({ 
           message: "Server error during email verification",
-          error: process.env.NODE_ENV === 'development' ? emailCheckError.toString() : undefined
+          error: process.env.NODE_ENV === 'development' 
+            ? (emailCheckError instanceof Error 
+                ? {message: emailCheckError.message, stack: emailCheckError.stack} 
+                : String(emailCheckError)) 
+            : "Server error, please try again later"
         });
       }
 
@@ -136,13 +158,23 @@ export function setupAuth(app: Express) {
       let username = validatedData.username;
       try {
         console.log("Generating username...");
+        
+        // Import the withRetry utility for database operations
+        const { withRetry } = await import('./db');
+        
         if (!username) {
-          // Create username from the part before @ in email
-          username = validatedData.email.split('@')[0];
+          // Create username from the part before @ in email, ensure it's a string
+          const emailUser = validatedData.email.split('@')[0] || "";
+          username = emailUser;
           
-          // Check if this username exists, if so add a random suffix
+          // Check if this username exists, if so add a random suffix, with retry logic
           console.log("Checking if username exists:", username);
-          const existingUsername = await storage.getUserByUsername(username);
+          const existingUsername = await withRetry(
+            async () => storage.getUserByUsername(username),
+            5, // 5 retries
+            2000 // 2 seconds initial delay with exponential backoff
+          );
+          
           if (existingUsername) {
             const randomSuffix = Math.floor(Math.random() * 9000 + 1000);
             username = `${username}${randomSuffix}`;
@@ -151,10 +183,21 @@ export function setupAuth(app: Express) {
         }
         console.log("Final username:", username);
       } catch (usernameError) {
-        console.error("Error generating username:", usernameError);
+        // More detailed error logging for username generation
+        console.error("Error generating username:", 
+          usernameError instanceof Error ? usernameError.message : String(usernameError));
+        
+        if (usernameError instanceof Error && usernameError.stack) {
+          console.error("Stack trace:", usernameError.stack);
+        }
+        
         return res.status(500).json({ 
           message: "Server error during username generation",
-          error: process.env.NODE_ENV === 'development' ? usernameError.toString() : undefined
+          error: process.env.NODE_ENV === 'development' 
+            ? (usernameError instanceof Error 
+                ? {message: usernameError.message, stack: usernameError.stack} 
+                : String(usernameError))
+            : "Server error, please try again later"
         });
       }
 
@@ -164,13 +207,21 @@ export function setupAuth(app: Express) {
         const hashedPassword = await hashPassword(validatedData.password);
         console.log("Password hashed successfully");
         
-        console.log("Creating user in database...");
-        const user = await storage.createUser({
-          ...validatedData,
-          username,
-          password: hashedPassword,
-          role: "user", // Set default role for new users
-        });
+        // Import the withRetry utility for database operations
+        const { withRetry } = await import('./db');
+        
+        console.log("Creating user in database with improved error handling...");
+        const user = await withRetry(
+          async () => storage.createUser({
+            ...validatedData,
+            username,
+            password: hashedPassword,
+            role: "user", // Set default role for new users
+          }),
+          5, // 5 retries
+          2000 // 2 seconds initial delay with exponential backoff
+        );
+        
         console.log("User created successfully with ID:", user.id);
 
         // Remove password from response
@@ -187,10 +238,37 @@ export function setupAuth(app: Express) {
           res.status(201).json(userWithoutPassword);
         });
       } catch (createError) {
-        console.error("Error creating user:", createError);
+        // More detailed error logging for user creation
+        console.error("Error creating user:", 
+          createError instanceof Error ? createError.message : String(createError));
+        
+        if (createError instanceof Error && createError.stack) {
+          console.error("Stack trace:", createError.stack);
+        }
+        
+        // Check for specific error types like unique constraint violations
+        const errorMsg = String(createError);
+        if (errorMsg.includes("unique constraint") || errorMsg.includes("duplicate key")) {
+          if (errorMsg.includes("username")) {
+            return res.status(400).json({
+              message: "Username already exists. Please choose a different username.",
+              error: errorMsg
+            });
+          } else if (errorMsg.includes("email")) {
+            return res.status(400).json({
+              message: "Email already exists. Please use a different email or sign in.",
+              error: errorMsg
+            });
+          }
+        }
+        
         return res.status(500).json({ 
           message: "Server error during user creation",
-          error: process.env.NODE_ENV === 'development' ? createError.toString() : undefined
+          error: process.env.NODE_ENV === 'development' 
+            ? (createError instanceof Error 
+                ? {message: createError.message, stack: createError.stack} 
+                : String(createError))
+            : "Server error, please try again later"
         });
       }
     } catch (error) {
@@ -220,21 +298,71 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
-      if (!user) {
+  app.post("/api/login", async (req, res, next) => {
+    try {
+      // Implement custom authentication with retry mechanism
+      const loginHandler = async () => {
+        return new Promise((resolve, reject) => {
+          passport.authenticate("local", (err, user, info) => {
+            if (err) {
+              console.error("Passport authentication error:", err);
+              return reject(err);
+            }
+            
+            if (!user) {
+              console.log("Login failed - invalid credentials");
+              return reject(new Error("Invalid email or password"));
+            }
+            
+            req.login(user, (loginErr) => {
+              if (loginErr) {
+                console.error("Login session error:", loginErr);
+                return reject(loginErr);
+              }
+              
+              // Remove password from response
+              const { password, ...userWithoutPassword } = user;
+              resolve(userWithoutPassword);
+            });
+          })(req, res, next);
+        });
+      };
+      
+      // Import the withRetry utility
+      const { withRetry } = await import('./db');
+      
+      // Execute login with retries
+      const userResponse = await withRetry(
+        loginHandler,
+        3, // 3 retries
+        1000 // 1 second initial delay
+      );
+      
+      return res.status(200).json(userResponse);
+    } catch (error) {
+      console.error("Login error:", 
+        error instanceof Error ? error.message : String(error));
+      
+      // Check if it's an invalid credentials error
+      if (error instanceof Error && error.message === "Invalid email or password") {
         return res.status(401).json({ message: "Invalid email or password" });
       }
       
-      req.login(user, (err) => {
-        if (err) return next(err);
-        
-        // Remove password from response
-        const { password, ...userWithoutPassword } = user;
-        return res.status(200).json(userWithoutPassword);
+      // Check if it's a connection error
+      if (error instanceof Error && error.message.includes('ECONNREFUSED')) {
+        return res.status(500).json({ 
+          message: "Server error: Database connection failed",
+          error: process.env.NODE_ENV === 'development' ? error.toString() : undefined
+        });
+      }
+      
+      return res.status(500).json({ 
+        message: "Server error during login",
+        error: process.env.NODE_ENV === 'development' 
+          ? (error instanceof Error ? error.toString() : String(error))
+          : "Server error, please try again later"
       });
-    })(req, res, next);
+    }
   });
 
   app.post("/api/logout", (req, res, next) => {
@@ -248,11 +376,63 @@ export function setupAuth(app: Express) {
     });
   });
 
-  app.get("/api/user", (req, res) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    // Remove password from response
-    const { password, ...userWithoutPassword } = req.user as SelectUser;
-    res.json(userWithoutPassword);
+  app.get("/api/user", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        console.log("User not authenticated for /api/user");
+        return res.sendStatus(401);
+      }
+      
+      // Get the latest user data from the database with retry
+      try {
+        const { withRetry } = await import('./db');
+        
+        // If we have a user ID, fetch the latest user data to ensure it's up to date
+        if (req.user?.id) {
+          console.log("Fetching latest user data for user ID:", req.user.id);
+          
+          const latestUser = await withRetry(
+            async () => storage.getUser(req.user.id),
+            3, // 3 retries
+            1000 // 1 second initial delay
+          );
+          
+          if (latestUser) {
+            // Remove password from response
+            const { password, ...userWithoutPassword } = latestUser;
+            console.log("Successfully retrieved latest user data");
+            return res.json(userWithoutPassword);
+          } else {
+            // This is an unusual case where the user is authenticated but not found in the DB
+            console.error("Authenticated user not found in database, user ID:", req.user.id);
+            req.logout((err) => {
+              if (err) console.error("Error logging out stale user session:", err);
+              return res.sendStatus(401);
+            });
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching latest user data:", 
+          error instanceof Error ? error.message : String(error));
+        // Continue to fallback
+      }
+      
+      // Fallback to the user data in the session if database fetch fails
+      console.log("Using session user data as fallback");
+      const { password, ...userWithoutPassword } = req.user as SelectUser;
+      res.json(userWithoutPassword);
+      
+    } catch (error) {
+      console.error("Error in /api/user endpoint:", 
+        error instanceof Error ? error.message : String(error));
+      
+      return res.status(500).json({
+        message: "Server error retrieving user data",
+        error: process.env.NODE_ENV === 'development' 
+          ? (error instanceof Error ? error.toString() : String(error))
+          : undefined
+      });
+    }
   });
 }
