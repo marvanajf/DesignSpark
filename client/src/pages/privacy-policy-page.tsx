@@ -1,12 +1,13 @@
-import { Metadata } from "@/components/ui/metadata";
+import { Helmet } from "react-helmet";
+import Layout from "@/components/Layout";
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
-      <Metadata
-        title="Privacy Policy | Tovably"
-        description="Our privacy policy details how Tovably collects, uses, and protects your personal information."
-      />
+    <Layout>
+      <Helmet>
+        <title>Privacy Policy | Tovably</title>
+        <meta name="description" content="Our privacy policy details how Tovably collects, uses, and protects your personal information." />
+      </Helmet>
       
       <div className="max-w-4xl mx-auto py-16 px-6">
         <h1 className="text-3xl font-medium mb-8">Privacy Policy</h1>
@@ -91,6 +92,6 @@ export default function PrivacyPolicyPage() {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
