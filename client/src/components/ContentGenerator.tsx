@@ -33,6 +33,7 @@ export default function ContentGenerator() {
   const [personaId, setPersonaId] = useState<string>("");
   const [toneAnalysisId, setToneAnalysisId] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
+  const [furtherDetails, setFurtherDetails] = useState<string>("");
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
 
   // Fetch tone analyses
@@ -66,6 +67,7 @@ export default function ContentGenerator() {
       personaId: number; 
       toneAnalysisId: number;
       topic: string;
+      furtherDetails?: string;
     }) => {
       const res = await apiRequest("POST", "/api/content", data);
       
@@ -150,6 +152,7 @@ export default function ContentGenerator() {
       personaId: parseInt(personaId),
       toneAnalysisId: parseInt(toneAnalysisId),
       topic,
+      furtherDetails: furtherDetails || undefined,
     });
   };
 
@@ -317,6 +320,22 @@ export default function ContentGenerator() {
             </p>
           </div>
           
+          <div className="mt-4">
+            <label htmlFor="further-details" className="block text-sm font-medium mb-2">
+              Further Details <span className="text-muted-foreground text-xs">(Optional)</span>
+            </label>
+            <textarea
+              id="further-details"
+              value={furtherDetails}
+              onChange={(e) => setFurtherDetails(e.target.value)}
+              placeholder="Add any additional context, requirements, or specific points you'd like to include"
+              className="w-full max-w-xl rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring min-h-[100px]"
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              Provide additional information to make your content more specific and detailed
+            </p>
+          </div>
+          
           <div className="mt-8">
             <Button 
               onClick={handleGenerate}
@@ -377,6 +396,7 @@ export default function ContentGenerator() {
               onClick={() => {
                 setGeneratedContent(null);
                 setTopic("");
+                setFurtherDetails("");
               }}
             >
               <Loader2 className="mr-2 h-4 w-4" />
