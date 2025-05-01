@@ -65,7 +65,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[425px] border border-border">
+      <DialogContent className="sm:max-w-[425px] border border-border" closeButton={false}>
         <DialogHeader>
           <DialogTitle>Subscribe to {plan.name} Plan</DialogTitle>
           <DialogDescription>
