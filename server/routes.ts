@@ -1344,8 +1344,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (!session.metadata?.userId) {
           // Auto-create an account using the customer email
           try {
-            const customer = await stripe.customers.retrieve(session.customer as string);
+            // Check if session.customer exists before trying to retrieve it
+            if (!session.customer) {
+              console.log("No customer ID found in session, cannot create account");
+              return;
+            }
+            
+            const customerStripeId = session.customer as string;
+            console.log("Retrieved customer ID from session:", customerStripeId);
+            
+            const customer = await stripe.customers.retrieve(customerStripeId);
+            console.log("Retrieved customer details:", customer ? "Success" : "Failed");
+            
             const customerEmail = typeof customer === 'object' && !('deleted' in customer) ? customer.email : null;
+            console.log("Retrieved customer email:", customerEmail || "No email found");
             
             if (customerEmail) {
               // Generate a random secure password
@@ -1361,28 +1373,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 personas_used: 0,
                 tone_analyses_used: 0,
                 content_generated: 0,
-                stripe_customer_id: session.customer as string,
+                stripe_customer_id: customerStripeId,
                 stripe_subscription_id: null, // Will be updated later if we create a subscription
                 subscription_status: 'active',
                 // Set subscription end date to 30 days from now
                 subscription_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
               });
               
+              console.log("Created new user:", newUser ? "Success" : "Failed");
+              
               // If we're in payment mode, create a subscription manually
               if (shouldCreateSubscription && newUser) {
                 try {
+                  console.log("Creating subscription for customer:", customerStripeId);
+                  
                   // Use Stripe API to create a subscription for this customer
                   const subscription = await stripe.subscriptions.create({
-                    customer: session.customer as string,
+                    customer: customerStripeId,
                     items: [
                       {
                         price_data: {
                           currency: 'gbp',
                           product_data: {
-                            name: `${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
-                            description: `Monthly subscription to Tovably ${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
+                            name: `${subscriptionPlans[planId as SubscriptionPlanType]?.name || 'Standard'} Plan`,
+                            description: `Monthly subscription to Tovably ${subscriptionPlans[planId as SubscriptionPlanType]?.name || 'Standard'} Plan`,
                           },
-                          unit_amount: Math.round(subscriptionPlans[planId as SubscriptionPlanType].price * 100),
+                          unit_amount: Math.round((subscriptionPlans[planId as SubscriptionPlanType]?.price || 9.99) * 100),
                           recurring: {
                             interval: 'month',
                           },
@@ -1391,16 +1407,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     ],
                     metadata: {
                       userId: newUser.id.toString(),
-                      planId: planId,
+                      planId: planId || 'standard',
                     },
                   });
                   
-                  // Update user with subscription ID
-                  await storage.updateUserStripeInfo(newUser.id, {
-                    subscriptionId: subscription.id,
-                    status: subscription.status,
-                    periodEnd: new Date(subscription.current_period_end * 1000)
-                  });
+                  console.log("Created subscription:", subscription ? "Success" : "Failed", subscription?.id || "No ID");
+                  
+                  // Only update user with subscription info if subscription was created successfully
+                  if (subscription && subscription.id) {
+                    // Update user with subscription ID
+                    await storage.updateUserStripeInfo(newUser.id, {
+                      customerId: customerStripeId, // Make sure to pass the customer ID again
+                      subscriptionId: subscription.id,
+                      status: subscription.status,
+                      periodEnd: new Date(subscription.current_period_end * 1000)
+                    });
+                    console.log("Updated user with subscription info");
+                  }
                 } catch (subError) {
                   console.error("Failed to create subscription:", subError);
                 }
