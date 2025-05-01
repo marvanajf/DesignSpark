@@ -32,25 +32,42 @@ async function comparePasswords(supplied: string, stored: string) {
 // Create a default user for testing if it doesn't exist
 async function createDefaultUserIfNotExists() {
   try {
-    const existingUser = await storage.getUserByEmail("demo@tovably.com");
+    // Import the withRetry utility for database operations
+    const { withRetry } = await import('./db');
+    
+    // Use withRetry for resilient user fetching
+    const existingUser = await withRetry(
+      async () => storage.getUserByEmail("demo@tovably.com"),
+      3, // 3 retries
+      1000 // 1 second initial delay with exponential backoff
+    );
     
     if (!existingUser) {
       console.log("Creating default demo user for testing...");
       const hashedPassword = await hashPassword("password123");
-      // Create the user with all needed fields
-      await storage.createUser({
-        username: "demouser",
-        email: "demo@tovably.com",
-        password: hashedPassword,
-        full_name: "Demo User",
-        company: "Tovably Demo",
-        role: "user"
-      });
+      
+      // Create the user with all needed fields, with retry logic
+      await withRetry(
+        async () => storage.createUser({
+          username: "demouser",
+          email: "demo@tovably.com",
+          password: hashedPassword,
+          full_name: "Demo User",
+          company: "Tovably Demo",
+          role: "user"
+        }),
+        3, // 3 retries
+        1000 // 1 second initial delay
+      );
       
       console.log("Default demo user created successfully");
     }
   } catch (error) {
-    console.error("Error creating default user:", error);
+    console.error("Error creating default user:", 
+      error instanceof Error ? error.message : String(error));
+    if (error instanceof Error && error.stack) {
+      console.error("Stack trace:", error.stack);
+    }
   }
 }
 
@@ -79,13 +96,35 @@ export function setupAuth(app: Express) {
       passwordField: 'password'
     }, async (email, password, done) => {
       try {
-        const user = await storage.getUserByEmail(email);
+        // Import the withRetry utility for database operations
+        const { withRetry } = await import('./db');
+        
+        // Use withRetry for resilient user fetching
+        const user = await withRetry(
+          async () => storage.getUserByEmail(email),
+          3, // 3 retries
+          1000 // 1 second initial delay with exponential backoff
+        );
+        
         if (!user || !(await comparePasswords(password, user.password))) {
+          console.log("Authentication failed - invalid credentials");
           return done(null, false);
         } else {
+          console.log("Authentication successful for user:", user.id);
           return done(null, user);
         }
       } catch (err) {
+        console.error("Authentication error:", 
+          err instanceof Error ? err.message : String(err));
+          
+        // Determine if this is a connection error
+        if (err instanceof Error && 
+           (err.message.includes('ECONNREFUSED') || 
+            err.message.includes('connection') || 
+            err.message.includes('network'))) {
+          console.error('Database connection error during authentication');
+        }
+        
         return done(err);
       }
     }),
@@ -94,9 +133,38 @@ export function setupAuth(app: Express) {
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: number, done) => {
     try {
-      const user = await storage.getUser(id);
+      // Import the withRetry utility for database operations
+      const { withRetry } = await import('./db');
+      
+      // Use withRetry for resilient user fetching with exponential backoff
+      const user = await withRetry(
+        async () => storage.getUser(id),
+        3, // 3 retries
+        1000 // 1 second initial delay with exponential backoff
+      );
+      
+      if (!user) {
+        // Handle case where user doesn't exist anymore
+        console.warn(`Session references non-existent user ID: ${id}, session will be invalidated`);
+        return done(null, false);
+      }
+      
       done(null, user);
     } catch (err) {
+      console.error(`Error deserializing user ID ${id}:`, 
+        err instanceof Error ? err.message : String(err));
+      
+      // Determine if this is a connection error vs. other errors
+      if (err instanceof Error && 
+         (err.message.includes('ECONNREFUSED') || 
+          err.message.includes('connection') || 
+          err.message.includes('network'))) {
+        console.error('Connection error during session deserialize - will retry on next request');
+        // For connection errors, don't fail the request completely, return the session data
+        // This allows the app to function during temporary outages
+        return done(null, false);
+      }
+      
       done(err);
     }
   });
