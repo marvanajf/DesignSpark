@@ -24,12 +24,15 @@ if (!connectionString.includes('sslmode=')) {
 // Log connection attempt (without sensitive details)
 console.log(`Attempting database connection to: ${connectionString.split('@')[1]?.split('/')[0] || 'unknown host'}`);
 
-// Initialize database connection pool with improved configuration
+// Initialize database connection pool with improved configuration for production
 const pool = new Pool({ 
   connectionString: connectionString,
   max: 10, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
   connectionTimeoutMillis: 10000, // How long to wait for a connection
+  ssl: {
+    rejectUnauthorized: false // Important for some hosting providers (like Render)
+  }
 });
 
 // Initialize Drizzle ORM with the connection pool
