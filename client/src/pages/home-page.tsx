@@ -39,12 +39,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] text-center">
             <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto">
-              <span className="block text-white">Transform your</span>
-              <span className="block text-[#74d1ea]">content strategy</span>
+              <span className="block text-white">Supercharge your comms with</span>
+              <span className="block text-[#74d1ea]">AI-powered precision</span>
             </h1>
             <p className="mt-6 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto">
-              Analyze your brand's tone of voice, target specific personas, and 
-              generate perfectly tailored content for LinkedIn and cold emails.
+              From tone analysis to personalized content creation, our AI engine delivers 
+              targeted communications that engage, convert, and elevate your brand.
             </p>
             <div className="mt-8 sm:mt-12 flex flex-col items-center">
               <div className="rounded-md">
@@ -63,9 +63,53 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Main Features Placeholder - replaced with detailed features below */}
-      <div className="py-2 bg-black relative overflow-hidden">
-        {/* This div serves as a small spacer between the hero and detailed features */}
+      {/* AI Native App Section */}
+      <div className="py-12 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg py-10 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#74d1ea]/20 mb-4 border border-[#74d1ea]/30">
+                <Sparkles className="h-8 w-8 text-[#74d1ea]" />
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-semibold text-white">AI-Native Platform</h2>
+              <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
+                Built from the ground up with AI at its core, Tovably leverages cutting-edge machine learning to transform how you communicate.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
+                  <BarChart3 className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-xl font-medium text-white mb-2">GPT-4 Powered Analysis</h3>
+                <p className="text-gray-400">
+                  Our platform utilizes the latest GPT-4 models to precisely analyze content tone, identify patterns, and extract key insights.
+                </p>
+              </div>
+              
+              <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
+                  <Users className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-xl font-medium text-white mb-2">Dynamic Persona Engine</h3>
+                <p className="text-gray-400">
+                  Our intelligent persona system creates detailed audience profiles that evolve and improve with each interaction.
+                </p>
+              </div>
+              
+              <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
+                  <MessageSquare className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-xl font-medium text-white mb-2">Adaptive Content Creation</h3>
+                <p className="text-gray-400">
+                  Generate precisely tailored content that adapts to your brand voice and resonates with your target personas automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Platform Features Sections */}
