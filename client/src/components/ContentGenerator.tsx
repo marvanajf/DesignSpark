@@ -29,7 +29,7 @@ export default function ContentGenerator() {
   const [, navigate] = useLocation();
   const { openPricingModal } = usePricingModal();
   
-  const [contentType, setContentType] = useState<'linkedin_post' | 'email'>('linkedin_post');
+  const [contentType, setContentType] = useState<'linkedin_post' | 'email' | 'webinar' | 'workshop'>('linkedin_post');
   const [personaId, setPersonaId] = useState<string>("");
   const [toneAnalysisId, setToneAnalysisId] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
@@ -62,7 +62,7 @@ export default function ContentGenerator() {
   // Generate content mutation
   const generateContentMutation = useMutation({
     mutationFn: async (data: { 
-      type: 'linkedin_post' | 'email'; 
+      type: 'linkedin_post' | 'email' | 'webinar' | 'workshop'; 
       personaId: number; 
       toneAnalysisId: number;
       topic: string;
@@ -97,7 +97,7 @@ export default function ContentGenerator() {
     },
   });
 
-  const handleContentTypeChange = (type: 'linkedin_post' | 'email') => {
+  const handleContentTypeChange = (type: 'linkedin_post' | 'email' | 'webinar' | 'workshop') => {
     setContentType(type);
   };
 

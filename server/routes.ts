@@ -8,6 +8,8 @@ import {
   analyzeTone, 
   generateLinkedInPost, 
   generateColdEmail,
+  generateWebinar,
+  generateWorkshop,
   generatePersona
 } from "./openai";
 import { sendEmail, formatContactEmailHtml, formatContactEmailText } from "./email";
@@ -1366,6 +1368,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           );
         } else if (type === 'email') {
           contentText = await generateColdEmail(
+            topic, 
+            toneAnalysis.tone_results as any, 
+            persona.name, 
+            persona.description || ""
+          );
+        } else if (type === 'webinar') {
+          contentText = await generateWebinar(
+            topic, 
+            toneAnalysis.tone_results as any, 
+            persona.name, 
+            persona.description || ""
+          );
+        } else if (type === 'workshop') {
+          contentText = await generateWorkshop(
             topic, 
             toneAnalysis.tone_results as any, 
             persona.name, 

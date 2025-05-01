@@ -254,3 +254,125 @@ export async function generateColdEmail(
     throw new Error("Failed to generate cold email");
   }
 }
+
+// Generate a webinar script/outline based on the tone, persona, and topic
+export async function generateWebinar(
+  topic: string, 
+  toneResults: ToneAnalysisResult, 
+  personaName: string, 
+  personaDescription: string
+): Promise<string> {
+  try {
+    // Check if OpenAI is initialized
+    if (!openai) {
+      throw new Error("OpenAI API key is not configured");
+    }
+    
+    // Extract dominant tone characteristics
+    const toneCharacteristics = Object.entries(toneResults.characteristics)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2)
+      .map(([key, value]) => `${key} (${value}%)`)
+      .join(", ");
+    
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: 
+            `You are an expert webinar content strategist. Create a compelling webinar outline about ${topic}. ` +
+            `The webinar should match this tone of voice: ${toneCharacteristics}. ` +
+            `Target audience: ${personaName} (${personaDescription}). ` +
+            `Include the following sections:
+            1. A catchy webinar title that will attract registrations
+            2. A brief description/promotional text (100 words max)
+            3. 3-5 key learning objectives or takeaways
+            4. A structured outline with 3-5 main sections and brief descriptions of content for each
+            5. Ideas for audience engagement (polls, Q&A prompts, interactive elements)
+            6. A compelling call-to-action for the end of the webinar
+            
+            Format the output clearly with section headers and bullet points where appropriate.
+            The total length should be 400-600 words, structured for easy readability.`
+        },
+        {
+          role: "user",
+          content: `Create a webinar outline about ${topic} that would appeal to a ${personaName}.`
+        }
+      ],
+      temperature: 0.7
+    });
+
+    const responseContent = response.choices[0].message.content;
+    if (!responseContent) {
+      throw new Error("Empty response from OpenAI");
+    }
+    
+    return responseContent;
+  } catch (error) {
+    console.error("Error generating webinar content:", error);
+    throw new Error("Failed to generate webinar content");
+  }
+}
+
+// Generate a workshop plan based on the tone, persona, and topic
+export async function generateWorkshop(
+  topic: string, 
+  toneResults: ToneAnalysisResult, 
+  personaName: string, 
+  personaDescription: string
+): Promise<string> {
+  try {
+    // Check if OpenAI is initialized
+    if (!openai) {
+      throw new Error("OpenAI API key is not configured");
+    }
+    
+    // Extract dominant tone characteristics
+    const toneCharacteristics = Object.entries(toneResults.characteristics)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2)
+      .map(([key, value]) => `${key} (${value}%)`)
+      .join(", ");
+    
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: 
+            `You are a professional workshop facilitator and instructional designer. Create a workshop plan about ${topic}. ` +
+            `The workshop content should match this tone of voice: ${toneCharacteristics}. ` +
+            `Target participants: ${personaName} (${personaDescription}). ` +
+            `Include the following elements:
+            1. Workshop title and tagline
+            2. Duration recommendation (30 min, 60 min, half-day, etc.)
+            3. Learning objectives (3-5 specific outcomes)
+            4. Materials/prerequisites needed
+            5. Detailed agenda with timing for each section
+            6. 2-3 interactive exercises or activities with instructions
+            7. Key discussion questions
+            8. Follow-up resources or action items
+            
+            Format the output with clear section headers and structure for easy implementation.
+            The total length should be 500-700 words, written in a practical, actionable style.`
+        },
+        {
+          role: "user",
+          content: `Design a workshop plan about ${topic} for ${personaName} participants.`
+        }
+      ],
+      temperature: 0.7
+    });
+
+    const responseContent = response.choices[0].message.content;
+    if (!responseContent) {
+      throw new Error("Empty response from OpenAI");
+    }
+    
+    return responseContent;
+  } catch (error) {
+    console.error("Error generating workshop plan:", error);
+    throw new Error("Failed to generate workshop plan");
+  }
+}
