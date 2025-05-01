@@ -18,23 +18,21 @@ ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 RUN echo '#!/bin/bash\n\
 # Create database tables\n\
 echo "Creating database tables..."\n\
-node -r tsx/register server/init-db.ts\n\
+tsx server/init-db.ts\n\
 \n\
 # Create admin user if ADMIN_PASSWORD is set\n\
 if [ -n "$ADMIN_PASSWORD" ]; then\n\
   echo "Creating admin user..."\n\
-  node -r tsx/register create-admin-fixed.js\n\
+  tsx create-admin-fixed.js\n\
 fi\n\
 \n\
 # Start the application\n\
 echo "Starting application..."\n\
-npm run start\n\
+NODE_ENV=production tsx server/index.ts\n\
 ' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
-# Add start script to package.json if it doesn't exist
-RUN if ! grep -q "\"start\":" package.json; then \
-    sed -i 's/"scripts": {/"scripts": {\n    "start": "NODE_ENV=production tsx server\/index.ts",/' package.json; \
-    fi
+# Make sure TSX is installed globally
+RUN npm install -g tsx
 
 EXPOSE 5000
 
