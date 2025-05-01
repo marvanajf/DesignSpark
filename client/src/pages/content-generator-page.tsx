@@ -65,7 +65,7 @@ export default function ContentGeneratorPage() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [topic, setTopic] = useState("");
-  const [contentType, setContentType] = useState<"linkedin_post" | "email">("linkedin_post");
+  const [contentType, setContentType] = useState<"linkedin_post" | "email" | "webinar" | "workshop">("linkedin_post");
   const [selectedPersonaId, setSelectedPersonaId] = useState<number | null>(null);
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
