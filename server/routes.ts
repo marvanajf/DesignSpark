@@ -53,10 +53,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Cancel the subscription in Stripe
-      const subscription = await stripe.subscriptions.cancel(user.stripe_subscription_id);
+      try {
+        // Try to cancel the subscription in Stripe
+        await stripe.subscriptions.cancel(user.stripe_subscription_id);
+      } catch (stripeError: any) {
+        // If it's a resource_missing error, the subscription doesn't exist in Stripe anymore
+        // We can still proceed with updating the user's plan in our database
+        if (stripeError?.raw?.code !== 'resource_missing') {
+          // If it's not a resource_missing error, rethrow it
+          throw stripeError;
+        }
+        console.log(`Stripe subscription not found: ${user.stripe_subscription_id}. Proceeding with local cancellation.`);
+      }
       
-      // Update the user in our database
+      // Update the user in our database regardless of Stripe outcome
       const updatedUser = await storage.updateUserSubscription(user.id, {
         plan: 'free',
         status: 'canceled',
