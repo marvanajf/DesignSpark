@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, FileText, MessageSquare, BarChart, Zap, BellRing } from "lucide-react";
+import { ArrowRight, FileText, MessageSquare, BarChart, Zap, BellRing, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
@@ -119,6 +119,51 @@ export default function ComingSoonPage() {
               From tone analysis to personalized content creation, our AI engine delivers 
               targeted communications that engage, convert, and elevate your brand.
             </p>
+
+            {/* AI-Native Platform Section */}
+            <div className="border border-gray-700/60 rounded-lg py-10 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] mb-14 max-w-4xl mx-auto">
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#74d1ea]/20 mb-4 border border-[#74d1ea]/30">
+                  <Sparkles className="h-8 w-8 text-[#74d1ea]" />
+                </div>
+                <h2 className="text-3xl font-semibold text-white">AI-Native Platform</h2>
+                <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
+                  Built from the ground up with AI at its core, Tovably leverages cutting-edge machine learning to transform how you communicate.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
+                    <BarChart className="h-6 w-6 text-[#74d1ea]" />
+                  </div>
+                  <h3 className="text-xl font-medium text-white mb-2">GPT-4 Powered Analysis</h3>
+                  <p className="text-gray-400">
+                    Our platform utilizes the latest GPT-4 models to precisely analyze content tone, identify patterns, and extract key insights.
+                  </p>
+                </div>
+                
+                <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
+                    <Users className="h-6 w-6 text-[#74d1ea]" />
+                  </div>
+                  <h3 className="text-xl font-medium text-white mb-2">Dynamic Persona Engine</h3>
+                  <p className="text-gray-400">
+                    Our intelligent persona system creates detailed audience profiles that evolve and improve with each interaction.
+                  </p>
+                </div>
+                
+                <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
+                    <MessageSquare className="h-6 w-6 text-[#74d1ea]" />
+                  </div>
+                  <h3 className="text-xl font-medium text-white mb-2">Adaptive Content Creation</h3>
+                  <p className="text-gray-400">
+                    Generate precisely tailored content that adapts to your brand voice and resonates with your target personas automatically.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8 mb-14 max-w-xl mx-auto">
               <h3 className="font-medium text-xl mb-5 flex items-center justify-center">
