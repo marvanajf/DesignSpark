@@ -1088,6 +1088,21 @@ export class DatabaseStorage implements IStorage {
     
     return contact;
   }
+  
+  async deleteLeadContact(id: number): Promise<void> {
+    const [contactToDelete] = await db
+      .select()
+      .from(leadContacts)
+      .where(eq(leadContacts.id, id));
+      
+    if (!contactToDelete) {
+      throw new Error(`Lead contact with id ${id} not found`);
+    }
+    
+    await db
+      .delete(leadContacts)
+      .where(eq(leadContacts.id, id));
+  }
 }
 
 // Use DatabaseStorage to persist data to Postgres
