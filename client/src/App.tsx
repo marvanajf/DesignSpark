@@ -23,6 +23,7 @@ import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
 import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
 import PersonasMarketingPage from "@/pages/personas-marketing-page";
 import LandingPage from "@/pages/landing-page";
+import ComingSoonPage from "@/pages/coming-soon-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
 import PaymentSuccessPage from "@/pages/payment-success-page";
@@ -50,7 +51,8 @@ function Router() {
 
   return (
     <Switch>
-      <Route path="/" component={HomePage} />
+      <Route path="/" component={ComingSoonPage} />
+      <Route path="/app" component={HomePage} />
       <ProtectedRoute path="/dashboard" component={DashboardPage} />
       <Route path="/tone-analysis-info" component={ToneAnalysisMarketingPage} />
       <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
