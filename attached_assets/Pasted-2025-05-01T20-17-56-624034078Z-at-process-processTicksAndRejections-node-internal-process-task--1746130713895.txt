@@ -1,0 +1,52 @@
+2025-05-01T20:17:56.624034078Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:17:56.624036468Z     at async withRetry (/opt/render/project/src/server/db.ts:89:14)
+2025-05-01T20:17:56.624038728Z     at async testConnection (/opt/render/project/src/server/db.ts:112:20) {
+2025-05-01T20:17:56.62406975Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:17:56.62407237Z }
+2025-05-01T20:17:56.624208768Z Database connection test failed: Error: self-signed certificate
+2025-05-01T20:17:56.624213878Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:17:56.624216798Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:17:56.624219248Z     at async withRetry (/opt/render/project/src/server/db.ts:89:14)
+2025-05-01T20:17:56.624221469Z     at async testConnection (/opt/render/project/src/server/db.ts:112:20) {
+2025-05-01T20:17:56.624224529Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:17:56.624226879Z }
+2025-05-01T20:17:56.624271291Z Database connection pool initialization FAILED - check your connection string
+2025-05-01T20:17:56.733809165Z Database operation failed (attempt 2/3): self-signed certificate
+2025-05-01T20:17:56.733875059Z Retrying in 2000ms...
+2025-05-01T20:17:58.540292026Z Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+2025-05-01T20:17:58.540317248Z   npx update-browserslist-db@latest
+2025-05-01T20:17:58.540320708Z   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2025-05-01T20:17:58.78175278Z Circuit breaker open (100s/240s), skipping ping
+2025-05-01T20:18:01.215507707Z ==> Your service is live 🎉
+2025-05-01T20:18:02.457324806Z Database operation failed (attempt 3/3): self-signed certificate
+2025-05-01T20:18:02.521798853Z Database operation failed after 3 attempts: Error: self-signed certificate
+2025-05-01T20:18:02.521818874Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:18:02.521822584Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:18:02.521828805Z     at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+2025-05-01T20:18:02.521833175Z     at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+2025-05-01T20:18:02.521835865Z     at async withRetry (/opt/render/project/src/server/db.ts:89:14)
+2025-05-01T20:18:02.521838265Z     at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26) {
+2025-05-01T20:18:02.521841065Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:18:02.521843546Z }
+2025-05-01T20:18:02.521846636Z Error creating default user: self-signed certificate
+2025-05-01T20:18:02.521849136Z Stack trace: Error: self-signed certificate
+2025-05-01T20:18:02.521851756Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:18:02.521854326Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:18:02.521856937Z     at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+2025-05-01T20:18:02.521859777Z     at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+2025-05-01T20:18:02.521862337Z     at async withRetry (/opt/render/project/src/server/db.ts:89:14)
+2025-05-01T20:18:02.521865127Z     at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26)
+2025-05-01T20:18:06.836617924Z User not authenticated for /api/user
+2025-05-01T20:18:06.837327527Z 8:18:06 PM [express] GET /api/user 401 in 1ms
+2025-05-01T20:18:12.095572562Z Sending database ping to keep connection alive
+2025-05-01T20:18:12.108915225Z Ping error (attempt 1): self-signed certificate
+2025-05-01T20:18:16.880902391Z Registration attempt starting, validating input data...
+2025-05-01T20:18:16.882815281Z Data validation successful for email: jack@gomarvana.com
+2025-05-01T20:18:16.882835002Z Checking if email already exists: jack@gomarvana.com
+2025-05-01T20:18:16.895990114Z Database operation failed (attempt 1/5): self-signed certificate
+2025-05-01T20:18:16.896020756Z Retrying in 2000ms...
+2025-05-01T20:18:18.782360417Z Circuit breaker open (120s/240s), skipping ping
+2025-05-01T20:18:18.91138939Z Retrying in 4000ms...
+2025-05-01T20:18:18.911402711Z Database operation failed (attempt 2/5): self-signed certificate
+2025-05-01T20:18:22.925573483Z Retrying in 8000ms...
+2025-05-01T20:18:22.925595514Z Database operation failed (attempt 3/5): self-signed certificate

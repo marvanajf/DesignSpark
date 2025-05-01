@@ -39,39 +39,31 @@ console.log(`Connecting to database: ${sanitizeUrl(process.env.DATABASE_URL)}`);
 console.log('Using direct PostgreSQL connections (standard pg driver) - NO WebSockets');
 
 // Initialize the connection pool with direct PostgreSQL connections
-// Define the SSL configuration interface
-interface SSLConfig {
-  rejectUnauthorized: boolean;
-  checkServerIdentity?: (host: string, cert: any) => Error | undefined;
-}
+// CRITICAL FIX FOR RENDER DEPLOYMENT: Force SSL to false (no SSL verification) in all environments
+// This is the most reliable solution for Render, though less secure
+// We're prioritizing reliability over security for now
+// TEMPORARY FIX - TO BE REVISITED AFTER STABLE DEPLOYMENT
 
-// Different SSL config for different environments
-let sslConfig: SSLConfig;
-if (process.env.DATABASE_URL?.includes('dpg-')) {
-  // This is a Render-managed PostgreSQL database (has dpg- prefix)
-  console.log('Detected Render-managed PostgreSQL database, using custom SSL config');
-  sslConfig = { 
-    rejectUnauthorized: false, // Required for self-signed certs
-    checkServerIdentity: () => undefined // Skip hostname check
-  };
-} else {
-  // Standard SSL config for other environments
-  console.log('Using standard SSL config for PostgreSQL connection');
-  sslConfig = {
-    rejectUnauthorized: false // Required for SSL connections in many hosted environments
-  };
-}
+console.log("CRITICAL OVERRIDE: Using SSL=false (no SSL verification) for all database connections");
+console.log("This setting bypasses all certificate validation to fix Render deployment issues");
+console.log("TEMPORARY SOLUTION - Will be revisited once application is stable");
 
-// Create the pool configuration with correct type handling
+// Create a direct connection to the database by allowing self-signed certificates
+// SECURITY WARNING: This is a temporary fix for the Render deployment
+// Once stable, we should implement proper certificate verification
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+// Create the pool configuration with overridden SSL settings
+// We can revisit this once the application is stable
+
+// Create the pool configuration with correct type handling and SSL disabled
 const poolConfig: pg.PoolConfig = {
   connectionString: process.env.DATABASE_URL,
+  ssl: false, // Disable SSL verification completely to fix Render deployment issues
   max: isProd ? 10 : 20, // Maximum number of clients in the pool
   idleTimeoutMillis: isProd ? 30000 : 60000, // Close idle clients after this many milliseconds
   connectionTimeoutMillis: isProd ? 30000 : 15000, // Return an error after this many milliseconds if a connection cannot be established
 };
-
-// Add SSL configuration with type assertion to ensure it's handled correctly
-poolConfig.ssl = sslConfig as unknown as pg.ConnectionOptions['ssl'];
 
 // Initialize the connection pool
 const pool = new pg.Pool(poolConfig);
