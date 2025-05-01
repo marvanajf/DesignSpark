@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, jsonb, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, jsonb, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -128,6 +128,23 @@ export const blogPosts = pgTable("blog_posts", {
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
 
+export const campaigns = pgTable("campaigns", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").notNull().references(() => users.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").default("active").notNull(), // active, archived
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const campaignContents = pgTable("campaign_contents", {
+  id: serial("id").primaryKey(),
+  campaign_id: integer("campaign_id").notNull().references(() => campaigns.id),
+  content_id: integer("content_id").notNull().references(() => generatedContent.id),
+  created_at: timestamp("created_at").defaultNow().notNull()
+});
+
 export const leadContacts = pgTable("lead_contacts", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -212,6 +229,18 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
   publish_date: true
 });
 
+export const insertCampaignSchema = createInsertSchema(campaigns).pick({
+  user_id: true,
+  name: true,
+  description: true,
+  status: true
+});
+
+export const insertCampaignContentSchema = createInsertSchema(campaignContents).pick({
+  campaign_id: true,
+  content_id: true
+});
+
 export const insertLeadContactSchema = createInsertSchema(leadContacts).pick({
   name: true,
   email: true,
@@ -239,6 +268,12 @@ export type InsertBlogCategory = z.infer<typeof insertBlogCategorySchema>;
 
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
+
+export type CampaignContent = typeof campaignContents.$inferSelect;
+export type InsertCampaignContent = z.infer<typeof insertCampaignContentSchema>;
 
 export type LeadContact = typeof leadContacts.$inferSelect;
 export type InsertLeadContact = z.infer<typeof insertLeadContactSchema>;

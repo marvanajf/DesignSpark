@@ -1458,6 +1458,192 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch content" });
     }
   });
+  
+  // Campaign endpoints
+  app.get("/api/campaigns", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const campaigns = await storage.getCampaignsByUserId(req.user!.id);
+      res.status(200).json(campaigns);
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+      res.status(500).json({ error: "Failed to fetch campaigns" });
+    }
+  });
+
+  app.post("/api/campaigns", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const campaignData = {
+        user_id: req.user!.id,
+        name: req.body.name,
+        description: req.body.description || null,
+        status: req.body.status || 'active'
+      };
+
+      const newCampaign = await storage.createCampaign(campaignData);
+      res.status(201).json(newCampaign);
+    } catch (error) {
+      console.error("Error creating campaign:", error);
+      res.status(500).json({ error: "Failed to create campaign" });
+    }
+  });
+
+  app.get("/api/campaigns/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaign(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to access this campaign" });
+      }
+
+      // Get content associated with this campaign
+      const campaignContents = await storage.getCampaignContents(id);
+      
+      res.json({ campaign, contents: campaignContents });
+    } catch (error) {
+      console.error("Error fetching campaign:", error);
+      res.status(500).json({ error: "Failed to fetch campaign" });
+    }
+  });
+
+  app.patch("/api/campaigns/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaign(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to update this campaign" });
+      }
+
+      const updatedCampaign = await storage.updateCampaign(id, {
+        name: req.body.name,
+        description: req.body.description,
+        status: req.body.status
+      });
+
+      res.json(updatedCampaign);
+    } catch (error) {
+      console.error("Error updating campaign:", error);
+      res.status(500).json({ error: "Failed to update campaign" });
+    }
+  });
+
+  app.delete("/api/campaigns/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaign(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to delete this campaign" });
+      }
+
+      // First delete all campaign content associations
+      await storage.deleteCampaignContents(id);
+      
+      // Then delete the campaign
+      await storage.deleteCampaign(id);
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting campaign:", error);
+      res.status(500).json({ error: "Failed to delete campaign" });
+    }
+  });
+
+  // Campaign content association endpoints
+  app.post("/api/campaign-contents", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const { campaign_id, content_id } = req.body;
+      
+      if (!campaign_id || !content_id) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // Verify campaign belongs to user
+      const campaign = await storage.getCampaign(campaign_id);
+      if (!campaign || (campaign.user_id !== req.user!.id && req.user!.role !== 'admin')) {
+        return res.status(403).json({ error: "Not authorized to access this campaign" });
+      }
+
+      // Verify content belongs to user
+      const content = await storage.getGeneratedContent(content_id);
+      if (!content || (content.user_id !== req.user!.id && req.user!.role !== 'admin')) {
+        return res.status(403).json({ error: "Not authorized to access this content" });
+      }
+
+      const campaignContent = await storage.addContentToCampaign({
+        campaign_id,
+        content_id
+      });
+
+      res.status(201).json(campaignContent);
+    } catch (error) {
+      console.error("Error adding content to campaign:", error);
+      res.status(500).json({ error: "Failed to add content to campaign" });
+    }
+  });
+
+  app.delete("/api/campaign-contents/:campaign_id/:content_id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const campaign_id = parseInt(req.params.campaign_id);
+      const content_id = parseInt(req.params.content_id);
+      
+      if (isNaN(campaign_id) || isNaN(content_id)) {
+        return res.status(400).json({ error: "Invalid IDs" });
+      }
+
+      // Verify campaign belongs to user
+      const campaign = await storage.getCampaign(campaign_id);
+      if (!campaign || (campaign.user_id !== req.user!.id && req.user!.role !== 'admin')) {
+        return res.status(403).json({ error: "Not authorized to access this campaign" });
+      }
+
+      await storage.removeContentFromCampaign(campaign_id, content_id);
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error removing content from campaign:", error);
+      res.status(500).json({ error: "Failed to remove content from campaign" });
+    }
+  });
 
   // Generate a persona using OpenAI
   app.post("/api/generate-persona", async (req: Request, res: Response) => {
