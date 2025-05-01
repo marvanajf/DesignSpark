@@ -18,15 +18,34 @@ import { Textarea } from "@/components/ui/textarea";
 import Layout from "@/components/Layout";
 import { CheckCheck, MessageSquare } from "lucide-react";
 
+// Create a company email validator
+const isCompanyEmail = (email: string) => {
+  const domain = email.split('@')[1];
+  if (!domain) return false;
+  
+  // List of common personal email domains to reject
+  const personalDomains = [
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com', 
+    'icloud.com', 'me.com', 'mac.com', 'msn.com', 'live.com', 
+    'googlemail.com', 'ymail.com', 'protonmail.com', 'zoho.com'
+  ];
+  
+  return !personalDomains.includes(domain.toLowerCase());
+};
+
 // Form validation schema
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
   }),
-  email: z.string().email({
-    message: "Please enter a valid email address",
+  email: z.string()
+    .email({ message: "Please enter a valid email address" })
+    .refine(isCompanyEmail, { 
+      message: "Please use a company email address (personal email domains like gmail.com are not accepted)" 
+    }),
+  company: z.string().min(1, {
+    message: "Company name is required",
   }),
-  company: z.string().optional(),
   message: z.string().min(1, {
     message: "Message is required",
   }),
@@ -180,7 +199,7 @@ export default function ContactPage() {
                           <FormLabel className="text-gray-300">Email</FormLabel>
                           <FormControl>
                             <Input 
-                              placeholder="your.email@example.com" 
+                              placeholder="your.name@company.com" 
                               {...field} 
                               className="bg-gray-900 border-gray-700 text-white"
                             />
@@ -194,7 +213,7 @@ export default function ContactPage() {
                       name="company"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-gray-300">Company (Optional)</FormLabel>
+                          <FormLabel className="text-gray-300">Company</FormLabel>
                           <FormControl>
                             <Input 
                               placeholder="Your company" 

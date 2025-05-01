@@ -953,10 +953,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead contact submission endpoint
   app.post("/api/lead-contact", async (req: Request, res: Response) => {
     try {
+      // Create a refined email validator that checks for company domains
+      const isCompanyEmail = (email: string) => {
+        // Get the domain part of the email
+        const domain = email.split('@')[1];
+        if (!domain) return false;
+        
+        // List of common personal email domains to reject
+        const personalDomains = [
+          'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com', 
+          'icloud.com', 'me.com', 'mac.com', 'msn.com', 'live.com', 
+          'googlemail.com', 'ymail.com', 'protonmail.com', 'zoho.com'
+        ];
+        
+        // Check if the domain is in the list of personal domains
+        return !personalDomains.includes(domain.toLowerCase());
+      };
+      
       const schema = z.object({
         name: z.string().min(1, "Name is required"),
-        email: z.string().email("Please enter a valid email address"),
-        company: z.string().optional(),
+        email: z.string()
+          .email("Please enter a valid email address")
+          .refine(isCompanyEmail, { 
+            message: "Please use a company email address (personal email domains like gmail.com or outlook.com are not accepted)" 
+          }),
+        company: z.string().min(1, "Company name is required"),
         message: z.string().min(1, "Message is required"),
         status: z.string().optional(),
       });
@@ -967,7 +988,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const leadContact = await storage.createLeadContact({
         name,
         email,
-        company: company || null,
+        company, // Company is required now
         message,
         status,
         notes: null
