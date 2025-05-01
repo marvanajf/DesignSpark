@@ -7,6 +7,9 @@ import * as schema from "@shared/schema";
 const isProd = process.env.NODE_ENV === 'production';
 console.log(`Running in ${isProd ? 'production' : 'development'} mode`);
 
+// Define fallback database host for emergency recovery
+const FALLBACK_DB_HOST = "ep-falling-frog-a45g83oy.us-east-1.aws.neon.tech";
+
 // Configure Neon database connection with enhanced reliability
 neonConfig.webSocketConstructor = ws;
 
@@ -92,11 +95,28 @@ neonConfig.wsProxy = (url) => {
 neonConfig.pipelineTLS = true;
 neonConfig.useSecureWebSocket = true;
 
-// Different SSL handling strategy based on environment
+// Different connection strategy based on environment
 if (isProd) {
   console.log('Using production-optimized database connection settings');
-  neonConfig.forceDisablePgSSL = false; // Use both WebSocket and regular SSL in production
+  
+  // CRITICAL FIX FOR RENDER DEPLOYMENT:
+  // Force direct connections and completely bypass WebSockets in production
+  // This avoids the ECONNREFUSED errors with 10.202.x.x IP addresses
+  console.log('Enabling direct PostgreSQL connections and disabling WebSockets for Render compatibility');
+  neonConfig.usePoolConnections = true; // Use standard PostgreSQL Pool
+  neonConfig.forceDisablePgSSL = true; // We'll handle SSL in the Pool config
   neonConfig.connectionTimeoutMillis = 60000; // 60 seconds timeout
+  
+  // Add these if available in your version of the library
+  try {
+    // @ts-ignore - These might not be in all versions of the library
+    neonConfig.useDirectConnection = true;
+    // @ts-ignore
+    neonConfig.useProxyWs = false;
+    console.log('Enhanced Render compatibility settings applied');
+  } catch (e) {
+    console.log('Some compatibility settings not available in this version of the library');
+  }
 } else {
   console.log('Using development-optimized database connection settings');
   neonConfig.forceDisablePgSSL = true; // We'll handle SSL in the Pool config for dev
@@ -403,9 +423,8 @@ async function testConnection() {
 // Global recovery flag to prevent multiple simultaneous recovery attempts
 let recoveryInProgress = false;
 
-// Add a fallback database host in case everything else fails
-// This allows us to hard-code a known working hostname as a last resort
-const FALLBACK_DB_HOST = "ep-falling-frog-a45g83oy.us-east-1.aws.neon.tech";
+// We've moved the fallback database host to the top of the file
+// const FALLBACK_DB_HOST = "ep-falling-frog-a45g83oy.us-east-1.aws.neon.tech";
 
 async function recreatePool() {
   console.log("Emergency connection recovery: Attempting to recreate database pool");

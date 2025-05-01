@@ -1,0 +1,50 @@
+2025-05-01T19:38:39.944708568Z     address: '10.202.114.25',
+2025-05-01T19:38:39.944711178Z     port: 443
+2025-05-01T19:38:39.944713618Z   },
+2025-05-01T19:38:39.944729729Z   [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+2025-05-01T19:38:39.944732218Z }
+2025-05-01T19:38:39.944734898Z Error creating default user: [object Object]
+2025-05-01T19:38:43.630793236Z ==> Your service is live 🎉
+2025-05-01T19:38:47.739881261Z Sending websocket ping to keep connection alive
+2025-05-01T19:38:47.74060095Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:38:47.74061251Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:38:47.745437988Z Ping error (attempt 1): [object Object]
+2025-05-01T19:38:48.357494135Z Sending websocket ping to keep connection alive
+2025-05-01T19:38:48.357848082Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:38:48.357859123Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:38:48.360397855Z Ping error (attempt 19): [object Object]
+2025-05-01T19:38:51.90894581Z User not authenticated for /api/user
+2025-05-01T19:38:51.910182763Z 7:38:51 PM [express] GET /api/user 401 in 3ms
+2025-05-01T19:39:02.741081695Z Sending websocket ping to keep connection alive
+2025-05-01T19:39:02.741713932Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:02.741725012Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:02.745245885Z Ping error (attempt 2): [object Object]
+2025-05-01T19:39:04.832898907Z Registration attempt starting, validating input data...
+2025-05-01T19:39:04.834339345Z Data validation successful for email: jack@gomarvana.com
+2025-05-01T19:39:04.834347986Z Checking if email already exists: jack@gomarvana.com
+2025-05-01T19:39:04.835442155Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:04.835451835Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:04.837083838Z Retrying in 2000ms...
+2025-05-01T19:39:04.837089638Z Database operation failed (attempt 1/5): [object Object]
+2025-05-01T19:39:06.838535625Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:06.838571176Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:06.841647427Z Retrying in 4000ms...
+2025-05-01T19:39:06.841654268Z Database operation failed (attempt 2/5): [object Object]
+2025-05-01T19:39:09.357475862Z Sending websocket ping to keep connection alive
+2025-05-01T19:39:09.357765334Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:09.357779385Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:09.360080909Z Ping error (attempt 20): [object Object]
+2025-05-01T19:39:10.842946188Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:10.842969039Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:10.866832091Z Retrying in 8000ms...
+2025-05-01T19:39:10.866874253Z Database operation failed (attempt 3/5): [object Object]
+2025-05-01T19:39:17.743589373Z Sending websocket ping to keep connection alive
+2025-05-01T19:39:17.743628404Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:17.743634604Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:17.748510173Z Ping error (attempt 3): [object Object]
+2025-05-01T19:39:17.748574025Z Multiple ping failures detected, adjusting ping strategy
+2025-05-01T19:39:17.748579365Z Setting new ping interval to 21000ms
+2025-05-01T19:39:18.868117458Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:39:18.87608749Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:39:18.891088327Z Database operation failed (attempt 4/5): [object Object]
+2025-05-01T19:39:18.893575563Z Retrying in 16000ms...
