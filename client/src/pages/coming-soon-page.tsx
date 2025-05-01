@@ -10,10 +10,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import tovablyLogo from '../assets/tovably-logo.png';
 
+// Create a company email validator
+const isCompanyEmail = (email: string) => {
+  const domain = email.split('@')[1];
+  if (!domain) return false;
+  
+  // List of common personal email domains to reject
+  const personalDomains = [
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com', 
+    'icloud.com', 'me.com', 'mac.com', 'msn.com', 'live.com', 
+    'googlemail.com', 'ymail.com', 'protonmail.com', 'zoho.com'
+  ];
+  
+  return !personalDomains.includes(domain.toLowerCase());
+};
+
 // Email form schema
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
+  email: z.string()
+    .email({ message: "Please enter a valid email address" })
+    .refine(isCompanyEmail, { 
+      message: "Please use a company email address (personal email domains like gmail.com are not accepted)" 
+    }),
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+  company: z.string().min(2, { message: "Company name is required" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -27,6 +47,7 @@ export default function ComingSoonPage() {
     defaultValues: {
       email: "",
       name: "",
+      company: "",
     },
   });
   
@@ -42,6 +63,7 @@ export default function ComingSoonPage() {
         body: JSON.stringify({
           email: values.email,
           name: values.name,
+          company: values.company,
           message: "Early access request from coming soon page",
           status: "new_lead",
         }),
@@ -126,6 +148,23 @@ export default function ComingSoonPage() {
                     )}
                   />
                   
+                  <FormField
+                    control={form.control}
+                    name="company"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            className="bg-zinc-900 border-zinc-800 focus:border-[#74d1ea] h-10"
+                            placeholder="Your company"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
                   <div className="flex space-x-2">
                     <div className="flex-grow">
                       <FormField
@@ -136,7 +175,7 @@ export default function ComingSoonPage() {
                             <FormControl>
                               <Input
                                 className="bg-zinc-900 border-zinc-800 focus:border-[#74d1ea] h-10"
-                                placeholder="Enter your email"
+                                placeholder="your.name@company.com"
                                 type="email"
                                 {...field}
                               />
