@@ -6,6 +6,8 @@ import {
   blogCategories,
   blogPosts,
   leadContacts,
+  campaigns,
+  campaignContents,
   type User, 
   type InsertUser, 
   type ToneAnalysis, 
@@ -20,6 +22,10 @@ import {
   type InsertBlogPost,
   type LeadContact,
   type InsertLeadContact,
+  type Campaign,
+  type InsertCampaign,
+  type CampaignContent,
+  type InsertCampaignContent,
   type SubscriptionPlanType,
   predefinedPersonas
 } from "@shared/schema";
@@ -95,6 +101,19 @@ export interface IStorage {
   updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPost>;
   deleteBlogPost(id: number): Promise<void>;
   
+  // Campaign methods
+  createCampaign(campaign: InsertCampaign): Promise<Campaign>;
+  getCampaign(id: number): Promise<Campaign | undefined>;
+  getCampaignsByUserId(userId: number): Promise<Campaign[]>;
+  updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign>;
+  deleteCampaign(id: number): Promise<void>;
+  
+  // Campaign content methods
+  addContentToCampaign(campaignContent: InsertCampaignContent): Promise<CampaignContent>;
+  getCampaignContents(campaignId: number): Promise<GeneratedContent[]>;
+  removeContentFromCampaign(campaignId: number, contentId: number): Promise<void>;
+  deleteCampaignContents(campaignId: number): Promise<void>;
+  
   // Lead contact methods
   createLeadContact(contact: InsertLeadContact): Promise<LeadContact>;
   getLeadContact(id: number): Promise<LeadContact | undefined>;
@@ -117,6 +136,8 @@ export class MemStorage implements IStorage {
   private generatedContents: Map<number, GeneratedContent>;
   private blogCategories: Map<number, BlogCategory>;
   private blogPosts: Map<number, BlogPost>;
+  private campaigns: Map<number, Campaign>;
+  private campaignContents: Map<number, CampaignContent>;
   private leadContacts: Map<number, LeadContact>;
   private userIdCounter: number;
   private toneAnalysisIdCounter: number;
@@ -124,6 +145,8 @@ export class MemStorage implements IStorage {
   private contentIdCounter: number;
   private blogCategoryIdCounter: number;
   private blogPostIdCounter: number;
+  private campaignIdCounter: number;
+  private campaignContentIdCounter: number;
   private leadContactIdCounter: number;
   sessionStore: session.Store;
 
@@ -134,6 +157,8 @@ export class MemStorage implements IStorage {
     this.generatedContents = new Map();
     this.blogCategories = new Map();
     this.blogPosts = new Map();
+    this.campaigns = new Map();
+    this.campaignContents = new Map();
     this.leadContacts = new Map();
     this.userIdCounter = 1;
     this.toneAnalysisIdCounter = 1;
@@ -141,6 +166,8 @@ export class MemStorage implements IStorage {
     this.contentIdCounter = 1;
     this.blogCategoryIdCounter = 1;
     this.blogPostIdCounter = 1;
+    this.campaignIdCounter = 1;
+    this.campaignContentIdCounter = 1;
     this.leadContactIdCounter = 1;
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000 // prune expired entries every 24h
