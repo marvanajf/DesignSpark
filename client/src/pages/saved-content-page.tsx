@@ -21,40 +21,34 @@ export default function SavedContentPage() {
             </div>
           </div>
           
-          {/* Main intro card - similar to content-generator page */}
-          <div className="mb-8">
-            <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-              <div className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                    <FileText className="h-5 w-5 text-[#74d1ea]" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-white">AI-Powered Content Management</h3>
-                    <p className="text-sm text-gray-400">Organize and manage your generated content</p>
-                  </div>
-                </div>
+          {/* Content Management Promo Banner - matched with content-generator page */}
+          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+            
+            <div className="relative z-10 flex items-start">
+              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <FileText className="h-6 w-6 text-[#74d1ea]" />
+              </div>
+              
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-white mb-3">AI-Powered Content Management</h2>
+                <p className="text-gray-300 mb-6 max-w-3xl">
+                  View, edit, and organize your generated content. Group related pieces into campaigns for better 
+                  workflow management or access individual content items directly.
+                </p>
                 
-                <div className="text-sm text-gray-300">
-                  <p className="mb-2">
-                    View, edit, and organize your generated content. Group related pieces into campaigns for better 
-                    workflow management or access individual content items directly.
-                  </p>
-                </div>
-                
-                <div className="mt-4 space-y-1.5">
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
-                    <span className="text-[#74d1ea]">✓</span>
-                    <span>Categorize content into campaigns for organized access</span>
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Categorize content into campaigns for organized access</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
-                    <span className="text-[#74d1ea]">✓</span>
-                    <span>Easy content management with one-click copying</span>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Easy content management with one-click copying</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
-                    <span className="text-[#74d1ea]">✓</span>
-                    <span>Create themed campaigns for specific marketing initiatives</span>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Create themed campaigns for specific marketing initiatives</span>
                   </div>
                 </div>
               </div>
