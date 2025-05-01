@@ -27,11 +27,15 @@ const loginSchema = z.object({
 
 // Registration form schema
 const registerSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
+  email: z.string().email({ message: "Please enter a valid email address" })
+    .refine((email) => {
+      // This regex checks for common personal email domains and rejects them
+      const personalEmailRegex = /@(gmail|yahoo|hotmail|outlook|aol|icloud|protonmail|zoho|gmx|mail|inbox|yandex|tutanota)\./i;
+      return !personalEmailRegex.test(email);
+    }, { message: "Please use a company email address" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-  full_name: z.string().optional(),
-  company: z.string().optional(),
+  full_name: z.string().min(2, { message: "Full name is required" }),
+  company: z.string().min(2, { message: "Company name is required" }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -64,7 +68,6 @@ export default function AuthPage() {
     defaultValues: {
       email: "",
       password: "",
-      username: "",
       full_name: "",
       company: "",
     },
@@ -205,26 +208,10 @@ export default function AuthPage() {
                           name="company"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Company (Optional)</FormLabel>
+                              <FormLabel>Company</FormLabel>
                               <FormControl>
                                 <Input 
                                   placeholder="Your Company Ltd" 
-                                  {...field} 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={registerForm.control}
-                          name="username"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Username</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="johnsmith" 
                                   {...field} 
                                 />
                               </FormControl>

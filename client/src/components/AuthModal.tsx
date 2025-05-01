@@ -68,7 +68,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     defaultValues: {
       email: "",
       password: "",
-      username: "",
       full_name: "",
       company: "",
     },
@@ -212,27 +211,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     name="company"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Company (Optional)</FormLabel>
+                        <FormLabel className="text-white">Company</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Enter your company name"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Username</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Choose a username"
                             {...field}
                             className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
                           />
