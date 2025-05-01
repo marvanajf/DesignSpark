@@ -1,0 +1,50 @@
+2025-05-01T19:31:30.833273882Z   [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+2025-05-01T19:31:30.833276023Z }
+2025-05-01T19:31:30.833278233Z Error creating default user: [object Object]
+2025-05-01T19:31:30.971738775Z Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+2025-05-01T19:31:30.97180046Z   npx update-browserslist-db@latest
+2025-05-01T19:31:30.971806591Z   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2025-05-01T19:31:37.621498842Z ==> Your service is live 🎉
+2025-05-01T19:31:39.279298765Z Sending websocket ping to keep connection alive
+2025-05-01T19:31:39.336966686Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:31:39.336988967Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:31:39.343134283Z Ping error (attempt 1): [object Object]
+2025-05-01T19:31:49.191866644Z User not authenticated for /api/user
+2025-05-01T19:31:49.198322723Z 7:31:49 PM [express] GET /api/user 401 in 7ms
+2025-05-01T19:31:51.213721128Z Sending websocket ping to keep connection alive
+2025-05-01T19:31:51.214108646Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:31:51.214117796Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:31:51.222750642Z Ping error (attempt 15): [object Object]
+2025-05-01T19:31:54.33735245Z Sending websocket ping to keep connection alive
+2025-05-01T19:31:54.338055574Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:31:54.338067545Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:31:54.341821589Z Ping error (attempt 2): [object Object]
+2025-05-01T19:32:00.639666192Z Registration attempt starting, validating input data...
+2025-05-01T19:32:00.64108942Z Data validation successful for email: jack@gomarvana.com
+2025-05-01T19:32:00.641098501Z Checking if email already exists: jack@gomarvana.com
+2025-05-01T19:32:00.642498837Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:32:00.642507257Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:32:00.651954913Z Database operation failed (attempt 1/5): [object Object]
+2025-05-01T19:32:00.651998217Z Retrying in 2000ms...
+2025-05-01T19:32:02.653206579Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:32:02.65323027Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:32:02.654825151Z Retrying in 4000ms...
+2025-05-01T19:32:02.654827362Z Database operation failed (attempt 2/5): [object Object]
+2025-05-01T19:32:06.65677315Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:32:06.656802633Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:32:06.659326414Z Retrying in 8000ms...
+2025-05-01T19:32:06.659343115Z Database operation failed (attempt 3/5): [object Object]
+2025-05-01T19:32:09.339216126Z Sending websocket ping to keep connection alive
+2025-05-01T19:32:09.339508628Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:32:09.339515639Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:32:09.341471467Z Ping error (attempt 3): [object Object]
+2025-05-01T19:32:09.341486198Z Multiple ping failures detected, adjusting ping strategy
+2025-05-01T19:32:09.34164345Z Setting new ping interval to 21000ms
+2025-05-01T19:32:12.214751396Z Sending websocket ping to keep connection alive
+2025-05-01T19:32:12.215033722Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:32:12.215045713Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:32:12.217687707Z Ping error (attempt 16): [object Object]
+2025-05-01T19:32:14.660888334Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:32:14.660912626Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:32:14.663780093Z Retrying in 16000ms...
+2025-05-01T19:32:14.663792845Z Database operation failed (attempt 4/5): [object Object]

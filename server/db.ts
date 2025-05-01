@@ -18,6 +18,41 @@ neonConfig.wsProxy = (url) => {
   try {
     // In production, we need to handle IP-based connection issues that can occur on Render
     if (process.env.NODE_ENV === 'production') {
+      // Handle known problematic hostnames from Render
+      if (url === 'dpg-d07rtkqdbo4c73brf3rg-a' || url.startsWith('dpg-')) {
+        console.log(`Detected potentially problematic connection URL: ${url}`);
+        
+        // Check if we have a fallback host to use
+        if (FALLBACK_DB_HOST) {
+          console.log(`Using known working fallback host: ${FALLBACK_DB_HOST}`);
+          return FALLBACK_DB_HOST;
+        }
+        
+        // Get the DATABASE_URL to extract the correct hostname
+        const dbUrl = process.env.DATABASE_URL || '';
+        if (dbUrl.includes('@')) {
+          try {
+            // Extract hostname from DATABASE_URL which should be the correct endpoint
+            const hostname = dbUrl.split('@')[1].split('/')[0].split(':')[0];
+            if (hostname) {
+              console.log(`Using extracted hostname from DATABASE_URL: ${hostname}`);
+              return hostname;
+            }
+          } catch (extractErr) {
+            console.error('Error extracting hostname from DATABASE_URL:', extractErr);
+            // Use the fallback host if extraction fails
+            if (FALLBACK_DB_HOST) {
+              console.log(`Falling back to known working host: ${FALLBACK_DB_HOST}`);
+              return FALLBACK_DB_HOST;
+            }
+          }
+        } else if (FALLBACK_DB_HOST) {
+          // If the DATABASE_URL doesn't have the right format, use the fallback
+          console.log(`Cannot parse DATABASE_URL, using fallback host: ${FALLBACK_DB_HOST}`);
+          return FALLBACK_DB_HOST;
+        }
+      }
+      
       // Check if URL is IP-based (common issue with Render deployment)
       if (url.match(/\d+\.\d+\.\d+\.\d+/)) {
         // This appears to be an IP address which might be causing connection issues
@@ -27,7 +62,7 @@ neonConfig.wsProxy = (url) => {
         const dbUrl = process.env.DATABASE_URL || '';
         if (dbUrl.includes('@')) {
           try {
-            // Extract hostname from DATABASE_URL which should be the Neon endpoint
+            // Extract hostname from DATABASE_URL which should be the correct endpoint
             const hostname = dbUrl.split('@')[1].split('/')[0].split(':')[0];
             if (hostname && !hostname.match(/^\d+\.\d+\.\d+\.\d+$/)) {
               console.log(`Using extracted hostname: ${hostname} instead of IP`);
@@ -367,6 +402,10 @@ async function testConnection() {
  */
 // Global recovery flag to prevent multiple simultaneous recovery attempts
 let recoveryInProgress = false;
+
+// Add a fallback database host in case everything else fails
+// This allows us to hard-code a known working hostname as a last resort
+const FALLBACK_DB_HOST = "ep-falling-frog-a45g83oy.us-east-1.aws.neon.tech";
 
 async function recreatePool() {
   console.log("Emergency connection recovery: Attempting to recreate database pool");
