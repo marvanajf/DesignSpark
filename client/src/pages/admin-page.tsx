@@ -42,7 +42,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
-import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download } from "lucide-react";
+import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download, ChevronLeft } from "lucide-react";
 
 // Utility function to convert data to CSV
 function convertToCSV<T extends Record<string, any>>(data: T[], headers: Record<string, string>): string {
@@ -85,7 +85,7 @@ function downloadCSV(csvContent: string, fileName: string) {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
-import { Redirect } from "wouter";
+import { Redirect, Link } from "wouter";
 
 interface LeadContact {
   id: number;
@@ -480,11 +480,19 @@ export default function AdminPage() {
 
   return (
     <div className="container mx-auto py-8 max-w-7xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Admin Panel</h1>
-        <p className="text-zinc-400 mt-2">
-          Manage users and leads from this central dashboard
-        </p>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Panel</h1>
+          <p className="text-zinc-400 mt-2">
+            Manage users and leads from this central dashboard
+          </p>
+        </div>
+        <Link to="/">
+          <Button variant="outline" className="flex items-center gap-2 bg-zinc-900 border-zinc-700 hover:bg-zinc-800 transition-colors">
+            <ChevronLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </Link>
       </div>
 
       <div className="mb-6">
