@@ -303,7 +303,7 @@ export default function ComingSoonPage() {
             </div>
             
             <p className="text-xs text-zinc-500 mt-10">
-              &copy; {new Date().getFullYear()} Tovably. All rights reserved. <a href="mailto:sales@tovably.com" className="hover:text-[#74d1ea]">sales@tovably.com</a>
+              &copy; {new Date().getFullYear()} Tovably. All rights reserved. <a href="/contact" className="hover:text-[#74d1ea]">Contact us</a>
             </p>
           </div>
         </div>
