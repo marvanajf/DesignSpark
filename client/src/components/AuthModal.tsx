@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+// Define form validation schemas
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -51,11 +52,11 @@ interface AuthModalProps {
   onClose: () => void;
 }
 
-export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const [isLogin, setIsLogin] = useState(true);
-  const { loginMutation, registerMutation } = useAuth();
-
-  const loginForm = useForm<LoginFormValues>({
+// Login form component
+function LoginForm({ onSuccess }: { onSuccess: () => void }) {
+  const { loginMutation } = useAuth();
+  
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -64,7 +65,76 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     mode: "onChange",
   });
 
-  const registerForm = useForm<RegisterFormValues>({
+  function onSubmit(data: LoginFormValues) {
+    loginMutation.mutate(data, {
+      onSuccess: () => {
+        form.reset();
+        onSuccess();
+      },
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  {...field}
+                  className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                  className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="pt-4">
+          <Button
+            type="submit"
+            className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+            disabled={loginMutation.isPending}
+          >
+            {loginMutation.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Sign in
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}
+
+// Register form component
+function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
+  const { registerMutation } = useAuth();
+  
+  const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
@@ -75,64 +145,125 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     mode: "onChange",
   });
 
-  // Reset forms when modal is opened/closed
-  useEffect(() => {
-    if (isOpen) {
-      // When modal opens, reset both forms with explicit default values
-      loginForm.reset({
-        email: "",
-        password: "",
-      });
-      registerForm.reset({
-        email: "",
-        password: "",
-        full_name: "",
-        company: "",
-      });
-    }
-  }, [isOpen, loginForm, registerForm]);
-
-  // Reset the appropriate form when switching between login and signup
-  useEffect(() => {
-    if (isLogin) {
-      // Reset signup form when switching to login
-      registerForm.reset({
-        email: "",
-        password: "",
-        full_name: "",
-        company: "",
-      });
-    } else {
-      // Reset login form when switching to signup
-      loginForm.reset({
-        email: "",
-        password: "",
-      });
-    }
-  }, [isLogin, loginForm, registerForm]);
-
-  const onLoginSubmit = (data: LoginFormValues) => {
-    loginMutation.mutate(data, {
-      onSuccess: () => {
-        onClose();
-      },
-    });
-  };
-
-  const onRegisterSubmit = (data: RegisterFormValues) => {
+  function onSubmit(data: RegisterFormValues) {
     registerMutation.mutate(data, {
       onSuccess: () => {
-        onClose();
+        form.reset();
+        onSuccess();
       },
     });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  {...field}
+                  className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="full_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Full Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your full name"
+                  {...field}
+                  className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="company"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Company</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your company name"
+                  {...field}
+                  className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Create a password"
+                  {...field}
+                  className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="pt-4">
+          <Button
+            type="submit"
+            className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+            disabled={registerMutation.isPending}
+          >
+            {registerMutation.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Create account
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}
+
+// Main AuthModal component
+export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const [isLogin, setIsLogin] = useState(true);
+
+  // When user successfully logs in or registers
+  const handleSuccess = () => {
+    onClose();
+  };
+
+  // Toggle between login and register forms
+  const handleModeToggle = () => {
+    setIsLogin(!isLogin);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <CustomDialogContent hideCloseButton={true} className="sm:max-w-md bg-black border border-gray-700/60 text-white overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]">
-      
-        {/* Remove background grid pattern per user request */}
-        
+      <CustomDialogContent 
+        hideCloseButton={true} 
+        className="sm:max-w-md bg-black border border-gray-700/60 text-white overflow-hidden shadow-[0_0_20px_rgba(116,209,234,0.15)]"
+      >
         <div className="relative z-10">
           <DialogHeader className="flex flex-row items-center justify-between">
             <div>
@@ -154,171 +285,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </DialogHeader>
 
           <div className="mt-6">
+            {/* Render either LoginForm or RegisterForm based on state */}
             {isLogin ? (
-              <Form {...loginForm}>
-                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
-                  <FormField
-                    control={loginForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="Enter your email"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={loginForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter your password"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="pt-4">
-                    <Button
-                      type="submit"
-                      className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-                      disabled={loginMutation.isPending}
-                    >
-                      {loginMutation.isPending ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : null}
-                      Sign in
-                    </Button>
-                  </div>
-                </form>
-              </Form>
+              <LoginForm onSuccess={handleSuccess} />
             ) : (
-              <Form {...registerForm}>
-                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
-                  <FormField
-                    control={registerForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="Enter your email"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="full_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Full Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your full name"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="company"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Company</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your company name"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Create a password"
-                            {...field}
-                            className="bg-black border-gray-700/60 text-white focus:border-[#74d1ea]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="pt-4">
-                    <Button
-                      type="submit"
-                      className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-                      disabled={registerMutation.isPending}
-                    >
-                      {registerMutation.isPending ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : null}
-                      Create account
-                    </Button>
-                  </div>
-                </form>
-              </Form>
+              <RegisterForm onSuccess={handleSuccess} />
             )}
 
             <div className="mt-4 text-center">
               <Button
                 variant="link"
-                onClick={() => {
-                  // First reset the forms with explicit default values
-                  if (isLogin) {
-                    // If switching from login to signup, reset the signup form
-                    registerForm.reset({
-                      email: "",
-                      password: "",
-                      full_name: "",
-                      company: "",
-                    });
-                  } else {
-                    // If switching from signup to login, reset the login form
-                    loginForm.reset({
-                      email: "",
-                      password: "",
-                    });
-                  }
-                  // Then toggle the mode
-                  setIsLogin(!isLogin);
-                }}
+                onClick={handleModeToggle}
                 className="text-[#74d1ea] hover:text-[#5db8d0]"
               >
                 {isLogin
