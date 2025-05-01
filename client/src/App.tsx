@@ -29,6 +29,7 @@ import PricingPage from "@/pages/pricing-page";
 import PaymentSuccessPage from "@/pages/payment-success-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
+import CampaignPage from "@/pages/campaign-page";
 import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -68,6 +69,7 @@ function Router() {
       <ProtectedRoute path="/personas" component={PersonaSelectionPage} />
       <ProtectedRoute path="/content-generator" component={ContentGeneratorPage} />
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
+      <ProtectedRoute path="/campaign/:id" component={CampaignPage} />
       <ProtectedRoute path="/guides" component={GuidesPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
       <ProtectedRoute path="/support" component={SupportPage} />
