@@ -76,39 +76,68 @@ export default function SavedContentList() {
 
   return (
     <div className="space-y-6">
-      <TabsComponent value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
-          <TabsList>
-            <TabsTrigger value="content" className="gap-2">
-              <ListOrdered className="h-4 w-4" />
-              <span>All Content</span>
-            </TabsTrigger>
-            <TabsTrigger value="campaigns" className="gap-2">
-              <Grid className="h-4 w-4" />
-              <span>Campaigns</span>
-            </TabsTrigger>
-          </TabsList>
-          
-          {activeTab === "content" && (
-            <div className="w-full sm:w-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by topic, content or type..."
-                  className="pl-10 w-full sm:w-[300px]"
-                />
+      {/* Header with title and search */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Saved Content</h1>
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search content..."
+            className="w-[280px] pl-8"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Content Management Overview Card */}
+      <Card className="bg-background border-0 shadow-md rounded-xl overflow-hidden">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-primary/10 rounded-full">
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-xl font-semibold">Content Management</h2>
+              <p className="text-muted-foreground">
+                Organize and manage your generated content. Group related pieces into campaigns for better workflow management.
+              </p>
+              <div className="pt-4 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">✓</span>
+                  <span>Categorize content into campaigns for organized access</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">✓</span>
+                  <span>Easy content management with one-click copying</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">✓</span>
+                  <span>Create themed campaigns for specific marketing initiatives</span>
+                </div>
               </div>
             </div>
-          )}
-        </div>
-        
-        <Separator className="my-4" />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Tabs for content and campaigns */}
+      <TabsComponent value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="mb-6">
+          <TabsTrigger value="content" className="gap-2">
+            <ListOrdered className="h-4 w-4" />
+            <span>All Content</span>
+          </TabsTrigger>
+          <TabsTrigger value="campaigns" className="gap-2">
+            <Grid className="h-4 w-4" />
+            <span>Campaigns</span>
+          </TabsTrigger>
+        </TabsList>
         
         <TabsContent value="content" className="mt-0 space-y-6">
           {!filteredContent || filteredContent.length === 0 ? (
-            <div className="border border-dashed border-border rounded-xl overflow-hidden p-8 text-center">
+            <div className="border border-border/40 bg-background/50 rounded-xl overflow-hidden p-8 text-center">
               {searchQuery ? (
                 <>
                   <Search className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -127,11 +156,11 @@ export default function SavedContentList() {
                 <>
                   <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                   <h2 className="text-xl font-semibold mb-2">No content yet</h2>
-                  <p className="text-muted-foreground mb-4">
+                  <p className="text-muted-foreground mb-4 max-w-md mx-auto">
                     Generate some content in the Content Generator to see it here
                   </p>
                   <Button 
-                    variant="default"
+                    className="bg-primary hover:bg-primary/90"
                     onClick={() => window.location.href = "/content-generator"}
                   >
                     Go to Content Generator

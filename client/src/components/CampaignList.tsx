@@ -199,31 +199,37 @@ export function CampaignList() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Your Campaigns</h2>
-        <Button onClick={openCreateDialog} className="gap-1">
-          <Plus className="h-4 w-4" /> New Campaign
-        </Button>
+    <div className="space-y-6">
+      {/* Campaign header section */}
+      <div className="flex flex-col space-y-2">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">Your Campaigns</h2>
+          <Button onClick={openCreateDialog} className="gap-1 bg-primary hover:bg-primary/90">
+            <Plus className="h-4 w-4" /> New Campaign
+          </Button>
+        </div>
+        <p className="text-muted-foreground">
+          Create campaigns to organize related content pieces for better workflow management
+        </p>
       </div>
 
       {/* Create Campaign Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Create New Campaign</DialogTitle>
             <DialogDescription>
-              Organize your content by creating a new campaign.
+              Organize your content by creating a new campaign for related materials.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="campaign-name">Name</Label>
+              <Label htmlFor="campaign-name">Campaign Name</Label>
               <Input
                 id="campaign-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Campaign name"
+                placeholder="E.g. Q2 Marketing Campaign"
                 className="col-span-3"
               />
             </div>
@@ -233,8 +239,8 @@ export function CampaignList() {
                 id="campaign-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Campaign description"
-                className="col-span-3 min-h-[100px]"
+                placeholder="Describe the purpose of this campaign"
+                className="col-span-3 min-h-[120px]"
               />
             </div>
           </div>
@@ -242,7 +248,11 @@ export function CampaignList() {
             <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleCreateCampaign} disabled={createCampaignMutation.isPending}>
+            <Button 
+              onClick={handleCreateCampaign} 
+              disabled={createCampaignMutation.isPending}
+              className="bg-primary hover:bg-primary/90"
+            >
               {createCampaignMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...
@@ -257,7 +267,7 @@ export function CampaignList() {
 
       {/* Edit Campaign Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Edit Campaign</DialogTitle>
             <DialogDescription>
@@ -266,7 +276,7 @@ export function CampaignList() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="edit-campaign-name">Name</Label>
+              <Label htmlFor="edit-campaign-name">Campaign Name</Label>
               <Input
                 id="edit-campaign-name"
                 value={name}
@@ -282,7 +292,7 @@ export function CampaignList() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Campaign description"
-                className="col-span-3 min-h-[100px]"
+                className="col-span-3 min-h-[120px]"
               />
             </div>
           </div>
@@ -290,7 +300,11 @@ export function CampaignList() {
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleUpdateCampaign} disabled={updateCampaignMutation.isPending}>
+            <Button 
+              onClick={handleUpdateCampaign} 
+              disabled={updateCampaignMutation.isPending}
+              className="bg-primary hover:bg-primary/90"
+            >
               {updateCampaignMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
@@ -303,18 +317,21 @@ export function CampaignList() {
         </DialogContent>
       </Dialog>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Campaign cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {campaigns && campaigns.length > 0 ? (
           campaigns.map((campaign) => (
-            <Card key={campaign.id} className="overflow-hidden">
-              <CardHeader className="bg-background/5 pb-3">
+            <Card key={campaign.id} className="overflow-hidden bg-background border-0 shadow-md">
+              <CardHeader className="p-5 pb-3">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <CardTitle className="flex items-center gap-2">
-                      <Folder className="h-5 w-5 text-primary" />
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <span className="flex items-center justify-center p-1.5 rounded-full bg-primary/10">
+                        <Folder className="h-5 w-5 text-primary" />
+                      </span>
                       <span className="truncate">{campaign.name}</span>
                     </CardTitle>
-                    <CardDescription className="line-clamp-2">
+                    <CardDescription className="line-clamp-2 text-sm">
                       {campaign.description || "No description provided"}
                     </CardDescription>
                   </div>
@@ -323,14 +340,14 @@ export function CampaignList() {
                       variant="ghost"
                       size="icon"
                       onClick={() => openEditDialog(campaign)}
-                      className="h-8 w-8"
+                      className="h-8 w-8 opacity-70 hover:opacity-100"
                     >
                       <Pencil className="h-4 w-4" />
                       <span className="sr-only">Edit</span>
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 opacity-70 hover:opacity-100">
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Delete</span>
                         </Button>
@@ -357,16 +374,16 @@ export function CampaignList() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="pt-4">
+              <CardContent className="px-5 pt-3 pb-4">
                 <div className="text-sm text-muted-foreground">
                   Created: {new Date(campaign.created_at).toLocaleDateString()}
                 </div>
               </CardContent>
-              <CardFooter className="border-t bg-background/5 py-3">
+              <CardFooter className="border-t border-border/10 bg-background/5 p-3">
                 <Button
                   variant="default"
                   size="sm"
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90"
                   asChild
                 >
                   <a href={`/campaign/${campaign.id}`}>View Campaign</a>
@@ -375,15 +392,18 @@ export function CampaignList() {
             </Card>
           ))
         ) : (
-          <div className="col-span-full flex flex-col items-center justify-center p-8 border rounded-lg border-dashed">
-            <Folder className="h-10 w-10 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-1">No campaigns yet</h3>
-            <p className="text-sm text-muted-foreground text-center mb-4">
-              Create your first campaign to organize your content
+          <div className="col-span-full border border-border/40 bg-background/50 rounded-xl overflow-hidden p-10 text-center">
+            <Folder className="h-14 w-14 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No campaigns yet</h3>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              Create your first campaign to organize your content into focused collections for specific initiatives or themes.
             </p>
-            <Button onClick={openCreateDialog}>
+            <Button 
+              onClick={openCreateDialog}
+              className="bg-primary hover:bg-primary/90"
+            >
               <Plus className="mr-2 h-4 w-4" />
-              Create Campaign
+              Create Your First Campaign
             </Button>
           </div>
         )}
