@@ -57,11 +57,11 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(), // Keeping for backward compatibility, but will deprecate in favor of email
-  email: text("email").notNull().unique(), // Primary identifier moving forward
+  username: text("username").unique(), // Legacy field, keeping for backward compatibility
+  email: text("email").notNull().unique(), // Primary identifier 
   password: text("password").notNull(),
-  full_name: text("full_name"), // Added field
-  company: text("company"), // Added field
+  full_name: text("full_name").notNull(), // Required field
+  company: text("company").notNull(), // Required field
   role: text("role").default("user").notNull(),
   subscription_plan: text("subscription_plan").default("free").notNull(),
   personas_used: integer("personas_used").default(0).notNull(),
@@ -139,14 +139,34 @@ export const leadContacts = pgTable("lead_contacts", {
 });
 
 // Insert schemas
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  email: true,
-  password: true,
-  full_name: true,
-  company: true,
-  role: true
-});
+export const insertUserSchema = createInsertSchema(users)
+  .omit({ 
+    id: true,
+    personas_used: true, 
+    tone_analyses_used: true, 
+    content_generated: true,
+    stripe_customer_id: true,
+    stripe_subscription_id: true,
+    subscription_status: true,
+    subscription_period_end: true,
+    created_at: true,
+    subscription_plan: true
+  })
+  .extend({
+    // Make username optional
+    username: z.string().optional(),
+    // Company domain email validation
+    email: z.string().email().refine(
+      (email) => {
+        // This regex checks for common personal email domains and rejects them
+        const personalEmailRegex = /@(gmail|yahoo|hotmail|outlook|aol|icloud|protonmail|zoho|gmx|mail|inbox|yandex|tutanota)\./i;
+        return !personalEmailRegex.test(email);
+      },
+      {
+        message: "Please use a company email address",
+      }
+    ),
+  });
 
 export const insertToneAnalysisSchema = createInsertSchema(toneAnalyses).pick({
   user_id: true,

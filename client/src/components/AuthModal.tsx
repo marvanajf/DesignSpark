@@ -32,11 +32,15 @@ const loginSchema = z.object({
 });
 
 const registerSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  username: z.string().min(1, "Username is required"), // We'll keep this for now for compatibility
-  full_name: z.string().optional(),
-  company: z.string().optional(),
+  email: z.string().email("Invalid email address")
+    .refine((email) => {
+      // This regex checks for common personal email domains and rejects them
+      const personalEmailRegex = /@(gmail|yahoo|hotmail|outlook|aol|icloud|protonmail|zoho|gmx|mail|inbox|yandex|tutanota)\./i;
+      return !personalEmailRegex.test(email);
+    }, { message: "Please use a company email address" }),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  full_name: z.string().min(2, "Full name is required"),
+  company: z.string().min(2, "Company name is required"),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;

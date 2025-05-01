@@ -103,13 +103,11 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
-      // Extend the base schema with validation rules
+      // Extend the base schema with additional validation
       const extendedSchema = insertUserSchema.extend({
-        email: z.string().email("Invalid email format"),
         password: z.string().min(8, "Password must be at least 8 characters"),
-        username: z.string().min(3, "Username must be at least 3 characters"),
-        full_name: z.string().optional(),
-        company: z.string().optional(),
+        full_name: z.string().min(2, "Full name is required"),
+        company: z.string().min(2, "Company name is required"),
       });
 
       const validatedData = extendedSchema.parse(req.body);
@@ -120,16 +118,25 @@ export function setupAuth(app: Express) {
         return res.status(400).json({ message: "Email already exists" });
       }
 
-      // Check if username already exists
-      const existingUsername = await storage.getUserByUsername(validatedData.username);
-      if (existingUsername) {
-        return res.status(400).json({ message: "Username already exists" });
+      // Generate a unique username from the email if none is provided
+      let username = validatedData.username;
+      if (!username) {
+        // Create username from the part before @ in email
+        username = validatedData.email.split('@')[0];
+        
+        // Check if this username exists, if so add a random suffix
+        const existingUsername = await storage.getUserByUsername(username);
+        if (existingUsername) {
+          const randomSuffix = Math.floor(Math.random() * 9000 + 1000);
+          username = `${username}${randomSuffix}`;
+        }
       }
 
       // Hash the password and create user
       const hashedPassword = await hashPassword(validatedData.password);
       const user = await storage.createUser({
         ...validatedData,
+        username,
         password: hashedPassword,
         role: "user", // Set default role for new users
       });
