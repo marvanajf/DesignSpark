@@ -76,9 +76,8 @@ export default function SavedContentList() {
 
   return (
     <div className="space-y-6">
-      {/* Header with title and search */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Saved Content</h1>
+      {/* Search bar only */}
+      <div className="flex items-center justify-end">
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -90,57 +89,6 @@ export default function SavedContentList() {
           />
         </div>
       </div>
-
-      {/* Content Library Card - First card */}
-      <Card className="bg-[#0e1015] border-0 shadow-md rounded-xl overflow-hidden">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div>
-              <FileText className="h-6 w-6 text-[#74d1ea]" />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold">Content Library</h2>
-              <p className="text-muted-foreground">
-                View, edit, and manage all your generated content
-              </p>
-              <p className="text-muted-foreground mt-3">
-                Your generated LinkedIn posts and cold emails are saved here for quick access. You can easily copy, edit, or download content for use in your marketing campaigns.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* Content Management Card - Main intro card */}
-      <Card className="bg-[#0e1015] border-0 shadow-md rounded-xl overflow-hidden">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div>
-              <FileText className="h-6 w-6 text-[#74d1ea]" />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold">Content Management</h2>
-              <p className="text-muted-foreground">
-                Organize and manage your generated content. Group related pieces into campaigns for better workflow management.
-              </p>
-              <div className="pt-4 space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-[#74d1ea]">✓</span>
-                  <span>Categorize content into campaigns for organized access</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[#74d1ea]">✓</span>
-                  <span>Easy content management with one-click copying</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[#74d1ea]">✓</span>
-                  <span>Create themed campaigns for specific marketing initiatives</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Tabs for content and campaigns */}
       <TabsComponent value={activeTab} onValueChange={setActiveTab} className="w-full">

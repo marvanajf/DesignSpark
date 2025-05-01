@@ -21,7 +21,7 @@ export default function SavedContentPage() {
             </div>
           </div>
           
-          {/* Summary Section */}
+          {/* Main intro card - similar to content-generator page */}
           <div className="mb-8">
             <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
               <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
@@ -31,16 +31,31 @@ export default function SavedContentPage() {
                     <FileText className="h-5 w-5 text-[#74d1ea]" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-white">Content Library</h3>
-                    <p className="text-sm text-gray-400">View, edit, and manage all your generated content</p>
+                    <h3 className="text-lg font-semibold text-white">AI-Powered Content Management</h3>
+                    <p className="text-sm text-gray-400">Organize and manage your generated content</p>
                   </div>
                 </div>
                 
                 <div className="text-sm text-gray-300">
                   <p className="mb-2">
-                    Your generated LinkedIn posts and cold emails are saved here for quick access. 
-                    You can easily copy, edit, or download content for use in your marketing campaigns.
+                    View, edit, and organize your generated content. Group related pieces into campaigns for better 
+                    workflow management or access individual content items directly.
                   </p>
+                </div>
+                
+                <div className="mt-4 space-y-1.5">
+                  <div className="flex items-center gap-2 text-sm text-gray-300">
+                    <span className="text-[#74d1ea]">✓</span>
+                    <span>Categorize content into campaigns for organized access</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-300">
+                    <span className="text-[#74d1ea]">✓</span>
+                    <span>Easy content management with one-click copying</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-300">
+                    <span className="text-[#74d1ea]">✓</span>
+                    <span>Create themed campaigns for specific marketing initiatives</span>
+                  </div>
                 </div>
               </div>
             </div>
