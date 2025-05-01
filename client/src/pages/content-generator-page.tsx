@@ -71,6 +71,7 @@ export default function ContentGeneratorPage() {
   const [selectedPersonaId, setSelectedPersonaId] = useState<number | null>(null);
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [furtherDetails, setFurtherDetails] = useState("");
   
   // Fetch tone analyses
   const { 
@@ -129,6 +130,7 @@ export default function ContentGeneratorPage() {
         personaId: selectedPersonaId,
         toneAnalysisId: selectedToneAnalysisId,
         topic: topic.trim(),
+        furtherDetails: furtherDetails.trim() || undefined,
       });
       
       return res.json();
@@ -557,6 +559,21 @@ export default function ContentGeneratorPage() {
                         Run New Analysis
                       </Button>
                     </div>
+                  </div>
+                  
+                  {/* Further Details Input */}
+                  <div className="space-y-2">
+                    <label htmlFor="furtherDetails" className="text-sm font-medium text-gray-300">Further Details (Optional)</label>
+                    <Textarea
+                      id="furtherDetails"
+                      placeholder="Add specific details, context, or instructions to refine the generated content..."
+                      value={furtherDetails}
+                      onChange={(e) => setFurtherDetails(e.target.value)}
+                      className="bg-black border-gray-700 text-white min-h-[100px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
+                    />
+                    <p className="text-xs text-gray-500">
+                      Include additional context or specific requirements for more tailored content
+                    </p>
                   </div>
                 </CardContent>
                 <CardFooter className="px-6 py-4 bg-black/20 border-t border-gray-800">
