@@ -1,3 +1,8 @@
+// EMERGENCY FIX: Disable TLS certificate verification for Render
+// This MUST be at the top of the file, before any imports
+// This is the only guaranteed way to fix certificate issues with Render PostgreSQL
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";

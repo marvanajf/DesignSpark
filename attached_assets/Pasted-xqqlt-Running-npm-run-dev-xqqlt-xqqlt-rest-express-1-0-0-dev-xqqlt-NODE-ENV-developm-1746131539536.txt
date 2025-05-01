@@ -1,0 +1,163 @@
+xqqlt
+==> Running 'npm run dev'
+xqqlt
+xqqlt
+> rest-express@1.0.0 dev
+xqqlt
+> NODE_ENV=development tsx server/index.ts
+xqqlt
+xqqlt
+Running in development mode
+xqqlt
+Connecting to database: postgres://****:****@dpg-d07rtkqdbo4c73brf3rg-a/designsparkdb?sslmode=require
+xqqlt
+Using direct PostgreSQL connections (standard pg driver) - NO WebSockets
+xqqlt
+Configuring database connection with proper SSL settings...
+xqqlt
+Detected Render PostgreSQL database - applying specialized configuration
+xqqlt
+Using Render-specific PostgreSQL configuration with relaxed SSL security
+xqqlt
+Running Stripe fields migration...
+xqqlt
+Database operation failed (attempt 1/3): self-signed certificate
+xqqlt
+Retrying in 1000ms...
+xqqlt
+Database operation failed (attempt 1/3): self-signed certificate
+xqqlt
+Retrying in 1000ms...
+xqqlt
+Database operation failed (attempt 2/3): self-signed certificate
+xqqlt
+Retrying in 2000ms...
+xqqlt
+Database operation failed (attempt 2/3): self-signed certificate
+xqqlt
+Retrying in 2000ms...
+xqqlt
+Database operation failed (attempt 3/3): self-signed certificate
+xqqlt
+Database operation failed after 3 attempts: Error: self-signed certificate
+xqqlt
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+xqqlt
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+xqqlt
+    at async withRetry (/opt/render/project/src/server/db.ts:101:14)
+xqqlt
+    at async testConnection (/opt/render/project/src/server/db.ts:124:20) {
+xqqlt
+  code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+xqqlt
+}
+xqqlt
+Database connection test failed: Error: self-signed certificate
+xqqlt
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+xqqlt
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+xqqlt
+    at async withRetry (/opt/render/project/src/server/db.ts:101:14)
+xqqlt
+    at async testConnection (/opt/render/project/src/server/db.ts:124:20) {
+xqqlt
+  code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+xqqlt
+}
+xqqlt
+Database connection pool initialization FAILED - check your connection string
+xqqlt
+Database operation failed (attempt 3/3): self-signed certificate
+xqqlt
+Database operation failed after 3 attempts: Error: self-signed certificate
+xqqlt
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+xqqlt
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+xqqlt
+    at async withRetry (/opt/render/project/src/server/db.ts:101:14)
+xqqlt
+    at async migrateStripeFields (/opt/render/project/src/server/migrations.ts:10:27)
+xqqlt
+    at async <anonymous> (/opt/render/project/src/server/index.ts:93:5) {
+xqqlt
+  code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+xqqlt
+}
+xqqlt
+Error during Stripe fields migration: self-signed certificate
+xqqlt
+Stack trace: Error: self-signed certificate
+xqqlt
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+xqqlt
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+xqqlt
+    at async withRetry (/opt/render/project/src/server/db.ts:101:14)
+xqqlt
+    at async migrateStripeFields (/opt/render/project/src/server/migrations.ts:10:27)
+xqqlt
+    at async <anonymous> (/opt/render/project/src/server/index.ts:93:5)
+xqqlt
+Gmail credentials not found. Email functionality will be disabled.
+xqqlt
+8:31:54 PM [express] serving on port 5000
+xqqlt
+Retrying in 1000ms...
+xqqlt
+Database operation failed (attempt 1/3): self-signed certificate
+xqqlt
+Database operation failed (attempt 2/3): self-signed certificate
+xqqlt
+Retrying in 2000ms...
+xqqlt
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+xqqlt
+  npx update-browserslist-db@latest
+xqqlt
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+     ==> Your service is live 🎉
+nmnsp
+Circuit breaker open (160s/300s), skipping ping
+xqqlt
+Database operation failed (attempt 3/3): self-signed certificate
+xqqlt
+Database operation failed after 3 attempts: Error: self-signed certificate
+xqqlt
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+xqqlt
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+xqqlt
+    at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+xqqlt
+    at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+xqqlt
+    at async withRetry (/opt/render/project/src/server/db.ts:101:14)
+xqqlt
+    at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26) {
+xqqlt
+  code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+xqqlt
+}
+xqqlt
+Error creating default user: self-signed certificate
+xqqlt
+Stack trace: Error: self-signed certificate
+xqqlt
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+xqqlt
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+xqqlt
+    at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+xqqlt
+    at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+xqqlt
+    at async withRetry (/opt/render/project/src/server/db.ts:101:14)
+xqqlt
+    at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26)
+xqqlt
+Sending database ping to keep connection alive
+xqqlt
+Ping error (attempt 1): self-signed certificate
