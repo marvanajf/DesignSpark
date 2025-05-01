@@ -130,16 +130,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (dbSuccess) {
         // If successful, perform a simple query to ensure end-to-end connectivity
         try {
+          // Import additional diagnostics variables
+          const { pingFailureCount, circuitBreakerOpen, circuitBreakerResetTimeout } = await import('./db');
+          
+          // Execute with a retry for reliability
           const result = await withRetry(() => db.execute(sql`SELECT NOW() as now`));
+          
+          // Calculate a latency measurement to test roundtrip time
+          const startLatency = Date.now();
+          await pool.query('SELECT 1');
+          const latencyMs = Date.now() - startLatency;
           
           healthStatus.components.database = { 
             status: "healthy", 
             message: "Database connection successful",
             timestamp: result?.[0]?.now || new Date().toISOString(),
+            latency_ms: latencyMs,
             pool_stats: {
               total_connections: pool.totalCount,
               idle_connections: pool.idleCount,
               waiting_clients: pool.waitingCount
+            },
+            connection_manager: {
+              ping_failures: pingFailureCount,
+              circuit_breaker: {
+                open: circuitBreakerOpen,
+                reset_timeout_sec: Math.round(circuitBreakerResetTimeout / 1000)
+              }
             },
             db_type: "PostgreSQL via Neon"
           };

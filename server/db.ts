@@ -44,29 +44,75 @@ if (isProd) {
   neonConfig.connectionTimeoutMillis = 30000; // 30 seconds timeout
 }
 
-// Set up a more robust ping mechanism that adapts to connection failures
+// Set up a more robust ping mechanism that adapts to connection failures with circuit breaker pattern
 const PING_INTERVAL = isProd ? 10000 : 15000; // More frequent pings in production
 let pingFailureCount = 0;
+let consecutiveSuccessCount = 0;
+let circuitBreakerOpen = false;
+let circuitBreakerLastOpenTime = 0;
+let circuitBreakerResetTimeout = 30000; // 30 seconds before trying again
 let pingIntervalId = setInterval(doPing, PING_INTERVAL);
 
-// This function performs a database ping and tracks failures
+/**
+ * Enhanced database ping function with circuit breaker pattern
+ * This helps prevent overwhelming the database with connection attempts during outages
+ * while still allowing for recovery when the database becomes available again
+ */
 async function doPing() {
+  // Check if circuit breaker is open and if it's time to try again
+  if (circuitBreakerOpen) {
+    const now = Date.now();
+    if (now - circuitBreakerLastOpenTime < circuitBreakerResetTimeout) {
+      // Circuit breaker still open and cooling down
+      console.log(`Circuit breaker open (${Math.round((now - circuitBreakerLastOpenTime) / 1000)}s/${Math.round(circuitBreakerResetTimeout / 1000)}s), skipping ping`);
+      return;
+    } else {
+      // Time to try again
+      console.log("Circuit breaker reset, attempting to reestablish database connection");
+      circuitBreakerOpen = false;
+    }
+  }
+
   try {
-    console.log("Sending websocket ping to keep connection alive");
+    // Only output log in development or when debugging
+    if (!isProd || process.env.DEBUG_DB === 'true') {
+      console.log("Sending websocket ping to keep connection alive");
+    }
+    
     // Use proper async/await pattern for error handling
     await pool?.query('SELECT 1');
     
-    // Reset failure count on success
+    // Increment success counter and reset failure count on success
+    consecutiveSuccessCount++;
+    
     if (pingFailureCount > 0) {
       console.log(`Ping succeeded after ${pingFailureCount} previous failures`);
       pingFailureCount = 0;
+      
+      // If we had many consecutive successes after failure, we're stable again
+      if (consecutiveSuccessCount >= 5) {
+        console.log("Connection appears stable again");
+        consecutiveSuccessCount = 0;
+        
+        // Reset ping interval to normal
+        clearInterval(pingIntervalId);
+        pingIntervalId = setInterval(doPing, PING_INTERVAL);
+      }
     }
   } catch (err) {
     pingFailureCount++;
-    console.log(`Ping error (attempt ${pingFailureCount}):`, err instanceof Error ? err.message : String(err));
+    consecutiveSuccessCount = 0;
+    
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    console.log(`Ping error (attempt ${pingFailureCount}):`, errorMessage);
+    
+    // Analyze error type for better recovery strategy
+    const isConnectionError = errorMessage.includes('ECONNREFUSED') || 
+                             errorMessage.includes('timeout') ||
+                             errorMessage.includes('connection');
     
     // If we've had multiple consecutive failures, try recreating the interval with a different frequency
-    if (pingFailureCount === 5) {
+    if (pingFailureCount === 3) {
       console.log("Multiple ping failures detected, adjusting ping strategy");
       clearInterval(pingIntervalId);
       
@@ -76,15 +122,28 @@ async function doPing() {
       pingIntervalId = setInterval(doPing, newInterval);
     }
     
-    // If we have persistent failures, try emergency recovery
-    if (pingFailureCount === 10) {
+    // After 5 failures, try emergency recovery
+    if (pingFailureCount === 5) {
       console.log("Critical: Multiple ping failures, attempting connection recovery");
-      // After 10 failures, attempt to recreate the pool
+      
       try {
+        // Attempt pool recreation
         recreatePool();
       } catch (recoveryErr) {
         console.error("Failed to recover connection:", recoveryErr);
       }
+    }
+    
+    // After 10 consecutive failures, open the circuit breaker to avoid overwhelming the database
+    if (pingFailureCount >= 10 && isConnectionError) {
+      console.log("Critical: Too many consecutive failures, opening circuit breaker");
+      circuitBreakerOpen = true;
+      circuitBreakerLastOpenTime = Date.now();
+      
+      // Increase timeout for next attempt exponentially
+      circuitBreakerResetTimeout = Math.min(circuitBreakerResetTimeout * 2, 5 * 60 * 1000); // Cap at 5 minutes
+      
+      console.log(`Circuit breaker open: will try again in ${Math.round(circuitBreakerResetTimeout / 1000)} seconds`);
     }
   }
 }
@@ -224,56 +283,153 @@ async function testConnection() {
   }
 }
 
-// Pool recreation function to recover from persistent connection failures
+/**
+ * Enhanced pool recreation function with multiple strategies for connection recovery
+ * This uses a multi-stage approach to recover from connection failures:
+ * 1. Try closing and recreating the connection pool
+ * 2. If that fails, try with more conservative settings
+ * 3. If still failing, try with direct connections and reduced timeouts
+ */
 async function recreatePool() {
   console.log("Emergency connection recovery: Attempting to recreate database pool");
   
   try {
-    // End the existing pool
-    await pool.end();
-    console.log("Successfully closed existing pool connections");
-  } catch (endError) {
-    console.warn("Error while closing existing pool (continuing anyway):", endError);
-  }
-  
-  try {
-    // Short pause before recreating
+    // Try gracefully ending existing pool
+    try {
+      await pool.end();
+      console.log("Successfully closed existing pool connections");
+    } catch (endError) {
+      console.warn("Error while closing existing pool (continuing anyway):", 
+        endError instanceof Error ? endError.message : String(endError));
+    }
+    
+    // Short pause before recreating to let any outstanding connections fully close
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Create a new pool with the same configuration but with more conservative settings
-    const emergencyPool = new Pool({
-      connectionString: connectionString,
-      max: 5, // Less connections for recovery mode
-      idleTimeoutMillis: 30000, // Shorter idle timeout
-      connectionTimeoutMillis: 30000, // Longer timeout for initial connection
-      ssl: {
-        rejectUnauthorized: false,
-      },
-      keepAlive: true,
-    });
+    // Stage 1: Create new pool with moderate conservative settings
+    try {
+      // Create a new pool with similar configuration but with more conservative settings
+      const emergencyPool = new Pool({
+        connectionString: connectionString,
+        max: 5, // Less connections for recovery mode
+        idleTimeoutMillis: 30000, // Shorter idle timeout
+        connectionTimeoutMillis: 30000, // Longer timeout for initial connection
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 5000, // More aggressive keep-alive
+      });
+      
+      // Test if the new pool works
+      const testResult = await emergencyPool.query('SELECT 1');
+      console.log("Stage 1 recovery success - emergency pool test successful:", testResult.rows[0]);
+      
+      // Replace the original pool with the emergency one
+      // @ts-ignore - We need dynamic replacement
+      Object.assign(pool, emergencyPool);
+      
+      console.log("Database pool successfully recreated (Stage 1)");
+      
+      // Reset failure tracking
+      pingFailureCount = 0;
+      consecutiveSuccessCount = 0;
+      circuitBreakerOpen = false;
+      
+      return true;
+    } catch (stage1Error) {
+      console.error("Stage 1 recovery failed:", 
+        stage1Error instanceof Error ? stage1Error.message : String(stage1Error));
+      console.log("Proceeding to Stage 2 recovery with more conservative settings...");
+    }
     
-    // Test if the new pool works
-    const testResult = await emergencyPool.query('SELECT 1');
-    console.log("Emergency pool test successful:", testResult.rows[0]);
+    // Stage 2: Even more conservative settings with shorter timeouts
+    try {
+      // Wait a bit longer before retrying
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      
+      // Create ultra-conservative pool
+      const ultraConservativePool = new Pool({
+        connectionString: connectionString,
+        max: 3, // Minimal connections
+        min: 0, // Allow all connections to close when idle
+        idleTimeoutMillis: 10000, // Very short idle timeout
+        connectionTimeoutMillis: 60000, // Extra long initial connection timeout
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 1000, // Very aggressive keep-alive
+      });
+      
+      // Test with a very simple query and longer timeout
+      const testQuery = ultraConservativePool.query('SELECT 1');
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Query timeout")), 30000));
+      
+      const testResult = await Promise.race([testQuery, timeoutPromise]);
+      console.log("Stage 2 recovery success - ultra conservative pool working:", 
+        // @ts-ignore - testResult has rows
+        testResult.rows ? testResult.rows[0] : "success");
+      
+      // Replace the original pool
+      // @ts-ignore - We need dynamic replacement
+      Object.assign(pool, ultraConservativePool);
+      
+      console.log("Database pool successfully recreated (Stage 2)");
+      
+      // Reset failure tracking
+      pingFailureCount = 0;
+      consecutiveSuccessCount = 0;
+      circuitBreakerOpen = false;
+      
+      return true;
+    } catch (stage2Error) {
+      console.error("Stage 2 recovery also failed:", 
+        stage2Error instanceof Error ? stage2Error.message : String(stage2Error));
+      
+      // Final stage: Instead of giving up, set up a recovery state
+      // that will retry connection establishment less frequently
+      circuitBreakerOpen = true;
+      circuitBreakerLastOpenTime = Date.now();
+      circuitBreakerResetTimeout = 60000; // 1 minute before trying again
+      
+      console.log("All recovery stages failed, circuit breaker opened to prevent connection storms");
+      console.log(`Will attempt connection again in ${Math.round(circuitBreakerResetTimeout / 1000)} seconds`);
+      
+      return false;
+    }
+  } catch (unhandledError) {
+    console.error("Unhandled error during pool recovery:", 
+      unhandledError instanceof Error ? unhandledError.message : String(unhandledError));
     
-    // Replace the original pool with the emergency one
-    // @ts-ignore - We need dynamic replacement
-    Object.assign(pool, emergencyPool);
+    if (unhandledError instanceof Error && unhandledError.stack) {
+      console.error("Stack trace:", unhandledError.stack);
+    }
     
-    console.log("Database pool successfully recreated");
+    // Safety circuit breaker
+    circuitBreakerOpen = true;
+    circuitBreakerLastOpenTime = Date.now();
+    circuitBreakerResetTimeout = 60000; // 1 minute timeout
     
-    // Reset failures
-    pingFailureCount = 0;
-    
-    return true;
-  } catch (recreateError) {
-    console.error("Failed to recreate database pool:", recreateError);
     return false;
   }
 }
 
-// Export the pool, db, and testConnection function for use in other modules
-export { pool, db, withRetry, testConnection };
+// Export the pool, db, functions and diagnostic variables for use in other modules
+export { 
+  pool, 
+  db, 
+  withRetry, 
+  testConnection, 
+  recreatePool,
+  // Export diagnostic variables for system health monitoring
+  pingFailureCount,
+  consecutiveSuccessCount,
+  circuitBreakerOpen,
+  circuitBreakerLastOpenTime,
+  circuitBreakerResetTimeout
+};
 
 // Verify connection immediately
 testConnection()
