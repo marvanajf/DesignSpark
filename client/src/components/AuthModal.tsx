@@ -55,6 +55,7 @@ interface AuthModalProps {
 // Login form component
 function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   const { loginMutation } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -66,17 +67,36 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   });
 
   function onSubmit(data: LoginFormValues) {
+    // Clear any existing error messages
+    setErrorMessage(null);
+    
     loginMutation.mutate(data, {
       onSuccess: () => {
         form.reset();
         onSuccess();
       },
+      onError: (error) => {
+        if (error.message.includes("Database connection")) {
+          setErrorMessage("We're experiencing temporary connection issues. Please try again in a moment.");
+        } else if (error.message.includes("Network connection")) {
+          setErrorMessage("Please check your internet connection and try again.");
+        } else {
+          setErrorMessage(error.message || "Login failed. Please check your credentials.");
+        }
+      }
     });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Show error alert if there's an error */}
+        {errorMessage && (
+          <div className="bg-red-900/40 border border-red-500/50 text-red-200 px-4 py-3 rounded-md text-sm mb-4">
+            <p>{errorMessage}</p>
+          </div>
+        )}
+        
         <FormField
           control={form.control}
           name="email"
@@ -133,6 +153,7 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
 // Register form component
 function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
   const { registerMutation } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -146,17 +167,38 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
   });
 
   function onSubmit(data: RegisterFormValues) {
+    // Clear any existing error messages
+    setErrorMessage(null);
+    
     registerMutation.mutate(data, {
       onSuccess: () => {
         form.reset();
         onSuccess();
       },
+      onError: (error) => {
+        if (error.message.includes("Database connection")) {
+          setErrorMessage("We're experiencing temporary connection issues. Please try again in a moment.");
+        } else if (error.message.includes("Network connection")) {
+          setErrorMessage("Please check your internet connection and try again.");
+        } else if (error.message.includes("Username already exists") || error.message.includes("Email already exists")) {
+          setErrorMessage("This email is already registered. Please log in instead.");
+        } else {
+          setErrorMessage(error.message || "Registration failed. Please check your information.");
+        }
+      }
     });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Show error alert if there's an error */}
+        {errorMessage && (
+          <div className="bg-red-900/40 border border-red-500/50 text-red-200 px-4 py-3 rounded-md text-sm mb-4">
+            <p>{errorMessage}</p>
+          </div>
+        )}
+        
         <FormField
           control={form.control}
           name="email"
