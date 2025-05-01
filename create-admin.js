@@ -1,3 +1,21 @@
+/**
+ * Admin Account Creation Script
+ * 
+ * This script creates an admin user account for the Tovably application.
+ * 
+ * USAGE:
+ * - Development: node create-admin.js (uses default email with ADMIN_PASSWORD)
+ * - Production: ADMIN_EMAIL=sales@tovably.com ADMIN_USERNAME=tovablyadmin ADMIN_PASSWORD=yourSecurePassword node create-admin.js
+ * 
+ * Required Environment Variables:
+ * - DATABASE_URL: PostgreSQL connection string 
+ * - ADMIN_PASSWORD: Secure password for the admin account
+ * 
+ * Optional Environment Variables:
+ * - ADMIN_EMAIL: Email for the admin account (defaults to sales@tovably.com)
+ * - ADMIN_USERNAME: Username for the admin account (defaults to tovablyadmin)
+ */
+
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
@@ -21,11 +39,15 @@ async function hashPassword(password) {
 
 async function createAdminUser() {
   try {
-    // Create a production admin user
-    const adminEmail = "sales@tovably.com";
-    const adminUsername = "tovablyadmin";
-    // Generate a secure but memorable password
-    const securePassword = "TovablyAdmin2025!";
+    // Get admin credentials from environment variables, with defaults for development
+    const adminEmail = process.env.ADMIN_EMAIL || "sales@tovably.com";
+    const adminUsername = process.env.ADMIN_USERNAME || "tovablyadmin";
+    const securePassword = process.env.ADMIN_PASSWORD;
+    
+    if (!securePassword) {
+      console.error("Error: ADMIN_PASSWORD environment variable must be set");
+      process.exit(1);
+    }
 
     // Check if the admin user already exists
     const checkResult = await pool.query(
