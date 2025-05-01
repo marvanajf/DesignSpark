@@ -23,13 +23,22 @@ export default function Sidebar() {
   const { user, logoutMutation } = useAuth();
   const { avatarColor } = useUserAvatar();
 
-  const initials = user ? user.username.slice(0, 2).toUpperCase() : "?";
+  const initials = user && user.username ? user.username.slice(0, 2).toUpperCase() : "?";
 
   const handleLogout = () => {
     logoutMutation.mutate();
   };
 
-  const menuItems = [
+  // Define types for menu items
+  type MenuItem = {
+    href: string;
+    icon: JSX.Element;
+    label: string;
+    badge?: string | null;
+    onClick?: () => void;
+  };
+
+  const menuItems: MenuItem[] = [
     { href: "/dashboard", icon: <Home className="h-5 w-5" />, label: "Dashboard" },
     { href: "/tone-analysis", icon: <BarChart2 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
@@ -47,7 +56,7 @@ export default function Sidebar() {
     return plan.charAt(0).toUpperCase() + plan.slice(1);
   };
   
-  const bottomMenuItems = [
+  const bottomMenuItems: MenuItem[] = [
     { href: "/account", icon: <UserCog className="h-5 w-5" />, label: "Account" },
     { 
       href: "/pricing", 
@@ -105,6 +114,31 @@ export default function Sidebar() {
           <nav className="px-2 space-y-1">
             {bottomMenuItems.map((item) => {
               const isActive = location === item.href;
+              // For items with onClick handlers like logout
+              if (item.onClick) {
+                return (
+                  <button
+                    key={item.href}
+                    onClick={item.onClick}
+                    className={`w-full group flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md
+                      text-gray-300 hover:bg-gray-900 hover:text-white`}
+                  >
+                    <div className="flex items-center">
+                      <span className="mr-3 text-gray-400 group-hover:text-white">
+                        {item.icon}
+                      </span>
+                      {item.label}
+                    </div>
+                    {item.badge && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea] text-black">
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              }
+              
+              // Regular navigation links
               return (
                 <Link 
                   key={item.href} 
@@ -146,13 +180,6 @@ export default function Sidebar() {
               <p className="text-sm font-medium text-white">
                 {user?.username || "User"}
               </p>
-              <button 
-                onClick={handleLogout}
-                className="text-xs font-medium text-gray-400 hover:text-[#74d1ea] flex items-center"
-              >
-                <LogOut className="h-3 w-3 mr-1" /> 
-                Logout
-              </button>
             </div>
           </div>
         </div>
