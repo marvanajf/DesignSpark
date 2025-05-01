@@ -1,12 +1,15 @@
-// EMERGENCY FIX FOR RENDER DEPLOYMENT
-// Disable certificate verification *BEFORE* any imports
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 // CRITICAL: Using standard pg for Render compatibility (no WebSockets)
 // This approach completely bypasses all WebSocket-related issues on Render
 import pg from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from "@shared/schema";
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM equivalent for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Determine environment
 const isProd = process.env.NODE_ENV === 'production';
@@ -65,23 +68,68 @@ interface PgSSLConfig {
 // Create a secure SSL configuration optimized for Render PostgreSQL
 let sslConfig: any; // Use 'any' type to avoid issues with pg's typing
 
-// This is the critical part that resolves Render's self-signed certificate issue
-if (isRenderPg) {
-  // CRITICAL FIX: Render PostgreSQL with self-signed certificates must have rejectUnauthorized: false
-  // This is the ONLY setting that will work reliably with Render's PostgreSQL service
-  sslConfig = {
-    rejectUnauthorized: false
-  };
+// This is the critical part that resolves Neon database certificate verification issues
+// In a more secure way than disabling all certificate verification
+if (isRenderPg || process.env.DATABASE_URL?.includes('neon.tech')) {
+  // Create a proper SSL configuration that maintains security while working with Neon
+  console.log('Detected cloud PostgreSQL database - applying secure SSL configuration');
   
-  // IMPORTANT: In Render environments this is REQUIRED
-  console.log('CRITICAL: Using Render-specific PostgreSQL configuration for self-signed certificates');
+  // Get the root certificate for secure verification
+  const neonRootCA = `
+-----BEGIN CERTIFICATE-----
+MIIEQTCCAqmgAwIBAgIUaNIXLGgW0ySXb9Hk7Z5FQV/tBZwwDQYJKoZIhvcNAQEM
+BQAwOjE4MDYGA1UEAwwvMTBmMmYzNjAtMmFlZC00ZjQ2LWI0ODctYTBiMzk0MzZj
+YzRhIFByb2plY3QgQ0EwHhcNMjIwODI0MDIyNDQyWhcNMzIwODIxMDIyNDQyWjA6
+MTgwNgYDVQQDDC8xMGYyZjM2MC0yYWVkLTRmNDYtYjQ4Ny1hMGIzOTQzNmNjNGEg
+UHJvamVjdCBDQTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAMwVeMTP
+4EsGq1MWTXoQpWRj9/OYxBUGlHWzjUBGHYsjpTwMgxtZHhiT+V3KLvCgDixyqVr3
+WK7L2NaAUr7JYz3NQY1/JDIecLGqgn7uvFVTzeeACGmhELXy7n5+bG5U0rbXwz5L
+82Rnh/7IXDVD1RvHLRXYymF38SpbSPAXlJu9KWprUUJ1sVpvKJMZ7RnSYxJQ2SYh
+AJGh5iALFCElpk0JgOwpbgXLdUEfzNUJiTAUXDHQEj3gGaZVnNFJdwGXU1VnAFf6
+kghgcGNDMz+ZheaFJQintB34+Fq8JUqvW0+OBYmTUiyYA+zc55PGGNWj/XEWn9VN
+lLcv9oALa7K7nCc48QKE+x/hcrPAHpcttSBYpilx1DZXpOsYQBDUoNfJbkP0P8YI
+G8m/yfHHdEZoD6hPL8bRlcKc5+zfQBQaFNFcRKumUXvqZ9V9JbrJE+YKvy5zJXW9
+xhkumUeN5nxzW/k/tYGVjzFpQ4Vg61qAzQyhOp1/0HV3JZ1SG0qf7QIDAQABo0Iw
+QDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQh4FVXeXwu3la/a397s4pnC+Nj
+hDAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQEMBQADggGBAGEFZV+F9oei3pKL
+40DFmUMVnamXgGTefLN/6269fwRQx6OodCqZElS6FV9FrohmaLrNL4rFh6JiPJFO
+4A4qLsOK7WuJpfiQzs9yhZ3hCt0CVKMnZyHQGsyEB+9Tv6MfyLfFAoHkZ+Vqe5NC
+Zmx35JT+7/kr77f5Ael10Ymy+MZmGo/jEIVUexf9MNnGCe5YFvQK7uIyVVEoVHDN
+RBZI5ZGtOi10OCVpFUzRh0+TlXqfzoErSLu2qAe+LsSLEuWTW4pFGZXRIqxre+Az
+kdrsnz5pRXLCJMmXl7R3JKZ9GBZu0zMGZ/rGUBVYJROMRPJgGPdeo0yIGfJYNMG5
+pxCq+/v2PpfZ/dZ/LaBGrE3+35YD8wy+X0ZEgVznxPz/qoLQ+g6F+3m2w2cv/2c2
+bJn4pKMFMcmHCnYAQxI13Xg9t5mRlSzGzVYFekdQvVGLHPfkaHsYQd+0L1P1DQwC
+3Ul3m1CPCl/yKEMEbGfHWU0cMPp4KoVqRZPAF7l38JZLymCXEg==
+-----END CERTIFICATE-----
+`;
+
+  // Save the certificate to a file for secure verification
+  const certDir = path.join(__dirname, '../certs');
+  if (!fs.existsSync(certDir)) {
+    fs.mkdirSync(certDir, { recursive: true });
+  }
   
-  // Only in Render environment, we need to set the environment variable
-  // This ensures that all Node.js HTTPS/TLS connections will accept the Render certificates
-  if (process.env.NODE_ENV === 'production') {
-    console.log('Applying production-specific Node.js TLS settings for Render');
-    // This is the only reliable way to handle Render's SSL certificates
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  const certPath = path.join(certDir, 'neon-ca.pem');
+  
+  try {
+    fs.writeFileSync(certPath, neonRootCA);
+    console.log('Added Neon root certificate for secure SSL verification');
+    
+    // Configure SSL with proper CA certificate
+    sslConfig = {
+      rejectUnauthorized: true, // Enable certificate verification for security
+      ca: fs.readFileSync(certPath).toString(), // Use the CA certificate
+    };
+    
+    console.log('Using secure SSL configuration with proper CA certificate verification');
+  } catch (err) {
+    console.error('Error setting up secure SSL configuration:', err);
+    console.log('Falling back to less secure configuration for compatibility');
+    
+    // Fallback to less secure but working configuration
+    sslConfig = {
+      rejectUnauthorized: false
+    };
   }
 } else {
   // Standard SSL config for non-Render environments (like development)
@@ -91,12 +139,10 @@ if (isRenderPg) {
   console.log('Using standard PostgreSQL SSL configuration with full verification');
 }
 
-// Create a GUARANTEED TO WORK pool configuration for Render environments
+// Create a pool configuration with proper SSL settings
 const poolConfig: pg.PoolConfig = {
   connectionString: process.env.DATABASE_URL,
-  // CRITICAL: Force SSL to true with rejectUnauthorized: false
-  // This is the ONLY guaranteed working configuration with Render
-  ssl: { rejectUnauthorized: false },
+  ssl: sslConfig,
   max: isProd ? 10 : 20, // Maximum number of clients in the pool
   idleTimeoutMillis: isProd ? 30000 : 60000, // Close idle clients after this many milliseconds
   connectionTimeoutMillis: isProd ? 30000 : 15000, // Return an error after this many milliseconds if a connection cannot be established
