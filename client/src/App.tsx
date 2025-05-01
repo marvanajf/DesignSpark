@@ -27,6 +27,7 @@ import ComingSoonPage from "@/pages/coming-soon-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
 import PaymentSuccessPage from "@/pages/payment-success-page";
+import PrivacyPolicyPage from "@/pages/privacy-policy-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import CampaignPage from "@/pages/campaign-page";
@@ -34,6 +35,7 @@ import AdminPage from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
+import { CookieConsent } from "@/components/CookieConsent";
 
 function Router() {
   const [location, setLocation] = useLocation();
@@ -62,6 +64,7 @@ function Router() {
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/payment-success" component={PaymentSuccessPage} />
+      <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:id" component={BlogPostPage} />
       <ProtectedRoute path="/tone-analysis" component={ToneAnalysisPage} />
@@ -90,6 +93,7 @@ function App() {
             <UserAvatarProvider>
               <Toaster />
               <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+              <CookieConsent />
               <Router />
             </UserAvatarProvider>
           </PricingModalProvider>
