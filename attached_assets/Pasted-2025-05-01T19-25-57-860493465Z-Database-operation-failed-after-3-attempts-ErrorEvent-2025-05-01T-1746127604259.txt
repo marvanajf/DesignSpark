@@ -1,0 +1,50 @@
+2025-05-01T19:25:57.860493465Z Database operation failed after 3 attempts: ErrorEvent {
+2025-05-01T19:25:57.860505816Z   [Symbol(kTarget)]: WebSocket {
+2025-05-01T19:25:57.860508465Z     _events: [Object: null prototype] {
+2025-05-01T19:25:57.860510725Z       error: [Function],
+2025-05-01T19:25:57.860512356Z       message: [Function],
+2025-05-01T19:25:57.860514146Z       close: [Function],
+2025-05-01T19:25:57.860515806Z       open: [Function]
+2025-05-01T19:25:57.860517606Z     },
+2025-05-01T19:25:57.860519446Z     _eventsCount: 4,
+2025-05-01T19:25:57.860521176Z     _maxListeners: undefined,
+2025-05-01T19:25:57.860522936Z     _binaryType: 'arraybuffer',
+2025-05-01T19:25:57.860524606Z     _closeCode: 1006,
+2025-05-01T19:25:57.860526456Z     _closeFrameReceived: false,
+2025-05-01T19:25:57.860528186Z     _closeFrameSent: false,
+2025-05-01T19:25:57.860530316Z     _closeMessage: <Buffer >,
+2025-05-01T19:25:57.860532026Z     _closeTimer: null,
+2025-05-01T19:25:57.860533706Z     _errorEmitted: true,
+2025-05-01T19:25:57.860535356Z     _extensions: {},
+2025-05-01T19:25:57.860536996Z     _paused: false,
+2025-05-01T19:25:57.860538646Z     _protocol: '',
+2025-05-01T19:25:57.860540276Z     _readyState: 3,
+2025-05-01T19:25:57.860541896Z     _receiver: null,
+2025-05-01T19:25:57.860543516Z     _sender: null,
+2025-05-01T19:25:57.860545126Z     _socket: null,
+2025-05-01T19:25:57.860546806Z     _bufferedAmount: 0,
+2025-05-01T19:25:57.860548786Z     _isServer: false,
+2025-05-01T19:25:57.860551506Z     _redirects: 0,
+2025-05-01T19:25:57.860554386Z     _autoPong: true,
+2025-05-01T19:25:57.860557257Z     _url: 'wss://dpg-d07rtkqdbo4c73brf3rg-a/',
+2025-05-01T19:25:57.860560006Z     _req: null,
+2025-05-01T19:25:57.860562687Z     [Symbol(shapeMode)]: false,
+2025-05-01T19:25:57.860565297Z     [Symbol(kCapture)]: false
+2025-05-01T19:25:57.860568097Z   },
+2025-05-01T19:25:57.860570887Z   [Symbol(kType)]: 'error',
+2025-05-01T19:25:57.860574207Z   [Symbol(kError)]: Error: connect ECONNREFUSED 10.202.114.25:443
+2025-05-01T19:25:57.860577047Z       at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+2025-05-01T19:25:57.860578877Z     errno: -111,
+2025-05-01T19:25:57.860580597Z     code: 'ECONNREFUSED',
+2025-05-01T19:25:57.860582227Z     syscall: 'connect',
+2025-05-01T19:25:57.860583877Z     address: '10.202.114.25',
+2025-05-01T19:25:57.860585567Z     port: 443
+2025-05-01T19:25:57.860597627Z   },
+2025-05-01T19:25:57.860599527Z   [Symbol(kMessage)]: 'connect ECONNREFUSED 10.202.114.25:443'
+2025-05-01T19:25:57.860601267Z }
+2025-05-01T19:25:57.860612378Z Error creating default user: [object Object]
+2025-05-01T19:26:03.523418648Z ==> Your service is live 🎉
+2025-05-01T19:26:06.194131396Z Sending websocket ping to keep connection alive
+2025-05-01T19:26:06.194927992Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T19:26:06.194941302Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T19:26:06.198776841Z Ping error (attempt 1): [object Object]

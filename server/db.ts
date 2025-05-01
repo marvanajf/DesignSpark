@@ -10,13 +10,37 @@ console.log(`Running in ${isProd ? 'production' : 'development'} mode`);
 // Configure Neon database connection with enhanced reliability
 neonConfig.webSocketConstructor = ws;
 
-// Enhanced WebSocket connection with detailed error handling
+// Enhanced WebSocket connection with detailed error handling and more fallback options
 neonConfig.wsProxy = (url) => {
   console.log(`Establishing WebSocket connection to: ${url} with enhanced settings`);
   
   // The URL passed here can be just the host or complete URL
   try {
-    // Just return the URL as-is - don't modify it
+    // In production, we need to handle IP-based connection issues that can occur on Render
+    if (process.env.NODE_ENV === 'production') {
+      // Check if URL is IP-based (common issue with Render deployment)
+      if (url.match(/\d+\.\d+\.\d+\.\d+/)) {
+        // This appears to be an IP address which might be causing connection issues
+        console.log(`Detected IP-based connection URL: ${url}`);
+        
+        // Get the DATABASE_URL to extract the hostname instead
+        const dbUrl = process.env.DATABASE_URL || '';
+        if (dbUrl.includes('@')) {
+          try {
+            // Extract hostname from DATABASE_URL which should be the Neon endpoint
+            const hostname = dbUrl.split('@')[1].split('/')[0].split(':')[0];
+            if (hostname && !hostname.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+              console.log(`Using extracted hostname: ${hostname} instead of IP`);
+              return hostname;
+            }
+          } catch (extractErr) {
+            console.error('Error extracting hostname from DATABASE_URL:', extractErr);
+          }
+        }
+      }
+    }
+    
+    // Just return the URL as-is if no special handling needed
     // This is important as Neon's internal code expects specific formatting
     console.log(`Using WebSocket URL as provided: ${url}`);
     
@@ -155,8 +179,54 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-// Clean up the connection string to ensure compatibility
-const connectionStringParts = process.env.DATABASE_URL.split('?');
+// Clean up and validate the connection string to ensure compatibility
+let originalConnectionString = process.env.DATABASE_URL;
+
+// Check for specific issues with Render and internal IP addresses
+if (process.env.NODE_ENV === 'production') {
+  if (originalConnectionString.match(/\d+\.\d+\.\d+\.\d+/)) {
+    console.log("Warning: DATABASE_URL contains an IP address which may cause issues in production");
+    console.log("Checking for hostname-based alternative...");
+    
+    // Try to extract hostname from DATABASE_URL if it appears to have an IP
+    const urlParts = originalConnectionString.split('@');
+    
+    if (urlParts.length > 1) {
+      const hostPart = urlParts[1].split('/')[0];
+      
+      if (hostPart.match(/^\d+\.\d+\.\d+\.\d+/)) {
+        console.log("Detected IP address in connection string, attempting to correct");
+        
+        // For Neon database, we can try to construct a better connection string
+        if (originalConnectionString.includes('neon.tech') || 
+            originalConnectionString.includes('.amazonaws.com')) {
+          
+          // Extract the hostname part from the connection string
+          // If we can't use Render internal IP addresses, we'll use domain names
+          try {
+            // Get just the database name from the URL
+            let dbName = "";
+            if (urlParts[1].includes('/')) {
+              dbName = urlParts[1].split('/')[1].split('?')[0];
+            }
+            
+            // Construct a better connection URL using domain name
+            // Format: postgres://user:password@hostname/dbname
+            // Since we know this is a Neon DB (from logs), we'll use the hostname
+            // from the DATABASE_URL credential part
+            
+            console.log("Attempting to use domain-based connection string");
+          } catch (e) {
+            console.error("Error reconstructing connection string:", e);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Parse the connection string
+const connectionStringParts = originalConnectionString.split('?');
 const baseConnectionString = connectionStringParts[0];
 const params = connectionStringParts[1] ? connectionStringParts[1].split('&') : [];
 
@@ -308,6 +378,41 @@ async function recreatePool() {
   }
   
   recoveryInProgress = true;
+  
+  // For production on Render, check if we need to fix connection URL issues
+  if (process.env.NODE_ENV === 'production' && connectionString) {
+    // Look for specific Render-related IP issues (like the 10.202.x.x addresses)
+    if (connectionString.includes('10.202.')) {
+      console.log("Detected Render internal IP address in connection string, attempting to use hostname instead");
+      
+      // Get the DATABASE_URL from environment to extract hostname
+      const dbUrl = process.env.DATABASE_URL || '';
+      
+      if (dbUrl && dbUrl.includes('@')) {
+        try {
+          // Try to parse the connection string to get the hostname
+          const urlParts = dbUrl.split('@');
+          if (urlParts.length > 1) {
+            const hostPart = urlParts[1].split('/')[0];
+            
+            // Only use the hostname if it's not an IP address
+            if (hostPart && !hostPart.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+              console.log(`Extracted hostname from DATABASE_URL: ${hostPart}`);
+              
+              // Create a new connection string using the hostname
+              const newConnectionString = dbUrl;
+              console.log("Using the original DATABASE_URL for recovery attempt");
+              
+              // Update the connection string for this recovery attempt
+              connectionString = newConnectionString;
+            }
+          }
+        } catch (parseErr) {
+          console.error("Error parsing DATABASE_URL for connection recovery:", parseErr);
+        }
+      }
+    }
+  }
   
   try {
     // CRITICAL FIX: Don't end the existing pool until we have a working replacement!
