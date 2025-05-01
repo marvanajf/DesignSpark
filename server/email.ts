@@ -1,12 +1,7 @@
-import { MailService } from '@sendgrid/mail';
+// Import Gmail functions
+import { sendGmailEmail, initializeGmailTransport } from './gmail';
 
-if (!process.env.SENDGRID_API_KEY) {
-  throw new Error("SENDGRID_API_KEY environment variable must be set");
-}
-
-const mailService = new MailService();
-mailService.setApiKey(process.env.SENDGRID_API_KEY);
-
+// This interface is used throughout the app
 interface EmailParams {
   to: string;
   subject: string;
@@ -15,23 +10,30 @@ interface EmailParams {
   from?: string;
 }
 
-export async function sendEmail(params: EmailParams): Promise<boolean> {
-  try {
-    // Default sender email
-    const defaultFrom = 'noreply@tovably.com';
+// Try to initialize Gmail if credentials are available
+export function setupEmailService() {
+  if (process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD) {
+    const initialized = initializeGmailTransport(
+      process.env.GMAIL_EMAIL,
+      process.env.GMAIL_APP_PASSWORD
+    );
     
-    await mailService.send({
-      to: params.to,
-      from: params.from || defaultFrom,
-      subject: params.subject,
-      text: params.text || '',
-      html: params.html || '',
-    });
-    return true;
-  } catch (error) {
-    console.error('SendGrid email error:', error);
+    if (initialized) {
+      console.log('Email service initialized with Gmail');
+      return true;
+    } else {
+      console.error('Failed to initialize Gmail transport');
+      return false;
+    }
+  } else {
+    console.warn('Gmail credentials not found. Email functionality will be disabled.');
     return false;
   }
+}
+
+// This function is called from other parts of the app, now it uses Gmail
+export async function sendEmail(params: EmailParams): Promise<boolean> {
+  return await sendGmailEmail(params);
 }
 
 export function formatContactEmailHtml(data: {

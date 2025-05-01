@@ -973,35 +973,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
         notes: null
       });
 
-      // Send email notification to sales@tovably.com
+      // Import the createThankYouEmailHtml and createThankYouEmailText functions
+      const gmailModule = await import('./gmail');
+      const { createThankYouEmailHtml, createThankYouEmailText } = gmailModule;
+
+      // 1. Send email notification to sales@tovably.com (internal notification)
       try {
-        const emailHtml = formatContactEmailHtml({
+        const notificationHtml = formatContactEmailHtml({
           name,
           email,
           company,
           message
         });
         
-        const emailText = formatContactEmailText({
+        const notificationText = formatContactEmailText({
           name,
           email,
           company,
           message
         });
 
-        const emailSent = await sendEmail({
+        const notificationSent = await sendEmail({
           to: 'sales@tovably.com',
           subject: `New Contact Form Submission from ${name}`,
-          text: emailText,
-          html: emailHtml
+          text: notificationText,
+          html: notificationHtml
         });
 
-        if (!emailSent) {
-          console.warn('Failed to send notification email, but contact was saved to database');
+        if (!notificationSent) {
+          console.warn('Failed to send internal notification email, but contact was saved to database');
+        }
+        
+        // 2. Send thank you email to the person who submitted the form
+        const thankYouHtml = createThankYouEmailHtml(name);
+        const thankYouText = createThankYouEmailText(name);
+        
+        const thankYouSent = await sendEmail({
+          to: email,
+          subject: 'Thank you for contacting Tovably',
+          text: thankYouText,
+          html: thankYouHtml
+        });
+        
+        if (!thankYouSent) {
+          console.warn('Failed to send thank you email to the customer');
         }
       } catch (emailError) {
         // Log the email error but don't fail the request
-        console.error("Error sending notification email:", emailError);
+        console.error("Error sending email(s):", emailError);
       }
 
       res.status(201).json({

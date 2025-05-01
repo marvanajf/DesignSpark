@@ -41,6 +41,17 @@ app.use((req, res, next) => {
   // Run database migrations
   await migrateStripeFields();
   
+  // Set up email service with Gmail
+  try {
+    import('./email').then(emailModule => {
+      emailModule.setupEmailService();
+    }).catch(err => {
+      console.warn('Failed to import email module:', err);
+    });
+  } catch (error) {
+    console.warn('Failed to set up email service:', error);
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
