@@ -17,7 +17,9 @@ import {
   Sparkles,
   Layers,
   Search,
-  Filter
+  Filter,
+  Video,
+  ClipboardList
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -133,9 +135,28 @@ export default function ContentGeneratorPage() {
     },
     onSuccess: (data: GeneratedContent) => {
       queryClient.invalidateQueries({ queryKey: ["/api/content"] });
+      
+      let contentTypeText;
+      switch(contentType) {
+        case "linkedin_post":
+          contentTypeText = "LinkedIn post";
+          break;
+        case "email":
+          contentTypeText = "cold email";
+          break;
+        case "webinar":
+          contentTypeText = "webinar outline";
+          break;
+        case "workshop":
+          contentTypeText = "workshop plan";
+          break;
+        default:
+          contentTypeText = "content";
+      }
+      
       toast({
         title: "Content generated!",
-        description: `Your ${contentType === "linkedin_post" ? "LinkedIn post" : "email"} has been created.`,
+        description: `Your ${contentTypeText} has been created.`,
       });
     },
     onError: (error: any) => {
@@ -420,10 +441,10 @@ export default function ContentGeneratorPage() {
                     <Tabs 
                       defaultValue="linkedin_post" 
                       value={contentType}
-                      onValueChange={(value) => setContentType(value as "linkedin_post" | "email")}
+                      onValueChange={(value) => setContentType(value as "linkedin_post" | "email" | "webinar" | "workshop")}
                       className="w-full"
                     >
-                      <TabsList className="w-full bg-gray-900 p-1">
+                      <TabsList className="w-full bg-gray-900 p-1 grid grid-cols-2 md:grid-cols-4 gap-1">
                         <TabsTrigger 
                           value="linkedin_post" 
                           className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
@@ -437,6 +458,20 @@ export default function ContentGeneratorPage() {
                         >
                           <Mail className="h-4 w-4 mr-2" />
                           Cold Email
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="webinar" 
+                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
+                        >
+                          <Video className="h-4 w-4 mr-2" />
+                          Webinar
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="workshop" 
+                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
+                        >
+                          <ClipboardList className="h-4 w-4 mr-2" />
+                          Workshop
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
@@ -573,12 +608,12 @@ export default function ContentGeneratorPage() {
                         />
                       </div>
                       <Select
-                        value={contentType === "linkedin_post" || contentType === "email" ? contentType : "all"}
+                        value={contentType === "linkedin_post" || contentType === "email" || contentType === "webinar" || contentType === "workshop" ? contentType : "all"}
                         onValueChange={(value) => {
                           if (value === "all") {
                             // Keep the current contentType for the generator, but show all content
                           } else {
-                            setContentType(value as "linkedin_post" | "email");
+                            setContentType(value as "linkedin_post" | "email" | "webinar" | "workshop");
                           }
                         }}
                       >
@@ -589,6 +624,8 @@ export default function ContentGeneratorPage() {
                           <SelectItem value="all">All Types</SelectItem>
                           <SelectItem value="linkedin_post">LinkedIn Posts</SelectItem>
                           <SelectItem value="email">Cold Emails</SelectItem>
+                          <SelectItem value="webinar">Webinars</SelectItem>
+                          <SelectItem value="workshop">Workshops</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -613,14 +650,28 @@ export default function ContentGeneratorPage() {
                                   <Badge className={`mr-2 ${
                                     content.type === "linkedin_post" 
                                       ? "bg-blue-500/20 text-blue-400" 
-                                      : "bg-green-500/20 text-green-400"
+                                      : content.type === "email"
+                                      ? "bg-green-500/20 text-green-400"
+                                      : content.type === "webinar"
+                                      ? "bg-purple-500/20 text-purple-400"
+                                      : "bg-amber-500/20 text-amber-400"
                                   } border-0`}>
                                     {content.type === "linkedin_post" ? (
                                       <SiLinkedin className="h-3 w-3 mr-1" />
-                                    ) : (
+                                    ) : content.type === "email" ? (
                                       <Mail className="h-3 w-3 mr-1" />
+                                    ) : content.type === "webinar" ? (
+                                      <Video className="h-3 w-3 mr-1" />
+                                    ) : (
+                                      <ClipboardList className="h-3 w-3 mr-1" />
                                     )}
-                                    {content.type === "linkedin_post" ? "LinkedIn Post" : "Cold Email"}
+                                    {content.type === "linkedin_post" 
+                                      ? "LinkedIn Post" 
+                                      : content.type === "email" 
+                                      ? "Cold Email" 
+                                      : content.type === "webinar" 
+                                      ? "Webinar" 
+                                      : "Workshop"}
                                   </Badge>
                                   <span className="text-sm font-medium text-white">{content.topic}</span>
                                 </div>
@@ -707,6 +758,26 @@ export default function ContentGeneratorPage() {
                                   >
                                     <Mail className="h-3.5 w-3.5 mr-1" />
                                     Send Email
+                                  </Button>
+                                )}
+                                {content.type === "webinar" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-8 border-gray-700 text-gray-400 hover:text-white"
+                                  >
+                                    <Video className="h-3.5 w-3.5 mr-1" />
+                                    Schedule Webinar
+                                  </Button>
+                                )}
+                                {content.type === "workshop" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-8 border-gray-700 text-gray-400 hover:text-white"
+                                  >
+                                    <ClipboardList className="h-3.5 w-3.5 mr-1" />
+                                    Plan Workshop
                                   </Button>
                                 )}
                               </div>
