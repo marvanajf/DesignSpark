@@ -111,16 +111,13 @@ export default function ComingSoonPage() {
             </div>
             
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-6">
-              <span className="text-white">Revolutionise your comms</span><br />
-              <span className="text-white">with </span>
-              <span className="text-[#74d1ea]">AI-powered personas</span><br />
-              <span className="text-white">and </span>
-              <span className="text-[#74d1ea]">TOV analysis</span>
+              <span className="text-white">Supercharge your comms with</span><br />
+              <span className="text-[#74d1ea]">AI-powered precision</span>
             </h1>
             
             <p className="text-zinc-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-              Tovably is a cutting-edge AI platform that helps you analyze your content's tone, 
-              create targeted personas, and generate powerful messages that connect with your audience.
+              From tone analysis to personalized content creation, our AI engine delivers 
+              targeted communications that engage, convert, and elevate your brand.
             </p>
 
             <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8 mb-14 max-w-xl mx-auto">
