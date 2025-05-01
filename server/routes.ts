@@ -1323,7 +1323,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const schema = z.object({
-        type: z.enum(['linkedin_post', 'email']),
+        type: z.enum(['linkedin_post', 'email', 'webinar', 'workshop']),
         personaId: z.number(),
         toneAnalysisId: z.number(),
         topic: z.string(),
