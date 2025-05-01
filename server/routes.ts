@@ -1329,9 +1329,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         personaId: z.number(),
         toneAnalysisId: z.number(),
         topic: z.string(),
+        furtherDetails: z.string().optional(),
       });
 
-      const { type, personaId, toneAnalysisId, topic } = schema.parse(req.body);
+      const { type, personaId, toneAnalysisId, topic, furtherDetails } = schema.parse(req.body);
       
       // Get the tone analysis results
       const toneAnalysis = await storage.getToneAnalysis(toneAnalysisId);
@@ -1359,30 +1360,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let contentText = "";
       
       try {
+        // Prepare the topic with any additional details
+        const fullTopic = furtherDetails 
+          ? `${topic}\n\nAdditional Details: ${furtherDetails}` 
+          : topic;
+            
         if (type === 'linkedin_post') {
           contentText = await generateLinkedInPost(
-            topic, 
+            fullTopic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
             persona.description || ""
           );
         } else if (type === 'email') {
           contentText = await generateColdEmail(
-            topic, 
+            fullTopic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
             persona.description || ""
           );
         } else if (type === 'webinar') {
           contentText = await generateWebinar(
-            topic, 
+            fullTopic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
             persona.description || ""
           );
         } else if (type === 'workshop') {
           contentText = await generateWorkshop(
-            topic, 
+            fullTopic, 
             toneAnalysis.tone_results as any, 
             persona.name, 
             persona.description || ""
@@ -1406,6 +1412,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         persona_id: personaId,
         tone_analysis_id: toneAnalysisId,
         topic,
+        further_details: furtherDetails,
       });
       
       // Increment the content generation usage counter

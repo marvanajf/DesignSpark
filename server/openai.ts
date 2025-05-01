@@ -285,6 +285,7 @@ export async function generateWebinar(
             `The webinar should match this tone of voice: ${toneCharacteristics}. ` +
             `Target audience: ${personaName} (${personaDescription}). ` +
             `Include the following sections:
+            
             1. A catchy webinar title that will attract registrations
             2. A brief description/promotional text (100 words max)
             3. 3-5 key learning objectives or takeaways
@@ -292,7 +293,13 @@ export async function generateWebinar(
             5. Ideas for audience engagement (polls, Q&A prompts, interactive elements)
             6. A compelling call-to-action for the end of the webinar
             
-            Format the output clearly with section headers and bullet points where appropriate.
+            IMPORTANT FORMATTING GUIDELINES:
+            - Do NOT include markdown formatting like # symbols, asterisks, or other special characters
+            - Use plain text formatting with clean section headers
+            - Use dashes or bullet points for lists, not symbols or markdown
+            - Clearly label each section with a simple title and colon (Example: "Webinar Title:" instead of "### Webinar Title")
+            - Format should be clean and professional without any coding or markdown elements
+            
             The total length should be 400-600 words, structured for easy readability.`
         },
         {
@@ -345,6 +352,7 @@ export async function generateWorkshop(
             `The workshop content should match this tone of voice: ${toneCharacteristics}. ` +
             `Target participants: ${personaName} (${personaDescription}). ` +
             `Include the following elements:
+            
             1. Workshop title and tagline
             2. Duration recommendation (30 min, 60 min, half-day, etc.)
             3. Learning objectives (3-5 specific outcomes)
@@ -353,6 +361,13 @@ export async function generateWorkshop(
             6. 2-3 interactive exercises or activities with instructions
             7. Key discussion questions
             8. Follow-up resources or action items
+            
+            IMPORTANT FORMATTING GUIDELINES:
+            - Do NOT include markdown formatting like # symbols, asterisks, or other special characters
+            - Use plain text formatting with clean section headers
+            - Use dashes or bullet points for lists, not symbols or markdown
+            - Clearly label each section with a simple title and colon (Example: "Workshop Title:" instead of "### Workshop Title")
+            - Format should be clean and professional without any coding or markdown elements
             
             Format the output with clear section headers and structure for easy implementation.
             The total length should be 500-700 words, written in a practical, actionable style.`
