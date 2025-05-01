@@ -53,6 +53,7 @@ export interface IStorage {
   incrementPersonaUsage(id: number): Promise<User>;
   incrementToneAnalysisUsage(id: number): Promise<User>;
   incrementContentUsage(id: number): Promise<User>;
+  getAllUsers(): Promise<User[]>;
   
   // Tone analysis methods
   createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis>;
@@ -103,6 +104,7 @@ export interface IStorage {
     offset?: number;
   }): Promise<LeadContact[]>;
   updateLeadContact(id: number, updates: Partial<InsertLeadContact>): Promise<LeadContact>;
+  deleteLeadContact(id: number): Promise<void>;
   
   // Session store
   sessionStore: session.Store;
@@ -289,6 +291,11 @@ export class MemStorage implements IStorage {
     
     this.users.set(id, updatedUser);
     return updatedUser;
+  }
+  
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values())
+      .sort((a, b) => a.created_at.getTime() - b.created_at.getTime());
   }
 
   // Tone analysis methods
@@ -602,6 +609,13 @@ export class MemStorage implements IStorage {
     this.leadContacts.set(id, updatedContact);
     return updatedContact;
   }
+  
+  async deleteLeadContact(id: number): Promise<void> {
+    if (!this.leadContacts.has(id)) {
+      throw new Error(`Lead contact with id ${id} not found`);
+    }
+    this.leadContacts.delete(id);
+  }
 }
 
 import { eq, and, desc, sql } from "drizzle-orm";
@@ -740,6 +754,13 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+  
+  async getAllUsers(): Promise<User[]> {
+    return db
+      .select()
+      .from(users)
+      .orderBy(users.created_at);
   }
 
   // Tone analysis methods
