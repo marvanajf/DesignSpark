@@ -1026,12 +1026,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // 2. Send thank you email to the person who submitted the form
-        const thankYouHtml = createThankYouEmailHtml(name);
-        const thankYouText = createThankYouEmailText(name);
+        // Check if this is from the coming soon page (early access request)
+        const isEarlyAccessRequest = message.includes("Early access request from coming soon page");
+        
+        let emailSubject = 'Thank you for contacting Tovably';
+        // Pass the isEarlyAccessRequest flag to the email template functions
+        let thankYouHtml = createThankYouEmailHtml(name, isEarlyAccessRequest);
+        let thankYouText = createThankYouEmailText(name, isEarlyAccessRequest);
+        
+        if (isEarlyAccessRequest) {
+          emailSubject = "You're on the Tovably waiting list!";
+        }
         
         const thankYouSent = await sendEmail({
           to: email,
-          subject: 'Thank you for contacting Tovably',
+          subject: emailSubject,
           text: thankYouText,
           html: thankYouHtml
         });

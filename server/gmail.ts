@@ -70,7 +70,28 @@ export async function sendGmailEmail(params: EmailParams): Promise<boolean> {
 }
 
 // Template for sending thank you emails to contacts
-export function createThankYouEmailHtml(name: string): string {
+export function createThankYouEmailHtml(name: string, isLaunchNotification = false): string {
+  // Create different content based on whether this is a launch notification
+  let heading = `Thank you for reaching out, <span class="accent">${name}</span>`;
+  let paragraphs = [
+    `We've received your inquiry and we're excited to connect with you.`,
+    `Our team will review your message and get back to you as soon as possible, typically within 24-48 hours.`,
+    `In the meantime, feel free to explore our website to learn more about how Tovably can help revolutionize your marketing communications.`
+  ];
+  let buttonText = 'Visit Our Website';
+  let preheaderText = 'Thank you for contacting Tovably. We\'ve received your message and will get back to you within 24-48 hours.';
+  
+  if (isLaunchNotification) {
+    heading = `You're on the Tovably waiting list, <span class="accent">${name}</span>!`;
+    paragraphs = [
+      `Thank you for your interest in Tovably! We've added you to our early access waiting list.`,
+      `You'll be among the first to know when we launch and will receive exclusive benefits as an early supporter.`,
+      `We're working hard to bring you a revolutionary AI platform for content creation and tone analysis that will transform how you communicate with your audience.`
+    ];
+    buttonText = 'Learn More';
+    preheaderText = 'Thank you for joining the Tovably waiting list! You\'ll be the first to know when we launch.';
+  }
+  
   return `
 <!DOCTYPE html>
 <html>
@@ -78,7 +99,7 @@ export function createThankYouEmailHtml(name: string): string {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="x-apple-disable-message-reformatting">
-  <title>Thank You for Contacting Tovably</title>
+  <title>Thank You from Tovably</title>
   <!-- Import Open Sans font -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -157,7 +178,7 @@ export function createThankYouEmailHtml(name: string): string {
 <body>
   <!-- Preheader text that will be shown in email previews -->
   <div style="display: none; max-height: 0px; overflow: hidden;">
-    Thank you for contacting Tovably. We've received your message and will get back to you within 24-48 hours.
+    ${preheaderText}
   </div>
   
   <div class="container">
@@ -166,11 +187,11 @@ export function createThankYouEmailHtml(name: string): string {
       <div class="logo-text">tovably</div>
     </div>
     <div class="content">
-      <h1>Thank you for reaching out, <span class="accent">${name}</span></h1>
-      <p>We've received your inquiry and we're excited to connect with you.</p>
-      <p>Our team will review your message and get back to you as soon as possible, typically within 24-48 hours.</p>
-      <p>In the meantime, feel free to explore our website to learn more about how Tovably can help revolutionize your marketing communications.</p>
-      <a href="https://tovably.com" class="button">Visit Our Website</a>
+      <h1>${heading}</h1>
+      <p>${paragraphs[0]}</p>
+      <p>${paragraphs[1]}</p>
+      <p>${paragraphs[2]}</p>
+      <a href="https://tovably.com" class="button">${buttonText}</a>
       <div class="signature">
         <p>Best regards,<br><strong>The Tovably Team</strong></p>
       </div>
@@ -185,17 +206,36 @@ export function createThankYouEmailHtml(name: string): string {
   `;
 }
 
-export function createThankYouEmailText(name: string): string {
+export function createThankYouEmailText(name: string, isLaunchNotification = false): string {
+  // Create different content based on whether this is a launch notification
+  let heading = `Thank you for reaching out, ${name}`;
+  let paragraphs = [
+    `We've received your inquiry and we're excited to connect with you.`,
+    `Our team will review your message and get back to you as soon as possible, typically within 24-48 hours.`,
+    `In the meantime, feel free to explore our website to learn more about how Tovably can help revolutionize your marketing communications.`
+  ];
+  let buttonText = 'Visit Our Website';
+  
+  if (isLaunchNotification) {
+    heading = `You're on the Tovably waiting list, ${name}!`;
+    paragraphs = [
+      `Thank you for your interest in Tovably! We've added you to our early access waiting list.`,
+      `You'll be among the first to know when we launch and will receive exclusive benefits as an early supporter.`,
+      `We're working hard to bring you a revolutionary AI platform for content creation and tone analysis that will transform how you communicate with your audience.`
+    ];
+    buttonText = 'Learn More';
+  }
+
   return `
-Thank you for reaching out, ${name}
+${heading}
 
-We've received your inquiry and we're excited to connect with you.
+${paragraphs[0]}
 
-Our team will review your message and get back to you as soon as possible, typically within 24-48 hours.
+${paragraphs[1]}
 
-In the meantime, feel free to explore our website to learn more about how Tovably can help revolutionize your marketing communications.
+${paragraphs[2]}
 
-Visit Our Website: https://tovably.com
+${buttonText}: https://tovably.com
 
 Best regards,
 The Tovably Team
