@@ -17,7 +17,7 @@ import { registerAdminRoutes } from "./admin-routes";
 import { registerBlogRoutes } from "./blog-routes";
 import Stripe from "stripe";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 // Initialize Stripe with the secret key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -29,6 +29,36 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Database health check endpoint
+  app.get("/api/db-health", async (req: Request, res: Response) => {
+    try {
+      // Simple query to test database connection
+      const result = await db.execute(sql`SELECT NOW() as now`);
+      
+      // Log the result for debugging
+      console.log("Database health check result:", JSON.stringify(result));
+      
+      return res.json({ 
+        status: "healthy", 
+        message: "Database connection successful", 
+        timestamp: result[0]?.now || new Date().toISOString(),
+        connection_string: process.env.DATABASE_URL 
+          ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]}` 
+          : "Not set",
+        result: result
+      });
+    } catch (error) {
+      console.error("Database health check failed:", error);
+      return res.status(500).json({ 
+        status: "unhealthy", 
+        message: "Database connection failed", 
+        error: error instanceof Error ? error.message : String(error),
+        connection_string: process.env.DATABASE_URL 
+          ? `${process.env.DATABASE_URL.split("@")[0].split(":")[0]}:****@${process.env.DATABASE_URL.split("@")[1]}` 
+          : "Not set"
+      });
+    }
+  });
   // Set up authentication routes
   setupAuth(app);
   
