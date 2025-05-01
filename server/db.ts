@@ -290,21 +290,23 @@ async function testConnection() {
  * 2. If that fails, try with more conservative settings
  * 3. If still failing, try with direct connections and reduced timeouts
  */
+// Global recovery flag to prevent multiple simultaneous recovery attempts
+let recoveryInProgress = false;
+
 async function recreatePool() {
   console.log("Emergency connection recovery: Attempting to recreate database pool");
   
+  // Prevent multiple simultaneous recovery attempts
+  if (recoveryInProgress) {
+    console.log("Recovery already in progress, skipping this attempt");
+    return false;
+  }
+  
+  recoveryInProgress = true;
+  
   try {
-    // Try gracefully ending existing pool
-    try {
-      await pool.end();
-      console.log("Successfully closed existing pool connections");
-    } catch (endError) {
-      console.warn("Error while closing existing pool (continuing anyway):", 
-        endError instanceof Error ? endError.message : String(endError));
-    }
-    
-    // Short pause before recreating to let any outstanding connections fully close
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // CRITICAL FIX: Don't end the existing pool until we have a working replacement!
+    // This prevents the "Cannot use a pool after calling end" errors and hanging UI
     
     // Stage 1: Create new pool with moderate conservative settings
     try {
@@ -321,13 +323,30 @@ async function recreatePool() {
         keepAliveInitialDelayMillis: 5000, // More aggressive keep-alive
       });
       
-      // Test if the new pool works
+      // Test if the new pool works BEFORE closing the old one
       const testResult = await emergencyPool.query('SELECT 1');
       console.log("Stage 1 recovery success - emergency pool test successful:", testResult.rows[0]);
       
-      // Replace the original pool with the emergency one
-      // @ts-ignore - We need dynamic replacement
-      Object.assign(pool, emergencyPool);
+      // Only after confirming the new pool works, replace the old one
+      // Create a safe reference to the global pool
+      const oldPool = pool;
+      
+      // Replace the global pool with the new working pool
+      // @ts-ignore - We need to overwrite the variable
+      global.pool = emergencyPool;
+      
+      // Update the Drizzle instance to use the new pool
+      // @ts-ignore - We need to update the db client
+      db = drizzle({ client: emergencyPool, schema });
+      
+      // Now it's safe to close the old pool
+      try {
+        await oldPool.end();
+        console.log("Successfully closed old pool connections");
+      } catch (endError) {
+        console.warn("Error while closing old pool (continuing anyway):", 
+          endError instanceof Error ? endError.message : String(endError));
+      }
       
       console.log("Database pool successfully recreated (Stage 1)");
       
@@ -372,9 +391,26 @@ async function recreatePool() {
         // @ts-ignore - testResult has rows
         testResult.rows ? testResult.rows[0] : "success");
       
-      // Replace the original pool
-      // @ts-ignore - We need dynamic replacement
-      Object.assign(pool, ultraConservativePool);
+      // Only after confirming the new pool works, replace the old one
+      // Create a safe reference to the global pool
+      const oldPool = pool;
+      
+      // Replace the global pool with the new working pool
+      // @ts-ignore - We need to overwrite the variable
+      global.pool = ultraConservativePool;
+      
+      // Update the Drizzle instance to use the new pool
+      // @ts-ignore - We need to update the db client
+      db = drizzle({ client: ultraConservativePool, schema });
+      
+      // Now it's safe to close the old pool
+      try {
+        await oldPool.end();
+        console.log("Successfully closed old pool connections");
+      } catch (endError) {
+        console.warn("Error while closing old pool (continuing anyway):", 
+          endError instanceof Error ? endError.message : String(endError));
+      }
       
       console.log("Database pool successfully recreated (Stage 2)");
       
@@ -413,6 +449,9 @@ async function recreatePool() {
     circuitBreakerResetTimeout = 60000; // 1 minute timeout
     
     return false;
+  } finally {
+    // Make sure we release the recovery flag no matter what happens
+    recoveryInProgress = false;
   }
 }
 
