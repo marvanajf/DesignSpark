@@ -103,6 +103,8 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
+      console.log("Registration attempt starting, validating input data...");
+      
       // Extend the base schema with additional validation
       const extendedSchema = insertUserSchema.extend({
         password: z.string().min(8, "Password must be at least 8 characters"),
@@ -111,52 +113,110 @@ export function setupAuth(app: Express) {
       });
 
       const validatedData = extendedSchema.parse(req.body);
+      console.log("Data validation successful for email:", validatedData.email);
 
       // Check if email already exists
-      const existingEmail = await storage.getUserByEmail(validatedData.email);
-      if (existingEmail) {
-        return res.status(400).json({ message: "Email already exists" });
+      try {
+        console.log("Checking if email already exists...");
+        const existingEmail = await storage.getUserByEmail(validatedData.email);
+        if (existingEmail) {
+          console.log("Email already exists:", validatedData.email);
+          return res.status(400).json({ message: "Email already exists" });
+        }
+        console.log("Email check passed, email is unique");
+      } catch (emailCheckError) {
+        console.error("Error checking existing email:", emailCheckError);
+        return res.status(500).json({ 
+          message: "Server error during email verification",
+          error: process.env.NODE_ENV === 'development' ? emailCheckError.toString() : undefined
+        });
       }
 
       // Generate a unique username from the email if none is provided
       let username = validatedData.username;
-      if (!username) {
-        // Create username from the part before @ in email
-        username = validatedData.email.split('@')[0];
-        
-        // Check if this username exists, if so add a random suffix
-        const existingUsername = await storage.getUserByUsername(username);
-        if (existingUsername) {
-          const randomSuffix = Math.floor(Math.random() * 9000 + 1000);
-          username = `${username}${randomSuffix}`;
+      try {
+        console.log("Generating username...");
+        if (!username) {
+          // Create username from the part before @ in email
+          username = validatedData.email.split('@')[0];
+          
+          // Check if this username exists, if so add a random suffix
+          console.log("Checking if username exists:", username);
+          const existingUsername = await storage.getUserByUsername(username);
+          if (existingUsername) {
+            const randomSuffix = Math.floor(Math.random() * 9000 + 1000);
+            username = `${username}${randomSuffix}`;
+            console.log("Generated unique username with suffix:", username);
+          }
         }
+        console.log("Final username:", username);
+      } catch (usernameError) {
+        console.error("Error generating username:", usernameError);
+        return res.status(500).json({ 
+          message: "Server error during username generation",
+          error: process.env.NODE_ENV === 'development' ? usernameError.toString() : undefined
+        });
       }
 
-      // Hash the password and create user
-      const hashedPassword = await hashPassword(validatedData.password);
-      const user = await storage.createUser({
-        ...validatedData,
-        username,
-        password: hashedPassword,
-        role: "user", // Set default role for new users
-      });
+      try {
+        console.log("Hashing password...");
+        // Hash the password and create user
+        const hashedPassword = await hashPassword(validatedData.password);
+        console.log("Password hashed successfully");
+        
+        console.log("Creating user in database...");
+        const user = await storage.createUser({
+          ...validatedData,
+          username,
+          password: hashedPassword,
+          role: "user", // Set default role for new users
+        });
+        console.log("User created successfully with ID:", user.id);
 
-      // Remove password from response
-      const { password, ...userWithoutPassword } = user;
+        // Remove password from response
+        const { password, ...userWithoutPassword } = user;
 
-      // Log the user in
-      req.login(user, (err) => {
-        if (err) return next(err);
-        res.status(201).json(userWithoutPassword);
-      });
+        // Log the user in
+        console.log("Logging in new user...");
+        req.login(user, (err) => {
+          if (err) {
+            console.error("Error during login after registration:", err);
+            return next(err);
+          }
+          console.log("Registration and login complete for user:", user.id);
+          res.status(201).json(userWithoutPassword);
+        });
+      } catch (createError) {
+        console.error("Error creating user:", createError);
+        return res.status(500).json({ 
+          message: "Server error during user creation",
+          error: process.env.NODE_ENV === 'development' ? createError.toString() : undefined
+        });
+      }
     } catch (error) {
+      console.error("Unhandled error in registration process:", error);
+      
       if (error instanceof z.ZodError) {
+        console.log("Validation error details:", JSON.stringify(error.errors));
         return res.status(400).json({ 
           message: "Validation failed",
           errors: error.errors 
         });
       }
-      return res.status(500).json({ message: "Server error during registration" });
+      
+      // Check if it's a connection error
+      if (error instanceof Error && error.message.includes('ECONNREFUSED')) {
+        console.error("Database connection error during registration:", error);
+        return res.status(500).json({ 
+          message: "Server error: Database connection failed",
+          error: process.env.NODE_ENV === 'development' ? error.toString() : undefined
+        });
+      }
+      
+      return res.status(500).json({ 
+        message: "Server error during registration",
+        error: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.toString() : JSON.stringify(error)) : undefined
+      });
     }
   });
 
