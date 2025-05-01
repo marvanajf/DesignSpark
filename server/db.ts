@@ -39,15 +39,42 @@ console.log(`Connecting to database: ${sanitizeUrl(process.env.DATABASE_URL)}`);
 console.log('Using direct PostgreSQL connections (standard pg driver) - NO WebSockets');
 
 // Initialize the connection pool with direct PostgreSQL connections
-const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
+// Define the SSL configuration interface
+interface SSLConfig {
+  rejectUnauthorized: boolean;
+  checkServerIdentity?: (host: string, cert: any) => Error | undefined;
+}
+
+// Different SSL config for different environments
+let sslConfig: SSLConfig;
+if (process.env.DATABASE_URL?.includes('dpg-')) {
+  // This is a Render-managed PostgreSQL database (has dpg- prefix)
+  console.log('Detected Render-managed PostgreSQL database, using custom SSL config');
+  sslConfig = { 
+    rejectUnauthorized: false, // Required for self-signed certs
+    checkServerIdentity: () => undefined // Skip hostname check
+  };
+} else {
+  // Standard SSL config for other environments
+  console.log('Using standard SSL config for PostgreSQL connection');
+  sslConfig = {
     rejectUnauthorized: false // Required for SSL connections in many hosted environments
-  },
+  };
+}
+
+// Create the pool configuration with correct type handling
+const poolConfig: pg.PoolConfig = {
+  connectionString: process.env.DATABASE_URL,
   max: isProd ? 10 : 20, // Maximum number of clients in the pool
   idleTimeoutMillis: isProd ? 30000 : 60000, // Close idle clients after this many milliseconds
   connectionTimeoutMillis: isProd ? 30000 : 15000, // Return an error after this many milliseconds if a connection cannot be established
-});
+};
+
+// Add SSL configuration with type assertion to ensure it's handled correctly
+poolConfig.ssl = sslConfig as unknown as pg.ConnectionOptions['ssl'];
+
+// Initialize the connection pool
+const pool = new pg.Pool(poolConfig);
 
 // Setup error handler for connection pool
 pool.on('error', (err) => {
@@ -167,5 +194,11 @@ export {
   pool, 
   db, 
   withRetry, 
-  testConnection
+  testConnection,
+  // Circuit breaker pattern variables
+  pingFailureCount,
+  consecutiveSuccessCount,
+  circuitBreakerOpen,
+  circuitBreakerLastOpenTime,
+  circuitBreakerResetTimeout
 };

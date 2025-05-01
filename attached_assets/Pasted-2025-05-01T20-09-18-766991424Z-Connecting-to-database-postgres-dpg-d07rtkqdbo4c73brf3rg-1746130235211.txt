@@ -1,0 +1,100 @@
+2025-05-01T20:09:18.766991424Z Connecting to database: postgres://****:****@dpg-d07rtkqdbo4c73brf3rg-a/designsparkdb?sslmode=require
+2025-05-01T20:09:18.767005425Z Using direct PostgreSQL connections (standard pg driver) - NO WebSockets
+2025-05-01T20:09:18.874634311Z Running Stripe fields migration...
+2025-05-01T20:09:18.943047724Z Database operation failed (attempt 1/3): self-signed certificate
+2025-05-01T20:09:18.943075316Z Retrying in 1000ms...
+2025-05-01T20:09:18.944347853Z Retrying in 1000ms...
+2025-05-01T20:09:18.944367184Z Database operation failed (attempt 1/3): self-signed certificate
+2025-05-01T20:09:19.955135843Z Database operation failed (attempt 2/3): self-signed certificate
+2025-05-01T20:09:19.955165145Z Retrying in 2000ms...
+2025-05-01T20:09:19.956188017Z Database operation failed (attempt 2/3): self-signed certificate
+2025-05-01T20:09:19.956209949Z Retrying in 2000ms...
+2025-05-01T20:09:21.967176831Z Database operation failed (attempt 3/3): self-signed certificate
+2025-05-01T20:09:21.969264998Z Database operation failed after 3 attempts: Error: self-signed certificate
+2025-05-01T20:09:21.969279459Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:09:21.969282839Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:09:21.969285079Z     at async withRetry (/opt/render/project/src/server/db.ts:62:14)
+2025-05-01T20:09:21.96928736Z     at async migrateStripeFields (/opt/render/project/src/server/migrations.ts:10:27)
+2025-05-01T20:09:21.96928959Z     at async <anonymous> (/opt/render/project/src/server/index.ts:93:5) {
+2025-05-01T20:09:21.96929244Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:09:21.96929454Z }
+2025-05-01T20:09:21.969301991Z Error during Stripe fields migration: self-signed certificate
+2025-05-01T20:09:21.969304521Z Stack trace: Error: self-signed certificate
+2025-05-01T20:09:21.969306721Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:09:21.969309121Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:09:21.969311391Z     at async withRetry (/opt/render/project/src/server/db.ts:62:14)
+2025-05-01T20:09:21.969313511Z     at async migrateStripeFields (/opt/render/project/src/server/migrations.ts:10:27)
+2025-05-01T20:09:21.969315661Z     at async <anonymous> (/opt/render/project/src/server/index.ts:93:5)
+2025-05-01T20:09:21.993684758Z Database operation failed (attempt 3/3): self-signed certificate
+2025-05-01T20:09:21.993942304Z Database operation failed after 3 attempts: Error: self-signed certificate
+2025-05-01T20:09:21.993945534Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:09:21.993947904Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:09:21.993949624Z     at async withRetry (/opt/render/project/src/server/db.ts:62:14)
+2025-05-01T20:09:21.993951354Z     at async testConnection (/opt/render/project/src/server/db.ts:85:20) {
+2025-05-01T20:09:21.993953664Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:09:21.993955464Z }
+2025-05-01T20:09:21.994009068Z Database connection test failed: Error: self-signed certificate
+2025-05-01T20:09:21.994012078Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:09:21.994014548Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:09:21.994029509Z     at async withRetry (/opt/render/project/src/server/db.ts:62:14)
+2025-05-01T20:09:21.994031409Z     at async testConnection (/opt/render/project/src/server/db.ts:85:20) {
+2025-05-01T20:09:21.994033739Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:09:21.994035549Z }
+2025-05-01T20:09:21.994071511Z Database connection pool initialization FAILED - check your connection string
+2025-05-01T20:09:21.995423154Z Gmail credentials not found. Email functionality will be disabled.
+2025-05-01T20:09:22.023702559Z 8:09:22 PM [express] serving on port 5000
+2025-05-01T20:09:22.035012109Z Retrying in 1000ms...
+2025-05-01T20:09:22.035016079Z Database operation failed (attempt 1/3): self-signed certificate
+2025-05-01T20:09:23.045859043Z Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+2025-05-01T20:09:23.045882704Z   npx update-browserslist-db@latest
+2025-05-01T20:09:23.045885694Z   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2025-05-01T20:09:25.016388128Z Database operation failed (attempt 2/3): self-signed certificate
+2025-05-01T20:09:25.0164284Z Retrying in 2000ms...
+2025-05-01T20:09:27.241632255Z ==> Your service is live 🎉
+2025-05-01T20:09:28.413807597Z Database operation failed (attempt 3/3): self-signed certificate
+2025-05-01T20:09:28.421527518Z Database operation failed after 3 attempts: Error: self-signed certificate
+2025-05-01T20:09:28.421596532Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:09:28.421601752Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:09:28.421605782Z     at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+2025-05-01T20:09:28.421620593Z     at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+2025-05-01T20:09:28.421623394Z     at async withRetry (/opt/render/project/src/server/db.ts:62:14)
+2025-05-01T20:09:28.421626594Z     at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26) {
+2025-05-01T20:09:28.421629944Z   code: 'DEPTH_ZERO_SELF_SIGNED_CERT'
+2025-05-01T20:09:28.421632954Z }
+2025-05-01T20:09:28.421636064Z Error creating default user: self-signed certificate
+2025-05-01T20:09:28.421638834Z Stack trace: Error: self-signed certificate
+2025-05-01T20:09:28.421641584Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-01T20:09:28.421644145Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-01T20:09:28.421646725Z     at async <anonymous> (/opt/render/project/src/node_modules/src/node-postgres/session.ts:104:19)
+2025-05-01T20:09:28.421649535Z     at async DatabaseStorage.getUserByEmail (/opt/render/project/src/server/storage.ts:786:20)
+2025-05-01T20:09:28.421652095Z     at async withRetry (/opt/render/project/src/server/db.ts:62:14)
+2025-05-01T20:09:28.421654375Z     at async createDefaultUserIfNotExists (/opt/render/project/src/server/auth.ts:40:26)
+2025-05-01T20:09:30.160494247Z Sending websocket ping to keep connection alive
+2025-05-01T20:09:30.160791629Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T20:09:30.16080041Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T20:09:30.163332982Z Ping error (attempt 34): [object Object]
+2025-05-01T20:09:38.768892106Z Sending database ping to keep connection alive
+2025-05-01T20:09:38.781143064Z Ping error (attempt 1): self-signed certificate
+2025-05-01T20:09:51.160873783Z Sending websocket ping to keep connection alive
+2025-05-01T20:09:51.161107271Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T20:09:51.161118332Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T20:09:51.163454189Z Ping error (attempt 35): [object Object]
+2025-05-01T20:09:58.769732517Z Sending database ping to keep connection alive
+2025-05-01T20:09:58.781871597Z Ping error (attempt 2): self-signed certificate
+2025-05-01T20:10:02.050886514Z User not authenticated for /api/user
+2025-05-01T20:10:02.053046036Z 8:10:02 PM [express] GET /api/user 401 in 2ms
+2025-05-01T20:10:12.160894776Z Sending websocket ping to keep connection alive
+2025-05-01T20:10:12.161121553Z Establishing WebSocket connection to: dpg-d07rtkqdbo4c73brf3rg-a with enhanced settings
+2025-05-01T20:10:12.161127243Z Using WebSocket URL as provided: dpg-d07rtkqdbo4c73brf3rg-a
+2025-05-01T20:10:12.163355572Z Ping error (attempt 36): [object Object]
+2025-05-01T20:10:17.672670827Z Registration attempt starting, validating input data...
+2025-05-01T20:10:17.674160898Z Data validation successful for email: jack@gomarvana.com
+2025-05-01T20:10:17.674172308Z Checking if email already exists: jack@gomarvana.com
+2025-05-01T20:10:17.685854461Z Database operation failed (attempt 1/5): self-signed certificate
+2025-05-01T20:10:17.685890223Z Retrying in 2000ms...
+2025-05-01T20:10:18.771190729Z Sending database ping to keep connection alive
+2025-05-01T20:10:18.781008247Z Ping error (attempt 3): self-signed certificate
+2025-05-01T20:10:19.697668586Z Database operation failed (attempt 2/5): self-signed certificate
+2025-05-01T20:10:19.697698338Z Retrying in 4000ms...
+2025-05-01T20:10:23.710487617Z Database operation failed (attempt 3/5): self-signed certificate
+2025-05-01T20:10:23.71052271Z Retrying in 8000ms...
