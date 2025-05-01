@@ -175,7 +175,7 @@ export default function ComingSoonPage() {
                             <FormControl>
                               <Input
                                 className="bg-zinc-900 border-zinc-800 focus:border-[#74d1ea] h-10"
-                                placeholder="your.name@company.com"
+                                placeholder="yourname@company.com"
                                 type="email"
                                 {...field}
                               />
