@@ -2,8 +2,8 @@
 // This script will initialize the database schema directly
 // when the normal drizzle-kit push is not working
 
-// Set NODE_TLS_REJECT_UNAUTHORIZED at the beginning
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// We now use proper certificate verification with the Neon CA certificate
+// instead of disabling certificate verification.
 
 import { pool, db } from './db';
 import * as schema from '../shared/schema';

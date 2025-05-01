@@ -17,9 +17,8 @@
  * - ADMIN_USERNAME: Username for the admin account (defaults to tovablyadmin)
  */
 
-// EMERGENCY FIX: Disable TLS certificate verification for Render
-// This MUST be at the top of the file, before any imports
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// We now use proper certificate verification instead of disabling it completely.
+// The following is the CA certificate for Neon database.
 
 import pg from 'pg';
 import { scrypt, randomBytes } from 'crypto';
@@ -33,11 +32,43 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
-// Create a pool configuration with the proper SSL settings for Render
+// The Neon root certificate for proper verification
+const neonRootCA = `
+-----BEGIN CERTIFICATE-----
+MIIEQTCCAqmgAwIBAgIUaNIXLGgW0ySXb9Hk7Z5FQV/tBZwwDQYJKoZIhvcNAQEM
+BQAwOjE4MDYGA1UEAwwvMTBmMmYzNjAtMmFlZC00ZjQ2LWI0ODctYTBiMzk0MzZj
+YzRhIFByb2plY3QgQ0EwHhcNMjIwODI0MDIyNDQyWhcNMzIwODIxMDIyNDQyWjA6
+MTgwNgYDVQQDDC8xMGYyZjM2MC0yYWVkLTRmNDYtYjQ4Ny1hMGIzOTQzNmNjNGEg
+UHJvamVjdCBDQTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAMwVeMTP
+4EsGq1MWTXoQpWRj9/OYxBUGlHWzjUBGHYsjpTwMgxtZHhiT+V3KLvCgDixyqVr3
+WK7L2NaAUr7JYz3NQY1/JDIecLGqgn7uvFVTzeeACGmhELXy7n5+bG5U0rbXwz5L
+82Rnh/7IXDVD1RvHLRXYymF38SpbSPAXlJu9KWprUUJ1sVpvKJMZ7RnSYxJQ2SYh
+AJGh5iALFCElpk0JgOwpbgXLdUEfzNUJiTAUXDHQEj3gGaZVnNFJdwGXU1VnAFf6
+kghgcGNDMz+ZheaFJQintB34+Fq8JUqvW0+OBYmTUiyYA+zc55PGGNWj/XEWn9VN
+lLcv9oALa7K7nCc48QKE+x/hcrPAHpcttSBYpilx1DZXpOsYQBDUoNfJbkP0P8YI
+9lQczQUbtP8prPuGZw+JDKjR1D7CXQFecyjhgQhNvgIOvnIWQJOja5nGfMndeMtl
+3Cl4vdm/8xOx+G3XGhpZF9JLu3D7wZ2fAzf6NeJ2gClAO1z0qS7+qFuEKIRohwID
+AQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRXnYGGb/LTCGrVHN1O
+hwB4QM0qIDAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQEMBQADggGBAHLpXQqA
+CpxisqQZOE3GXqnSNsIAF/pzv+mIlbFkQZ4LxnJlzrJX6HV0aDnGHnTgcGIPorF9
+l7hz8OWvAW5xM0ULBqQgC/RyGzCZRWCLPkzF+uEJMvHDJdJnSKGxiAkAG7+X8eHM
++CmYPvfGS+JRt0Bk1ol9Z8TK/BoSJVZ9YlU3aKrRITwUEjJYrbLh5jW3jYLYHVEL
+xkPxc1Oz9VdJ1NKFq9Zz3MQxIxt4VJAVdFdPzLvBxwZGLQmFxuPUIXXMGP6Bvmf+
+ij1srbnYRnnPoDFZzGLYzUB7+HZ7ZmHihA4QPA234YAJpCFbeHN3hUkFDZnk2Jnf
+teLv0NYMHuYMNW5cYBfqQXn6cOSkVHHfMzGJIRdSVP7S2yJk5EZnijjKWQCjYIXR
+O8Bn7+ADUKqbTkZCZJm+dJR2mMKHjSvr/HT0TkF7h/+jzWXcKIwYXZM5GxQ9maCM
+CvXrIYjqjQmF9izFZpKYEgiJxKmABu+XRnYFAGHfNQoH8bLQCxnRzw==
+-----END CERTIFICATE-----
+`;
+
+// Create a pool configuration with proper SSL settings that maintains security
 const poolConfig = {
   connectionString: process.env.DATABASE_URL,
-  // CRITICAL: Force SSL to true with rejectUnauthorized: false for Render compatibility
-  ssl: { rejectUnauthorized: false }
+  // Secure approach: use the CA certificate for verification
+  ssl: {
+    rejectUnauthorized: true,
+    ca: neonRootCA,
+  }
 };
 
 console.log(`Creating database connection pool with ${isRenderPg ? 'Render-specific' : 'standard'} configuration`);
