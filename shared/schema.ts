@@ -144,7 +144,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
   email: true,
   password: true,
   full_name: true,
-  company: true
+  company: true,
+  role: true
 });
 
 export const insertToneAnalysisSchema = createInsertSchema(toneAnalyses).pick({

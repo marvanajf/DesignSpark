@@ -27,9 +27,11 @@ const loginSchema = z.object({
 
 // Registration form schema
 const registerSchema = z.object({
-  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
+  full_name: z.string().optional(),
+  company: z.string().optional(),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -60,9 +62,11 @@ export default function AuthPage() {
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
+      username: "",
+      full_name: "",
+      company: "",
     },
   });
 
@@ -165,13 +169,14 @@ export default function AuthPage() {
                       <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                         <FormField
                           control={registerForm.control}
-                          name="username"
+                          name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Username</FormLabel>
+                              <FormLabel>Email</FormLabel>
                               <FormControl>
                                 <Input 
-                                  placeholder="johnsmith" 
+                                  type="email"
+                                  placeholder="your.email@example.com" 
                                   {...field} 
                                 />
                               </FormControl>
@@ -181,13 +186,45 @@ export default function AuthPage() {
                         />
                         <FormField
                           control={registerForm.control}
-                          name="email"
+                          name="full_name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>Full Name</FormLabel>
                               <FormControl>
                                 <Input 
-                                  placeholder="your.email@example.com" 
+                                  placeholder="John Smith" 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={registerForm.control}
+                          name="company"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Company (Optional)</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  placeholder="Your Company Ltd" 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={registerForm.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Username</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  placeholder="johnsmith" 
                                   {...field} 
                                 />
                               </FormControl>

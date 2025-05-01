@@ -37,12 +37,16 @@ async function createDefaultUserIfNotExists() {
     if (!existingUser) {
       console.log("Creating default demo user for testing...");
       const hashedPassword = await hashPassword("password123");
+      // Create the user with all needed fields
       await storage.createUser({
         username: "demouser",
         email: "demo@tovably.com",
         password: hashedPassword,
+        full_name: "Demo User",
+        company: "Tovably Demo",
         role: "user"
       });
+      
       console.log("Default demo user created successfully");
     }
   } catch (error) {
@@ -102,8 +106,10 @@ export function setupAuth(app: Express) {
       // Extend the base schema with validation rules
       const extendedSchema = insertUserSchema.extend({
         email: z.string().email("Invalid email format"),
-        username: z.string().min(3, "Username must be at least 3 characters"),
         password: z.string().min(8, "Password must be at least 8 characters"),
+        username: z.string().min(3, "Username must be at least 3 characters"),
+        full_name: z.string().optional(),
+        company: z.string().optional(),
       });
 
       const validatedData = extendedSchema.parse(req.body);
@@ -125,6 +131,7 @@ export function setupAuth(app: Express) {
       const user = await storage.createUser({
         ...validatedData,
         password: hashedPassword,
+        role: "user", // Set default role for new users
       });
 
       // Remove password from response
