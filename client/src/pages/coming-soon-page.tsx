@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, FileText, MessageSquare, BarChart, Zap } from "lucide-react";
+import { ArrowRight, FileText, MessageSquare, BarChart, Zap, BellRing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
@@ -92,46 +92,53 @@ export default function ComingSoonPage() {
 
       {/* Hero section */}
       <div className="relative overflow-hidden">
+        {/* Background gradient effects */}
+        <div className="absolute -top-[30%] -right-[20%] w-[70%] h-[70%] bg-[#74d1ea]/10 rounded-full blur-[120px] opacity-70" />
+        <div className="absolute -bottom-[30%] -left-[20%] w-[70%] h-[70%] bg-[#74d1ea]/10 rounded-full blur-[120px] opacity-70" />
+        
         <div className="container max-w-screen-xl mx-auto px-6 py-16 md:py-20">
           <div className="max-w-3xl">
             <div className="text-[#74d1ea] text-sm mb-4 flex items-center">
-              <span className="mr-1.5">•</span> Tovably Coming Soon
+              <span className="mr-1.5">•</span> Launching Soon
             </div>
             
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-6">
-              <span className="text-white">Understand how your brand's<br /></span>
-              <span className="text-[#74d1ea]">tone</span>
-              <span className="text-white"> connects with your<br />audience</span>
+              <span className="text-white">Revolutionize your<br /></span>
+              <span className="text-[#74d1ea]">communication</span>
+              <span className="text-white"> with <br />AI-powered insights</span>
             </h1>
             
             <p className="text-zinc-400 text-lg mb-10 max-w-2xl leading-relaxed">
-              Analyze your content's tone, uncover patterns in your communication style, 
-              and discover how to enhance your brand's presence through precise language.
+              Tovably is a cutting-edge AI platform that helps you analyze your content's tone, 
+              create targeted personas, and generate powerful messages that connect with your audience.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-16">
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8 mb-14 max-w-xl">
+              <h3 className="font-medium text-xl mb-5 flex items-center">
+                <BellRing className="h-5 w-5 text-[#74d1ea] mr-2" /> 
+                <span>Find out when we go live</span>
+              </h3>
+              
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-3 max-w-lg">
-                  <div className="flex-1">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              className="bg-zinc-900 border-zinc-800 focus:border-[#74d1ea] h-10"
-                              placeholder="Your name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            className="bg-zinc-900 border-zinc-800 focus:border-[#74d1ea] h-10"
+                            placeholder="Your name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   
-                  <div className="flex flex-1 gap-2">
+                  <div className="flex space-x-2">
                     <div className="flex-grow">
                       <FormField
                         control={form.control}
@@ -159,97 +166,152 @@ export default function ComingSoonPage() {
                     >
                       {isSubmitting ? (
                         <div className="h-4 w-4 border-2 border-black/20 border-t-black animate-spin rounded-full"></div>
-                      ) : "Get started"}
+                      ) : (
+                        <div className="flex items-center whitespace-nowrap">
+                          <span>Notify Me</span>
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </div>
+                      )}
                     </Button>
                   </div>
+                  <p className="text-xs text-zinc-500">
+                    Be the first to know when Tovably launches. Early access subscribers will receive exclusive benefits.
+                  </p>
                 </form>
               </Form>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 border-t border-zinc-800 pt-16">
-              <div className="flex flex-col">
-                <div className="text-[#74d1ea] mb-3">
+            <h2 className="text-2xl font-medium mb-8">A glimpse of what's coming</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+              <div className="bg-zinc-900/30 border border-zinc-800/50 rounded-lg p-6">
+                <div className="text-[#74d1ea] mb-4">
                   <FileText className="h-5 w-5" />
                 </div>
-                <h3 className="font-medium text-white mb-2">Analyze Your Content</h3>
+                <h3 className="font-medium text-white text-lg mb-2">AI-Powered Tone Analysis</h3>
                 <p className="text-sm text-zinc-400">
-                  See how your brand's tone comes across in your content and identify key characteristics.
+                  Analyze how your brand's tone connects with your audience using our advanced AI tools that uncover patterns in your communication style.
                 </p>
               </div>
               
-              <div className="flex flex-col">
-                <div className="text-[#74d1ea] mb-3">
+              <div className="bg-zinc-900/30 border border-zinc-800/50 rounded-lg p-6">
+                <div className="text-[#74d1ea] mb-4">
                   <MessageSquare className="h-5 w-5" />
                 </div>
-                <h3 className="font-medium text-white mb-2">Discover Language Patterns</h3>
+                <h3 className="font-medium text-white text-lg mb-2">Intelligent Content Creation</h3>
                 <p className="text-sm text-zinc-400">
-                  Understand your vocabulary choices, sentence structure, and overall communication style.
+                  Generate targeted content aligned with your brand voice for emails, social posts, and more with our AI-assisted content engine.
                 </p>
               </div>
               
-              <div className="flex flex-col">
-                <div className="text-[#74d1ea] mb-3">
+              <div className="bg-zinc-900/30 border border-zinc-800/50 rounded-lg p-6">
+                <div className="text-[#74d1ea] mb-4">
                   <BarChart className="h-5 w-5" />
                 </div>
-                <h3 className="font-medium text-white mb-2">Uncover Insights</h3>
+                <h3 className="font-medium text-white text-lg mb-2">Audience Persona Builder</h3>
                 <p className="text-sm text-zinc-400">
-                  Find out which tonal elements resonate with your audience and how to leverage them.
+                  Create detailed audience personas to tailor your content for specific demographics and communication preferences.
                 </p>
               </div>
               
-              <div className="flex flex-col">
-                <div className="text-[#74d1ea] mb-3">
+              <div className="bg-zinc-900/30 border border-zinc-800/50 rounded-lg p-6">
+                <div className="text-[#74d1ea] mb-4">
                   <Zap className="h-5 w-5" />
                 </div>
-                <h3 className="font-medium text-white mb-2">Take Action</h3>
+                <h3 className="font-medium text-white text-lg mb-2">Actionable Insights</h3>
                 <p className="text-sm text-zinc-400">
-                  Improve your content's effectiveness with AI-generated recommendations based on your analysis.
+                  Get detailed recommendations to improve your content strategy and enhance audience engagement based on data-driven analysis.
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Secondary content - How it works */}
+      
+      {/* Pricing preview */}
       <div className="border-t border-zinc-800">
         <div className="container max-w-screen-xl mx-auto px-6 py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-medium mb-5">How Tone Analysis Works</h2>
+          <div className="text-center mb-14">
+            <h2 className="text-2xl md:text-3xl font-medium mb-5">Simple, transparent pricing</h2>
             <p className="text-zinc-400 max-w-xl mx-auto">
-              Our AI-powered tone analysis provides deep insights into your brand's voice
+              Choose the plan that fits your needs, from individual creators to enterprise teams
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="bg-zinc-900/30 rounded-lg p-8 border border-zinc-800/50">
-              <div className="h-10 w-10 rounded-full bg-[#74d1ea]/20 flex items-center justify-center mb-6 text-white">
-                1
+              <div className="mb-4">
+                <h3 className="text-lg font-medium">Free</h3>
+                <p className="text-3xl font-medium mt-2">£0<span className="text-sm text-zinc-400">/month</span></p>
               </div>
-              <h3 className="text-lg font-medium mb-3">Input Your Content</h3>
-              <p className="text-zinc-400 text-sm">
-                Upload a sample of your existing content, enter a URL to your website, or provide blog posts, emails, or any text content you'd like to analyze.
-              </p>
+              <p className="text-zinc-400 text-sm mb-6">Perfect for trying out the platform</p>
+              <ul className="space-y-2 text-sm text-zinc-400 mb-6">
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> 5 persona creations
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> 3 tone analyses
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> 10 content generations
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-zinc-900/30 rounded-lg p-8 border border-[#74d1ea]/30 ring-1 ring-[#74d1ea]/20 relative">
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#74d1ea] text-black text-xs py-1 px-3 rounded-full">
+                Most Popular
+              </div>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium">Standard</h3>
+                <p className="text-3xl font-medium mt-2">£9.99<span className="text-sm text-zinc-400">/month</span></p>
+              </div>
+              <p className="text-zinc-400 text-sm mb-6">For individuals and small teams</p>
+              <ul className="space-y-2 text-sm text-zinc-400 mb-6">
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> Unlimited personas
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> 20 tone analyses per month
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> 100 content generations
+                </li>
+              </ul>
             </div>
 
             <div className="bg-zinc-900/30 rounded-lg p-8 border border-zinc-800/50">
-              <div className="h-10 w-10 rounded-full bg-[#74d1ea]/20 flex items-center justify-center mb-6 text-white">
-                2
+              <div className="mb-4">
+                <h3 className="text-lg font-medium">Professional</h3>
+                <p className="text-3xl font-medium mt-2">£24.99<span className="text-sm text-zinc-400">/month</span></p>
               </div>
-              <h3 className="text-lg font-medium mb-3">AI Analysis</h3>
-              <p className="text-zinc-400 text-sm">
-                Our advanced AI analyzes your content for tone, formality, technical complexity, friendliness, and other key attributes that define your brand's voice.
-              </p>
+              <p className="text-zinc-400 text-sm mb-6">For professionals and growing teams</p>
+              <ul className="space-y-2 text-sm text-zinc-400 mb-6">
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> Everything in Standard plus
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> Advanced analytics
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#74d1ea] mr-2">✓</span> Priority support
+                </li>
+              </ul>
             </div>
+          </div>
 
-            <div className="bg-zinc-900/30 rounded-lg p-8 border border-zinc-800/50">
-              <div className="h-10 w-10 rounded-full bg-[#74d1ea]/20 flex items-center justify-center mb-6 text-white">
-                3
-              </div>
-              <h3 className="text-lg font-medium mb-3">Actionable Results</h3>
-              <p className="text-zinc-400 text-sm">
-                Receive a comprehensive analysis with visual breakdowns and actionable insights to refine your content strategy and enhance audience engagement.
+          <div className="text-center mt-12">
+            <div className="inline-block bg-zinc-900 border border-zinc-800 rounded-lg p-6 max-w-2xl">
+              <h3 className="font-medium mb-3">Want to be notified when we launch?</h3>
+              <p className="text-zinc-400 text-sm mb-5">
+                Join our early access list to receive exclusive launch discounts and benefits.
               </p>
+              <Button onClick={() => document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[#74d1ea] hover:bg-[#74d1ea]/90 text-black font-normal">
+                <div className="flex items-center">
+                  <BellRing className="mr-2 h-4 w-4" />
+                  <span>Join the waiting list</span>
+                </div>
+              </Button>
             </div>
           </div>
         </div>
@@ -261,6 +323,9 @@ export default function ComingSoonPage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <img src={tovablyLogo} alt="Tovably" className="h-5" />
+              <p className="text-xs text-zinc-500 mt-2">
+                AI-powered communication tools
+              </p>
             </div>
             
             <div className="text-center md:text-right">
