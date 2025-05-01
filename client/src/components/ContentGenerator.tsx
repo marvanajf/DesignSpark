@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-import { Loader2, Linkedin, Mail, Copy, Download, Edit } from "lucide-react";
+import { Loader2, Linkedin, Mail, Copy, Download, Edit, Video, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -83,9 +83,25 @@ export default function ContentGenerator() {
     onSuccess: (data: GeneratedContent) => {
       queryClient.invalidateQueries({ queryKey: ["/api/content"] });
       setGeneratedContent(data);
+      let contentTypeLabel = '';
+      switch (contentType) {
+        case 'linkedin_post':
+          contentTypeLabel = 'LinkedIn post';
+          break;
+        case 'email':
+          contentTypeLabel = 'cold email';
+          break;
+        case 'webinar':
+          contentTypeLabel = 'webinar outline';
+          break;
+        case 'workshop':
+          contentTypeLabel = 'workshop plan';
+          break;
+      }
+      
       toast({
         title: "Content generated",
-        description: `Your ${contentType === 'linkedin_post' ? 'LinkedIn post' : 'cold email'} has been created`,
+        description: `Your ${contentTypeLabel} has been created`,
       });
     },
     onError: (error: Error) => {
@@ -186,25 +202,47 @@ export default function ContentGenerator() {
                 Content Type
               </label>
               <div className="mt-1">
-                <div className="flex rounded-md shadow-sm">
-                  <Button
-                    type="button"
-                    variant={contentType === 'linkedin_post' ? 'default' : 'outline'}
-                    onClick={() => handleContentTypeChange('linkedin_post')}
-                    className="flex-1 rounded-r-none"
-                  >
-                    <Linkedin className="mr-2 h-4 w-4" />
-                    LinkedIn Post
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={contentType === 'email' ? 'default' : 'outline'}
-                    onClick={() => handleContentTypeChange('email')}
-                    className="flex-1 rounded-l-none"
-                  >
-                    <Mail className="mr-2 h-4 w-4" />
-                    Cold Email
-                  </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex rounded-md shadow-sm">
+                    <Button
+                      type="button"
+                      variant={contentType === 'linkedin_post' ? 'default' : 'outline'}
+                      onClick={() => handleContentTypeChange('linkedin_post')}
+                      className="flex-1 rounded-r-none"
+                    >
+                      <Linkedin className="mr-2 h-4 w-4" />
+                      LinkedIn Post
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={contentType === 'email' ? 'default' : 'outline'}
+                      onClick={() => handleContentTypeChange('email')}
+                      className="flex-1 rounded-l-none"
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      Cold Email
+                    </Button>
+                  </div>
+                  <div className="flex rounded-md shadow-sm">
+                    <Button
+                      type="button"
+                      variant={contentType === 'webinar' ? 'default' : 'outline'}
+                      onClick={() => handleContentTypeChange('webinar')}
+                      className="flex-1 rounded-r-none"
+                    >
+                      <Video className="mr-2 h-4 w-4" />
+                      Webinar
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={contentType === 'workshop' ? 'default' : 'outline'}
+                      onClick={() => handleContentTypeChange('workshop')}
+                      className="flex-1 rounded-l-none"
+                    >
+                      <ClipboardList className="mr-2 h-4 w-4" />
+                      Workshop
+                    </Button>
+                  </div>
                 </div>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -302,13 +340,35 @@ export default function ContentGenerator() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div className="flex items-center">
-              {contentType === 'linkedin_post' ? (
-                <Linkedin className="h-5 w-5 text-blue-500 mr-3" />
-              ) : (
-                <Mail className="h-5 w-5 text-yellow-500 mr-3" />
-              )}
+              {(() => {
+                switch (generatedContent.type) {
+                  case 'linkedin_post':
+                    return <Linkedin className="h-5 w-5 text-blue-500 mr-3" />;
+                  case 'email':
+                    return <Mail className="h-5 w-5 text-yellow-500 mr-3" />;
+                  case 'webinar':
+                    return <Video className="h-5 w-5 text-green-500 mr-3" />;
+                  case 'workshop':
+                    return <ClipboardList className="h-5 w-5 text-purple-500 mr-3" />;
+                  default:
+                    return <Edit className="h-5 w-5 text-gray-500 mr-3" />;
+                }
+              })()}
               <CardTitle>
-                Generated {contentType === 'linkedin_post' ? 'LinkedIn Post' : 'Cold Email'}
+                {(() => {
+                  switch (generatedContent.type) {
+                    case 'linkedin_post':
+                      return 'Generated LinkedIn Post';
+                    case 'email':
+                      return 'Generated Cold Email';
+                    case 'webinar':
+                      return 'Generated Webinar Outline';
+                    case 'workshop':
+                      return 'Generated Workshop Plan';
+                    default:
+                      return 'Generated Content';
+                  }
+                })()}
               </CardTitle>
             </div>
             <Button 
@@ -338,7 +398,20 @@ export default function ContentGenerator() {
                 </Badge>
               )}
               <Badge variant="outline" className="bg-muted text-muted-foreground">
-                {generatedContent.type === "linkedin_post" ? "LinkedIn Post" : "Cold Email"}
+                {(() => {
+                  switch (generatedContent.type) {
+                    case 'linkedin_post':
+                      return 'LinkedIn Post';
+                    case 'email':
+                      return 'Cold Email';
+                    case 'webinar':
+                      return 'Webinar';
+                    case 'workshop':
+                      return 'Workshop';
+                    default:
+                      return generatedContent.type;
+                  }
+                })()}
               </Badge>
               {generatedContent.topic && (
                 <Badge variant="outline" className="bg-muted text-muted-foreground">
