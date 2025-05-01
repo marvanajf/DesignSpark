@@ -97,11 +97,12 @@ export const personas = pgTable("personas", {
 export const generatedContent = pgTable("generated_content", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id").notNull().references(() => users.id),
-  type: text("type").notNull(), // 'linkedin_post' or 'email'
+  type: text("type").notNull(), // 'linkedin_post', 'email', 'webinar', 'workshop'
   content_text: text("content_text").notNull(),
   persona_id: integer("persona_id").references(() => personas.id),
   tone_analysis_id: integer("tone_analysis_id").references(() => toneAnalyses.id),
   topic: text("topic"),
+  further_details: text("further_details"),
   created_at: timestamp("created_at").defaultNow().notNull()
 });
 
@@ -190,7 +191,8 @@ export const insertGeneratedContentSchema = createInsertSchema(generatedContent)
   content_text: true,
   persona_id: true,
   tone_analysis_id: true,
-  topic: true
+  topic: true,
+  further_details: true
 });
 
 export const insertBlogCategorySchema = createInsertSchema(blogCategories).pick({
