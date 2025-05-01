@@ -21,7 +21,12 @@ async function hashPassword(password) {
 
 async function createAdminUser() {
   try {
-    const adminEmail = "admin@tovably.com";
+    // Create a production admin user
+    const adminEmail = "sales@tovably.com";
+    const adminUsername = "tovablyadmin";
+    // Generate a secure but memorable password
+    const securePassword = "TovablyAdmin2025!";
+
     // Check if the admin user already exists
     const checkResult = await pool.query(
       "SELECT * FROM users WHERE email = $1",
@@ -29,7 +34,7 @@ async function createAdminUser() {
     );
 
     if (checkResult.rows.length > 0) {
-      console.log("Admin user already exists. Updating role to 'admin'...");
+      console.log("Production admin user already exists. Updating role to 'admin'...");
       await pool.query(
         "UPDATE users SET role = 'admin' WHERE email = $1",
         [adminEmail]
@@ -37,19 +42,19 @@ async function createAdminUser() {
       console.log("Admin role updated.");
     } else {
       // Create a new admin user
-      const hashedPassword = await hashPassword("admin123");
+      const hashedPassword = await hashPassword(securePassword);
       
       const result = await pool.query(
         `INSERT INTO users 
-        (username, email, password, role, subscription_plan, personas_used, tone_analyses_used, content_generated, created_at, stripe_customer_id, stripe_subscription_id, subscription_status, subscription_period_end) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+        (username, email, password, role, subscription_plan, personas_used, tone_analyses_used, content_generated, created_at, stripe_customer_id, stripe_subscription_id, subscription_status, subscription_period_end, company, full_name) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) 
         RETURNING id`,
         [
-          "admin", 
+          adminUsername, 
           adminEmail, 
           hashedPassword, 
           "admin", 
-          "professional", 
+          "premium", 
           0, 
           0, 
           0, 
@@ -57,16 +62,18 @@ async function createAdminUser() {
           null, 
           null, 
           null, 
-          null
+          null,
+          "Tovably Ltd",
+          "Tovably Admin"
         ]
       );
       
-      console.log(`Admin user created with id: ${result.rows[0].id}`);
+      console.log(`Production admin user created with id: ${result.rows[0].id}`);
     }
 
     console.log("\nYou can now log in with:");
-    console.log("Email: admin@tovably.com");
-    console.log("Password: admin123");
+    console.log(`Email: ${adminEmail}`);
+    console.log(`Password: ${securePassword}`);
     
   } catch (error) {
     console.error("Error creating admin user:", error);
