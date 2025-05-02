@@ -73,8 +73,7 @@ export default function ContentGeneratorPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [furtherDetails, setFurtherDetails] = useState("");
   const [prospectName, setProspectName] = useState("");
-  const [prospectCompany, setProspectCompany] = useState("");
-  const [industryNiche, setIndustryNiche] = useState("");
+  const [nicheData, setNicheData] = useState("");
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   
   // Fetch tone analyses
@@ -135,8 +134,7 @@ export default function ContentGeneratorPage() {
       if (contentType === "email") {
         // Include prospect details in further details for cold emails
         if (prospectName) additionalDetails += `Prospect Name: ${prospectName}\n`;
-        if (prospectCompany) additionalDetails += `Prospect Company: ${prospectCompany}\n`;
-        if (industryNiche) additionalDetails += `Industry/Niche: ${industryNiche}\n`;
+        if (nicheData) additionalDetails += `Niche Data: ${nicheData}\n`;
       }
       
       // Combine user-entered further details with prospect details
@@ -223,8 +221,7 @@ export default function ContentGeneratorPage() {
     if (contentType !== "email") {
       // Reset prospect-specific fields when not in email mode
       setProspectName("");
-      setProspectCompany("");
-      setIndustryNiche("");
+      setNicheData("");
       setShowAdvancedOptions(false);
     }
   }, [contentType]);
@@ -628,27 +625,14 @@ export default function ContentGeneratorPage() {
                           </div>
                           
                           <div className="space-y-2">
-                            <label htmlFor="prospectCompany" className="text-xs font-medium text-gray-300">
-                              Prospect's Company (Optional)
+                            <label htmlFor="nicheData" className="text-xs font-medium text-gray-300">
+                              Niche Data? Add here (Optional)
                             </label>
                             <Input
-                              id="prospectCompany"
-                              value={prospectCompany}
-                              onChange={(e) => setProspectCompany(e.target.value)}
-                              placeholder="e.g., Acme Digital"
-                              className="bg-black border-gray-700 text-white h-8 text-sm focus:border-[#74d1ea]"
-                            />
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <label htmlFor="industryNiche" className="text-xs font-medium text-gray-300">
-                              Industry/Niche (Optional)
-                            </label>
-                            <Input
-                              id="industryNiche"
-                              value={industryNiche}
-                              onChange={(e) => setIndustryNiche(e.target.value)}
-                              placeholder="e.g., Digital Marketing, Tech, Healthcare"
+                              id="nicheData"
+                              value={nicheData}
+                              onChange={(e) => setNicheData(e.target.value)}
+                              placeholder="e.g., Tech startup, HR software, Recruitment automation"
                               className="bg-black border-gray-700 text-white h-8 text-sm focus:border-[#74d1ea]"
                             />
                           </div>
