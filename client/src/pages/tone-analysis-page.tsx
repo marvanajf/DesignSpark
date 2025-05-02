@@ -567,29 +567,7 @@ export default function ToneAnalysisPage() {
                         </div>
                       </div>
 
-                      {/* Gold Standard Guidance - Separate, prominent container */}
-                      <div className="mb-8 bg-[#0e1b33]/80 border-2 border-[#74d1ea]/50 rounded-xl p-6 shadow-[0_0_30px_rgba(116,209,234,0.3)]">
-                        <div className="flex items-center mb-4">
-                          <div className="bg-[#182030] border border-[#74d1ea]/30 rounded-lg p-2.5 mr-3 shadow-[0_0_15px_rgba(116,209,234,0.2)]">
-                            <Sparkles className="h-5 w-5 text-[#74d1ea]" />
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-white">Further Guidance</h3>
-                            <p className="text-gray-300 text-sm mt-0.5">Provide your gold standard copy to guide the analysis</p>
-                          </div>
-                        </div>
-                        
-                        <Textarea
-                          id="furtherGuidance"
-                          className="min-h-[100px] bg-black/40 border-[#74d1ea]/30 focus:border-[#74d1ea]/60 focus:ring-[#74d1ea]/20"
-                          placeholder="Add your gold standard copy or specific instructions to guide the AI in analyzing your content..."
-                          value={furtherGuidance}
-                          onChange={(e) => setFurtherGuidance(e.target.value)}
-                        />
-                        <p className="mt-2 text-sm text-[#74d1ea]/80">
-                          Upload your ideal content examples to help the AI understand what you're aiming for
-                        </p>
-                      </div>
+                      {/* Intentionally removed the guidance section from here */}
 
                       <form onSubmit={handleSubmit}>
                         <Tabs defaultValue="url" className="mb-8" onValueChange={(value) => setAnalysisMethod(value)}>
@@ -641,7 +619,11 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
                               
-
+                              {/* Further Guidance Component for URL tab */}
+                              <FurtherGuidance 
+                                value={furtherGuidance}
+                                onChange={setFurtherGuidance}
+                              />
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
