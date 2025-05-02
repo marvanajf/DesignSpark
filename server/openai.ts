@@ -250,7 +250,14 @@ export async function generateColdEmail(
             `Include a clear subject line, personalized introduction, concise value proposition, relevant social proof, ` +
             `and a specific call to action. Avoid generic sales language. ` +
             `Format the email properly with subject, greeting, body, and signature. ` +
-            `The email should be 200-300 words and look like a real email a business might send.`
+            `The email should be 200-300 words and look like a real email a business might send.` +
+            `\n\nIMPORTANT GUIDELINES:` +
+            `\n- DO NOT use placeholder text like [Company Name], [Competitor Name], etc.` +
+            `\n- If you need to mention specific companies or competitors, use real examples that are well-known in the industry.` +
+            `\n- For retail/supermarket examples, use real competitors like Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.` +
+            `\n- For tech examples, use real companies like Microsoft, Google, Apple, Oracle, etc.` +
+            `\n- If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.` +
+            `\n- When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.`
         },
         {
           role: "user",
