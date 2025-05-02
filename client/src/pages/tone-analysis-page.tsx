@@ -51,6 +51,7 @@ export default function ToneAnalysisPage() {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [sampleText, setSampleText] = useState("");
   const [goldStandardText, setGoldStandardText] = useState("");
+  const [furtherGuidance, setFurtherGuidance] = useState("");
   const [analysisMethod, setAnalysisMethod] = useState<string>("url");
   const [currentAnalysisId, setCurrentAnalysisId] = useState<number | null>(null);
   const [limitModalOpen, setLimitModalOpen] = useState(false);
@@ -94,7 +95,12 @@ export default function ToneAnalysisPage() {
   });
 
   const toneAnalysisMutation = useMutation({
-    mutationFn: async (data: { websiteUrl?: string; sampleText?: string; goldStandardText?: string }) => {
+    mutationFn: async (data: { 
+      websiteUrl?: string; 
+      sampleText?: string; 
+      goldStandardText?: string;
+      furtherGuidance?: string;
+    }) => {
       const res = await apiRequest("POST", "/api/tone-analysis", data);
       
       if (res.status === 402) {
@@ -199,6 +205,7 @@ export default function ToneAnalysisPage() {
       websiteUrl: analysisMethod === "url" ? finalUrl : undefined,
       sampleText: analysisMethod === "text" || analysisMethod === "advanced" ? sampleText : undefined,
       goldStandardText: analysisMethod === "advanced" ? goldStandardText : undefined,
+      furtherGuidance: furtherGuidance || undefined,
     });
   };
 
@@ -608,6 +615,22 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
                               
+                              <div className="mt-4">
+                                <label htmlFor="furtherGuidance" className="block text-sm font-medium text-white mb-2">
+                                  Further Guidance (Optional)
+                                </label>
+                                <Textarea
+                                  id="furtherGuidance"
+                                  className="min-h-[80px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
+                                  placeholder="Add any specific instructions or focus areas for the analysis..."
+                                  value={furtherGuidance}
+                                  onChange={(e) => setFurtherGuidance(e.target.value)}
+                                />
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Help guide the AI by providing context or specific areas to focus on in your analysis
+                                </p>
+                              </div>
+                              
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
                                   <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
@@ -659,6 +682,22 @@ export default function ToneAnalysisPage() {
                                 />
                                 <p className="mt-2 text-xs text-gray-500">
                                   Paste sample text from your content, blog posts, or marketing materials
+                                </p>
+                              </div>
+
+                              <div className="mt-4">
+                                <label htmlFor="furtherGuidanceText" className="block text-sm font-medium text-white mb-2">
+                                  Further Guidance (Optional)
+                                </label>
+                                <Textarea
+                                  id="furtherGuidanceText"
+                                  className="min-h-[80px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
+                                  placeholder="Add any specific instructions or focus areas for the analysis..."
+                                  value={furtherGuidance}
+                                  onChange={(e) => setFurtherGuidance(e.target.value)}
+                                />
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Help guide the AI by providing context or specific areas to focus on in your analysis
                                 </p>
                               </div>
                               
