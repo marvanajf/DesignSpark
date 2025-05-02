@@ -92,6 +92,7 @@ export const toneAnalyses = pgTable("tone_analyses", {
   website_url: text("website_url"),
   sample_text: text("sample_text"),
   gold_standard_text: text("gold_standard_text"),
+  further_guidance: text("further_guidance"),
   tone_results: jsonb("tone_results"),
   created_at: timestamp("created_at").defaultNow().notNull()
 });
@@ -205,6 +206,7 @@ export const insertToneAnalysisSchema = createInsertSchema(toneAnalyses).pick({
   website_url: true,
   sample_text: true,
   gold_standard_text: true,
+  further_guidance: true,
   tone_results: true
 });
 

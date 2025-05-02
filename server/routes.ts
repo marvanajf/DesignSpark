@@ -1853,7 +1853,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         // Send content to OpenAI for tone analysis
         const content = websiteUrl || sampleText || "";
-        const toneResults = await analyzeTone(content, goldStandardText);
+        const toneResults = await analyzeTone(content, goldStandardText, furtherGuidance);
         
         // Generate a default name if none provided
         const analysisName = name || (websiteUrl ? 
@@ -1867,6 +1867,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           website_url: websiteUrl,
           sample_text: sampleText,
           gold_standard_text: goldStandardText,
+          further_guidance: furtherGuidance,
           tone_results: toneResults
         });
         
