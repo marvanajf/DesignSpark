@@ -48,6 +48,7 @@ import { ToneAnalysis } from "@shared/schema";
 export default function ToneAnalysisPage() {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [sampleText, setSampleText] = useState("");
+  const [goldStandardText, setGoldStandardText] = useState("");
   const [analysisMethod, setAnalysisMethod] = useState<string>("url");
   const [currentAnalysisId, setCurrentAnalysisId] = useState<number | null>(null);
   const [limitModalOpen, setLimitModalOpen] = useState(false);
@@ -91,7 +92,7 @@ export default function ToneAnalysisPage() {
   });
 
   const toneAnalysisMutation = useMutation({
-    mutationFn: async (data: { websiteUrl?: string; sampleText?: string }) => {
+    mutationFn: async (data: { websiteUrl?: string; sampleText?: string; goldStandardText?: string }) => {
       const res = await apiRequest("POST", "/api/tone-analysis", data);
       
       if (res.status === 402) {
