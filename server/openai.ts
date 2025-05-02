@@ -192,12 +192,12 @@ export async function generateLinkedInPost(
             - Do NOT use markdown formatting like asterisks (*) for emphasis
             
             IMPORTANT CONTENT GUIDELINES:
-            - DO NOT use placeholder text like [Company Name], [Competitor Name], etc.
-            - If you need to mention specific companies or competitors, use real examples that are well-known in the industry.
-            - For retail examples, use real retailers like Tesco, Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.
-            - For tech examples, use real companies like Microsoft, Google, Apple, Amazon, etc.
-            - If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.
-            - When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.
+            - NEVER use placeholder text like [Company Name], [Competitor Name], etc.
+            - Be specific and authentic in your references without forcing mentions of specific companies
+            - Use your judgment about whether to include specific examples based on context
+            - You can refer to competitor characteristics without naming them if appropriate
+            - Focus on industry trends and benefits where sensible
+            - Be natural and genuine rather than generic - no placeholders of any kind
             
             NEVER sound like corporate marketing copy - the goal is authenticity, relatability and engagement.`
         },
