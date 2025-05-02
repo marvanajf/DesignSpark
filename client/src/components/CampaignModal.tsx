@@ -147,7 +147,7 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[900px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-2xl">
             <span className="flex items-center justify-center h-8 w-8 rounded-full bg-[#181c25]">
@@ -221,16 +221,18 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
                 <div className="flex items-center gap-2 text-muted-foreground mb-2">
                   <span>{campaignContents.length} item{campaignContents.length !== 1 ? 's' : ''}</span>
                 </div>
-                <div className="grid gap-4 max-h-[400px] overflow-y-auto pr-2">
-                  {campaignContents.map((content: any) => (
-                    <SavedContentListItem
-                      key={content.id}
-                      content={content}
-                      onRemoveFromCampaign={() => handleRemoveContent(content.id)}
-                      showCampaignActions={true}
-                    />
-                  ))}
-                </div>
+                <ScrollArea className="h-[400px]">
+                  <div className="grid gap-4 pr-2">
+                    {campaignContents.map((content: any) => (
+                      <SavedContentListItem
+                        key={content.id}
+                        content={content}
+                        onRemoveFromCampaign={() => handleRemoveContent(content.id)}
+                        showCampaignActions={true}
+                      />
+                    ))}
+                  </div>
+                </ScrollArea>
               </div>
             )}
           </div>
