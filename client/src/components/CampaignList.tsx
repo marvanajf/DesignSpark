@@ -344,7 +344,7 @@ export function CampaignList() {
                   variant="ghost"
                   size="sm"
                   className="text-[#74d1ea] hover:bg-[#181c25] hover:text-[#74d1ea]"
-                  onClick={() => navigate(`/campaign/${campaign.id}`)}
+                  onClick={() => openCampaignModal(campaign)}
                 >
                   <FolderOpen className="mr-2 h-4 w-4" /> Open
                 </Button>
