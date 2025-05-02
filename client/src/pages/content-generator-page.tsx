@@ -496,7 +496,7 @@ export default function ContentGeneratorPage() {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* Left Column: Content Generation Form */}
             <div className="xl:col-span-1">
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden h-full">
+              <Card className="bg-black border-gray-800 rounded-lg overflow-hidden h-full">
                 <CardHeader className="pb-3 border-b border-gray-800">
                   <CardTitle className="text-lg font-medium text-white">Generate New Content</CardTitle>
                   <CardDescription className="text-gray-400">
@@ -571,7 +571,7 @@ export default function ContentGeneratorPage() {
                       <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                         <SelectValue placeholder="Select a persona" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#111] border-gray-800">
+                      <SelectContent className="bg-black border-gray-800">
                         {personas.map((persona) => (
                           <SelectItem key={persona.id} value={persona.id.toString()}>
                             {persona.name}
@@ -603,7 +603,7 @@ export default function ContentGeneratorPage() {
                       <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                         <SelectValue placeholder="Select tone analysis" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#111] border-gray-800">
+                      <SelectContent className="bg-black border-gray-800">
                         {toneAnalyses.map((analysis) => (
                           <SelectItem key={analysis.id} value={analysis.id.toString()}>
                             {analysis.website_url 
@@ -729,7 +729,7 @@ export default function ContentGeneratorPage() {
             
             {/* Right Column: Generated Content */}
             <div className="xl:col-span-2">
-              <Card className="bg-[#111] border-gray-800 rounded-lg overflow-hidden h-full">
+              <Card className="bg-black border-gray-800 rounded-lg overflow-hidden h-full">
                 <CardHeader className="pb-3 border-b border-gray-800">
                   <div className="flex justify-between items-center">
                     <div>
@@ -761,7 +761,7 @@ export default function ContentGeneratorPage() {
                         <SelectTrigger className="bg-black border-gray-800 text-gray-300 w-[150px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
                           <SelectValue placeholder="Filter type" />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#111] border-gray-800">
+                        <SelectContent className="bg-black border-gray-800">
                           <SelectItem value="all">All Types</SelectItem>
                           <SelectItem value="linkedin_post">LinkedIn Posts</SelectItem>
                           <SelectItem value="email">Cold Emails</SelectItem>
@@ -839,7 +839,7 @@ export default function ContentGeneratorPage() {
                                         </svg>
                                       </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-[#111] border-gray-800">
+                                    <DropdownMenuContent className="bg-black border-gray-800">
                                       <DropdownMenuItem 
                                         className="text-gray-300 hover:text-white focus:text-white cursor-pointer"
                                         onClick={() => copyToClipboard(content.content_text)}
