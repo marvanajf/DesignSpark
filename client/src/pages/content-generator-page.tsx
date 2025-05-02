@@ -72,6 +72,10 @@ export default function ContentGeneratorPage() {
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [furtherDetails, setFurtherDetails] = useState("");
+  const [prospectName, setProspectName] = useState("");
+  const [prospectCompany, setProspectCompany] = useState("");
+  const [industryNiche, setIndustryNiche] = useState("");
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   
   // Fetch tone analyses
   const { 
@@ -125,12 +129,27 @@ export default function ContentGeneratorPage() {
         throw new Error("Please select a persona, tone analysis, and enter a topic");
       }
       
+      // Build additional details based on content type
+      let additionalDetails = "";
+      
+      if (contentType === "email") {
+        // Include prospect details in further details for cold emails
+        if (prospectName) additionalDetails += `Prospect Name: ${prospectName}\n`;
+        if (prospectCompany) additionalDetails += `Prospect Company: ${prospectCompany}\n`;
+        if (industryNiche) additionalDetails += `Industry/Niche: ${industryNiche}\n`;
+      }
+      
+      // Combine user-entered further details with prospect details
+      const combinedDetails = additionalDetails 
+        ? (furtherDetails ? `${additionalDetails}\n\n${furtherDetails}` : additionalDetails).trim()
+        : furtherDetails.trim();
+      
       const res = await apiRequest("POST", "/api/content", {
         type: contentType,
         personaId: selectedPersonaId,
         toneAnalysisId: selectedToneAnalysisId,
         topic: topic.trim(),
-        furtherDetails: furtherDetails.trim() || undefined,
+        furtherDetails: combinedDetails || undefined,
       });
       
       return res.json();
@@ -198,6 +217,17 @@ export default function ContentGeneratorPage() {
       setSelectedToneAnalysisId(sortedAnalyses[0].id);
     }
   }, [toneAnalyses]);
+  
+  // Clear prospect fields when switching away from email content type
+  useEffect(() => {
+    if (contentType !== "email") {
+      // Reset prospect-specific fields when not in email mode
+      setProspectName("");
+      setProspectCompany("");
+      setIndustryNiche("");
+      setShowAdvancedOptions(false);
+    }
+  }, [contentType]);
 
   // Handle copy to clipboard
   const copyToClipboard = (text: string) => {
@@ -560,6 +590,76 @@ export default function ContentGeneratorPage() {
                       </Button>
                     </div>
                   </div>
+                  
+                  {/* Cold Email Advanced Options - only shown for email type */}
+                  {contentType === "email" && (
+                    <div className="mt-4 mb-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium text-gray-300 flex items-center">
+                          <span className="text-[#74d1ea] mr-2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </span>
+                          Advanced Options
+                        </h3>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+                          className="text-[#74d1ea] h-7 text-xs hover:bg-gray-800"
+                        >
+                          {showAdvancedOptions ? "Hide" : "Show"}
+                        </Button>
+                      </div>
+                      {showAdvancedOptions && (
+                        <div className="mt-3 p-4 border border-gray-800 rounded-lg bg-gray-900/40 space-y-4">
+                          <div className="space-y-2">
+                            <label htmlFor="prospectName" className="text-xs font-medium text-gray-300">
+                              Prospect's Name (Optional)
+                            </label>
+                            <Input
+                              id="prospectName"
+                              value={prospectName}
+                              onChange={(e) => setProspectName(e.target.value)}
+                              placeholder="e.g., Sarah Johnson"
+                              className="bg-black border-gray-700 text-white h-8 text-sm focus:border-[#74d1ea]"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <label htmlFor="prospectCompany" className="text-xs font-medium text-gray-300">
+                              Prospect's Company (Optional)
+                            </label>
+                            <Input
+                              id="prospectCompany"
+                              value={prospectCompany}
+                              onChange={(e) => setProspectCompany(e.target.value)}
+                              placeholder="e.g., Acme Digital"
+                              className="bg-black border-gray-700 text-white h-8 text-sm focus:border-[#74d1ea]"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <label htmlFor="industryNiche" className="text-xs font-medium text-gray-300">
+                              Industry/Niche (Optional)
+                            </label>
+                            <Input
+                              id="industryNiche"
+                              value={industryNiche}
+                              onChange={(e) => setIndustryNiche(e.target.value)}
+                              placeholder="e.g., Digital Marketing, Tech, Healthcare"
+                              className="bg-black border-gray-700 text-white h-8 text-sm focus:border-[#74d1ea]"
+                            />
+                          </div>
+                          
+                          <p className="text-xs text-gray-500 italic">
+                            These details will help personalize the email for your specific prospect
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   
                   {/* Further Details Input */}
                   <div className="space-y-2">
