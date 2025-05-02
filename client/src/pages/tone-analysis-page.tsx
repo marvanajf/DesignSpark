@@ -565,6 +565,30 @@ export default function ToneAnalysisPage() {
                         </div>
                       </div>
 
+                      {/* Gold Standard Guidance - Separate, prominent container */}
+                      <div className="mb-8 bg-[#0e1b33]/80 border-2 border-[#74d1ea]/50 rounded-xl p-6 shadow-[0_0_30px_rgba(116,209,234,0.3)]">
+                        <div className="flex items-center mb-4">
+                          <div className="bg-[#182030] border border-[#74d1ea]/30 rounded-lg p-2.5 mr-3 shadow-[0_0_15px_rgba(116,209,234,0.2)]">
+                            <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-white">Further Guidance</h3>
+                            <p className="text-gray-300 text-sm mt-0.5">Provide your gold standard copy to guide the analysis</p>
+                          </div>
+                        </div>
+                        
+                        <Textarea
+                          id="furtherGuidance"
+                          className="min-h-[100px] bg-black/40 border-[#74d1ea]/30 focus:border-[#74d1ea]/60 focus:ring-[#74d1ea]/20"
+                          placeholder="Add your gold standard copy or specific instructions to guide the AI in analyzing your content..."
+                          value={furtherGuidance}
+                          onChange={(e) => setFurtherGuidance(e.target.value)}
+                        />
+                        <p className="mt-2 text-sm text-[#74d1ea]/80">
+                          Upload your ideal content examples to help the AI understand what you're aiming for
+                        </p>
+                      </div>
+
                       <form onSubmit={handleSubmit}>
                         <Tabs defaultValue="url" className="mb-8" onValueChange={(value) => setAnalysisMethod(value)}>
                           <TabsList className="bg-black/50 border border-gray-800/60 rounded-lg p-1 mb-6">
@@ -615,22 +639,7 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
                               
-                              <div className="mt-6 border-t border-gray-800/60 pt-6 rounded-lg bg-[#0e1b33]/50 border border-[#74d1ea]/30 p-5">
-                                <label htmlFor="furtherGuidance" className="block text-sm font-medium text-white mb-2 flex items-center">
-                                  <Sparkles className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                                  Further Guidance (Optional)
-                                </label>
-                                <Textarea
-                                  id="furtherGuidance"
-                                  className="min-h-[80px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
-                                  placeholder="Add any specific instructions or focus areas for the analysis..."
-                                  value={furtherGuidance}
-                                  onChange={(e) => setFurtherGuidance(e.target.value)}
-                                />
-                                <p className="mt-2 text-xs text-gray-500">
-                                  Help guide the AI by providing context or specific areas to focus on in your analysis
-                                </p>
-                              </div>
+
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
@@ -686,22 +695,7 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
-                              <div className="mt-6 border-t border-gray-800/60 pt-6 rounded-lg bg-[#0e1b33]/50 border border-[#74d1ea]/30 p-5">
-                                <label htmlFor="furtherGuidanceText" className="block text-sm font-medium text-white mb-2 flex items-center">
-                                  <Sparkles className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                                  Further Guidance (Optional)
-                                </label>
-                                <Textarea
-                                  id="furtherGuidanceText"
-                                  className="min-h-[80px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
-                                  placeholder="Add any specific instructions or focus areas for the analysis..."
-                                  value={furtherGuidance}
-                                  onChange={(e) => setFurtherGuidance(e.target.value)}
-                                />
-                                <p className="mt-2 text-xs text-gray-500">
-                                  Help guide the AI by providing context or specific areas to focus on in your analysis
-                                </p>
-                              </div>
+
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
@@ -773,22 +767,7 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
-                              <div className="mt-6 border-t border-gray-800/60 pt-6 rounded-lg bg-[#0e1b33]/50 border border-[#74d1ea]/30 p-5">
-                                <label htmlFor="furtherGuidanceAdvanced" className="block text-sm font-medium text-white mb-2 flex items-center">
-                                  <Sparkles className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                                  Further Guidance (Optional)
-                                </label>
-                                <Textarea
-                                  id="furtherGuidanceAdvanced"
-                                  className="min-h-[80px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
-                                  placeholder="Add any specific instructions or focus areas for the analysis..."
-                                  value={furtherGuidance}
-                                  onChange={(e) => setFurtherGuidance(e.target.value)}
-                                />
-                                <p className="mt-2 text-xs text-gray-500">
-                                  Help guide the AI by providing context or specific areas to focus on in your comparative analysis
-                                </p>
-                              </div>
+
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
