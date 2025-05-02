@@ -1,0 +1,50 @@
+2025-05-02T21:14:54.744130846Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:14:54.744133595Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:14:54.744136546Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:14:54.744139186Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:14:54.744141956Z   length: 115,
+2025-05-02T21:14:54.744144686Z   severity: 'ERROR',
+2025-05-02T21:14:54.744147266Z   code: '42703',
+2025-05-02T21:14:54.744150176Z   detail: undefined,
+2025-05-02T21:14:54.744152756Z   hint: undefined,
+2025-05-02T21:14:54.744155326Z   position: '160',
+2025-05-02T21:14:54.744158056Z   internalPosition: undefined,
+2025-05-02T21:14:54.744160636Z   internalQuery: undefined,
+2025-05-02T21:14:54.744172716Z   where: undefined,
+2025-05-02T21:14:54.744174407Z   schema: undefined,
+2025-05-02T21:14:54.744175876Z   table: undefined,
+2025-05-02T21:14:54.744177396Z   column: undefined,
+2025-05-02T21:14:54.744178897Z   dataType: undefined,
+2025-05-02T21:14:54.744180357Z   constraint: undefined,
+2025-05-02T21:14:54.744181837Z   file: 'parse_relation.c',
+2025-05-02T21:14:54.744183467Z   line: '3722',
+2025-05-02T21:14:54.744184977Z   routine: 'errorMissingColumn'
+2025-05-02T21:14:54.744186477Z }
+2025-05-02T21:14:54.744188277Z Database operation failed (attempt 3/3): column "campaigns_used" does not exist
+2025-05-02T21:14:54.744215048Z Database operation failed after 3 attempts: error: column "campaigns_used" does not exist
+2025-05-02T21:14:54.744218898Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:14:54.744220838Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:14:54.744222838Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:14:54.744224758Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:14:54.744226638Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:14:54.744228528Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:14:54.744230488Z   length: 115,
+2025-05-02T21:14:54.744232588Z   severity: 'ERROR',
+2025-05-02T21:14:54.744234488Z   code: '42703',
+2025-05-02T21:14:54.744236398Z   detail: undefined,
+2025-05-02T21:14:54.744238238Z   hint: undefined,
+2025-05-02T21:14:54.744240088Z   position: '160',
+2025-05-02T21:14:54.744242048Z   internalPosition: undefined,
+2025-05-02T21:14:54.744243928Z   internalQuery: undefined,
+2025-05-02T21:14:54.744245938Z   where: undefined,
+2025-05-02T21:14:54.744247978Z   schema: undefined,
+2025-05-02T21:14:54.744249848Z   table: undefined,
+2025-05-02T21:14:54.744251698Z   column: undefined,
+2025-05-02T21:14:54.744253569Z   dataType: undefined,
+2025-05-02T21:14:54.744255438Z   constraint: undefined,
+2025-05-02T21:14:54.744257289Z   file: 'parse_relation.c',
+2025-05-02T21:14:54.744259209Z   line: '3722',
+2025-05-02T21:14:54.744261429Z   routine: 'errorMissingColumn'
+2025-05-02T21:14:54.744263349Z }
+2025-05-02T21:14:54.744273969Z Login error: column "campaigns_used" does not exist
+2025-05-02T21:14:54.745253803Z 9:14:54 PM [express] POST /api/login 500 in 12136ms :: {"message":"Server error during login","error…

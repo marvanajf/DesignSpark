@@ -5,6 +5,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { migrateStripeFields } from "./migrations";
+import { migrateCampaignsColumn } from "./migrate-campaigns";
 
 const app = express();
 app.use(express.json());
@@ -94,6 +95,16 @@ process.on('unhandledRejection', async (reason, promise) => {
   try {
     // Run database migrations
     await migrateStripeFields();
+    
+    // Run emergency migration for campaigns_used column
+    try {
+      console.log("Running emergency campaigns_used column migration...");
+      await migrateCampaignsColumn();
+      console.log("Emergency column migration complete.");
+    } catch (migrationError) {
+      console.error("Error during campaigns_used column migration:", migrationError);
+      // Continue application startup even if migration fails
+    }
     
     // Set up email service with Gmail
     try {
