@@ -513,39 +513,45 @@ export default function ContentGeneratorPage() {
                       onValueChange={(value) => setContentType(value as "linkedin_post" | "email" | "webinar" | "workshop")}
                       className="w-full"
                     >
-                      <TabsList className="w-full bg-gray-900 p-1 grid grid-cols-2 md:grid-cols-4 gap-1">
-                        <TabsTrigger 
-                          value="linkedin_post" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
-                        >
-                          <SiLinkedin className="h-4 w-4 sm:mr-2 flex-shrink-0" />
-                          <span className="hidden sm:inline">LinkedIn Post</span>
-                          <span className="sm:hidden">LinkedIn</span>
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="email" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
-                        >
-                          <Mail className="h-4 w-4 sm:mr-2 flex-shrink-0" />
-                          <span className="hidden sm:inline">Cold Email</span>
-                          <span className="sm:hidden">Email</span>
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="webinar" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
-                        >
-                          <Video className="h-4 w-4 sm:mr-2 flex-shrink-0" />
-                          <span className="hidden sm:inline">Webinar</span>
-                          <span className="sm:hidden">Webinar</span>
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="workshop" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
-                        >
-                          <ClipboardList className="h-4 w-4 sm:mr-2 flex-shrink-0" />
-                          <span className="hidden sm:inline">Workshop</span>
-                          <span className="sm:hidden">Workshop</span>
-                        </TabsTrigger>
+                      <TabsList className="w-full bg-gray-900 p-1">
+                        <div className="w-full grid grid-cols-4 gap-1">
+                          <TabsTrigger 
+                            value="linkedin_post" 
+                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
+                          >
+                            <div className="flex items-center justify-center">
+                              <SiLinkedin className="h-4 w-4 mr-1.5" />
+                              <span className="text-xs">LinkedIn</span>
+                            </div>
+                          </TabsTrigger>
+                          <TabsTrigger 
+                            value="email" 
+                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
+                          >
+                            <div className="flex items-center justify-center">
+                              <Mail className="h-4 w-4 mr-1.5" />
+                              <span className="text-xs">Email</span>
+                            </div>
+                          </TabsTrigger>
+                          <TabsTrigger 
+                            value="webinar" 
+                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
+                          >
+                            <div className="flex items-center justify-center">
+                              <Video className="h-4 w-4 mr-1.5" />
+                              <span className="text-xs">Webinar</span>
+                            </div>
+                          </TabsTrigger>
+                          <TabsTrigger 
+                            value="workshop" 
+                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
+                          >
+                            <div className="flex items-center justify-center">
+                              <ClipboardList className="h-4 w-4 mr-1.5" />
+                              <span className="text-xs">Workshop</span>
+                            </div>
+                          </TabsTrigger>
+                        </div>
                       </TabsList>
                     </Tabs>
                   </div>
