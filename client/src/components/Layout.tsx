@@ -77,7 +77,8 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                     location.startsWith('/saved-content') || 
                     location.startsWith('/account') || 
                     location.startsWith('/support') ||
-                    location.startsWith('/guides');
+                    location.startsWith('/guides') ||
+                    location.startsWith('/usage');
   
   // For app pages, only show sidebar; for other non-homepage pages, show both navbar and sidebar
   return (
