@@ -138,16 +138,11 @@ export default function Sidebar() {
           isCollapsed ? 'w-0 -translate-x-full md:w-auto md:translate-x-0 md:w-16' : 'w-64'
         } fixed md:relative z-40 h-screen`}
       >
-        {/* Logo section - simple text rather than image */}
+        {/* Logo section */}
         <div className="h-16 flex items-center px-4">
           <Link href="/dashboard" className="flex items-center">
-            {!isCollapsed && (
-              <div className="text-white font-medium text-sm flex items-center">
-                <span className="flex h-6 w-6 items-center justify-center rounded mr-2 text-center bg-zinc-800 text-zinc-400">R</span>
-                Rho
-              </div>
-            )}
-            {isCollapsed && <div className="rounded text-center bg-zinc-800 text-zinc-400 h-6 w-6 flex items-center justify-center">R</div>}
+            {!isCollapsed && <img src={tovablyLogo} alt="Tovably Logo" className="h-7 w-auto" />}
+            {isCollapsed && <div className="text-white font-bold text-lg">T</div>}
           </Link>
         </div>
         
