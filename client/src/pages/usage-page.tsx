@@ -155,8 +155,8 @@ export default function UsagePage() {
                       status={userData.campaigns_used < plan.campaigns ? "Available" : "Limit Reached"} 
                     />
                     <FeatureRow 
-                      feature="Customer Service" 
-                      limit={plan.customerService ? "Included" : "Not Available"} 
+                      feature="Support" 
+                      limit={plan.customerService ? "Unlimited" : "Not Available"} 
                       status={plan.customerService ? "Available" : "Upgrade Required"} 
                     />
                   </tbody>
@@ -207,7 +207,12 @@ function UsageCard({
         />
         
         <div className="mt-4 text-sm">
-          {percentage >= 90 ? (
+          {current >= limit ? (
+            <div className="flex items-center text-red-400">
+              <Lock className="h-4 w-4 mr-1" />
+              <span>At Limit! Consider upgrading.</span>
+            </div>
+          ) : percentage >= 90 ? (
             <div className="flex items-center text-red-400">
               <Lock className="h-4 w-4 mr-1" />
               <span>Almost at limit! Consider upgrading.</span>
