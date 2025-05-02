@@ -46,6 +46,7 @@ export default function ToneAnalysisMarketingPage() {
               <Button 
                 variant="outline"
                 className="px-8 py-3 text-white border-gray-700 hover:bg-gray-900"
+                onClick={() => navigate('/contact')}
               >
                 Contact us
               </Button>
@@ -245,7 +246,7 @@ export default function ToneAnalysisMarketingPage() {
               </a>
             </div>
             <div className="px-5 py-2">
-              <a href="#" className="text-base text-gray-400 hover:text-[#74d1ea]">
+              <a href="/contact" onClick={(e) => { e.preventDefault(); navigate('/contact'); }} className="text-base text-gray-400 hover:text-[#74d1ea]">
                 Contact
               </a>
             </div>
