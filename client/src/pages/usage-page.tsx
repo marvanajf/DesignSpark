@@ -157,7 +157,7 @@ export default function UsagePage() {
                     <FeatureRow 
                       feature="Support" 
                       limit="Unlimited" 
-                      status={plan.price > 0 ? "Available" : "Upgrade Required"} 
+                      status="Available" 
                     />
                   </tbody>
                 </table>
