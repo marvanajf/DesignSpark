@@ -398,14 +398,14 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
                   <div className="flex flex-col space-y-2">
                     <Label htmlFor="persona-select">Select a persona for this campaign</Label>
                     <Select 
-                      value={selectedPersonaId?.toString() || (campaign.persona_id?.toString() || '')}
-                      onValueChange={(value) => setSelectedPersonaId(parseInt(value))}
+                      value={selectedPersonaId?.toString() || (campaign.persona_id?.toString() || '0')}
+                      onValueChange={(value) => setSelectedPersonaId(value === "0" ? null : parseInt(value))}
                     >
                       <SelectTrigger id="persona-select" className="w-full">
                         <SelectValue placeholder="Select a persona" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
+                        <SelectItem key="none" value="0">None</SelectItem>
                         {personas.map((persona) => (
                           <SelectItem key={persona.id} value={persona.id.toString()}>
                             {persona.name}
@@ -484,14 +484,14 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
                   <div className="flex flex-col space-y-2">
                     <Label htmlFor="tone-select">Select a tone analysis for this campaign</Label>
                     <Select 
-                      value={selectedToneAnalysisId?.toString() || (campaign.tone_analysis_id?.toString() || '')}
-                      onValueChange={(value) => setSelectedToneAnalysisId(parseInt(value))}
+                      value={selectedToneAnalysisId?.toString() || (campaign.tone_analysis_id?.toString() || '0')}
+                      onValueChange={(value) => setSelectedToneAnalysisId(value === "0" ? null : parseInt(value))}
                     >
                       <SelectTrigger id="tone-select" className="w-full">
                         <SelectValue placeholder="Select a tone analysis" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
+                        <SelectItem key="none-tone" value="0">None</SelectItem>
                         {toneAnalyses.map((tone) => (
                           <SelectItem key={tone.id} value={tone.id.toString()}>
                             {tone.name}
