@@ -191,6 +191,14 @@ export async function generateLinkedInPost(
             - The call to action should feel natural, not salesy
             - Do NOT use markdown formatting like asterisks (*) for emphasis
             
+            IMPORTANT CONTENT GUIDELINES:
+            - DO NOT use placeholder text like [Company Name], [Competitor Name], etc.
+            - If you need to mention specific companies or competitors, use real examples that are well-known in the industry.
+            - For retail examples, use real retailers like Tesco, Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.
+            - For tech examples, use real companies like Microsoft, Google, Apple, Amazon, etc.
+            - If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.
+            - When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.
+            
             NEVER sound like corporate marketing copy - the goal is authenticity, relatability and engagement.`
         },
         {
@@ -329,6 +337,14 @@ export async function generateWebinar(
             - Clearly label each section with a simple title and colon (Example: "Webinar Title:" instead of "### Webinar Title")
             - Format should be clean and professional without any coding or markdown elements
             
+            IMPORTANT CONTENT GUIDELINES:
+            - DO NOT use placeholder text like [Company Name], [Competitor Name], etc.
+            - If you need to mention specific companies or competitors, use real examples that are well-known in the industry.
+            - For retail examples, use real retailers like Tesco, Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.
+            - For tech examples, use real companies like Microsoft, Google, Apple, Amazon, etc.
+            - If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.
+            - When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.
+            
             The total length should be 400-600 words, structured for easy readability.`
         },
         {
@@ -402,6 +418,14 @@ export async function generateWorkshop(
             - Use dashes or bullet points for lists, not symbols or markdown
             - Clearly label each section with a simple title and colon (Example: "Workshop Title:" instead of "### Workshop Title")
             - Format should be clean and professional without any coding or markdown elements
+            
+            IMPORTANT CONTENT GUIDELINES:
+            - DO NOT use placeholder text like [Company Name], [Competitor Name], etc.
+            - If you need to mention specific companies or competitors, use real examples that are well-known in the industry.
+            - For retail examples, use real retailers like Tesco, Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.
+            - For tech examples, use real companies like Microsoft, Google, Apple, Amazon, etc.
+            - If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.
+            - When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.
             
             Format the output with clear section headers and structure for easy implementation.
             The total length should be 500-700 words, written in a practical, actionable style.`
