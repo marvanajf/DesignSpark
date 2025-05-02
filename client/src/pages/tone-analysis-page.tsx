@@ -50,7 +50,14 @@ export default function ToneAnalysisPage() {
   const [sampleText, setSampleText] = useState("");
   const [analysisMethod, setAnalysisMethod] = useState<string>("url");
   const [currentAnalysisId, setCurrentAnalysisId] = useState<number | null>(null);
+  const [limitModalOpen, setLimitModalOpen] = useState(false);
+  const [limitData, setLimitData] = useState<{
+    limitType: "toneAnalyses";
+    current: number;
+    limit: number;
+  } | null>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
   const [, navigate] = useLocation();
 
   // Fetch all tone analyses for the user
@@ -86,6 +93,21 @@ export default function ToneAnalysisPage() {
   const toneAnalysisMutation = useMutation({
     mutationFn: async (data: { websiteUrl?: string; sampleText?: string }) => {
       const res = await apiRequest("POST", "/api/tone-analysis", data);
+      
+      if (res.status === 402) {
+        // Subscription limit reached
+        const errorData = await res.json();
+        if (errorData.limitType === "toneAnalyses") {
+          setLimitData({
+            limitType: "toneAnalyses",
+            current: errorData.current,
+            limit: errorData.limit
+          });
+          setLimitModalOpen(true);
+          throw new Error("Subscription limit reached for tone analyses");
+        }
+      }
+      
       return res.json();
     },
     onSuccess: (data) => {
@@ -93,11 +115,13 @@ export default function ToneAnalysisPage() {
       setCurrentAnalysisId(data.id);
     },
     onError: (error: Error) => {
-      toast({
-        title: "Analysis failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      if (!error.message.includes("Subscription limit")) {
+        toast({
+          title: "Analysis failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -676,6 +700,17 @@ export default function ToneAnalysisPage() {
           )}
         </div>
       </div>
+      {/* Display subscription limit modal when needed */}
+      {limitModalOpen && limitData && user && (
+        <SubscriptionLimitModal
+          isOpen={limitModalOpen}
+          onClose={() => setLimitModalOpen(false)}
+          limitType={limitData.limitType}
+          currentUsage={limitData.current}
+          limit={limitData.limit}
+          currentPlan={user.subscription_plan}
+        />
+      )}
     </Layout>
   );
 }
