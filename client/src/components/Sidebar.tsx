@@ -147,7 +147,7 @@ export default function Sidebar() {
         </div>
         
         {/* Navigation section */}
-        <div className="flex-grow flex flex-col justify-between overflow-y-auto py-4">
+        <div className="flex-grow flex flex-col justify-between overflow-y-hidden py-4 h-full">
           <nav className="px-2 space-y-1">
             {menuItems.map((item) => {
               const isActive = location === item.href;
@@ -172,7 +172,7 @@ export default function Sidebar() {
           </nav>
           
           {/* Bottom navigation items */}
-          <div className={`mt-8 pt-6 border-t border-gray-700/60 ${isCollapsed ? 'px-2' : ''}`}>
+          <div className={`mt-auto pt-6 border-t border-gray-700/60 ${isCollapsed ? 'px-2' : ''}`}>
             {!isCollapsed && (
               <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Settings</h3>
             )}
