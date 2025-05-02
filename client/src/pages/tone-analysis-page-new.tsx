@@ -288,7 +288,7 @@ export default function ToneAnalysisPage() {
                           className={`p-3 rounded-lg cursor-pointer transition-all ${
                             currentAnalysisId === analysis.id
                               ? "bg-[#182030] border border-[#74d1ea]/30"
-                              : "bg-[#111] border border-gray-800/60 hover:bg-gray-900"
+                              : "bg-black border border-gray-800/60 hover:bg-gray-900"
                           }`}
                           onClick={() => {
                             setCurrentAnalysisId(analysis.id);
@@ -446,7 +446,7 @@ export default function ToneAnalysisPage() {
                       <div className="mb-10">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           {/* Keywords section (renamed from Common Phrases) */}
-                          <div className="md:col-span-2 bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
+                          <div className="md:col-span-2 bg-black border border-[#74d1ea]/10 rounded-xl p-6 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
                             <div className="mb-5">
                               <h3 className="text-lg font-semibold text-white">Keywords</h3>
                               <p className="text-gray-400 text-sm mt-0.5">Key phrases that define your brand's voice</p>
@@ -465,7 +465,7 @@ export default function ToneAnalysisPage() {
                                   ))}
                                 </div>
                               ) : (
-                                <div className="bg-black/30 rounded-lg p-4 text-center mt-2">
+                                <div className="bg-black border border-gray-800/60 rounded-lg p-4 text-center mt-2">
                                   <p className="text-gray-400">No keywords detected in your content</p>
                                 </div>
                               )
@@ -488,7 +488,7 @@ export default function ToneAnalysisPage() {
                               {Object.entries(toneAnalysis.tone_results.language_patterns)
                                 .filter(([key]) => key !== 'common_phrases')
                                 .map(([key, value]) => (
-                                  <div key={key} className="bg-black/20 rounded-xl border border-gray-800/60 p-5 hover:bg-[#0e131f]/30 transition-colors">
+                                  <div key={key} className="bg-black rounded-xl border border-gray-800/60 p-5 hover:bg-[#0e131f]/30 transition-colors">
                                     <div className="flex items-center mb-3">
                                       <div className="bg-[#182030] rounded-lg p-2 mr-3">
                                         {key === 'sentence_structure' ? (
@@ -524,7 +524,7 @@ export default function ToneAnalysisPage() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
                           {Array.isArray(toneAnalysis.tone_results.recommended_content_types) ? 
                             toneAnalysis.tone_results.recommended_content_types.map((type, i) => (
-                              <div key={i} className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 flex items-center space-x-3">
+                              <div key={i} className="bg-black border border-[#74d1ea]/10 rounded-lg p-4 flex items-center space-x-3">
                                 <div className="bg-[#182030] rounded-lg p-1.5">
                                   <FileText className="h-5 w-5 text-[#74d1ea]" />
                                 </div>
@@ -677,7 +677,7 @@ export default function ToneAnalysisPage() {
                       </div>
                       
                       <div className="space-y-6">
-                        <div className="bg-[#111] border border-gray-800/60 rounded-xl p-5">
+                        <div className="bg-black border border-gray-800/60 rounded-xl p-5">
                           <div className="flex items-center mb-3">
                             <div className="h-8 w-8 rounded-full bg-[#182030] border border-[#74d1ea]/20 flex items-center justify-center mr-3">
                               <span className="text-[#74d1ea] font-semibold">1</span>
@@ -689,7 +689,7 @@ export default function ToneAnalysisPage() {
                           </p>
                         </div>
                         
-                        <div className="bg-[#111] border border-gray-800/60 rounded-xl p-5">
+                        <div className="bg-black border border-gray-800/60 rounded-xl p-5">
                           <div className="flex items-center mb-3">
                             <div className="h-8 w-8 rounded-full bg-[#182030] border border-[#74d1ea]/20 flex items-center justify-center mr-3">
                               <span className="text-[#74d1ea] font-semibold">2</span>
@@ -701,7 +701,7 @@ export default function ToneAnalysisPage() {
                           </p>
                         </div>
                         
-                        <div className="bg-[#111] border border-gray-800/60 rounded-xl p-5">
+                        <div className="bg-black border border-gray-800/60 rounded-xl p-5">
                           <div className="flex items-center mb-3">
                             <div className="h-8 w-8 rounded-full bg-[#182030] border border-[#74d1ea]/20 flex items-center justify-center mr-3">
                               <span className="text-[#74d1ea] font-semibold">3</span>
