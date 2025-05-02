@@ -42,7 +42,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
-import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download, ChevronLeft } from "lucide-react";
+import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download, ChevronLeft, BookOpen } from "lucide-react";
+import BlogManagement from "@/components/admin/BlogManagement";
 
 // Utility function to convert data to CSV
 function convertToCSV<T extends Record<string, any>>(data: T[], headers: Record<string, string>): string {
