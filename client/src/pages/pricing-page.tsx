@@ -234,18 +234,7 @@ export default function PricingPage() {
                         )}
                         <span className="text-gray-300">Customer Service</span>
                       </li>
-                      <li className="flex items-center">
-                        {isPremiumPlan ? (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                            <Check className="h-3 w-3 text-[#74d1ea]" />
-                          </div>
-                        ) : (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-gray-700/50">
-                            <X className="h-3 w-3 text-gray-400" />
-                          </div>
-                        )}
-                        <span className="text-gray-300">API Access</span>
-                      </li>
+
                     </ul>
                   </div>
 
