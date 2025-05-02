@@ -17,7 +17,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
   stripePrice?: string; // Stripe price ID
 }> = {
   free: {
-    name: "Free",
+    name: "Starter",
     personas: 5,
     toneAnalyses: 5,
     contentGeneration: 10,
