@@ -123,26 +123,36 @@ export function SubscriptionLimitModal({
           </div>
         </div>
 
-        <DialogFooter className="sm:justify-between flex flex-col sm:flex-row gap-2">
-          <div className="flex gap-2 w-full sm:w-auto">
-            <Button variant="outline" onClick={onClose} className="flex-1">
-              Close
-            </Button>
+        <DialogFooter className="sm:justify-between flex flex-col gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full">
             <Button 
               variant="outline" 
-              className="text-[#74d1ea] border-[#74d1ea] hover:bg-[#74d1ea]/10 flex-1"
+              className="text-[#74d1ea] border-[#74d1ea] hover:bg-[#74d1ea]/10"
               asChild
             >
               <Link href="/usage">
                 View Usage
               </Link>
             </Button>
+            <Button 
+              variant="outline" 
+              className="text-[#74d1ea] border-[#74d1ea] hover:bg-[#74d1ea]/10"
+              asChild
+            >
+              <Link href="/pricing">
+                View Plans
+              </Link>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="col-span-2 sm:col-span-1">
+              Close
+            </Button>
           </div>
+          
           {nextPlan && (
             <Button
               type="submit"
               onClick={handleUpgrade}
-              className="w-full sm:w-auto"
+              className="w-full"
               style={{ backgroundColor: "#74d1ea", color: "black" }}
             >
               Upgrade Plan
