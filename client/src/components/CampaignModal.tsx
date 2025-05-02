@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Plus, Search, FileText } from "lucide-react";
 import SavedContentListItem from "./SavedContentListItem";
+import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 
 interface CampaignModalProps {
   campaignId: number;

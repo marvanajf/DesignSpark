@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 
 export function CampaignList() {
   const { toast } = useToast();
@@ -51,6 +52,15 @@ export function CampaignList() {
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  
+  // Subscription limit modal state
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [limitData, setLimitData] = useState<{
+    limitType: "campaigns";
+    currentUsage: number;
+    limit: number;
+    currentPlan: string;
+  } | null>(null);
 
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
@@ -59,10 +69,41 @@ export function CampaignList() {
 
   const createCampaignMutation = useMutation({
     mutationFn: async (campaign: InsertCampaign) => {
-      const res = await apiRequest("POST", "/api/campaigns", campaign);
-      return await res.json();
+      try {
+        const res = await apiRequest("POST", "/api/campaigns", campaign);
+        
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          return { 
+            limitReached: true, 
+            limitType: "campaigns" as const,
+            currentUsage: limitData.currentUsage, 
+            limit: limitData.limit,
+            currentPlan: limitData.currentPlan 
+          };
+        }
+        
+        return { data: await res.json() };
+      } catch (error) {
+        throw error;
+      }
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      // Check if this was a subscription limit response
+      if ('limitReached' in result && result.limitReached) {
+        setLimitData({
+          limitType: result.limitType,
+          currentUsage: result.currentUsage,
+          limit: result.limit,
+          currentPlan: result.currentPlan
+        });
+        setShowLimitModal(true);
+        setIsCreateDialogOpen(false);
+        return;
+      }
+      
+      // Normal success flow
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
       toast({
         title: "Campaign created",
@@ -434,6 +475,18 @@ export function CampaignList() {
           campaignId={selectedCampaignId}
           isOpen={isCampaignModalOpen}
           onClose={() => setIsCampaignModalOpen(false)}
+        />
+      )}
+      
+      {/* Subscription Limit Modal */}
+      {showLimitModal && limitData && (
+        <SubscriptionLimitModal
+          isOpen={showLimitModal}
+          onClose={() => setShowLimitModal(false)}
+          limitType={limitData.limitType}
+          currentUsage={limitData.currentUsage}
+          limit={limitData.limit}
+          currentPlan={limitData.currentPlan}
         />
       )}
     </div>
