@@ -1830,6 +1830,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                       .optional(),
         sampleText: z.string().optional(),
         goldStandardText: z.string().optional(),
+        furtherGuidance: z.string().optional(),
         name: z.string().optional(),
       });
 
@@ -1843,7 +1844,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Ignore any errors in the automatic fixing - the zod validation will catch them
       }
 
-      const { websiteUrl, sampleText, goldStandardText, name } = schema.parse(req.body);
+      const { websiteUrl, sampleText, goldStandardText, furtherGuidance, name } = schema.parse(req.body);
       
       if (!websiteUrl && !sampleText) {
         return res.status(400).send("Please provide either a website URL or sample text");

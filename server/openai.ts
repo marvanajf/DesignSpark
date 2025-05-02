@@ -48,7 +48,8 @@ export interface GeneratedPersona {
 // Analyze the tone of the content
 export async function analyzeTone(
   content: string, 
-  goldStandardText?: string
+  goldStandardText?: string,
+  furtherGuidance?: string
 ): Promise<ToneAnalysisResult> {
   try {
     // Check if OpenAI is initialized
@@ -93,6 +94,11 @@ export async function analyzeTone(
         "  }\n";
       
       userPrompt = "Sample text for analysis:\n\n" + content + "\n\nGold standard text for comparison:\n\n" + goldStandardText;
+    }
+    
+    // If further guidance is provided, add it to the user prompt
+    if (furtherGuidance && furtherGuidance.trim()) {
+      userPrompt += "\n\nAdditional context and guidance for analysis:\n" + furtherGuidance;
     }
     
     // Complete the format
