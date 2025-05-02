@@ -15,7 +15,8 @@ import {
   CreditCard,
   Menu,
   X,
-  PieChart
+  PieChart,
+  Megaphone
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
@@ -68,6 +69,7 @@ export default function Sidebar() {
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
     { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" },
+    { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
     { href: "/guides", icon: <Book className="h-5 w-5" />, label: "Guides" }
   ];
   
