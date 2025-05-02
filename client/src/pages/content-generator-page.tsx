@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
 import { 
   Loader2, 
   ChevronRight, 
@@ -21,6 +22,7 @@ import {
   Video,
   ClipboardList
 } from "lucide-react";
+import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,6 +67,7 @@ import { SiLinkedin } from "react-icons/si";
 
 export default function ContentGeneratorPage() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [, navigate] = useLocation();
   const [topic, setTopic] = useState("");
   const [contentType, setContentType] = useState<"linkedin_post" | "email" | "webinar" | "workshop">("linkedin_post");
@@ -75,6 +78,12 @@ export default function ContentGeneratorPage() {
   const [prospectName, setProspectName] = useState("");
   const [nicheData, setNicheData] = useState("");
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [limitData, setLimitData] = useState<{
+    limitType: string;
+    current: number;
+    limit: number;
+  } | null>(null);
   
   // Fetch tone analyses
   const { 
@@ -142,15 +151,31 @@ export default function ContentGeneratorPage() {
         ? (furtherDetails ? `${additionalDetails}\n\n${furtherDetails}` : additionalDetails).trim()
         : furtherDetails.trim();
       
-      const res = await apiRequest("POST", "/api/content", {
-        type: contentType,
-        personaId: selectedPersonaId,
-        toneAnalysisId: selectedToneAnalysisId,
-        topic: topic.trim(),
-        furtherDetails: combinedDetails || undefined,
-      });
-      
-      return res.json();
+      try {
+        const res = await apiRequest("POST", "/api/content", {
+          type: contentType,
+          personaId: selectedPersonaId,
+          toneAnalysisId: selectedToneAnalysisId,
+          topic: topic.trim(),
+          furtherDetails: combinedDetails || undefined,
+        });
+        
+        // Check for subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitInfo = await res.json();
+          setLimitData({
+            limitType: limitInfo.limitType,
+            current: limitInfo.current,
+            limit: limitInfo.limit
+          });
+          setShowLimitModal(true);
+          throw new Error("Subscription limit reached");
+        }
+        
+        return res.json();
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: (data: GeneratedContent) => {
       queryClient.invalidateQueries({ queryKey: ["/api/content"] });
@@ -179,7 +204,10 @@ export default function ContentGeneratorPage() {
       });
     },
     onError: (error: any) => {
-      if (error.message?.includes("OpenAI API is not available")) {
+      if (error.message === "Subscription limit reached") {
+        // This is already handled by setting showLimitModal to true
+        return;
+      } else if (error.message?.includes("OpenAI API is not available")) {
         toast({
           title: "API Key Required",
           description: "An OpenAI API key is required to generate content. Please add your API key in the settings.",
@@ -404,6 +432,18 @@ export default function ContentGeneratorPage() {
 
   return (
     <Layout showSidebar={true}>
+      {/* Subscription Limit Modal */}
+      {showLimitModal && limitData && (
+        <SubscriptionLimitModal
+          open={showLimitModal}
+          onOpenChange={setShowLimitModal}
+          limitType={limitData.limitType}
+          current={limitData.current}
+          limit={limitData.limit}
+          user={user}
+        />
+      )}
+      
       <div className="flex-1 overflow-y-auto bg-black">
         <div className="p-6">
           {/* Header Section with Breadcrumbs */}
