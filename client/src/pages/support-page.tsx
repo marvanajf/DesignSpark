@@ -65,7 +65,7 @@ export default function SupportPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Support - Using dashboard styling */}
             <div className="lg:col-span-2">
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] h-full">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] h-full">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -131,7 +131,7 @@ export default function SupportPage() {
                       />
                     </div>
                     
-                    <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-4 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
+                    <div className="bg-black border border-[#74d1ea]/10 rounded-xl p-4 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
                       <div className="flex items-start">
                         <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
                           <AlertCircle className="h-4 w-4 text-[#74d1ea]" />
@@ -159,7 +159,7 @@ export default function SupportPage() {
             {/* Right Support Column - Using dashboard styling */}
             <div className="lg:col-span-1 space-y-8">
               {/* Quick Help Card */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -170,7 +170,7 @@ export default function SupportPage() {
                   </div>
                   
                   <div className="space-y-4">
-                    <a href="#" className="flex items-center p-3 rounded-lg border border-gray-800/60 bg-black/30 hover:bg-[#0e131f]/80 transition-colors">
+                    <a href="#" className="flex items-center p-3 rounded-lg border border-gray-800/60 bg-black hover:bg-[#0e131f]/80 transition-colors">
                       <div className="w-10 h-10 rounded-lg bg-[#182030] border border-[#74d1ea]/20 shadow-[0_0_10px_rgba(116,209,234,0.1)] flex items-center justify-center">
                         <FileText className="h-5 w-5 text-[#74d1ea]" />
                       </div>
@@ -181,7 +181,7 @@ export default function SupportPage() {
                       <MoveRight className="h-4 w-4 text-gray-500" />
                     </a>
                     
-                    <a href="#" className="flex items-center p-3 rounded-lg border border-gray-800/60 bg-black/30 hover:bg-[#0e131f]/80 transition-colors">
+                    <a href="#" className="flex items-center p-3 rounded-lg border border-gray-800/60 bg-black hover:bg-[#0e131f]/80 transition-colors">
                       <div className="w-10 h-10 rounded-lg bg-[#182030] border border-[#74d1ea]/20 shadow-[0_0_10px_rgba(116,209,234,0.1)] flex items-center justify-center">
                         <BookOpen className="h-5 w-5 text-[#74d1ea]" />
                       </div>
@@ -196,7 +196,7 @@ export default function SupportPage() {
               </div>
               
               {/* Contact Info Card */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -207,14 +207,14 @@ export default function SupportPage() {
                   </div>
                   
                   <div className="space-y-4">
-                    <div className="p-4 border border-gray-800/60 rounded-lg bg-black/30">
+                    <div className="p-4 border border-gray-800/60 rounded-lg bg-black">
                       <div className="flex items-center">
                         <Mail className="h-5 w-5 text-[#74d1ea] mr-3" />
                         <p className="text-white">support@tovably.com</p>
                       </div>
                     </div>
                     
-                    <div className="p-4 border border-gray-800/60 rounded-lg bg-black/30">
+                    <div className="p-4 border border-gray-800/60 rounded-lg bg-black">
                       <div className="flex items-center">
                         <Clock className="h-5 w-5 text-[#74d1ea] mr-3" />
                         <div>
@@ -225,7 +225,7 @@ export default function SupportPage() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-4 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
+                  <div className="mt-6 bg-black border border-[#74d1ea]/10 rounded-xl p-4 shadow-[0_0_15px_rgba(116,209,234,0.05)]">
                     <p className="text-sm text-gray-300">
                       For urgent matters outside of business hours, please use our emergency support form and our on-call team will respond.
                     </p>
