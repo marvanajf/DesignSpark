@@ -465,7 +465,7 @@ export default function PersonaSelectionPage() {
                         Generate with AI
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="bg-[#111] border-gray-800 text-white">
+                    <DialogContent className="bg-black border border-gray-800 text-white">
                       <DialogHeader>
                         <DialogTitle className="text-lg font-semibold">Generate Persona with AI</DialogTitle>
                         <DialogDescription className="text-gray-400">
@@ -534,7 +534,7 @@ export default function PersonaSelectionPage() {
                         Create Manually
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="bg-[#111] border-gray-800 text-white">
+                    <DialogContent className="bg-black border border-gray-800 text-white">
                       <DialogHeader>
                         <DialogTitle className="text-lg font-semibold">Create Custom Persona</DialogTitle>
                         <DialogDescription className="text-gray-400">
@@ -914,7 +914,7 @@ export default function PersonaSelectionPage() {
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <DialogContent className="bg-[#111] border-gray-800 text-white">
+          <DialogContent className="bg-black border border-gray-800 text-white">
             <DialogHeader>
               <DialogTitle className="text-lg font-semibold flex items-center">
                 <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
