@@ -167,6 +167,26 @@ export default function ToneAnalysisPage() {
       return;
     }
     
+    if (analysisMethod === "advanced") {
+      if (!sampleText) {
+        toast({
+          title: "Missing sample text",
+          description: "Please enter or paste text content to analyze",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (!goldStandardText) {
+        toast({
+          title: "Missing gold standard text",
+          description: "Please provide benchmark text to compare against",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
     // Prepend https:// if the URL doesn't have a protocol
     let finalUrl = websiteUrl;
     if (analysisMethod === "url" && !websiteUrl.startsWith('http')) {
@@ -175,7 +195,8 @@ export default function ToneAnalysisPage() {
     
     toneAnalysisMutation.mutate({
       websiteUrl: analysisMethod === "url" ? finalUrl : undefined,
-      sampleText: analysisMethod === "text" ? sampleText : undefined,
+      sampleText: analysisMethod === "text" || analysisMethod === "advanced" ? sampleText : undefined,
+      goldStandardText: analysisMethod === "advanced" ? goldStandardText : undefined,
     });
   };
 
@@ -489,6 +510,13 @@ export default function ToneAnalysisPage() {
                               <FileText className="h-4 w-4 mr-2" />
                               Sample Text
                             </TabsTrigger>
+                            <TabsTrigger 
+                              value="advanced" 
+                              className="rounded-md data-[state=active]:bg-[#182030] data-[state=active]:text-[#74d1ea] data-[state=active]:shadow-[0_0_10px_rgba(116,209,234,0.15)]"
+                            >
+                              <Sparkles className="h-4 w-4 mr-2" />
+                              Advanced
+                            </TabsTrigger>
                           </TabsList>
                           
                           <TabsContent value="url" className="mt-4 space-y-6">
@@ -600,6 +628,76 @@ export default function ToneAnalysisPage() {
                                 <>
                                   <BarChart className="mr-2 h-5 w-5" />
                                   Analyze Text Tone
+                                </>
+                              )}
+                            </Button>
+                          </TabsContent>
+                          
+                          <TabsContent value="advanced" className="mt-4 space-y-6">
+                            <div className="space-y-4">
+                              <div>
+                                <label htmlFor="sampleText" className="block text-sm font-medium text-white mb-2">
+                                  Sample Text
+                                </label>
+                                <Textarea
+                                  id="sampleText"
+                                  className="min-h-[150px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
+                                  placeholder="Paste the content you want to analyze..."
+                                  value={sampleText}
+                                  onChange={(e) => setSampleText(e.target.value)}
+                                />
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Paste the text you want to analyze
+                                </p>
+                              </div>
+                              
+                              <div>
+                                <label htmlFor="goldStandardText" className="block text-sm font-medium text-white mb-2">
+                                  Gold Standard Text
+                                </label>
+                                <Textarea
+                                  id="goldStandardText"
+                                  className="min-h-[150px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
+                                  placeholder="Paste your benchmark or 'gold standard' content here..."
+                                  value={goldStandardText}
+                                  onChange={(e) => setGoldStandardText(e.target.value)}
+                                />
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Add your benchmark content that represents the ideal tone of voice for your brand
+                                </p>
+                              </div>
+                              
+                              <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
+                                <div className="flex items-start">
+                                  <div className="bg-[#182030] border border-[#74d1ea]/20 rounded-md p-1.5 mr-3">
+                                    <Sparkles className="h-4 w-4 text-[#74d1ea]" />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-medium text-white">How advanced benchmarking works</h4>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      Our AI will analyze both your sample text and gold standard text to provide a
+                                      comparative analysis, showing how closely your content matches your ideal tone of voice.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <Button 
+                              type="submit" 
+                              className="text-black font-medium shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+                              style={{ backgroundColor: '#74d1ea' }}
+                              disabled={toneAnalysisMutation.isPending}
+                            >
+                              {toneAnalysisMutation.isPending ? (
+                                <>
+                                  <Loader2 className="mr-2 h-5 w-5 animate-spin text-black" />
+                                  Analyzing...
+                                </>
+                              ) : (
+                                <>
+                                  <Sparkles className="mr-2 h-5 w-5" />
+                                  Compare With Gold Standard
                                 </>
                               )}
                             </Button>
