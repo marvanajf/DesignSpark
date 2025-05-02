@@ -23,6 +23,8 @@ import {
   ArrowRight,
   RefreshCw,
   MessageSquare,
+  AlertCircle,
+  Lightbulb,
   Sparkles,
   AlignLeft,
   BookMarked
