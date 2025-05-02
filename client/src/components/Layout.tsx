@@ -8,7 +8,7 @@ interface LayoutProps {
   showSidebar?: boolean;
 }
 
-export default function Layout({ children, showSidebar = false }: LayoutProps) {
+export function Layout({ children, showSidebar = false }: LayoutProps) {
   const [location] = useLocation();
   const isHomePage = location === "/";
   
@@ -92,3 +92,6 @@ export default function Layout({ children, showSidebar = false }: LayoutProps) {
     </div>
   );
 }
+
+// Also export as default for backward compatibility
+export default Layout;

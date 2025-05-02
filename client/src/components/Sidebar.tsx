@@ -14,7 +14,8 @@ import {
   ShieldAlert,
   CreditCard,
   Menu,
-  X
+  X,
+  PieChart
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
@@ -81,6 +82,7 @@ export default function Sidebar() {
   
   const bottomMenuItems: MenuItem[] = [
     { href: "/account", icon: <UserCog className="h-5 w-5" />, label: "Account" },
+    { href: "/usage", icon: <PieChart className="h-5 w-5" />, label: "Usage Monitor" },
     { 
       href: "/pricing", 
       icon: <CreditCard className="h-5 w-5" />, 

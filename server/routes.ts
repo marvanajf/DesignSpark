@@ -2258,6 +2258,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
 
     try {
+      // Check if user has reached their subscription limit for campaigns
+      const userData = await storage.getUser(req.user!.id);
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const campaignLimit = subscriptionPlans[userPlan]?.campaigns || 0;
+      
+      if (userData.campaigns_used >= campaignLimit) {
+        return res.status(402).json({ 
+          error: "Subscription limit reached", 
+          limitType: "campaigns",
+          current: userData.campaigns_used,
+          limit: campaignLimit
+        });
+      }
+
       const campaignData = {
         user_id: req.user!.id,
         name: req.body.name,
@@ -2266,6 +2284,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       const newCampaign = await storage.createCampaign(campaignData);
+      
+      // Increment campaign usage counter
+      await storage.incrementCampaignUsage(req.user!.id);
+      
       res.status(201).json(newCampaign);
     } catch (error) {
       console.error("Error creating campaign:", error);
