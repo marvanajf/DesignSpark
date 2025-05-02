@@ -148,7 +148,7 @@ export default function Sidebar() {
         
         {/* Navigation section */}
         <div className="flex-grow flex flex-col justify-between overflow-y-hidden py-4 h-full">
-          <nav className="px-2 space-y-1">
+          <nav className="px-2 space-y-3 mt-6">
             {menuItems.map((item) => {
               const isActive = location === item.href;
               return (
@@ -156,7 +156,7 @@ export default function Sidebar() {
                   key={item.href} 
                   href={item.href}
                   onClick={() => handleNavigation(item.href)}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                  className={`group flex items-center px-3 py-3 text-sm font-medium rounded-md ${
                     isActive 
                       ? "bg-[#74d1ea]/10 text-[#74d1ea]" 
                       : "text-gray-300 hover:bg-gray-900 hover:text-white"
@@ -172,11 +172,11 @@ export default function Sidebar() {
           </nav>
           
           {/* Bottom navigation items */}
-          <div className={`mt-auto pt-6 border-t border-gray-700/60 ${isCollapsed ? 'px-2' : ''}`}>
+          <div className={`mt-auto pt-8 border-t border-gray-700/60 ${isCollapsed ? 'px-2' : ''}`}>
             {!isCollapsed && (
-              <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Settings</h3>
+              <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-2">SETTINGS</h3>
             )}
-            <nav className="px-2 space-y-1">
+            <nav className="px-2 space-y-3">
               {bottomMenuItems.map((item) => {
                 const isActive = location === item.href;
                 // For items with onClick handlers like logout
@@ -185,7 +185,7 @@ export default function Sidebar() {
                     <button
                       key={item.href}
                       onClick={item.onClick}
-                      className={`w-full group flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md
+                      className={`w-full group flex items-center justify-between px-3 py-3 text-sm font-medium rounded-md
                         text-gray-300 hover:bg-gray-900 hover:text-white`}
                     >
                       <div className="flex items-center">
@@ -209,7 +209,7 @@ export default function Sidebar() {
                     key={item.href} 
                     href={item.href}
                     onClick={() => handleNavigation(item.href)}
-                    className={`group flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md ${
+                    className={`group flex items-center justify-between px-3 py-3 text-sm font-medium rounded-md ${
                       isActive 
                         ? "bg-[#74d1ea]/10 text-[#74d1ea]" 
                         : "text-gray-300 hover:bg-gray-900 hover:text-white"
