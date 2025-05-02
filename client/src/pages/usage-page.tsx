@@ -215,7 +215,7 @@ function UsageCard({
           <h3 className="text-xl font-semibold text-white">{title}</h3>
           <Button variant="link" asChild className="text-[#74d1ea] p-0 hover:text-[#74d1ea]/80">
             <Link href={linkTo}>
-              Go to {title.toLowerCase()}
+              GO TO {title.toUpperCase()}
             </Link>
           </Button>
         </div>
@@ -227,32 +227,28 @@ function UsageCard({
         
         <div className="h-2 bg-gray-800/60 rounded-full overflow-hidden mb-4">
           <div 
-            className={`h-full rounded-full ${
-              percentage >= 90 ? "bg-red-500" : 
-              percentage >= 70 ? "bg-yellow-500" : 
-              "bg-[#74d1ea]"
-            }`}
+            className="h-full rounded-full bg-[#74d1ea]"
             style={{ width: `${percentage}%` }}
           />
         </div>
         
         <div className="text-sm">
           {current >= limit ? (
-            <div className="flex items-center text-red-400">
-              <Lock className="h-4 w-4 mr-1" />
+            <div className="flex items-center text-white">
+              <Lock className="h-4 w-4 mr-1 text-red-400" />
               <span>At Limit! Consider upgrading.</span>
             </div>
           ) : percentage >= 90 ? (
-            <div className="flex items-center text-red-400">
-              <Lock className="h-4 w-4 mr-1" />
+            <div className="flex items-center text-white">
+              <Lock className="h-4 w-4 mr-1 text-red-400" />
               <span>Almost at limit! Consider upgrading.</span>
             </div>
           ) : percentage >= 70 ? (
-            <div className="flex items-center text-yellow-400">
+            <div className="flex items-center text-white">
               <span>Usage high, plan accordingly.</span>
             </div>
           ) : (
-            <div className="flex items-center text-green-400">
+            <div className="flex items-center text-white">
               <span>Good usage level.</span>
             </div>
           )}
