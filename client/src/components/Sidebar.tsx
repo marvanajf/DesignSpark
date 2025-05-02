@@ -116,39 +116,44 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle button - fixed to the side of the screen */}
+      {/* Mobile toggle button - minimal design */}
       {isMobile && (
         <button 
           onClick={toggleSidebar}
-          className={`md:hidden fixed z-50 p-2 bg-black border border-gray-700/60 rounded-r-md transition-all duration-300 ${
+          className={`md:hidden fixed z-50 p-2 bg-black transition-all duration-300 ${
             isCollapsed ? 'left-0 top-4' : 'left-64 top-4'
           }`}
         >
           {isCollapsed ? (
-            <Menu className="h-5 w-5 text-[#74d1ea]" />
+            <Menu className="h-5 w-5 text-zinc-400" />
           ) : (
-            <X className="h-5 w-5 text-[#74d1ea]" />
+            <X className="h-5 w-5 text-zinc-400" />
           )}
         </button>
       )}
 
       {/* Main sidebar container */}
       <div 
-        className={`flex flex-col border-r border-gray-700/60 bg-black transition-all duration-300 ${
+        className={`flex flex-col bg-black transition-all duration-300 ${
           isCollapsed ? 'w-0 -translate-x-full md:w-auto md:translate-x-0 md:w-16' : 'w-64'
         } fixed md:relative z-40 h-screen`}
       >
-        {/* Logo section */}
-        <div className="h-16 flex items-center px-4 border-b border-gray-700/60">
+        {/* Logo section - simple text rather than image */}
+        <div className="h-16 flex items-center px-4">
           <Link href="/dashboard" className="flex items-center">
-            {!isCollapsed && <img src={tovablyLogo} alt="Tovably Logo" className="h-7 w-auto" />}
-            {isCollapsed && <div className="text-white font-bold text-lg">T</div>}
+            {!isCollapsed && (
+              <div className="text-white font-medium text-sm flex items-center">
+                <span className="flex h-6 w-6 items-center justify-center rounded mr-2 text-center bg-zinc-800 text-zinc-400">R</span>
+                Rho
+              </div>
+            )}
+            {isCollapsed && <div className="rounded text-center bg-zinc-800 text-zinc-400 h-6 w-6 flex items-center justify-center">R</div>}
           </Link>
         </div>
         
         {/* Navigation section */}
         <div className="flex-grow flex flex-col justify-between overflow-y-hidden py-4 h-full">
-          <nav className="px-2 space-y-3 mt-6">
+          <nav className="space-y-1">
             {menuItems.map((item) => {
               const isActive = location === item.href;
               return (
@@ -156,13 +161,13 @@ export default function Sidebar() {
                   key={item.href} 
                   href={item.href}
                   onClick={() => handleNavigation(item.href)}
-                  className={`group flex items-center px-3 py-3 text-sm font-medium rounded-md ${
+                  className={`group flex items-center px-4 py-2 text-sm ${
                     isActive 
-                      ? "bg-[#74d1ea]/10 text-[#74d1ea]" 
-                      : "text-gray-300 hover:bg-gray-900 hover:text-white"
+                      ? "bg-zinc-800 text-white" 
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
-                  <span className={`${isActive ? "text-[#74d1ea]" : "text-gray-400 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
+                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
                     {item.icon}
                   </span>
                   {!isCollapsed && item.label}
@@ -172,11 +177,11 @@ export default function Sidebar() {
           </nav>
           
           {/* Bottom navigation items */}
-          <div className={`mt-auto pt-8 border-t border-gray-700/60 ${isCollapsed ? 'px-2' : ''}`}>
+          <div className={`mt-6 ${isCollapsed ? '' : ''}`}>
             {!isCollapsed && (
-              <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-2">SETTINGS</h3>
+              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2">Settings</h3>
             )}
-            <nav className="px-2 space-y-3">
+            <nav className="space-y-1">
               {bottomMenuItems.map((item) => {
                 const isActive = location === item.href;
                 // For items with onClick handlers like logout
@@ -185,11 +190,13 @@ export default function Sidebar() {
                     <button
                       key={item.href}
                       onClick={item.onClick}
-                      className={`w-full group flex items-center justify-between px-3 py-3 text-sm font-medium rounded-md
-                        text-gray-300 hover:bg-gray-900 hover:text-white`}
+                      className={`w-full group flex items-center justify-between px-4 py-2 text-sm
+                        ${isActive 
+                          ? "bg-zinc-800 text-white" 
+                          : "text-zinc-400 hover:text-white"}`}
                     >
                       <div className="flex items-center">
-                        <span className="text-gray-400 group-hover:text-white">
+                        <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"}`}>
                           {item.icon}
                         </span>
                         {!isCollapsed && <span className="ml-3">{item.label}</span>}
@@ -209,14 +216,14 @@ export default function Sidebar() {
                     key={item.href} 
                     href={item.href}
                     onClick={() => handleNavigation(item.href)}
-                    className={`group flex items-center justify-between px-3 py-3 text-sm font-medium rounded-md ${
+                    className={`group flex items-center justify-between px-4 py-2 text-sm ${
                       isActive 
-                        ? "bg-[#74d1ea]/10 text-[#74d1ea]" 
-                        : "text-gray-300 hover:bg-gray-900 hover:text-white"
+                        ? "bg-zinc-800 text-white" 
+                        : "text-zinc-400 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center">
-                      <span className={`${isActive ? "text-[#74d1ea]" : "text-gray-400 group-hover:text-white"}`}>
+                      <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"}`}>
                         {item.icon}
                       </span>
                       {!isCollapsed && <span className="ml-3">{item.label}</span>}
@@ -233,22 +240,18 @@ export default function Sidebar() {
           </div>
         </div>
         
-        {/* User profile section */}
+        {/* User profile section simplified to match design */}
         {!isCollapsed && (
-          <div className="flex-shrink-0 flex border-t border-gray-700/60 p-4">
-            <div className="flex-shrink-0 w-full group block">
-              <div className="flex items-center">
-                <div>
-                  <Avatar className="border border-gray-700/60">
-                    <AvatarFallback className={`${avatarColor} text-white`}>{initials}</AvatarFallback>
-                  </Avatar>
-                </div>
-                <div className="ml-3 flex flex-col">
-                  <p className="text-sm font-medium text-white">
-                    {user?.username || "User"}
-                  </p>
-                </div>
-              </div>
+          <div className="flex items-center px-4 py-3 mt-auto">
+            <div>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-black text-zinc-400 text-sm border border-zinc-800">{initials}</AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-zinc-400">
+                {user?.username || "User"}
+              </p>
             </div>
           </div>
         )}
