@@ -38,6 +38,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import FurtherGuidance from "@/components/FurtherGuidance";
 import { 
   Tabs, 
   TabsContent, 
@@ -640,6 +641,11 @@ export default function ToneAnalysisPage() {
                               </div>
                               
 
+                              {/* Further Guidance Component */}
+                              <FurtherGuidance 
+                                value={furtherGuidance}
+                                onChange={setFurtherGuidance}
+                              />
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
