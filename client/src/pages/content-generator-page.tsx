@@ -495,8 +495,8 @@ export default function ContentGeneratorPage() {
           
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* Left Column: Content Generation Form */}
-            <div className="xl:col-span-1">
-              <Card className="bg-black border-gray-800 rounded-lg overflow-hidden h-full">
+            <div className="xl:col-span-1 flex">
+              <Card className="bg-black border-gray-800 rounded-lg overflow-hidden h-full flex-1">
                 <CardHeader className="pb-3 border-b border-gray-800">
                   <CardTitle className="text-lg font-medium text-white">Generate New Content</CardTitle>
                   <CardDescription className="text-gray-400">
@@ -516,31 +516,35 @@ export default function ContentGeneratorPage() {
                       <TabsList className="w-full bg-gray-900 p-1 grid grid-cols-2 md:grid-cols-4 gap-1">
                         <TabsTrigger 
                           value="linkedin_post" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
+                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
                         >
-                          <SiLinkedin className="h-4 w-4 mr-2" />
-                          LinkedIn Post
+                          <SiLinkedin className="h-4 w-4 sm:mr-2 flex-shrink-0" />
+                          <span className="hidden sm:inline">LinkedIn Post</span>
+                          <span className="sm:hidden">LinkedIn</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="email" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
+                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
                         >
-                          <Mail className="h-4 w-4 mr-2" />
-                          Cold Email
+                          <Mail className="h-4 w-4 sm:mr-2 flex-shrink-0" />
+                          <span className="hidden sm:inline">Cold Email</span>
+                          <span className="sm:hidden">Email</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="webinar" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
+                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
                         >
-                          <Video className="h-4 w-4 mr-2" />
-                          Webinar
+                          <Video className="h-4 w-4 sm:mr-2 flex-shrink-0" />
+                          <span className="hidden sm:inline">Webinar</span>
+                          <span className="sm:hidden">Webinar</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="workshop" 
-                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black"
+                          className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black text-xs sm:text-sm whitespace-nowrap px-1 sm:px-2"
                         >
-                          <ClipboardList className="h-4 w-4 mr-2" />
-                          Workshop
+                          <ClipboardList className="h-4 w-4 sm:mr-2 flex-shrink-0" />
+                          <span className="hidden sm:inline">Workshop</span>
+                          <span className="sm:hidden">Workshop</span>
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
