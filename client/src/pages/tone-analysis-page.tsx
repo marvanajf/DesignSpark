@@ -615,8 +615,9 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
                               
-                              <div className="mt-6 border-t border-gray-800/60 pt-6">
-                                <label htmlFor="furtherGuidance" className="block text-sm font-medium text-white mb-2">
+                              <div className="mt-6 border-t border-gray-800/60 pt-6 rounded-lg bg-[#0e1b33]/50 border border-[#74d1ea]/30 p-5">
+                                <label htmlFor="furtherGuidance" className="block text-sm font-medium text-white mb-2 flex items-center">
+                                  <Sparkles className="h-4 w-4 mr-2 text-[#74d1ea]" />
                                   Further Guidance (Optional)
                                 </label>
                                 <Textarea
@@ -685,8 +686,9 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
-                              <div className="mt-6 border-t border-gray-800/60 pt-6">
-                                <label htmlFor="furtherGuidanceText" className="block text-sm font-medium text-white mb-2">
+                              <div className="mt-6 border-t border-gray-800/60 pt-6 rounded-lg bg-[#0e1b33]/50 border border-[#74d1ea]/30 p-5">
+                                <label htmlFor="furtherGuidanceText" className="block text-sm font-medium text-white mb-2 flex items-center">
+                                  <Sparkles className="h-4 w-4 mr-2 text-[#74d1ea]" />
                                   Further Guidance (Optional)
                                 </label>
                                 <Textarea
@@ -771,8 +773,9 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
-                              <div className="mt-6 border-t border-gray-800/60 pt-6">
-                                <label htmlFor="furtherGuidanceAdvanced" className="block text-sm font-medium text-white mb-2">
+                              <div className="mt-6 border-t border-gray-800/60 pt-6 rounded-lg bg-[#0e1b33]/50 border border-[#74d1ea]/30 p-5">
+                                <label htmlFor="furtherGuidanceAdvanced" className="block text-sm font-medium text-white mb-2 flex items-center">
+                                  <Sparkles className="h-4 w-4 mr-2 text-[#74d1ea]" />
                                   Further Guidance (Optional)
                                 </label>
                                 <Textarea
