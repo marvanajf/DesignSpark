@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
 import { 
   Loader2, 
   Info, 
@@ -15,6 +16,7 @@ import {
   Trash2,
   AlertTriangle
 } from "lucide-react";
+import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +29,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 
 export default function PersonaSelectionPage() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [, navigate] = useLocation();
   const [selectedPersonaIds, setSelectedPersonaIds] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,6 +37,14 @@ export default function PersonaSelectionPage() {
   const [personaDescription, setPersonaDescription] = useState("");
   const [personaToDelete, setPersonaToDelete] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  
+  // Subscription limit state
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [limitData, setLimitData] = useState<{
+    limitType: string;
+    current: number;
+    limit: number;
+  } | null>(null);
 
   // Fetch personas
   const { data: personas, isLoading, error } = useQuery({
@@ -90,8 +101,25 @@ export default function PersonaSelectionPage() {
   // Generate a new persona with OpenAI
   const generatePersonaMutation = useMutation({
     mutationFn: async (description: string) => {
-      const res = await apiRequest("POST", "/api/generate-persona", { description });
-      return res.json();
+      try {
+        const res = await apiRequest("POST", "/api/generate-persona", { description });
+        
+        // Check for subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitInfo = await res.json();
+          setLimitData({
+            limitType: limitInfo.limitType,
+            current: limitInfo.current,
+            limit: limitInfo.limit
+          });
+          setShowLimitModal(true);
+          throw new Error("Subscription limit reached");
+        }
+        
+        return res.json();
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: (data) => {
       setIsGenerateDialogOpen(false);
@@ -103,7 +131,10 @@ export default function PersonaSelectionPage() {
       });
     },
     onError: (error: any) => {
-      if (error.message?.includes("OpenAI API is not available")) {
+      if (error.message === "Subscription limit reached") {
+        // This is already handled by setting showLimitModal to true
+        return;
+      } else if (error.message?.includes("OpenAI API is not available")) {
         toast({
           title: "API Key Required",
           description: "An OpenAI API key is required to generate personas. Please add your API key in the settings.",
@@ -122,22 +153,48 @@ export default function PersonaSelectionPage() {
   // Create a new persona manually
   const createPersonaMutation = useMutation({
     mutationFn: async (data: { name: string; description: string }) => {
-      const res = await apiRequest("POST", "/api/personas", {
-        name: data.name,
-        description: data.description,
-        interests: []
-      });
-      return res.json();
+      try {
+        const res = await apiRequest("POST", "/api/personas", {
+          name: data.name,
+          description: data.description,
+          interests: []
+        });
+        
+        // Check for subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitInfo = await res.json();
+          setLimitData({
+            limitType: limitInfo.limitType,
+            current: limitInfo.current,
+            limit: limitInfo.limit
+          });
+          setShowLimitModal(true);
+          throw new Error("Subscription limit reached");
+        }
+        
+        return res.json();
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/personas"] });
-    },
-    onError: (error: Error) => {
       toast({
-        title: "Failed to create persona",
-        description: error.message,
-        variant: "destructive",
+        title: "Persona created",
+        description: "Your persona has been created successfully",
       });
+    },
+    onError: (error: any) => {
+      if (error.message === "Subscription limit reached") {
+        // This is already handled by setting showLimitModal to true
+        return;
+      } else {
+        toast({
+          title: "Failed to create persona",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     },
   });
   
@@ -300,6 +357,18 @@ export default function PersonaSelectionPage() {
 
   return (
     <Layout showSidebar={true}>
+      {/* Subscription Limit Modal */}
+      {showLimitModal && limitData && (
+        <SubscriptionLimitModal
+          open={showLimitModal}
+          onOpenChange={setShowLimitModal}
+          limitType={limitData.limitType}
+          current={limitData.current}
+          limit={limitData.limit}
+          user={user}
+        />
+      )}
+      
       <div className="flex-1 overflow-y-auto bg-black">
         <div className="p-6">
           {/* Header Section with Search */}
