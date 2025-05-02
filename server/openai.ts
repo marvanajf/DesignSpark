@@ -237,7 +237,7 @@ export async function generateLinkedInPost(
         },
         {
           role: "user",
-          content: `Write a LinkedIn post about ${topic} as if you were a real ${personaName} sharing your personal thoughts and experience. Make it conversational and authentic.`
+          content: `Write a LinkedIn post about ${topic} as if you were a real ${personaName} sharing your personal thoughts and experience. Make it conversational and authentic.${furtherDetails ? `\n\nPlease consider this additional context: ${furtherDetails}` : ''}`
         }
       ],
       temperature: 0.8
