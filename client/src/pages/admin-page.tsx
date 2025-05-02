@@ -516,6 +516,9 @@ export default function AdminPage() {
           <TabsTrigger value="users" className="data-[state=active]:bg-zinc-800">
             Users
           </TabsTrigger>
+          <TabsTrigger value="blog" className="data-[state=active]:bg-zinc-800">
+            Blog
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="leads">
@@ -744,6 +747,25 @@ export default function AdminPage() {
                   </Table>
                 </div>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="blog">
+          <Card className="bg-zinc-950 border-zinc-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="flex items-center">
+                  <BookOpen className="mr-2 h-5 w-5 text-[#74d1ea]" />
+                  <span>Blog Management</span>
+                </CardTitle>
+                <CardDescription className="mt-1.5">
+                  Create and manage blog posts and categories
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <BlogManagement />
             </CardContent>
           </Card>
         </TabsContent>

@@ -1,73 +1,107 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { Link } from "wouter";
-import { ArrowRight, RssIcon } from "lucide-react";
+import { ArrowRight, RssIcon, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 
-// Blog post types
+// Blog post types from API
 interface BlogPost {
   id: number;
   title: string;
+  slug: string;
   excerpt: string;
-  date: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-  category: string;
-  imageUrl?: string;
+  content: string;
+  author_id: number;
+  category_id?: number;
+  featured_image?: string;
+  published: boolean;
+  publish_date?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface BlogCategory {
+  id: number;
+  name: string;
+  slug: string;
+  created_at: string;
+}
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
 }
 
 export default function BlogPage() {
-  // Sample blog posts data
-  const blogPosts: BlogPost[] = [
-    {
-      id: 1,
-      title: "The Evolution of AI-Generated Content for Marketing",
-      excerpt: "How artificial intelligence is transforming content creation for marketers, enabling personalization at scale and automating routine tasks.",
-      date: "April 25, 2025",
-      author: {
-        name: "Emma Wilson",
-        avatar: "",
-      },
-      category: "Technology",
-    },
-    {
-      id: 2,
-      title: "Introducing Enhanced Tone Analysis Features",
-      excerpt: "We are excited to announce new tone analysis capabilities that help you better understand audience perception of your messaging across channels.",
-      date: "April 18, 2025",
-      author: {
-        name: "Michael Chen",
-        avatar: "",
-      },
-      category: "Product",
-    },
-    {
-      id: 3,
-      title: "5 Ways to Optimize Your LinkedIn Content Strategy",
-      excerpt: "Learn how to leverage data-driven insights to create more engaging content that resonates with your professional audience on LinkedIn.",
-      date: "April 10, 2025",
-      author: {
-        name: "Sarah Johnson",
-        avatar: "",
-      },
-      category: "Strategy",
-    },
-    {
-      id: 4,
-      title: "The Psychology Behind Effective Email Communication",
-      excerpt: "Understanding how tone, timing, and personalization affect email engagement rates and how to apply these insights to your campaigns.",
-      date: "April 3, 2025",
-      author: {
-        name: "David Rodriguez",
-        avatar: "",
-      },
-      category: "Research",
-    },
-  ];
+  // Fetch blog posts from API
+  const {
+    data: blogPosts = [],
+    isLoading: isPostsLoading,
+    error: postsError
+  } = useQuery<BlogPost[]>({
+    queryKey: ["/api/blog-posts"],
+    staleTime: 1000 * 60, // 1 minute
+  });
+
+  // Fetch blog categories
+  const {
+    data: categories = [],
+    isLoading: isCategoriesLoading,
+    error: categoriesError
+  } = useQuery<BlogCategory[]>({
+    queryKey: ["/api/blog-categories"],
+    staleTime: 1000 * 60, // 1 minute
+  });
+
+  // State for users info (authors)
+  const [authors, setAuthors] = useState<Record<number, User>>({});
+
+  // Fetch users for authors info
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        // Extract unique author IDs
+        const uniqueAuthorIdsSet = new Set<number>();
+        blogPosts.forEach(post => {
+          if (post.author_id) {
+            uniqueAuthorIdsSet.add(post.author_id);
+          }
+        });
+        
+        const uniqueAuthorIds = Array.from(uniqueAuthorIdsSet);
+        
+        if (uniqueAuthorIds.length === 0) return;
+        
+        const authorsMap: Record<number, User> = {};
+        
+        // Since we don't have a specific API to fetch users by IDs, we'll use a simple approach
+        // In a real app, you might want to create a dedicated endpoint for this
+        const res = await fetch('/api/admin/users');
+        if (res.ok) {
+          const users = await res.json();
+          for (const user of users) {
+            if (uniqueAuthorIds.includes(user.id)) {
+              authorsMap[user.id] = user;
+            }
+          }
+          setAuthors(authorsMap);
+        }
+      } catch (error) {
+        console.error('Error fetching authors:', error);
+      }
+    };
+    
+    if (blogPosts.length > 0) {
+      fetchUsers();
+    }
+  }, [blogPosts]);
 
   return (
     <Layout>
@@ -81,46 +115,75 @@ export default function BlogPage() {
                 News and Updates about <span className="text-[#74d1ea]">Tovably</span>
               </h1>
             </div>
-            <a href="#" className="hidden md:flex items-center text-gray-400 hover:text-[#74d1ea]">
+            <a href="/api/blog-rss" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center text-gray-400 hover:text-[#74d1ea]">
               <RssIcon className="h-4 w-4 mr-2" />
               RSS Feed
             </a>
           </div>
 
           {/* Blog Grid */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-12">
-            {blogPosts.map((post) => (
-              <div key={post.id} className="border-t border-[#74d1ea]/30 pt-6 group">
-                {/* Post Header with Author and Date */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <Avatar className="h-10 w-10 bg-gray-700 text-white">
-                      <div className="uppercase">{post.author.name.charAt(0)}</div>
-                    </Avatar>
-                    <span className="ml-3 text-gray-400 text-sm">{post.author.name}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-gray-500 text-sm">{post.date}</span>
-                    <span className="mx-2 text-gray-600">|</span>
-                    <span className="text-[#74d1ea] text-sm">{post.category}</span>
-                  </div>
+          <div className="mt-12">
+            {isPostsLoading || isCategoriesLoading ? (
+              <div className="flex justify-center py-16">
+                <div className="flex flex-col items-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-[#74d1ea] mb-4" />
+                  <p className="text-gray-400">Loading blog posts...</p>
                 </div>
-
-                {/* Post Title and Excerpt */}
-                <Link href={`/blog/${post.id}`}>
-                  <a className="block">
-                    <h2 className="text-2xl font-medium text-white mb-3 group-hover:text-[#74d1ea] transition-colors">
-                      {post.title}
-                    </h2>
-                    <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                    <div className="flex items-center text-[#74d1ea]">
-                      <span className="mr-2">Read more</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </div>
-                  </a>
-                </Link>
               </div>
-            ))}
+            ) : postsError || categoriesError ? (
+              <div className="text-center py-16 text-red-500">
+                <p>Error loading blog content. Please try again later.</p>
+              </div>
+            ) : blogPosts.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-gray-400">No blog posts found.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                {blogPosts.map((post) => {
+                  const author = authors[post.author_id] || { username: 'Unknown Author' };
+                  const category = categories.find(c => c.id === post.category_id);
+                  const postDate = post.publish_date || post.created_at;
+                  
+                  return (
+                    <div key={post.id} className="border-t border-[#74d1ea]/30 pt-6 group">
+                      {/* Post Header with Author and Date */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          <Avatar className="h-10 w-10 bg-gray-700 text-white">
+                            <div className="uppercase">{author.username.charAt(0)}</div>
+                          </Avatar>
+                          <span className="ml-3 text-gray-400 text-sm">{author.username}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-gray-500 text-sm">{format(new Date(postDate), "MMM d, yyyy")}</span>
+                          {category && (
+                            <>
+                              <span className="mx-2 text-gray-600">|</span>
+                              <span className="text-[#74d1ea] text-sm">{category.name}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Post Title and Excerpt */}
+                      <Link href={`/blog/${post.slug}`}>
+                        <a className="block">
+                          <h2 className="text-2xl font-medium text-white mb-3 group-hover:text-[#74d1ea] transition-colors">
+                            {post.title}
+                          </h2>
+                          <p className="text-gray-400 mb-4">{post.excerpt}</p>
+                          <div className="flex items-center text-[#74d1ea]">
+                            <span className="mr-2">Read more</span>
+                            <ArrowRight className="h-4 w-4" />
+                          </div>
+                        </a>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Load More Button */}
@@ -150,38 +213,60 @@ export default function BlogPage() {
 
           {/* Categories Section */}
           <div className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="border-t border-[#74d1ea]/30 pt-6">
-              <h3 className="text-lg font-medium text-white mb-3">Technology</h3>
-              <p className="text-gray-400">AI, machine learning, and tech innovation insights.</p>
-              <a href="#" className="mt-3 inline-flex items-center text-[#74d1ea]">
-                <span className="mr-2">View all</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-            <div className="border-t border-[#74d1ea]/30 pt-6">
-              <h3 className="text-lg font-medium text-white mb-3">Product</h3>
-              <p className="text-gray-400">Updates, new features, and product announcements.</p>
-              <a href="#" className="mt-3 inline-flex items-center text-[#74d1ea]">
-                <span className="mr-2">View all</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-            <div className="border-t border-[#74d1ea]/30 pt-6">
-              <h3 className="text-lg font-medium text-white mb-3">Strategy</h3>
-              <p className="text-gray-400">Content marketing and audience engagement tactics.</p>
-              <a href="#" className="mt-3 inline-flex items-center text-[#74d1ea]">
-                <span className="mr-2">View all</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-            <div className="border-t border-[#74d1ea]/30 pt-6">
-              <h3 className="text-lg font-medium text-white mb-3">Research</h3>
-              <p className="text-gray-400">Data-driven insights and communication research.</p>
-              <a href="#" className="mt-3 inline-flex items-center text-[#74d1ea]">
-                <span className="mr-2">View all</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
+            {categories.length > 0 ? (
+              categories.map((category) => (
+                <div key={category.id} className="border-t border-[#74d1ea]/30 pt-6">
+                  <h3 className="text-lg font-medium text-white mb-3">{category.name}</h3>
+                  <p className="text-gray-400">
+                    {category.name === "Technology" && "AI, machine learning, and tech innovation insights."}
+                    {category.name === "Product Updates" && "Latest features, improvements and announcements."}
+                    {category.name === "Marketing Tips" && "Content marketing and audience engagement tactics."}
+                    {category.name === "Case Studies" && "Success stories and implementation examples."}
+                  </p>
+                  <Link href={`/blog/category/${category.slug}`}>
+                    <a className="mt-3 inline-flex items-center text-[#74d1ea]">
+                      <span className="mr-2">View all</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <>
+                <div className="border-t border-[#74d1ea]/30 pt-6">
+                  <h3 className="text-lg font-medium text-white mb-3">Technology</h3>
+                  <p className="text-gray-400">AI, machine learning, and tech innovation insights.</p>
+                  <div className="mt-3 inline-flex items-center text-zinc-600">
+                    <span className="mr-2">View all</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+                <div className="border-t border-[#74d1ea]/30 pt-6">
+                  <h3 className="text-lg font-medium text-white mb-3">Product Updates</h3>
+                  <p className="text-gray-400">Latest features, improvements and announcements.</p>
+                  <div className="mt-3 inline-flex items-center text-zinc-600">
+                    <span className="mr-2">View all</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+                <div className="border-t border-[#74d1ea]/30 pt-6">
+                  <h3 className="text-lg font-medium text-white mb-3">Marketing Tips</h3>
+                  <p className="text-gray-400">Content marketing and audience engagement tactics.</p>
+                  <div className="mt-3 inline-flex items-center text-zinc-600">
+                    <span className="mr-2">View all</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+                <div className="border-t border-[#74d1ea]/30 pt-6">
+                  <h3 className="text-lg font-medium text-white mb-3">Case Studies</h3>
+                  <p className="text-gray-400">Success stories and implementation examples.</p>
+                  <div className="mt-3 inline-flex items-center text-zinc-600">
+                    <span className="mr-2">View all</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
