@@ -127,7 +127,7 @@ export default function Sidebar() {
 
       {/* Main sidebar container */}
       <div 
-        className={`flex flex-col bg-black transition-all duration-300 ${
+        className={`flex flex-col justify-between bg-black transition-all duration-300 ${
           isCollapsed ? 'w-0 -translate-x-full md:w-auto md:translate-x-0 md:w-16' : 'w-64'
         } fixed md:relative z-40 h-screen`}
       >
@@ -139,103 +139,100 @@ export default function Sidebar() {
           </Link>
         </div>
         
-        {/* Navigation section with overflow */}
-        <div className="flex flex-col py-4 h-full overflow-y-auto">
-          {/* Main navigation - can overflow */}
-          <div className="flex-grow">
+        {/* Top section with menu items */}
+        <div className="flex-1 py-4 overflow-hidden">
+          {/* Main navigation */}
+          <nav className="space-y-1">
+            {menuItems.map((item) => {
+              const isActive = location === item.href;
+              return (
+                <Link 
+                  key={item.href} 
+                  href={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`group flex items-center px-4 py-2 text-sm ${
+                    isActive 
+                      ? "bg-zinc-800 text-white" 
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
+                    {item.icon}
+                  </span>
+                  {!isCollapsed && item.label}
+                </Link>
+              );
+            })}
+          </nav>
+          
+          {/* Settings navigation items */}
+          <div className="mt-8">
+            {!isCollapsed && (
+              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2">Settings</h3>
+            )}
             <nav className="space-y-1">
-              {menuItems.map((item) => {
+              {bottomMenuItems.map((item) => {
                 const isActive = location === item.href;
+                
                 return (
                   <Link 
                     key={item.href} 
                     href={item.href}
                     onClick={() => handleNavigation(item.href)}
-                    className={`group flex items-center px-4 py-2 text-sm ${
+                    className={`group flex items-center justify-between px-4 py-2 text-sm ${
                       isActive 
                         ? "bg-zinc-800 text-white" 
                         : "text-zinc-400 hover:text-white"
                     }`}
                   >
-                    <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
-                      {item.icon}
-                    </span>
-                    {!isCollapsed && item.label}
+                    <div className="flex items-center">
+                      <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"}`}>
+                        {item.icon}
+                      </span>
+                      {!isCollapsed && <span className="ml-3">{item.label}</span>}
+                    </div>
+                    {!isCollapsed && item.badge && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea] text-black">
+                        {item.badge}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
             </nav>
-            
-            {/* Settings navigation items */}
-            <div className="mt-8">
-              {!isCollapsed && (
-                <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2">Settings</h3>
-              )}
-              <nav className="space-y-1">
-                {bottomMenuItems.map((item) => {
-                  const isActive = location === item.href;
-                  
-                  // Regular navigation links
-                  return (
-                    <Link 
-                      key={item.href} 
-                      href={item.href}
-                      onClick={() => handleNavigation(item.href)}
-                      className={`group flex items-center justify-between px-4 py-2 text-sm ${
-                        isActive 
-                          ? "bg-zinc-800 text-white" 
-                          : "text-zinc-400 hover:text-white"
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"}`}>
-                          {item.icon}
-                        </span>
-                        {!isCollapsed && <span className="ml-3">{item.label}</span>}
-                      </div>
-                      {!isCollapsed && item.badge && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea] text-black">
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </div>
+          </div>
+        </div>
+        
+        {/* Bottom section with logout and profile */}
+        <div className="py-2">
+          {/* Logout button */}
+          <div className="border-t border-zinc-900 pt-4">
+            <button
+              onClick={() => logoutMutation.mutate()}
+              className="w-full group flex items-center px-4 py-2 text-sm text-zinc-400 hover:text-white"
+            >
+              <span className="text-zinc-500 group-hover:text-white">
+                <LogOut className="h-5 w-5" />
+              </span>
+              {!isCollapsed && <span className="ml-3">Logout</span>}
+            </button>
           </div>
           
-          {/* Fixed bottom section that doesn't scroll */}
-          <div className="mt-auto">
-            {/* Logout button */}
-            <div className="mt-4 pt-4 border-t border-zinc-900">
-              <button
-                onClick={() => logoutMutation.mutate()}
-                className="w-full group flex items-center px-4 py-2 text-sm text-zinc-400 hover:text-white"
-              >
-                <span className="text-zinc-500 group-hover:text-white">
-                  <LogOut className="h-5 w-5" />
-                </span>
-                {!isCollapsed && <span className="ml-3">Logout</span>}
-              </button>
-            </div>
-            
-            {/* User profile section simplified to match design */}
-            {!isCollapsed && (
-              <div className="flex items-center px-4 py-3 mt-2">
-                <div>
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-black text-zinc-400 text-sm border border-zinc-800">{initials}</AvatarFallback>
-                  </Avatar>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-zinc-400">
-                    {user?.username || "User"}
-                  </p>
-                </div>
+          {/* User profile section simplified to match design */}
+          {!isCollapsed && (
+            <div className="flex items-center px-4 py-3">
+              <div>
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-black text-zinc-400 text-sm border border-zinc-800">{initials}</AvatarFallback>
+                </Avatar>
               </div>
-            )}
-          </div>
+              <div className="ml-3">
+                <p className="text-sm text-zinc-400">
+                  {user?.username || "User"}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       
