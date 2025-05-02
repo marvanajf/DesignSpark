@@ -2155,7 +2155,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             toneAnalysis.tone_results as any, 
             persona.name, 
             persona.description || "",
-            furtherDetails
+            furtherDetails,
+            req.user!.username // Pass the actual logged-in user's username
           );
         } else if (type === 'webinar') {
           contentText = await generateWebinar(

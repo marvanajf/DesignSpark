@@ -227,7 +227,8 @@ export async function generateColdEmail(
   toneResults: ToneAnalysisResult, 
   personaName: string, 
   personaDescription: string,
-  furtherDetails?: string
+  furtherDetails?: string,
+  userName: string = "Jack" // Default to "Jack" if no name is provided
 ): Promise<string> {
   try {
     // Check if OpenAI is initialized
@@ -258,6 +259,7 @@ export async function generateColdEmail(
             `Include a clear subject line, personalized introduction, concise value proposition, relevant social proof, ` +
             `and a specific call to action. Avoid generic sales language. ` +
             `Format the email properly with subject, greeting, body, and signature. ` +
+            `For the email signature, just use the sender's name which is: "${userName}" - nothing else needed, no company or title. ` +
             `The email should be 200-300 words and look like a real email a business might send.` +
             `\n\nIMPORTANT GUIDELINES:` +
             `\n- NEVER use placeholder text like [Company Name], [Competitor Name], etc.` +
