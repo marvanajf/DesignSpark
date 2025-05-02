@@ -770,6 +770,22 @@ export default function ToneAnalysisPage() {
                                   Add your benchmark content that represents the ideal tone of voice for your brand
                                 </p>
                               </div>
+
+                              <div className="mt-4">
+                                <label htmlFor="furtherGuidanceAdvanced" className="block text-sm font-medium text-white mb-2">
+                                  Further Guidance (Optional)
+                                </label>
+                                <Textarea
+                                  id="furtherGuidanceAdvanced"
+                                  className="min-h-[80px] bg-black/30 border-gray-800/60 focus:border-[#74d1ea]/50 focus:ring-[#74d1ea]/20"
+                                  placeholder="Add any specific instructions or focus areas for the analysis..."
+                                  value={furtherGuidance}
+                                  onChange={(e) => setFurtherGuidance(e.target.value)}
+                                />
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Help guide the AI by providing context or specific areas to focus on in your comparative analysis
+                                </p>
+                              </div>
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
