@@ -27,6 +27,8 @@ import {
   AlignLeft,
   BookMarked
 } from "lucide-react";
+import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
+import { useAuth } from "@/hooks/use-auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
