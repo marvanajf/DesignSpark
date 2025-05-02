@@ -183,17 +183,19 @@ export default function ContentGenerationMarketingPage() {
               </div>
               <div className="p-6 text-gray-300">
                 <p className="mb-4">
-                  Hi [First Name],
+                  Hi Sarah,
                 </p>
                 <p className="mb-4">
-                  I noticed that [Company] has been expanding its digital marketing efforts, and I thought you might be interested in how we recently helped a similar company in your industry increase their conversion rates by 34%.
+                  I noticed that Acme Digital has been expanding its digital marketing efforts, and I thought you might be interested in how we recently helped a similar company in the tech industry increase their conversion rates by 34%.
                 </p>
                 <p className="mb-4">
-                  Would you be open to a quick 15-minute call next Tuesday to discuss how we could achieve similar results for your team?
+                  Would you be open to a quick 15-minute call next Tuesday to discuss how we could achieve similar results for your marketing team?
                 </p>
                 <p>
-                  Best regards,<br />
-                  [Your Name]
+                  Warm regards,<br />
+                  James Wilson<br />
+                  Marketing Director<br />
+                  Tovably
                 </p>
               </div>
             </div>
