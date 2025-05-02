@@ -9,6 +9,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
   personas: number;
   toneAnalyses: number;
   contentGeneration: number;
+  campaigns: number;
+  customerService: boolean;
   price: number;
   currency: string;
   displayPrice: string;
@@ -17,37 +19,45 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
   free: {
     name: "Free",
     personas: 5,
-    toneAnalyses: 3,
+    toneAnalyses: 5,
     contentGeneration: 10,
+    campaigns: 2,
+    customerService: false,
     price: 0,
     currency: "GBP",
     displayPrice: "Free"
   },
   standard: {
     name: "Standard",
-    personas: 10,
-    toneAnalyses: 15,
+    personas: 20,
+    toneAnalyses: 50,
     contentGeneration: 100,
-    price: 9.99,
+    campaigns: 5,
+    customerService: true,
+    price: 4.99,
     currency: "GBP",
-    displayPrice: "£9.99",
+    displayPrice: "£4.99",
     stripePrice: "price_standard" // Replace with actual Stripe price ID
   },
   professional: {
-    name: "Professional",
-    personas: 25,
-    toneAnalyses: 30,
-    contentGeneration: 200,
-    price: 24.99,
+    name: "Premium",
+    personas: 30,
+    toneAnalyses: 100,
+    contentGeneration: 150,
+    campaigns: 20,
+    customerService: true,
+    price: 19.99,
     currency: "GBP",
-    displayPrice: "£24.99",
+    displayPrice: "£19.99",
     stripePrice: "price_professional" // Replace with actual Stripe price ID
   },
   premium: {
-    name: "Premium",
+    name: "Pro",
     personas: 50,
-    toneAnalyses: 100,
-    contentGeneration: 500,
+    toneAnalyses: 200,
+    contentGeneration: 300,
+    campaigns: 30,
+    customerService: true,
     price: 39.99,
     currency: "GBP",
     displayPrice: "£39.99",

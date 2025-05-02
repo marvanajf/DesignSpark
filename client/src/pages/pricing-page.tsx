@@ -86,7 +86,6 @@ export default function PricingPage() {
       toast({
         title: "Subscription Canceled",
         description: "Your subscription has been canceled and you have been downgraded to the free plan.",
-        variant: "success",
       });
     } catch (error) {
       console.error("Error canceling subscription:", error);
@@ -120,8 +119,8 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             {Object.entries(subscriptionPlans).map(([planId, plan], index) => {
               // Calculate different visual styling based on plan
-              const isProPlan = planId === 'professional';
-              const isPremiumPlan = planId === 'premium';
+              const isProPlan = planId === 'premium'; // Pro plan is now the premium tier
+              const isPremiumPlan = planId === 'professional'; // Premium plan is now the professional tier
               const isFreePlan = planId === 'free';
               const isPaidPlan = !isFreePlan;
               
@@ -215,31 +214,25 @@ export default function PricingPage() {
                         <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
                           <Check className="h-3 w-3 text-[#74d1ea]" />
                         </div>
-                        <span className="text-gray-300">{plan.contentGeneration} Content Pieces</span>
+                        <span className="text-gray-300">{plan.contentGeneration} Content Creations</span>
                       </li>
                       <li className="flex items-center">
-                        {isFreePlan ? (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-gray-700/50">
-                            <X className="h-3 w-3 text-gray-400" />
-                          </div>
-                        ) : (
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
+                        </div>
+                        <span className="text-gray-300">{plan.campaigns} Campaigns</span>
+                      </li>
+                      <li className="flex items-center">
+                        {plan.customerService ? (
                           <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
                             <Check className="h-3 w-3 text-[#74d1ea]" />
                           </div>
-                        )}
-                        <span className="text-gray-300">Email Support</span>
-                      </li>
-                      <li className="flex items-center">
-                        {['free', 'standard'].includes(planId) ? (
+                        ) : (
                           <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-gray-700/50">
                             <X className="h-3 w-3 text-gray-400" />
                           </div>
-                        ) : (
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                            <Check className="h-3 w-3 text-[#74d1ea]" />
-                          </div>
                         )}
-                        <span className="text-gray-300">Priority Support</span>
+                        <span className="text-gray-300">Customer Service</span>
                       </li>
                       <li className="flex items-center">
                         {isPremiumPlan ? (
