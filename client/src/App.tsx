@@ -35,6 +35,7 @@ import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import CampaignPage from "@/pages/campaign-page";
 import AdminPage from "@/pages/admin-page";
+import ModalPreviewPage from "@/pages/modal-preview-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
@@ -83,6 +84,7 @@ function Router() {
       <ProtectedRoute path="/usage" component={UsagePage} />
       <ProtectedRoute path="/support" component={SupportPage} />
       <ProtectedRoute path="/admin" component={AdminPage} />
+      <ProtectedRoute path="/modal-preview" component={ModalPreviewPage} />
       <Route component={NotFound} />
     </Switch>
   );
