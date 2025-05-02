@@ -92,14 +92,7 @@ export default function Sidebar() {
       badge: subscriptionPlan === 'free' ? 'Upgrade' : null
     },
     { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" },
-    ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : []),
-    // Add logout as a menu item for better visibility
-    { 
-      href: "#", 
-      icon: <LogOut className="h-5 w-5" />, 
-      label: "Logout",
-      onClick: () => logoutMutation.mutate()
-    }
+    ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : [])
   ];
 
   // Navigate and collapse sidebar on mobile
@@ -147,34 +140,36 @@ export default function Sidebar() {
         </div>
         
         {/* Navigation section */}
-        <div className="flex-grow flex flex-col justify-between overflow-y-hidden py-4 h-full">
-          <nav className="space-y-1">
-            {menuItems.map((item) => {
-              const isActive = location === item.href;
-              return (
-                <Link 
-                  key={item.href} 
-                  href={item.href}
-                  onClick={() => handleNavigation(item.href)}
-                  className={`group flex items-center px-4 py-2 text-sm ${
-                    isActive 
-                      ? "bg-zinc-800 text-white" 
-                      : "text-zinc-400 hover:text-white"
-                  }`}
-                >
-                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
-                    {item.icon}
-                  </span>
-                  {!isCollapsed && item.label}
-                </Link>
-              );
-            })}
-          </nav>
+        <div className="flex-grow flex flex-col overflow-y-hidden py-4 h-full">
+          <div>
+            <nav className="space-y-1">
+              {menuItems.map((item) => {
+                const isActive = location === item.href;
+                return (
+                  <Link 
+                    key={item.href} 
+                    href={item.href}
+                    onClick={() => handleNavigation(item.href)}
+                    className={`group flex items-center px-4 py-2 text-sm ${
+                      isActive 
+                        ? "bg-zinc-800 text-white" 
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
+                      {item.icon}
+                    </span>
+                    {!isCollapsed && item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
           
           {/* Settings navigation items */}
-          <div>
+          <div className="mt-8">
             {!isCollapsed && (
-              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2 mt-8">Settings</h3>
+              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2">Settings</h3>
             )}
             <nav className="space-y-1">
               {bottomMenuItems.map((item) => {
@@ -235,9 +230,22 @@ export default function Sidebar() {
           </div>
         </div>
         
+        {/* Logout button */}
+        <div className="mt-6 mb-6">
+          <button
+            onClick={() => logoutMutation.mutate()}
+            className="w-full group flex items-center px-4 py-2 text-sm text-zinc-400 hover:text-white"
+          >
+            <span className="text-zinc-500 group-hover:text-white">
+              <LogOut className="h-5 w-5" />
+            </span>
+            {!isCollapsed && <span className="ml-3">Logout</span>}
+          </button>
+        </div>
+        
         {/* User profile section simplified to match design */}
         {!isCollapsed && (
-          <div className="flex items-center px-4 py-3 mt-auto">
+          <div className="flex items-center px-4 py-3 border-t border-zinc-900">
             <div>
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-black text-zinc-400 text-sm border border-zinc-800">{initials}</AvatarFallback>
