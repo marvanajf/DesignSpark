@@ -443,7 +443,7 @@ export default function PersonaSelectionPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* AI Generator Card */}
-              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
+              <Card className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
@@ -512,7 +512,7 @@ export default function PersonaSelectionPage() {
               </Card>
 
               {/* Manual Create Card */}
-              <Card className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
+              <Card className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
@@ -627,7 +627,7 @@ export default function PersonaSelectionPage() {
                     return (
                     <Card 
                       key={persona.id} 
-                      className={`group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
+                      className={`group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
                         isSelected ? 'ring-2 ring-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.2)]' : ''
                       }`}
                     >
@@ -707,7 +707,7 @@ export default function PersonaSelectionPage() {
                 })}
               </div>
             ) : (
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6 text-center">
                   <div className="py-10">
@@ -769,7 +769,7 @@ export default function PersonaSelectionPage() {
                       return (
                         <Card 
                           key={persona.id} 
-                          className={`group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
+                          className={`group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
                             isSelected ? 'ring-2 ring-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.2)]' : ''
                           }`}
                         >
@@ -858,7 +858,7 @@ export default function PersonaSelectionPage() {
                 </div>
               ) : (
                 // No custom personas
-                <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                   <div className="p-6 text-center">
                     <div className="py-10">
