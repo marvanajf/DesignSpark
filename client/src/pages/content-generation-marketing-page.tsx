@@ -168,10 +168,10 @@ export default function ContentGenerationMarketingPage() {
               </div>
               <div className="p-6 text-gray-300">
                 <p className="mb-4">
-                  Excited to announce our new API integration capabilities! 🚀 We've enhanced our platform to seamlessly connect with your existing tech stack, reducing implementation time by 65%.
+                  Excited to announce our new content generation features! 🚀 We've enhanced our platform to create highly engaging professional content, reducing creation time by 65%.
                 </p>
                 <p>
-                  Have you been struggling with integration bottlenecks? Let me know in the comments how this could help your development workflow.
+                  Have you been struggling with consistent content creation? Let me know in the comments how this could help your marketing workflow.
                 </p>
               </div>
             </div>
