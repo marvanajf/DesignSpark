@@ -892,6 +892,17 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
   
+  async incrementCampaignUsage(id: number): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        campaigns_used: sql`${users.campaigns_used} + 1` 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+  
   async getAllUsers(): Promise<User[]> {
     return db
       .select()
