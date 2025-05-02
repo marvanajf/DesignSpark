@@ -152,6 +152,17 @@ export function registerAdminRoutes(app: Express) {
     }
   });
 
+  // Get all blog posts (including unpublished)
+  app.get("/api/admin/blog-posts", requireAdmin, async (_req: Request, res: Response) => {
+    try {
+      const posts = await storage.getAllBlogPosts();
+      res.json(posts);
+    } catch (error) {
+      console.error("Error fetching blog posts:", error);
+      res.status(500).json({ error: "Failed to fetch blog posts" });
+    }
+  });
+  
   // Create a blog post
   app.post("/api/admin/blog-posts", requireAdmin, async (req: Request, res: Response) => {
     try {

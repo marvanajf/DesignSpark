@@ -81,13 +81,13 @@ export default function BlogManagement() {
     published: true,
   });
 
-  // Fetch blog posts
+  // Fetch blog posts (including unpublished) from admin endpoint
   const {
     data: blogPosts = [] as BlogPost[],
     isLoading: isPostsLoading,
     error: postsError,
   } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog-posts"],
+    queryKey: ["/api/admin/blog-posts"],
     staleTime: 1000 * 60, // 1 minute
   });
 
