@@ -642,11 +642,6 @@ export default function ToneAnalysisPage() {
                               </div>
                               
 
-                              {/* Further Guidance Component */}
-                              <FurtherGuidance 
-                                value={furtherGuidance}
-                                onChange={setFurtherGuidance}
-                              />
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
                                 <div className="flex items-start">
