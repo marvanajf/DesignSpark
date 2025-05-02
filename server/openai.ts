@@ -31,11 +31,6 @@ export interface ToneAnalysisResult {
   };
   summary: string;
   recommended_content_types: string[];
-  comparative_analysis?: {
-    similarity_score: number;
-    differences: string[];
-    improvement_suggestions: string[];
-  };
 }
 
 // Define the Persona Generator type
@@ -46,74 +41,45 @@ export interface GeneratedPersona {
 }
 
 // Analyze the tone of the content
-export async function analyzeTone(
-  content: string, 
-  goldStandardText?: string,
-  furtherGuidance?: string
-): Promise<ToneAnalysisResult> {
+export async function analyzeTone(content: string): Promise<ToneAnalysisResult> {
   try {
     // Check if OpenAI is initialized
     if (!openai) {
       throw new Error("OpenAI API key is not configured");
     }
     
-    let systemPrompt = "You are a tone of voice expert. Analyze the provided content and extract the tone characteristics. " +
-      "Measure these attributes on a scale of 0-100: Professional, Conversational, Technical, Friendly, Formal. " +
-      "Also analyze sentence structure, vocabulary, voice (active vs passive), and common phrases. " +
-      "Finally, provide a summary of the overall tone. ";
-    
-    let responseFormat = "{\n" +
-      "  \"characteristics\": {\n" +
-      "    \"professional\": number,\n" +
-      "    \"conversational\": number,\n" +
-      "    \"technical\": number,\n" +
-      "    \"friendly\": number,\n" +
-      "    \"formal\": number\n" +
-      "  },\n" +
-      "  \"language_patterns\": {\n" +
-      "    \"sentence_structure\": string,\n" +
-      "    \"vocabulary\": string,\n" +
-      "    \"voice\": string,\n" +
-      "    \"common_phrases\": string[]\n" +
-      "  },\n" +
-      "  \"summary\": string,\n" +
-      "  \"recommended_content_types\": string[]\n";
-    
-    let userPrompt = content;
-    
-    // If gold standard text is provided, add comparative analysis
-    if (goldStandardText && goldStandardText.trim()) {
-      systemPrompt += "Additionally, compare the sample text with the provided gold standard text. " +
-        "Analyze how closely the sample text matches the tone, style, and language patterns of the gold standard. " +
-        "Provide a similarity score (0-100), key differences, and suggestions for improvement.";
-      
-      responseFormat += "  \"comparative_analysis\": {\n" +
-        "    \"similarity_score\": number,\n" +
-        "    \"differences\": string[],\n" +
-        "    \"improvement_suggestions\": string[]\n" +
-        "  }\n";
-      
-      userPrompt = "Sample text for analysis:\n\n" + content + "\n\nGold standard text for comparison:\n\n" + goldStandardText;
-    }
-    
-    // If further guidance is provided, add it to the user prompt
-    if (furtherGuidance && furtherGuidance.trim()) {
-      userPrompt += "\n\nAdditional context and guidance for analysis:\n" + furtherGuidance;
-    }
-    
-    // Complete the format
-    responseFormat += "}";
-    
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: systemPrompt + "Output your response as a JSON object with the following structure: " + responseFormat
+          content: 
+            "You are a tone of voice expert. Analyze the provided content and extract the tone characteristics. " +
+            "Measure these attributes on a scale of 0-100: Professional, Conversational, Technical, Friendly, Formal. " +
+            "Also analyze sentence structure, vocabulary, voice (active vs passive), and common phrases. " +
+            "Finally, provide a summary of the overall tone. " +
+            "Output your response as a JSON object with the following structure: " +
+            "{\n" +
+            "  \"characteristics\": {\n" +
+            "    \"professional\": number,\n" +
+            "    \"conversational\": number,\n" +
+            "    \"technical\": number,\n" +
+            "    \"friendly\": number,\n" +
+            "    \"formal\": number\n" +
+            "  },\n" +
+            "  \"language_patterns\": {\n" +
+            "    \"sentence_structure\": string,\n" +
+            "    \"vocabulary\": string,\n" +
+            "    \"voice\": string,\n" +
+            "    \"common_phrases\": string[]\n" +
+            "  },\n" +
+            "  \"summary\": string,\n" +
+            "  \"recommended_content_types\": string[]\n" +
+            "}"
         },
         {
           role: "user",
-          content: userPrompt
+          content: content
         }
       ],
       response_format: { type: "json_object" },
@@ -237,7 +203,7 @@ export async function generateLinkedInPost(
         },
         {
           role: "user",
-          content: `Write a LinkedIn post about ${topic} as if you were a real ${personaName} sharing your personal thoughts and experience. Make it conversational and authentic.${furtherDetails ? `\n\nPlease consider this additional context: ${furtherDetails}` : ''}`
+          content: `Write a LinkedIn post about ${topic} as if you were a real ${personaName} sharing your personal thoughts and experience. Make it conversational and authentic.`
         }
       ],
       temperature: 0.8
