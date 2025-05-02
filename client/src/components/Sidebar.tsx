@@ -65,11 +65,11 @@ export default function Sidebar() {
 
   const menuItems: MenuItem[] = [
     { href: "/dashboard", icon: <Home className="h-5 w-5" />, label: "Dashboard" },
+    { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
     { href: "/tone-analysis", icon: <BarChart2 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
     { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" },
-    { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
     { href: "/guides", icon: <Book className="h-5 w-5" />, label: "Guides" }
   ];
   
