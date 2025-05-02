@@ -29,6 +29,7 @@ async function initializeDatabase() {
         "personas_used" INTEGER NOT NULL DEFAULT 0,
         "tone_analyses_used" INTEGER NOT NULL DEFAULT 0,
         "content_generated" INTEGER NOT NULL DEFAULT 0,
+        "campaigns_used" INTEGER NOT NULL DEFAULT 0,
         "stripe_customer_id" TEXT,
         "stripe_subscription_id" TEXT,
         "subscription_status" TEXT DEFAULT 'inactive',

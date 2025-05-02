@@ -1,0 +1,200 @@
+2025-05-02T21:01:19.638305298Z Database operation failed (attempt 1/3): column "campaigns_used" does not exist
+2025-05-02T21:01:19.638342189Z Retrying in 1000ms...
+2025-05-02T21:01:20.668935412Z Retrying in 2000ms...
+2025-05-02T21:01:20.668980443Z Database operation failed (attempt 2/3): column "campaigns_used" does not exist
+2025-05-02T21:01:22.721524663Z Database operation failed (attempt 3/3): column "campaigns_used" does not exist
+2025-05-02T21:01:22.721872612Z Database operation failed after 3 attempts: error: column "campaigns_used" does not exist
+2025-05-02T21:01:22.721884632Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:22.721889173Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:22.721893793Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:22.721898233Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:22.721917844Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:22.721920524Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:22.721922934Z   length: 115,
+2025-05-02T21:01:22.721926664Z   severity: 'ERROR',
+2025-05-02T21:01:22.721929684Z   code: '42703',
+2025-05-02T21:01:22.721932614Z   detail: undefined,
+2025-05-02T21:01:22.721935684Z   hint: undefined,
+2025-05-02T21:01:22.721938694Z   position: '160',
+2025-05-02T21:01:22.721941834Z   internalPosition: undefined,
+2025-05-02T21:01:22.721944574Z   internalQuery: undefined,
+2025-05-02T21:01:22.721947514Z   where: undefined,
+2025-05-02T21:01:22.721949964Z   schema: undefined,
+2025-05-02T21:01:22.721952634Z   table: undefined,
+2025-05-02T21:01:22.721955454Z   column: undefined,
+2025-05-02T21:01:22.721957934Z   dataType: undefined,
+2025-05-02T21:01:22.721960614Z   constraint: undefined,
+2025-05-02T21:01:22.721963445Z   file: 'parse_relation.c',
+2025-05-02T21:01:22.721966155Z   line: '3722',
+2025-05-02T21:01:22.721969005Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:22.721971975Z }
+2025-05-02T21:01:22.721974905Z Authentication error: column "campaigns_used" does not exist
+2025-05-02T21:01:22.722186591Z Retrying in 1000ms...
+2025-05-02T21:01:22.722208811Z Passport authentication error: error: column "campaigns_used" does not exist
+2025-05-02T21:01:22.722215221Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:22.722218691Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:22.722221821Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:22.722224061Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:22.722226332Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:22.722228432Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:22.722230522Z   length: 115,
+2025-05-02T21:01:22.722233192Z   severity: 'ERROR',
+2025-05-02T21:01:22.722235262Z   code: '42703',
+2025-05-02T21:01:22.722237312Z   detail: undefined,
+2025-05-02T21:01:22.722239312Z   hint: undefined,
+2025-05-02T21:01:22.722241332Z   position: '160',
+2025-05-02T21:01:22.722244002Z   internalPosition: undefined,
+2025-05-02T21:01:22.722246272Z   internalQuery: undefined,
+2025-05-02T21:01:22.722248292Z   where: undefined,
+2025-05-02T21:01:22.722250622Z   schema: undefined,
+2025-05-02T21:01:22.722252652Z   table: undefined,
+2025-05-02T21:01:22.722254662Z   column: undefined,
+2025-05-02T21:01:22.722256662Z   dataType: undefined,
+2025-05-02T21:01:22.722258953Z   constraint: undefined,
+2025-05-02T21:01:22.722260942Z   file: 'parse_relation.c',
+2025-05-02T21:01:22.722262982Z   line: '3722',
+2025-05-02T21:01:22.722264943Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:22.722266933Z }
+2025-05-02T21:01:22.722269123Z Database operation failed (attempt 1/3): column "campaigns_used" does not exist
+2025-05-02T21:01:23.738024406Z Database operation failed (attempt 1/3): column "campaigns_used" does not exist
+2025-05-02T21:01:23.738053066Z Retrying in 1000ms...
+2025-05-02T21:01:24.753687176Z Database operation failed (attempt 2/3): column "campaigns_used" does not exist
+2025-05-02T21:01:24.753730157Z Retrying in 2000ms...
+2025-05-02T21:01:26.820310987Z Database operation failed (attempt 3/3): column "campaigns_used" does not exist
+2025-05-02T21:01:26.820594394Z Database operation failed after 3 attempts: error: column "campaigns_used" does not exist
+2025-05-02T21:01:26.820600234Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:26.820603194Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:26.820606514Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:26.820609064Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:26.820611735Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:26.820614484Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:26.820617015Z   length: 115,
+2025-05-02T21:01:26.820620305Z   severity: 'ERROR',
+2025-05-02T21:01:26.820622915Z   code: '42703',
+2025-05-02T21:01:26.820625665Z   detail: undefined,
+2025-05-02T21:01:26.820628325Z   hint: undefined,
+2025-05-02T21:01:26.820631085Z   position: '160',
+2025-05-02T21:01:26.820635425Z   internalPosition: undefined,
+2025-05-02T21:01:26.820638095Z   internalQuery: undefined,
+2025-05-02T21:01:26.820640795Z   where: undefined,
+2025-05-02T21:01:26.820643445Z   schema: undefined,
+2025-05-02T21:01:26.820646165Z   table: undefined,
+2025-05-02T21:01:26.820648745Z   column: undefined,
+2025-05-02T21:01:26.820651205Z   dataType: undefined,
+2025-05-02T21:01:26.820653536Z   constraint: undefined,
+2025-05-02T21:01:26.820655905Z   file: 'parse_relation.c',
+2025-05-02T21:01:26.820658646Z   line: '3722',
+2025-05-02T21:01:26.820661196Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:26.820663526Z }
+2025-05-02T21:01:26.820667106Z Authentication error: column "campaigns_used" does not exist
+2025-05-02T21:01:26.820943923Z Passport authentication error: error: column "campaigns_used" does not exist
+2025-05-02T21:01:26.820954613Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:26.820957784Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:26.820960594Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:26.820963454Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:26.820966034Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:26.820969144Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:26.820971764Z   length: 115,
+2025-05-02T21:01:26.820974334Z   severity: 'ERROR',
+2025-05-02T21:01:26.820976254Z Retrying in 2000ms...
+2025-05-02T21:01:26.820977014Z   code: '42703',
+2025-05-02T21:01:26.820980124Z   detail: undefined,
+2025-05-02T21:01:26.820982764Z   hint: undefined,
+2025-05-02T21:01:26.820985284Z   position: '160',
+2025-05-02T21:01:26.820997974Z   internalPosition: undefined,
+2025-05-02T21:01:26.821000945Z   internalQuery: undefined,
+2025-05-02T21:01:26.821003365Z   where: undefined,
+2025-05-02T21:01:26.821005245Z   schema: undefined,
+2025-05-02T21:01:26.821006885Z   table: undefined,
+2025-05-02T21:01:26.821008525Z   column: undefined,
+2025-05-02T21:01:26.821010145Z   dataType: undefined,
+2025-05-02T21:01:26.821011775Z   constraint: undefined,
+2025-05-02T21:01:26.821013565Z   file: 'parse_relation.c',
+2025-05-02T21:01:26.821015285Z   line: '3722',
+2025-05-02T21:01:26.821026735Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:26.821039556Z }
+2025-05-02T21:01:26.821043296Z Database operation failed (attempt 2/3): column "campaigns_used" does not exist
+2025-05-02T21:01:28.825382356Z Retrying in 1000ms...
+2025-05-02T21:01:28.825414046Z Database operation failed (attempt 1/3): column "campaigns_used" does not exist
+2025-05-02T21:01:29.839872695Z Retrying in 2000ms...
+2025-05-02T21:01:29.839879045Z Database operation failed (attempt 2/3): column "campaigns_used" does not exist
+2025-05-02T21:01:31.862978229Z 9:01:31 PM [express] POST /api/login 500 in 12227ms :: {"message":"Server error during login","error…
+2025-05-02T21:01:31.86298123Z Database operation failed (attempt 3/3): column "campaigns_used" does not exist
+2025-05-02T21:01:31.863024171Z Database operation failed after 3 attempts: error: column "campaigns_used" does not exist
+2025-05-02T21:01:31.863029961Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:31.863034631Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:31.863039301Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:31.863043651Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:31.863047851Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:31.863052071Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:31.863056321Z   length: 115,
+2025-05-02T21:01:31.863061201Z   severity: 'ERROR',
+2025-05-02T21:01:31.863065412Z   code: '42703',
+2025-05-02T21:01:31.863069392Z   detail: undefined,
+2025-05-02T21:01:31.863073462Z   hint: undefined,
+2025-05-02T21:01:31.863077592Z   position: '160',
+2025-05-02T21:01:31.863082052Z   internalPosition: undefined,
+2025-05-02T21:01:31.863085912Z   internalQuery: undefined,
+2025-05-02T21:01:31.863090042Z   where: undefined,
+2025-05-02T21:01:31.863093762Z   schema: undefined,
+2025-05-02T21:01:31.863097562Z   table: undefined,
+2025-05-02T21:01:31.863101373Z   column: undefined,
+2025-05-02T21:01:31.863105223Z   dataType: undefined,
+2025-05-02T21:01:31.863108803Z   constraint: undefined,
+2025-05-02T21:01:31.863112423Z   file: 'parse_relation.c',
+2025-05-02T21:01:31.863116263Z   line: '3722',
+2025-05-02T21:01:31.863120283Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:31.863124303Z }
+2025-05-02T21:01:31.863129043Z Authentication error: column "campaigns_used" does not exist
+2025-05-02T21:01:31.863133014Z Passport authentication error: error: column "campaigns_used" does not exist
+2025-05-02T21:01:31.863136954Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:31.863140984Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:31.863144854Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:31.863148534Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:31.863152364Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:31.863156634Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:31.863160514Z   length: 115,
+2025-05-02T21:01:31.863164204Z   severity: 'ERROR',
+2025-05-02T21:01:31.863168244Z   code: '42703',
+2025-05-02T21:01:31.863172275Z   detail: undefined,
+2025-05-02T21:01:31.863176144Z   hint: undefined,
+2025-05-02T21:01:31.863193425Z   position: '160',
+2025-05-02T21:01:31.863195865Z   internalPosition: undefined,
+2025-05-02T21:01:31.863198275Z   internalQuery: undefined,
+2025-05-02T21:01:31.863200575Z   where: undefined,
+2025-05-02T21:01:31.863202985Z   schema: undefined,
+2025-05-02T21:01:31.863205665Z   table: undefined,
+2025-05-02T21:01:31.863208145Z   column: undefined,
+2025-05-02T21:01:31.863210356Z   dataType: undefined,
+2025-05-02T21:01:31.863212696Z   constraint: undefined,
+2025-05-02T21:01:31.863215316Z   file: 'parse_relation.c',
+2025-05-02T21:01:31.863217596Z   line: '3722',
+2025-05-02T21:01:31.863219776Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:31.863221816Z }
+2025-05-02T21:01:31.863224376Z Database operation failed (attempt 3/3): column "campaigns_used" does not exist
+2025-05-02T21:01:31.863226996Z Database operation failed after 3 attempts: error: column "campaigns_used" does not exist
+2025-05-02T21:01:31.863229636Z     at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+2025-05-02T21:01:31.863232176Z     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-05-02T21:01:31.863234526Z     at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+2025-05-02T21:01:31.863236676Z     at async DatabaseStorage.getUserByEmail (file:///opt/render/project/src/dist/index.js:865:20)
+2025-05-02T21:01:31.863238736Z     at async withRetry (file:///opt/render/project/src/dist/index.js:451:18)
+2025-05-02T21:01:31.863241056Z     at async Strategy._verify (file:///opt/render/project/src/dist/index.js:1266:22) {
+2025-05-02T21:01:31.863243426Z   length: 115,
+2025-05-02T21:01:31.863245716Z   severity: 'ERROR',
+2025-05-02T21:01:31.863247986Z   code: '42703',
+2025-05-02T21:01:31.863250277Z   detail: undefined,
+2025-05-02T21:01:31.863252637Z   hint: undefined,
+2025-05-02T21:01:31.863255277Z   position: '160',
+2025-05-02T21:01:31.863257987Z   internalPosition: undefined,
+2025-05-02T21:01:31.863260407Z   internalQuery: undefined,
+2025-05-02T21:01:31.863262677Z   where: undefined,
+2025-05-02T21:01:31.863265057Z   schema: undefined,
+2025-05-02T21:01:31.863267597Z   table: undefined,
+2025-05-02T21:01:31.863270507Z   column: undefined,
+2025-05-02T21:01:31.863273007Z   dataType: undefined,
+2025-05-02T21:01:31.863275857Z   constraint: undefined,
+2025-05-02T21:01:31.863278407Z   file: 'parse_relation.c',
+2025-05-02T21:01:31.863280607Z   line: '3722',
+2025-05-02T21:01:31.863283037Z   routine: 'errorMissingColumn'
+2025-05-02T21:01:31.863285367Z }
+2025-05-02T21:01:31.863287687Z Login error: column "campaigns_used" does not exist

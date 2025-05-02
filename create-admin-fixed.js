@@ -20,9 +20,11 @@
 // We now use proper certificate verification instead of disabling it completely.
 // The following is the CA certificate for Neon database.
 
-import pg from 'pg';
-import { scrypt, randomBytes } from 'crypto';
-import { promisify } from 'util';
+// CommonJS format for better Docker compatibility
+const pg = require('pg');
+const crypto = require('crypto');
+const { scrypt, randomBytes } = crypto;
+const { promisify } = require('util');
 
 // Configure PostgreSQL connection
 const isRenderPg = process.env.DATABASE_URL?.includes('dpg-');
@@ -116,8 +118,8 @@ async function createAdminUser() {
       
       const result = await pool.query(
         `INSERT INTO users 
-        (username, email, password, role, subscription_plan, personas_used, tone_analyses_used, content_generated, created_at, stripe_customer_id, stripe_subscription_id, subscription_status, subscription_period_end, company, full_name) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) 
+        (username, email, password, role, subscription_plan, personas_used, tone_analyses_used, content_generated, campaigns_used, created_at, stripe_customer_id, stripe_subscription_id, subscription_status, subscription_period_end, company, full_name) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) 
         RETURNING id`,
         [
           adminUsername, 
@@ -128,6 +130,7 @@ async function createAdminUser() {
           0, 
           0, 
           0, 
+          0,
           new Date(), 
           null, 
           null, 
