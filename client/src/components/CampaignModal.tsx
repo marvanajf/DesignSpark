@@ -33,6 +33,15 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
   const [isAddContentDialogOpen, setIsAddContentDialogOpen] = useState(false);
   const [selectedContentIds, setSelectedContentIds] = useState<number[]>([]);
   const queryClient = useQueryClient();
+  
+  // Subscription limit modal state
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [limitData, setLimitData] = useState<{
+    limitType: "campaigns";
+    currentUsage: number;
+    limit: number;
+    currentPlan: string;
+  } | null>(null);
 
   // Get campaign details
   const { data: campaign, isLoading: isLoadingCampaign } = useQuery({
@@ -58,20 +67,53 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
   // Add content to campaign mutation
   const batchAddContentMutation = useMutation({
     mutationFn: async (contentIds: number[]) => {
-      // Create an array of promises that add each content one by one
-      const promises = contentIds.map(contentId => 
-        apiRequest("POST", "/api/campaign-contents", {
-          campaign_id: campaignId,
-          content_id: contentId
-        })
-      );
-      // Wait for all promises to complete
-      return await Promise.all(promises);
+      try {
+        // Create an array of promises that add each content one by one
+        const promises = contentIds.map(async contentId => {
+          const res = await apiRequest("POST", "/api/campaign-contents", {
+            campaign_id: campaignId,
+            content_id: contentId
+          });
+          
+          // Check if we hit a subscription limit (402 Payment Required)
+          if (res.status === 402) {
+            const limitData = await res.json();
+            throw { 
+              isLimitError: true, 
+              limitData: {
+                limitType: "campaigns" as const,
+                currentUsage: limitData.currentUsage, 
+                limit: limitData.limit,
+                currentPlan: limitData.currentPlan 
+              }
+            };
+          }
+          
+          return res;
+        });
+        
+        // Wait for all promises to complete
+        return await Promise.all(promises);
+      } catch (error: any) {
+        // If it's a limit error, rethrow it to be handled in onError
+        if (error?.isLimitError) {
+          throw error;
+        }
+        throw new Error(error.message || "Failed to add content to campaign");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}/contents`] });
       setSelectedContentIds([]);
       setIsAddContentDialogOpen(false);
+    },
+    onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
+        setShowLimitModal(true);
+        setIsAddContentDialogOpen(false);
+      }
     },
   });
 
@@ -320,6 +362,18 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        
+        {/* Subscription Limit Modal */}
+        {showLimitModal && limitData && (
+          <SubscriptionLimitModal
+            isOpen={showLimitModal}
+            onClose={() => setShowLimitModal(false)}
+            limitType={limitData.limitType}
+            currentUsage={limitData.currentUsage}
+            limit={limitData.limit}
+            currentPlan={limitData.currentPlan}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
