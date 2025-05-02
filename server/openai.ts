@@ -260,12 +260,12 @@ export async function generateColdEmail(
             `Format the email properly with subject, greeting, body, and signature. ` +
             `The email should be 200-300 words and look like a real email a business might send.` +
             `\n\nIMPORTANT GUIDELINES:` +
-            `\n- DO NOT use placeholder text like [Company Name], [Competitor Name], etc.` +
-            `\n- If you need to mention specific companies or competitors, use real examples that are well-known in the industry.` +
-            `\n- For retail/supermarket examples, use real competitors like Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.` +
-            `\n- For tech examples, use real companies like Microsoft, Google, Apple, Oracle, etc.` +
-            `\n- If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.` +
-            `\n- When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.`
+            `\n- NEVER use placeholder text like [Company Name], [Competitor Name], etc.` +
+            `\n- Be specific and authentic in your references without forcing mentions of specific companies` +
+            `\n- Use your judgment about whether to include specific examples based on context` +
+            `\n- You can refer to competitor characteristics without naming them if appropriate` +
+            `\n- Focus on industry trends and benefits where sensible` +
+            `\n- Be natural and genuine rather than generic - no placeholders of any kind`
         },
         {
           role: "user",
@@ -338,12 +338,12 @@ export async function generateWebinar(
             - Format should be clean and professional without any coding or markdown elements
             
             IMPORTANT CONTENT GUIDELINES:
-            - DO NOT use placeholder text like [Company Name], [Competitor Name], etc.
-            - If you need to mention specific companies or competitors, use real examples that are well-known in the industry.
-            - For retail examples, use real retailers like Tesco, Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.
-            - For tech examples, use real companies like Microsoft, Google, Apple, Amazon, etc.
-            - If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.
-            - When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.
+            - NEVER use placeholder text like [Company Name], [Competitor Name], etc.
+            - Be specific and authentic in your references without forcing mentions of specific companies
+            - Use your judgment about whether to include specific examples based on context
+            - You can refer to competitor characteristics without naming them if appropriate
+            - Focus on industry trends and benefits where sensible
+            - Be natural and genuine rather than generic - no placeholders of any kind
             
             The total length should be 400-600 words, structured for easy readability.`
         },
@@ -420,12 +420,12 @@ export async function generateWorkshop(
             - Format should be clean and professional without any coding or markdown elements
             
             IMPORTANT CONTENT GUIDELINES:
-            - DO NOT use placeholder text like [Company Name], [Competitor Name], etc.
-            - If you need to mention specific companies or competitors, use real examples that are well-known in the industry.
-            - For retail examples, use real retailers like Tesco, Sainsbury's, Asda, Morrisons, Lidl, or Aldi rather than placeholders.
-            - For tech examples, use real companies like Microsoft, Google, Apple, Amazon, etc.
-            - If you're unsure about which specific examples to use, focus on the benefits without naming specific competitors.
-            - When providing statistics or data, use realistic figures without claiming they are from specific studies unless you can cite the real source.
+            - NEVER use placeholder text like [Company Name], [Competitor Name], etc.
+            - Be specific and authentic in your references without forcing mentions of specific companies
+            - Use your judgment about whether to include specific examples based on context
+            - You can refer to competitor characteristics without naming them if appropriate
+            - Focus on industry trends and benefits where sensible
+            - Be natural and genuine rather than generic - no placeholders of any kind
             
             Format the output with clear section headers and structure for easy implementation.
             The total length should be 500-700 words, written in a practical, actionable style.`
