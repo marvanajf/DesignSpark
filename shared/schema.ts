@@ -145,6 +145,8 @@ export const campaigns = pgTable("campaigns", {
   name: text("name").notNull(),
   description: text("description"),
   status: text("status").default("active").notNull(), // active, archived
+  persona_id: integer("persona_id").references(() => personas.id),
+  tone_analysis_id: integer("tone_analysis_id").references(() => toneAnalyses.id),
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
@@ -245,7 +247,9 @@ export const insertCampaignSchema = createInsertSchema(campaigns).pick({
   user_id: true,
   name: true,
   description: true,
-  status: true
+  status: true,
+  persona_id: true,
+  tone_analysis_id: true
 });
 
 export const insertCampaignContentSchema = createInsertSchema(campaignContents).pick({
