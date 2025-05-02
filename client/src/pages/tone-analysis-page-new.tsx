@@ -271,7 +271,7 @@ export default function ToneAnalysisPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Saved Analyses Panel - Left Column */}
             <div className="md:col-span-1">
-              <div className="bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="bg-black border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="p-4 border-b border-gray-800/60">
                   <h3 className="text-lg font-semibold text-white">Saved Analyses</h3>
                 </div>
@@ -328,7 +328,7 @@ export default function ToneAnalysisPage() {
               {currentAnalysisId && toneAnalysis ? (
                 <div className="space-y-8">
                   {/* Tone Analysis Results - Enhanced with platform style */}
-                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                  <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                     <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                     
                     {/* Header */}
@@ -549,7 +549,7 @@ export default function ToneAnalysisPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Left column - Form with dashboard styling */}
-                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                  <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                     <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                     <div className="p-6">
                       <div className="flex items-center space-x-3 mb-6">
@@ -666,7 +666,7 @@ export default function ToneAnalysisPage() {
                   </div>
                   
                   {/* Right column - Tips and info card */}
-                  <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                  <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                     <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                     <div className="p-6">
                       <div className="flex items-center space-x-3 mb-6">
@@ -724,7 +724,7 @@ export default function ToneAnalysisPage() {
       
       {/* Rename Dialog */}
       <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
-        <DialogContent className="bg-[#0a0c10] border border-gray-800 text-white max-w-md">
+        <DialogContent className="bg-black border border-gray-800 text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="text-white">Save Tone Analysis</DialogTitle>
             <DialogDescription className="text-gray-400">
