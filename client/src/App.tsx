@@ -34,6 +34,7 @@ import FeaturesPage from "@/pages/features-page";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import CampaignPage from "@/pages/campaign-page";
+import CampaignsPage from "@/pages/campaigns-page";
 import AdminPage from "@/pages/admin-page";
 import ModalPreviewPage from "@/pages/modal-preview-page";
 import NotFound from "@/pages/not-found";
@@ -78,6 +79,7 @@ function Router() {
       <ProtectedRoute path="/personas" component={PersonaSelectionPage} />
       <ProtectedRoute path="/content-generator" component={ContentGeneratorPage} />
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
+      <ProtectedRoute path="/campaigns" component={CampaignsPage} />
       <ProtectedRoute path="/campaign/:id" component={CampaignPage} />
       <ProtectedRoute path="/guides" component={GuidesPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
