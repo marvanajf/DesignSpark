@@ -1,0 +1,133 @@
+2025-05-02T21:08:24.770769829Z ==> Deploying...
+2025-05-02T21:08:40.42878539Z ==> Running 'npm run build && npx tsx server/init-db.ts && npx tsx create-admin-fixed.js && NODE_ENV=production node dist/index.js'
+2025-05-02T21:08:40.552083886Z 
+2025-05-02T21:08:40.552108157Z > rest-express@1.0.0 build
+2025-05-02T21:08:40.552112797Z > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+2025-05-02T21:08:40.552115807Z 
+2025-05-02T21:08:40.784261271Z vite v5.4.14 building for production...
+2025-05-02T21:08:40.855578375Z transforming...
+2025-05-02T21:08:41.261191408Z Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+2025-05-02T21:08:41.261211628Z   npx update-browserslist-db@latest
+2025-05-02T21:08:41.261215099Z   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2025-05-02T21:08:49.971455983Z ✓ 2215 modules transformed.
+2025-05-02T21:08:50.75097414Z rendering chunks...
+2025-05-02T21:08:50.849417615Z computing gzip size...
+2025-05-02T21:08:51.049045453Z ../dist/public/index.html                            1.44 kB │ gzip:   0.77 kB
+2025-05-02T21:08:51.049146775Z ../dist/public/assets/tovably-logo-YLxNo9Ke.png     78.47 kB
+2025-05-02T21:08:51.049192246Z ../dist/public/assets/index--N2Yug01.css           122.54 kB │ gzip:  18.46 kB
+2025-05-02T21:08:51.04937647Z ../dist/public/assets/index-BRdApsKW.js          1,000.09 kB │ gzip: 257.62 kB
+2025-05-02T21:08:51.049448221Z 
+2025-05-02T21:08:51.049454631Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2025-05-02T21:08:51.049458702Z - Using dynamic import() to code-split the application
+2025-05-02T21:08:51.049462202Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2025-05-02T21:08:51.049465092Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2025-05-02T21:08:51.049722147Z ✓ built in 10.24s
+2025-05-02T21:08:51.294760296Z 
+2025-05-02T21:08:51.294786347Z   dist/index.js  189.8kb
+2025-05-02T21:08:51.294791267Z 
+2025-05-02T21:08:51.294795877Z ⚡ Done in 13ms
+2025-05-02T21:08:52.849910077Z Running in production mode
+2025-05-02T21:08:52.85002556Z Connecting to database: postgres://****:****@dpg-d07rtkqdbo4c73brf3rg-a/designsparkdb?sslmode=require
+2025-05-02T21:08:52.85005477Z Using direct PostgreSQL connections (standard pg driver) - NO WebSockets
+2025-05-02T21:08:52.850068471Z Configuring database connection with proper SSL settings...
+2025-05-02T21:08:52.850090641Z Detected Render PostgreSQL database - applying specialized configuration
+2025-05-02T21:08:52.850094541Z Detected cloud PostgreSQL database - applying secure SSL configuration
+2025-05-02T21:08:52.854957935Z Added Neon root certificate for secure SSL verification
+2025-05-02T21:08:52.855102128Z Using secure SSL configuration with proper CA certificate verification
+2025-05-02T21:08:52.862989777Z 🔥 EMERGENCY DATABASE INITIALIZATION SCRIPT 🔥
+2025-05-02T21:08:52.86313624Z Creating database tables directly...
+2025-05-02T21:08:52.86315111Z Creating users table...
+2025-05-02T21:08:52.907905157Z (node:183) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+2025-05-02T21:08:52.907939848Z (Use `node --trace-warnings ...` to show where the warning was created)
+2025-05-02T21:08:52.928348854Z Database connection test successful: { now: 2025-05-02T21:08:52.921Z }
+2025-05-02T21:08:52.928385975Z Database connection pool initialized successfully
+2025-05-02T21:08:52.928391795Z Creating tone_analyses table...
+2025-05-02T21:08:52.930154413Z Creating personas table...
+2025-05-02T21:08:52.931623204Z Creating generated_content table...
+2025-05-02T21:08:52.933037084Z Creating blog_categories table...
+2025-05-02T21:08:52.934450575Z Creating blog_posts table...
+2025-05-02T21:08:52.936522509Z Creating campaigns table...
+2025-05-02T21:08:52.938213025Z Creating campaign_contents table...
+2025-05-02T21:08:52.939971033Z Creating lead_contacts table...
+2025-05-02T21:08:52.941647609Z Creating session table...
+2025-05-02T21:08:52.942939986Z Database initialization completed successfully!
+2025-05-02T21:08:52.94356368Z Database connection closed.
+2025-05-02T21:08:53.666545108Z file:///opt/render/project/src/create-admin-fixed.js:24
+2025-05-02T21:08:53.666571198Z const pg = require('pg');
+2025-05-02T21:08:53.666574568Z            ^
+2025-05-02T21:08:53.666577308Z 
+2025-05-02T21:08:53.666581339Z ReferenceError: require is not defined in ES module scope, you can use import instead
+2025-05-02T21:08:53.666586749Z This file is being treated as an ES module because it has a '.js' file extension and '/opt/render/project/src/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+2025-05-02T21:08:53.666592539Z     at file:///opt/render/project/src/create-admin-fixed.js:24:12
+2025-05-02T21:08:53.666597129Z     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+2025-05-02T21:08:53.666601849Z     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+2025-05-02T21:08:53.666606419Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+2025-05-02T21:08:53.666610649Z 
+2025-05-02T21:08:53.666614999Z Node.js v22.14.0
+2025-05-02T21:08:54.705537901Z ==> Exited with status 1
+2025-05-02T21:08:54.849225571Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+2025-05-02T21:08:55.239769665Z ==> Running 'npm run build && npx tsx server/init-db.ts && npx tsx create-admin-fixed.js && NODE_ENV=production node dist/index.js'
+2025-05-02T21:08:55.338491435Z 
+2025-05-02T21:08:55.338512756Z > rest-express@1.0.0 build
+2025-05-02T21:08:55.338520476Z > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+2025-05-02T21:08:55.338523526Z 
+2025-05-02T21:08:55.58330169Z vite v5.4.14 building for production...
+2025-05-02T21:08:55.62959234Z transforming...
+2025-05-02T21:08:56.082041563Z Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+2025-05-02T21:08:56.082066554Z   npx update-browserslist-db@latest
+2025-05-02T21:08:56.082086674Z   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2025-05-02T21:09:05.380684957Z ✓ 2215 modules transformed.
+2025-05-02T21:09:06.101190752Z rendering chunks...
+2025-05-02T21:09:06.111688126Z computing gzip size...
+2025-05-02T21:09:06.134195337Z ../dist/public/index.html                            1.44 kB │ gzip:   0.77 kB
+2025-05-02T21:09:06.134221708Z ../dist/public/assets/tovably-logo-YLxNo9Ke.png     78.47 kB
+2025-05-02T21:09:06.134241509Z ../dist/public/assets/index--N2Yug01.css           122.54 kB │ gzip:  18.46 kB
+2025-05-02T21:09:06.13430882Z ../dist/public/assets/index-BRdApsKW.js          1,000.09 kB │ gzip: 257.62 kB
+2025-05-02T21:09:06.134454263Z 
+2025-05-02T21:09:06.134460473Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2025-05-02T21:09:06.134463343Z - Using dynamic import() to code-split the application
+2025-05-02T21:09:06.134466063Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2025-05-02T21:09:06.134468943Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2025-05-02T21:09:06.134750279Z ✓ built in 10.54s
+2025-05-02T21:09:06.239474099Z 
+2025-05-02T21:09:06.239497239Z   dist/index.js  189.8kb
+2025-05-02T21:09:06.239499919Z 
+2025-05-02T21:09:06.239502439Z ⚡ Done in 11ms
+2025-05-02T21:09:07.884986751Z Running in production mode
+2025-05-02T21:09:07.885096763Z Connecting to database: postgres://****:****@dpg-d07rtkqdbo4c73brf3rg-a/designsparkdb?sslmode=require
+2025-05-02T21:09:07.885129874Z Using direct PostgreSQL connections (standard pg driver) - NO WebSockets
+2025-05-02T21:09:07.885140464Z Configuring database connection with proper SSL settings...
+2025-05-02T21:09:07.885148504Z Detected Render PostgreSQL database - applying specialized configuration
+2025-05-02T21:09:07.885151454Z Detected cloud PostgreSQL database - applying secure SSL configuration
+2025-05-02T21:09:07.890901917Z Added Neon root certificate for secure SSL verification
+2025-05-02T21:09:07.8910341Z Using secure SSL configuration with proper CA certificate verification
+2025-05-02T21:09:07.89988772Z 🔥 EMERGENCY DATABASE INITIALIZATION SCRIPT 🔥
+2025-05-02T21:09:07.899985702Z Creating database tables directly...
+2025-05-02T21:09:07.899995582Z Creating users table...
+2025-05-02T21:09:07.928619844Z (node:162) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+2025-05-02T21:09:07.928643334Z (Use `node --trace-warnings ...` to show where the warning was created)
+2025-05-02T21:09:07.940920037Z Creating tone_analyses table...
+2025-05-02T21:09:07.942393938Z Database connection test successful: { now: 2025-05-02T21:09:07.939Z }
+2025-05-02T21:09:07.942432239Z Database connection pool initialized successfully
+2025-05-02T21:09:07.942704935Z Creating personas table...
+2025-05-02T21:09:07.944014113Z Creating generated_content table...
+2025-05-02T21:09:07.945395382Z Creating blog_categories table...
+2025-05-02T21:09:07.946885144Z Creating blog_posts table...
+2025-05-02T21:09:07.949718305Z Creating campaigns table...
+2025-05-02T21:09:07.949777766Z Creating campaign_contents table...
+2025-05-02T21:09:07.951222177Z Creating lead_contacts table...
+2025-05-02T21:09:07.95276669Z Creating session table...
+2025-05-02T21:09:07.95416074Z Database initialization completed successfully!
+2025-05-02T21:09:07.954717002Z Database connection closed.
+2025-05-02T21:09:08.614037899Z file:///opt/render/project/src/create-admin-fixed.js:24
+2025-05-02T21:09:08.614065659Z const pg = require('pg');
+2025-05-02T21:09:08.614068959Z            ^
+2025-05-02T21:09:08.614071509Z 
+2025-05-02T21:09:08.614074999Z ReferenceError: require is not defined in ES module scope, you can use import instead
+2025-05-02T21:09:08.61408399Z This file is being treated as an ES module because it has a '.js' file extension and '/opt/render/project/src/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+2025-05-02T21:09:08.61408793Z     at file:///opt/render/project/src/create-admin-fixed.js:24:12
+2025-05-02T21:09:08.61409084Z     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+2025-05-02T21:09:08.61409341Z     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+2025-05-02T21:09:08.61409609Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+2025-05-02T21:09:08.61409849Z 
+2025-05-02T21:09:08.61410122Z Node.js v22.14.0

@@ -10,10 +10,9 @@
  * - DATABASE_URL: PostgreSQL connection string
  */
 
-// CommonJS format for better Docker compatibility
-const pg = require('pg');
-const crypto = require('crypto');
-const { randomBytes } = crypto;
+// ES module format for Render compatibility
+import pg from 'pg';
+import { randomBytes } from 'crypto';
 
 // Configure PostgreSQL connection with proper SSL settings
 if (!process.env.DATABASE_URL) {

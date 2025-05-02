@@ -20,11 +20,10 @@
 // We now use proper certificate verification instead of disabling it completely.
 // The following is the CA certificate for Neon database.
 
-// CommonJS format for better Docker compatibility
-const pg = require('pg');
-const crypto = require('crypto');
-const { scrypt, randomBytes } = crypto;
-const { promisify } = require('util');
+// ES module format for Render compatibility
+import pg from 'pg';
+import { scrypt, randomBytes } from 'crypto';
+import { promisify } from 'util';
 
 // Configure PostgreSQL connection
 const isRenderPg = process.env.DATABASE_URL?.includes('dpg-');
