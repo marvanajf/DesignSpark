@@ -72,7 +72,7 @@ export default function UsagePage() {
           </div>
           
           {/* Usage Banner - styled like saved content page */}
-          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+          <div className="mb-8 bg-black border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
             
             <div className="relative z-10 flex items-start">
@@ -148,7 +148,7 @@ export default function UsagePage() {
           {/* Features table */}
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-white mb-4">Plan Features</h2>
-            <div className="bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden">
+            <div className="bg-black border border-gray-800/60 rounded-xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -209,7 +209,7 @@ function UsageCard({
   linkTo: string;
 }) {
   return (
-    <div className="bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.2)]">
+    <div className="bg-black border border-gray-800/60 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.2)]">
       <div className="p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-white">{title}</h3>
@@ -264,7 +264,7 @@ function FeatureRow({ feature, limit, status }: { feature: string, limit: number
                      "text-yellow-400";
   
   return (
-    <tr className="border-b border-gray-800/60 hover:bg-[#111318]">
+    <tr className="border-b border-gray-800/60 hover:bg-black/80">
       <td className="py-4 px-6 text-gray-300">{feature}</td>
       <td className="py-4 px-6 text-gray-300">{limit}</td>
       <td className={`py-4 px-6 ${statusColor}`}>{status}</td>
