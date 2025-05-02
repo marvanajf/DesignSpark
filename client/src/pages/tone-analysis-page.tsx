@@ -433,6 +433,68 @@ export default function ToneAnalysisPage() {
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Comparative Analysis - Only show if available */}
+                  {toneAnalysis.tone_results.comparative_analysis && (
+                    <div className="mb-10">
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-white">Gold Standard Comparison</h3>
+                        <p className="text-gray-400 text-sm mt-0.5">How your content compares to your benchmark</p>
+                      </div>
+                      
+                      <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-xl p-6 mt-4">
+                        {/* Similarity Score */}
+                        <div className="mb-8">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm font-medium text-white">Similarity Score</span>
+                            <span className="text-sm font-medium text-[#74d1ea]">
+                              {toneAnalysis.tone_results.comparative_analysis.similarity_score}%
+                            </span>
+                          </div>
+                          <div className="relative h-2 bg-gray-800/60 rounded-full overflow-hidden">
+                            <div 
+                              className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#74d1ea] to-[#4983ab]" 
+                              style={{ width: `${toneAnalysis.tone_results.comparative_analysis.similarity_score}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                        
+                        {/* Key Differences */}
+                        <div className="mb-6">
+                          <h4 className="text-white font-medium mb-4">Key Differences</h4>
+                          <div className="space-y-3">
+                            {toneAnalysis.tone_results.comparative_analysis.differences.map((difference, i) => (
+                              <div key={i} className="bg-black/20 rounded-lg p-4 border border-gray-800/60">
+                                <div className="flex items-start">
+                                  <div className="bg-[#182030] self-start rounded-lg p-1.5 mr-3 mt-0.5">
+                                    <AlertCircle className="h-4 w-4 text-[#74d1ea]" />
+                                  </div>
+                                  <p className="text-gray-300 text-sm">{difference}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {/* Improvement Suggestions */}
+                        <div>
+                          <h4 className="text-white font-medium mb-4">Improvement Suggestions</h4>
+                          <div className="space-y-3">
+                            {toneAnalysis.tone_results.comparative_analysis.improvement_suggestions.map((suggestion, i) => (
+                              <div key={i} className="bg-black/20 rounded-lg p-4 border border-gray-800/60">
+                                <div className="flex items-start">
+                                  <div className="bg-[#182030] self-start rounded-lg p-1.5 mr-3 mt-0.5">
+                                    <Lightbulb className="h-4 w-4 text-[#74d1ea]" />
+                                  </div>
+                                  <p className="text-gray-300 text-sm">{suggestion}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Action buttons - Enhanced design */}
                   <div className="flex justify-between items-center border-t border-gray-800/60 px-2 pt-8">
@@ -456,6 +518,7 @@ export default function ToneAnalysisPage() {
                           toneAnalysisMutation.mutate({
                             websiteUrl: toneAnalysis.website_url ?? undefined,
                             sampleText: toneAnalysis.sample_text ?? undefined,
+                            goldStandardText: toneAnalysis.gold_standard_text ?? undefined,
                           });
                         }}
                       >
