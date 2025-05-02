@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { Persona, ToneAnalysis } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -19,9 +21,16 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Plus, Search, FileText } from "lucide-react";
+import { Loader2, Plus, Search, FileText, User, BarChart } from "lucide-react";
 import SavedContentListItem from "./SavedContentListItem";
 import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CampaignModalProps {
   campaignId: number;
@@ -32,7 +41,11 @@ interface CampaignModalProps {
 export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProps) {
   const [isAddContentDialogOpen, setIsAddContentDialogOpen] = useState(false);
   const [selectedContentIds, setSelectedContentIds] = useState<number[]>([]);
+  const [activeTab, setActiveTab] = useState("content");
+  const [selectedPersonaId, setSelectedPersonaId] = useState<number | null>(null);
+  const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   
   // Subscription limit modal state
   const [showLimitModal, setShowLimitModal] = useState(false);
@@ -62,6 +75,20 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
     queryKey: ["/api/content"],
     queryFn: getQueryFn({ onError: () => {} }),
     enabled: isAddContentDialogOpen,
+  });
+  
+  // Get all personas
+  const { data: personas, isLoading: isLoadingPersonas } = useQuery<Persona[]>({
+    queryKey: ["/api/personas"],
+    queryFn: getQueryFn({ onError: () => {} }),
+    enabled: activeTab === "persona" || !!campaign?.persona_id,
+  });
+  
+  // Get all tone analyses
+  const { data: toneAnalyses, isLoading: isLoadingToneAnalyses } = useQuery<ToneAnalysis[]>({
+    queryKey: ["/api/tone-analyses"],
+    queryFn: getQueryFn({ onError: () => {} }),
+    enabled: activeTab === "tone" || !!campaign?.tone_analysis_id,
   });
 
   // Add content to campaign mutation
@@ -124,6 +151,46 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}/contents`] });
+    },
+  });
+  
+  // Update campaign mutation for persona or tone analysis
+  const updateCampaignMutation = useMutation({
+    mutationFn: async ({ 
+      campaignId, 
+      personaId, 
+      toneAnalysisId 
+    }: { 
+      campaignId: number; 
+      personaId?: number | null; 
+      toneAnalysisId?: number | null; 
+    }) => {
+      const updateData: any = {};
+      
+      if (personaId !== undefined) {
+        updateData.persona_id = personaId;
+      }
+      
+      if (toneAnalysisId !== undefined) {
+        updateData.tone_analysis_id = toneAnalysisId;
+      }
+      
+      const res = await apiRequest("PATCH", `/api/campaigns/${campaignId}`, updateData);
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}`] });
+      toast({
+        title: "Campaign updated",
+        description: "The campaign associations have been updated successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Update failed",
+        description: error.message || "Failed to update campaign",
+        variant: "destructive",
+      });
     },
   });
 
@@ -222,6 +289,22 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
                     <span className="text-muted-foreground">Content items: </span>
                     <span>{campaignContents?.length || 0}</span>
                   </div>
+                  {campaign.persona_id && personas?.length > 0 && (
+                    <div className="text-sm">
+                      <span className="text-muted-foreground">Persona: </span>
+                      <span className="text-[#74d1ea]">
+                        {personas.find(p => p.id === campaign.persona_id)?.name || 'None'}
+                      </span>
+                    </div>
+                  )}
+                  {campaign.tone_analysis_id && toneAnalyses?.length > 0 && (
+                    <div className="text-sm">
+                      <span className="text-muted-foreground">Tone: </span>
+                      <span className="text-[#74d1ea]">
+                        {toneAnalyses.find(t => t.id === campaign.tone_analysis_id)?.name || 'None'}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="ml-auto">
@@ -236,49 +319,235 @@ export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProp
             </div>
           </div>
 
-          {/* Campaign Content */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Campaign Content</h3>
+          {/* Tabs for Content, Persona and Tone Analysis */}
+          <Tabs defaultValue="content" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-4">
+              <TabsTrigger value="content" className="gap-2">
+                <FileText className="h-4 w-4" /> Content
+              </TabsTrigger>
+              <TabsTrigger value="persona" className="gap-2">
+                <User className="h-4 w-4" /> Persona
+              </TabsTrigger>
+              <TabsTrigger value="tone" className="gap-2">
+                <BarChart className="h-4 w-4" /> Tone Analysis
+              </TabsTrigger>
+            </TabsList>
             
-            {isLoadingContents ? (
-              <div className="flex justify-center items-center h-[200px]">
-                <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
-              </div>
-            ) : !campaignContents || campaignContents.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
-                <FileText className="h-10 w-10 text-muted-foreground" />
-                <h3 className="text-lg font-semibold">No content in this campaign</h3>
-                <p className="text-muted-foreground text-center max-w-md text-sm">
-                  This campaign doesn't have any content yet. Add some from your saved content.
-                </p>
-                <Button 
-                  onClick={() => setIsAddContentDialogOpen(true)}
-                  size="sm"
-                  style={{ backgroundColor: "#74d1ea", color: "black" }}
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Add Content
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                  <span>{campaignContents.length} item{campaignContents.length !== 1 ? 's' : ''}</span>
+            {/* Content Tab */}
+            <TabsContent value="content" className="space-y-4">
+              <h3 className="text-xl font-bold mb-4">Campaign Content</h3>
+              
+              {isLoadingContents ? (
+                <div className="flex justify-center items-center h-[200px]">
+                  <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
                 </div>
-                <ScrollArea className="h-[400px]">
-                  <div className="grid gap-4 pr-2">
-                    {campaignContents.map((content: any) => (
-                      <SavedContentListItem
-                        key={content.id}
-                        content={content}
-                        onRemoveFromCampaign={() => handleRemoveContent(content.id)}
-                        showCampaignActions={true}
-                      />
-                    ))}
+              ) : !campaignContents || campaignContents.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
+                  <FileText className="h-10 w-10 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold">No content in this campaign</h3>
+                  <p className="text-muted-foreground text-center max-w-md text-sm">
+                    This campaign doesn't have any content yet. Add some from your saved content.
+                  </p>
+                  <Button 
+                    onClick={() => setIsAddContentDialogOpen(true)}
+                    size="sm"
+                    style={{ backgroundColor: "#74d1ea", color: "black" }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" /> Add Content
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                    <span>{campaignContents.length} item{campaignContents.length !== 1 ? 's' : ''}</span>
                   </div>
-                </ScrollArea>
-              </div>
-            )}
-          </div>
+                  <ScrollArea className="h-[400px]">
+                    <div className="grid gap-4 pr-2">
+                      {campaignContents.map((content: any) => (
+                        <SavedContentListItem
+                          key={content.id}
+                          content={content}
+                          onRemoveFromCampaign={() => handleRemoveContent(content.id)}
+                          showCampaignActions={true}
+                        />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+              )}
+            </TabsContent>
+            
+            {/* Persona Tab */}
+            <TabsContent value="persona" className="space-y-4">
+              <h3 className="text-xl font-bold mb-4">Campaign Persona</h3>
+              
+              {isLoadingPersonas ? (
+                <div className="flex justify-center items-center h-[200px]">
+                  <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+                </div>
+              ) : !personas || personas.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
+                  <User className="h-10 w-10 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold">No personas available</h3>
+                  <p className="text-muted-foreground text-center max-w-md text-sm">
+                    You haven't created any personas yet. Create personas to associate with this campaign.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="persona-select">Select a persona for this campaign</Label>
+                    <Select 
+                      value={selectedPersonaId?.toString() || (campaign.persona_id?.toString() || '')}
+                      onValueChange={(value) => setSelectedPersonaId(parseInt(value))}
+                    >
+                      <SelectTrigger id="persona-select" className="w-full">
+                        <SelectValue placeholder="Select a persona" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">None</SelectItem>
+                        {personas.map((persona) => (
+                          <SelectItem key={persona.id} value={persona.id.toString()}>
+                            {persona.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Associating a persona helps maintain consistent audience targeting across all campaign content.
+                    </p>
+                  </div>
+                  
+                  {(selectedPersonaId || campaign.persona_id) && personas.length > 0 && (
+                    <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
+                      <h4 className="font-medium mb-2">
+                        {personas.find(p => p.id === (selectedPersonaId || campaign.persona_id))?.name}
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {personas.find(p => p.id === (selectedPersonaId || campaign.persona_id))?.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {personas.find(p => p.id === (selectedPersonaId || campaign.persona_id))?.interests?.map((interest: string, i: number) => (
+                          <span 
+                            key={i} 
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#181c25] text-[#74d1ea]"
+                          >
+                            {interest}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-end">
+                    <Button
+                      onClick={() => {
+                        updateCampaignMutation.mutate({
+                          campaignId, 
+                          personaId: selectedPersonaId !== null ? selectedPersonaId : campaign.persona_id
+                        });
+                      }}
+                      disabled={updateCampaignMutation.isPending}
+                      style={{ backgroundColor: "#74d1ea", color: "black" }}
+                    >
+                      {updateCampaignMutation.isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
+                        </>
+                      ) : (
+                        "Update Persona"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+            
+            {/* Tone Analysis Tab */}
+            <TabsContent value="tone" className="space-y-4">
+              <h3 className="text-xl font-bold mb-4">Campaign Tone Analysis</h3>
+              
+              {isLoadingToneAnalyses ? (
+                <div className="flex justify-center items-center h-[200px]">
+                  <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+                </div>
+              ) : !toneAnalyses || toneAnalyses.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
+                  <BarChart className="h-10 w-10 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold">No tone analyses available</h3>
+                  <p className="text-muted-foreground text-center max-w-md text-sm">
+                    You haven't created any tone analyses yet. Create tone analyses to associate with this campaign.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="tone-select">Select a tone analysis for this campaign</Label>
+                    <Select 
+                      value={selectedToneAnalysisId?.toString() || (campaign.tone_analysis_id?.toString() || '')}
+                      onValueChange={(value) => setSelectedToneAnalysisId(parseInt(value))}
+                    >
+                      <SelectTrigger id="tone-select" className="w-full">
+                        <SelectValue placeholder="Select a tone analysis" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">None</SelectItem>
+                        {toneAnalyses.map((tone) => (
+                          <SelectItem key={tone.id} value={tone.id.toString()}>
+                            {tone.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Associating a tone analysis ensures consistent voice and tone across all campaign materials.
+                    </p>
+                  </div>
+                  
+                  {(selectedToneAnalysisId || campaign.tone_analysis_id) && toneAnalyses.length > 0 && (
+                    <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
+                      <h4 className="font-medium mb-2">
+                        {toneAnalyses.find(t => t.id === (selectedToneAnalysisId || campaign.tone_analysis_id))?.name}
+                      </h4>
+                      {toneAnalyses.find(t => t.id === (selectedToneAnalysisId || campaign.tone_analysis_id))?.tone_results && (
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {toneAnalyses.find(t => t.id === (selectedToneAnalysisId || campaign.tone_analysis_id))?.tone_results?.keywords?.slice(0, 6)?.map((keyword: string, i: number) => (
+                            <span 
+                              key={i} 
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#181c25] text-[#74d1ea]"
+                            >
+                              {keyword}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-end">
+                    <Button
+                      onClick={() => {
+                        updateCampaignMutation.mutate({
+                          campaignId, 
+                          toneAnalysisId: selectedToneAnalysisId !== null ? selectedToneAnalysisId : campaign.tone_analysis_id
+                        });
+                      }}
+                      disabled={updateCampaignMutation.isPending}
+                      style={{ backgroundColor: "#74d1ea", color: "black" }}
+                    >
+                      {updateCampaignMutation.isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
+                        </>
+                      ) : (
+                        "Update Tone Analysis"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* Add Content Dialog */}

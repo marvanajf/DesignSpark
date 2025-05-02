@@ -1,12 +1,24 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { Campaign, InsertCampaign } from "@shared/schema";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useAuth } from "@/hooks/use-auth";
-import { Loader2, Plus, Folder, Pencil, Trash2 } from "lucide-react";
-import { CampaignModal } from "./CampaignModal";
 import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Campaign, InsertCampaign } from "@shared/schema";
+import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
+import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { CampaignModal } from "@/components/CampaignModal";
+import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Card,
   CardContent,
@@ -16,43 +28,38 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { 
+  Loader2, 
+  MoreVertical, 
+  Pencil, 
+  Plus, 
+  Search, 
+  Trash2, 
+  FolderOpen,
+  LayoutGrid
+} from "lucide-react";
 
 export function CampaignList() {
-  const { toast } = useToast();
   const { user } = useAuth();
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
-  const [currentCampaign, setCurrentCampaign] = useState<Campaign | null>(null);
+  const { toast } = useToast();
+  const [, navigate] = useLocation();
+  const queryClient = useQueryClient();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+  });
+
   // Subscription limit modal state
   const [showLimitModal, setShowLimitModal] = useState(false);
   const [limitData, setLimitData] = useState<{
@@ -62,422 +69,450 @@ export function CampaignList() {
     currentPlan: string;
   } | null>(null);
 
+  // Get all campaigns for the user
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
     staleTime: 1000 * 60, // 1 minute
   });
 
+  // Create a new campaign
   const createCampaignMutation = useMutation({
-    mutationFn: async (campaign: InsertCampaign) => {
-      try {
-        const res = await apiRequest("POST", "/api/campaigns", campaign);
-        
-        // Check if we hit a subscription limit (402 Payment Required)
-        if (res.status === 402) {
-          const limitData = await res.json();
-          return { 
-            limitReached: true, 
+    mutationFn: async (data: Omit<InsertCampaign, "user_id">) => {
+      const res = await apiRequest("POST", "/api/campaigns", {
+        ...data,
+        user_id: user?.id,
+        status: "active",
+      });
+
+      // Check if we hit a subscription limit (402 Payment Required)
+      if (res.status === 402) {
+        const limitData = await res.json();
+        throw { 
+          isLimitError: true, 
+          limitData: {
             limitType: "campaigns" as const,
             currentUsage: limitData.currentUsage, 
             limit: limitData.limit,
             currentPlan: limitData.currentPlan 
-          };
-        }
-        
-        return { data: await res.json() };
-      } catch (error) {
-        throw error;
+          }
+        };
       }
+
+      return await res.json();
     },
-    onSuccess: (result) => {
-      // Check if this was a subscription limit response
-      if ('limitReached' in result && result.limitReached) {
-        setLimitData({
-          limitType: result.limitType,
-          currentUsage: result.currentUsage,
-          limit: result.limit,
-          currentPlan: result.currentPlan
-        });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      setIsCreateModalOpen(false);
+      setFormData({ name: "", description: "" });
+      toast({
+        title: "Campaign created",
+        description: "Your campaign has been created successfully",
+      });
+    },
+    onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
         setShowLimitModal(true);
-        setIsCreateDialogOpen(false);
+        setIsCreateModalOpen(false);
         return;
       }
       
-      // Normal success flow
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
-      toast({
-        title: "Campaign created",
-        description: "Your campaign was created successfully",
-      });
-      resetForm();
-      setIsCreateDialogOpen(false);
-    },
-    onError: (error) => {
       toast({
         title: "Failed to create campaign",
-        description: error.message,
+        description: error.message || "An error occurred",
         variant: "destructive",
       });
     },
   });
 
+  // Update a campaign
   const updateCampaignMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<InsertCampaign> }) => {
+    mutationFn: async ({ id, data }: { id: number; data: Partial<Campaign> }) => {
       const res = await apiRequest("PATCH", `/api/campaigns/${id}`, data);
       return await res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      setIsEditModalOpen(false);
+      setSelectedCampaign(null);
       toast({
         title: "Campaign updated",
-        description: "Your campaign was updated successfully",
+        description: "Your campaign has been updated successfully",
       });
-      resetForm();
-      setIsEditDialogOpen(false);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Failed to update campaign",
-        description: error.message,
+        description: error.message || "An error occurred",
         variant: "destructive",
       });
     },
   });
 
+  // Delete a campaign
   const deleteCampaignMutation = useMutation({
     mutationFn: async (id: number) => {
       await apiRequest("DELETE", `/api/campaigns/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      setIsDeleteModalOpen(false);
+      setSelectedCampaignId(null);
       toast({
         title: "Campaign deleted",
-        description: "Your campaign was deleted successfully",
+        description: "The campaign has been deleted successfully",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Failed to delete campaign",
-        description: error.message,
+        description: error.message || "An error occurred",
         variant: "destructive",
       });
     },
   });
 
-  const handleCreateCampaign = () => {
-    if (!name) {
-      toast({
-        title: "Campaign name required",
-        description: "Please enter a name for your campaign",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!user) {
-      toast({
-        title: "Authentication required",
-        description: "You must be logged in to create a campaign",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    createCampaignMutation.mutate({
-      name,
-      description: description || null,
-      user_id: user.id,
-      status: "active",
+  const handleCreateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await createCampaignMutation.mutateAsync({
+      name: formData.name,
+      description: formData.description || null,
     });
   };
 
-  const handleUpdateCampaign = () => {
-    if (!currentCampaign) return;
-    
-    if (!name) {
-      toast({
-        title: "Campaign name required",
-        description: "Please enter a name for your campaign",
-        variant: "destructive",
-      });
-      return;
-    }
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCampaign) return;
 
-    updateCampaignMutation.mutate({
-      id: currentCampaign.id,
+    await updateCampaignMutation.mutateAsync({
+      id: selectedCampaign.id,
       data: {
-        name,
-        description: description || null,
+        name: formData.name,
+        description: formData.description || null,
       },
     });
   };
 
-  const handleDelete = (id: number) => {
-    deleteCampaignMutation.mutate(id);
+  const handleDeleteConfirm = async () => {
+    if (selectedCampaignId) {
+      await deleteCampaignMutation.mutateAsync(selectedCampaignId);
+    }
   };
 
-  const resetForm = () => {
-    setName("");
-    setDescription("");
-    setCurrentCampaign(null);
+  const openCampaignModal = (campaign: Campaign) => {
+    setSelectedCampaignId(campaign.id);
   };
 
-  const openEditDialog = (campaign: Campaign) => {
-    setCurrentCampaign(campaign);
-    setName(campaign.name);
-    setDescription(campaign.description || "");
-    setIsEditDialogOpen(true);
+  const openEditModal = (campaign: Campaign) => {
+    setSelectedCampaign(campaign);
+    setFormData({
+      name: campaign.name,
+      description: campaign.description || "",
+    });
+    setIsEditModalOpen(true);
   };
 
-  const openCreateDialog = () => {
-    resetForm();
-    setIsCreateDialogOpen(true);
+  const openDeleteModal = (id: number) => {
+    setSelectedCampaignId(id);
+    setIsDeleteModalOpen(true);
   };
 
-  if (isLoading) {
+  const filteredCampaigns = campaigns?.filter(campaign => {
+    if (!searchQuery) return true;
     return (
-      <div className="flex justify-center items-center h-[200px]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      campaign.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (campaign.description?.toLowerCase() || "").includes(searchQuery.toLowerCase())
     );
-  }
+  });
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Your Campaigns</h2>
+      <div className="flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center mb-6">
+        <div className="relative flex-1 w-full sm:max-w-xs">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search campaigns..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8"
+          />
+        </div>
         <Button 
-          onClick={openCreateDialog} 
-          className="gap-1"
+          onClick={() => setIsCreateModalOpen(true)}
+          className="gap-1 whitespace-nowrap"
           style={{ backgroundColor: "#74d1ea", color: "black" }}
         >
           <Plus className="h-4 w-4" /> New Campaign
         </Button>
       </div>
-      
-      <p className="text-muted-foreground">
-        Custom campaigns you've created for your specific content organization
-      </p>
 
-      {/* Create Campaign Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Create New Campaign</DialogTitle>
-            <DialogDescription>
-              Organize your content by creating a new campaign for related materials.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="campaign-name">Campaign Name</Label>
-              <Input
-                id="campaign-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="E.g. Q2 Marketing Campaign"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="campaign-description">Description (optional)</Label>
-              <Textarea
-                id="campaign-description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe the purpose of this campaign"
-                className="col-span-3 min-h-[120px]"
-              />
-            </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <Loader2 className="h-10 w-10 animate-spin text-[#74d1ea]" />
+        </div>
+      ) : !campaigns || campaigns.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 space-y-4">
+          <div className="rounded-full bg-[#181c25] p-4">
+            <LayoutGrid className="h-8 w-8 text-[#74d1ea]" />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleCreateCampaign} 
-              disabled={createCampaignMutation.isPending}
-              style={{ backgroundColor: "#74d1ea", color: "black" }}
-            >
-              {createCampaignMutation.isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...
-                </>
-              ) : (
-                "Create Campaign"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Campaign Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Edit Campaign</DialogTitle>
-            <DialogDescription>
-              Update your campaign details.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="edit-campaign-name">Campaign Name</Label>
-              <Input
-                id="edit-campaign-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Campaign name"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-campaign-description">Description (optional)</Label>
-              <Textarea
-                id="edit-campaign-description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Campaign description"
-                className="col-span-3 min-h-[120px]"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleUpdateCampaign} 
-              disabled={updateCampaignMutation.isPending}
-              style={{ backgroundColor: "#74d1ea", color: "black" }}
-            >
-              {updateCampaignMutation.isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
-                </>
-              ) : (
-                "Update Campaign"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Campaign cards */}
-      {campaigns && campaigns.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {campaigns.map((campaign) => (
-            <div key={campaign.id} className="relative group overflow-hidden">
-              <Card className="overflow-hidden bg-[#0e1015] border-0 h-full flex flex-col">
-                <CardHeader className="p-5 pb-3">
-                  <div className="flex items-start space-x-2">
-                    <div className="flex-shrink-0 flex items-center justify-center h-9 w-9 rounded-full bg-[#181c25]">
+          <h2 className="text-xl font-bold">No campaigns yet</h2>
+          <p className="text-muted-foreground text-center max-w-md">
+            Create your first campaign to organize your content for different marketing initiatives
+          </p>
+          <Button 
+            onClick={() => setIsCreateModalOpen(true)} 
+            className="gap-1"
+            style={{ backgroundColor: "#74d1ea", color: "black" }}
+          >
+            <Plus className="h-4 w-4" /> Create Your First Campaign
+          </Button>
+        </div>
+      ) : filteredCampaigns?.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 space-y-4">
+          <Search className="h-8 w-8 text-muted-foreground" />
+          <h2 className="text-xl font-bold">No matching campaigns</h2>
+          <p className="text-muted-foreground text-center max-w-md">
+            No campaigns match your search query. Try a different search or clear the search field.
+          </p>
+          <Button 
+            variant="outline" 
+            onClick={() => setSearchQuery("")}
+          >
+            Clear Search
+          </Button>
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {filteredCampaigns?.map((campaign) => (
+            <Card key={campaign.id} className="overflow-hidden hover:bg-[#0e1015] transition-colors">
+              <CardHeader className="pb-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-full bg-[#181c25]">
                       <span className="text-base font-medium uppercase text-[#74d1ea]">
                         {campaign.name.substring(0, 2)}
                       </span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <CardTitle className="text-lg font-semibold truncate">
-                        {campaign.name}
-                      </CardTitle>
-                      <CardDescription className="line-clamp-2 text-sm">
-                        {campaign.description || "No description provided"}
-                      </CardDescription>
+                    <div>
+                      <CardTitle className="text-lg">{campaign.name}</CardTitle>
                     </div>
-                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => openEditDialog(campaign)}
-                        className="h-8 w-8"
-                      >
-                        <Pencil className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreVertical className="h-4 w-4" />
                       </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Delete</span>
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Campaign</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Are you sure you want to delete this campaign? This action cannot be undone
-                              and will remove all content associations.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(campaign.id)}
-                              className="bg-destructive hover:bg-destructive/90"
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-1 px-5 py-3">
-                  <div className="text-sm text-muted-foreground mb-2">
-                    <span className="text-xs uppercase font-semibold text-[#74d1ea]">KEY DETAILS</span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-sm">
-                      <span className="text-muted-foreground">Created: </span>
-                      <span>{new Date(campaign.created_at).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="border-t border-[#1a1e29] p-3 mt-auto">
-                  <Button
-                    variant="default"
-                    size="sm"
-                    className="w-full"
-                    style={{ backgroundColor: "#74d1ea", color: "black" }}
-                    onClick={() => {
-                      setSelectedCampaignId(campaign.id);
-                      setIsCampaignModalOpen(true);
-                    }}
-                  >
-                    Select
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem 
+                        onClick={() => openCampaignModal(campaign)}
+                        className="cursor-pointer"
+                      >
+                        <FolderOpen className="mr-2 h-4 w-4" /> View Campaign
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => openEditModal(campaign)}
+                        className="cursor-pointer"
+                      >
+                        <Pencil className="mr-2 h-4 w-4" /> Edit Campaign
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => openDeleteModal(campaign.id)}
+                        className="cursor-pointer text-destructive focus:text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" /> Delete Campaign
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </CardHeader>
+              <CardContent className="pb-3">
+                {campaign.description ? (
+                  <CardDescription className="line-clamp-3">{campaign.description}</CardDescription>
+                ) : (
+                  <CardDescription className="text-muted-foreground italic">No description</CardDescription>
+                )}
+              </CardContent>
+              <CardFooter className="flex justify-between items-center border-t border-[#1a1e29] pt-3 pb-3">
+                <div className="text-xs text-muted-foreground">
+                  Created {new Date(campaign.created_at).toLocaleDateString()}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-[#74d1ea] hover:bg-[#181c25] hover:text-[#74d1ea]"
+                  onClick={() => navigate(`/campaign/${campaign.id}`)}
+                >
+                  <FolderOpen className="mr-2 h-4 w-4" /> Open
+                </Button>
+              </CardFooter>
+            </Card>
           ))}
-        </div>
-      ) : (
-        <div className="border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden p-10 text-center">
-          <Folder className="h-14 w-14 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">No campaigns yet</h3>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            Create your first campaign to organize your content into focused collections for specific initiatives or themes.
-          </p>
-          <Button 
-            onClick={openCreateDialog}
-            style={{ backgroundColor: "#74d1ea", color: "black" }}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Create Your First Campaign
-          </Button>
         </div>
       )}
 
-      {/* Campaign Modal */}
+      {/* Create Campaign Modal */}
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent>
+          <form onSubmit={handleCreateSubmit}>
+            <DialogHeader>
+              <DialogTitle>Create a New Campaign</DialogTitle>
+              <DialogDescription>
+                Organize your content into campaigns for easier management
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Campaign Name</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Enter campaign name"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description (optional)</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe the purpose of this campaign"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsCreateModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={createCampaignMutation.isPending || !formData.name.trim()}
+                style={{ backgroundColor: "#74d1ea", color: "black" }}
+              >
+                {createCampaignMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...
+                  </>
+                ) : (
+                  "Create Campaign"
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Campaign Modal */}
+      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+        <DialogContent>
+          <form onSubmit={handleEditSubmit}>
+            <DialogHeader>
+              <DialogTitle>Edit Campaign</DialogTitle>
+              <DialogDescription>
+                Update your campaign details
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-name">Campaign Name</Label>
+                <Input
+                  id="edit-name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Enter campaign name"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-description">Description (optional)</Label>
+                <Textarea
+                  id="edit-description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe the purpose of this campaign"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsEditModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={updateCampaignMutation.isPending || !formData.name.trim()}
+                style={{ backgroundColor: "#74d1ea", color: "black" }}
+              >
+                {updateCampaignMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
+                  </>
+                ) : (
+                  "Update Campaign"
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Campaign Confirmation Modal */}
+      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Campaign</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this campaign? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleDeleteConfirm} 
+              disabled={deleteCampaignMutation.isPending}
+              variant="destructive"
+            >
+              {deleteCampaignMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Deleting...
+                </>
+              ) : (
+                "Delete Campaign"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Campaign Details Modal */}
       {selectedCampaignId && (
         <CampaignModal
           campaignId={selectedCampaignId}
-          isOpen={isCampaignModalOpen}
-          onClose={() => setIsCampaignModalOpen(false)}
+          isOpen={!!selectedCampaignId}
+          onClose={() => setSelectedCampaignId(null)}
         />
       )}
-      
+
       {/* Subscription Limit Modal */}
       {showLimitModal && limitData && (
         <SubscriptionLimitModal
