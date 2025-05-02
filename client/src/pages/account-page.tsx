@@ -167,7 +167,7 @@ export default function AccountPage() {
             </TabsList>
             
             <TabsContent value="profile">
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -285,7 +285,7 @@ export default function AccountPage() {
             </TabsContent>
             
             <TabsContent value="security">
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -360,7 +360,7 @@ export default function AccountPage() {
             </TabsContent>
             
             <TabsContent value="notifications">
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -414,7 +414,7 @@ export default function AccountPage() {
             </TabsContent>
             
             <TabsContent value="billing">
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -500,7 +500,7 @@ export default function AccountPage() {
       
       {/* Avatar Selection Dialog */}
       <Dialog open={avatarDialogOpen} onOpenChange={setAvatarDialogOpen}>
-        <DialogContent className="bg-[#0a0c10] border border-gray-800/60 text-white max-w-md">
+        <DialogContent className="bg-black border border-gray-800/60 text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center">
               <Camera className="h-5 w-5 text-[#74d1ea] mr-2" />
@@ -516,7 +516,7 @@ export default function AccountPage() {
               {avatarColors.map((color, index) => (
                 <div 
                   key={index}
-                  className={`h-16 w-16 rounded-xl ${color} border border-gray-800/30 flex items-center justify-center text-white text-lg font-medium cursor-pointer transition-all duration-200 hover:scale-105 ${selectedAvatar === color ? 'ring-2 ring-[#74d1ea] ring-offset-2 ring-offset-[#0a0c10]' : ''}`}
+                  className={`h-16 w-16 rounded-xl ${color} border border-gray-800/30 flex items-center justify-center text-white text-lg font-medium cursor-pointer transition-all duration-200 hover:scale-105 ${selectedAvatar === color ? 'ring-2 ring-[#74d1ea] ring-offset-2 ring-offset-black' : ''}`}
                   onClick={() => setSelectedAvatar(color)}
                 >
                   {user?.username?.slice(0, 2).toUpperCase() || "U"}
