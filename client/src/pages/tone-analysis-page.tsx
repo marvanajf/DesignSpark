@@ -615,7 +615,7 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
                               
-                              <div className="mt-4">
+                              <div className="mt-6 border-t border-gray-800/60 pt-6">
                                 <label htmlFor="furtherGuidance" className="block text-sm font-medium text-white mb-2">
                                   Further Guidance (Optional)
                                 </label>
@@ -685,7 +685,7 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
-                              <div className="mt-4">
+                              <div className="mt-6 border-t border-gray-800/60 pt-6">
                                 <label htmlFor="furtherGuidanceText" className="block text-sm font-medium text-white mb-2">
                                   Further Guidance (Optional)
                                 </label>
@@ -771,7 +771,7 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
-                              <div className="mt-4">
+                              <div className="mt-6 border-t border-gray-800/60 pt-6">
                                 <label htmlFor="furtherGuidanceAdvanced" className="block text-sm font-medium text-white mb-2">
                                   Further Guidance (Optional)
                                 </label>
