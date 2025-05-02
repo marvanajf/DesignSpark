@@ -130,7 +130,7 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Content Type Distribution - Platform style */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -183,7 +183,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Tone Analysis Results - Platform style */}
-              <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -261,7 +261,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Advanced Tone Analysis Card */}
               <div 
-                className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer"
+                className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer"
                 onClick={() => navigate('/tone-analysis')}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
@@ -296,7 +296,7 @@ export default function DashboardPage() {
               
               {/* Target Personas Card */}
               <div 
-                className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer"
+                className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer"
                 onClick={() => navigate('/personas')}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
@@ -347,7 +347,7 @@ export default function DashboardPage() {
               </Button>
             </div>
             
-            <div className="group relative bg-[#0a0c10] border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+            <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
               <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
               
               {contentList && contentList.length > 0 ? (
@@ -355,7 +355,7 @@ export default function DashboardPage() {
                   {contentList.slice(0, 3).map((content, index) => (
                     <div 
                       key={content.id} 
-                      className={`p-6 hover:bg-[#0e131f]/50 transition-colors duration-200 ${
+                      className={`p-6 bg-black hover:bg-black/80 transition-colors duration-200 ${
                         index !== contentList.slice(0, 3).length - 1 ? 'border-b border-gray-800/60' : ''
                       }`}
                     >
@@ -410,7 +410,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : (
-                <div className="p-8 text-center">
+                <div className="p-8 text-center bg-black">
                   <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0e131f] border border-[#74d1ea]/20 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                     <FileText className="h-6 w-6 text-[#74d1ea]" />
                   </div>
