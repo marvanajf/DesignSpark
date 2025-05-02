@@ -171,10 +171,10 @@ export default function Sidebar() {
             })}
           </nav>
           
-          {/* Bottom navigation items */}
-          <div className={`mt-6 ${isCollapsed ? '' : ''}`}>
+          {/* Settings navigation items */}
+          <div>
             {!isCollapsed && (
-              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2">Settings</h3>
+              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2 mt-8">Settings</h3>
             )}
             <nav className="space-y-1">
               {bottomMenuItems.map((item) => {
