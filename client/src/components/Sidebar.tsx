@@ -136,7 +136,7 @@ export default function Sidebar() {
       <div 
         className={`flex flex-col border-r border-gray-700/60 bg-black transition-all duration-300 ${
           isCollapsed ? 'w-0 -translate-x-full md:w-auto md:translate-x-0 md:w-16' : 'w-64'
-        } fixed md:relative z-40 h-full`}
+        } fixed md:relative z-40 h-screen`}
       >
         {/* Logo section */}
         <div className="h-16 flex items-center px-4 border-b border-gray-700/60">
@@ -147,7 +147,7 @@ export default function Sidebar() {
         </div>
         
         {/* Navigation section */}
-        <div className="flex-grow overflow-y-auto py-4">
+        <div className="flex-grow flex flex-col justify-between overflow-y-auto py-4">
           <nav className="px-2 space-y-1">
             {menuItems.map((item) => {
               const isActive = location === item.href;
