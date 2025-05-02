@@ -8,6 +8,12 @@ if (process.env.OPENAI_API_KEY) {
   openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 }
 
+// Utility function to clean up markdown formatting from text
+function cleanupMarkdownFormatting(text: string): string {
+  // Remove asterisks used for bold or italic formatting
+  return text.replace(/\*\*/g, '').replace(/\*/g, '');
+}
+
 // Type for tone analysis results
 export interface ToneAnalysisResult {
   characteristics: {
@@ -183,6 +189,7 @@ export async function generateLinkedInPost(
             - Keep it 100-200 words maximum
             - Add line breaks between paragraphs for readability
             - The call to action should feel natural, not salesy
+            - Do NOT use markdown formatting like asterisks (*) for emphasis
             
             NEVER sound like corporate marketing copy - the goal is authenticity, relatability and engagement.`
         },
@@ -199,7 +206,7 @@ export async function generateLinkedInPost(
       throw new Error("Empty response from OpenAI");
     }
     
-    return responseContent;
+    return cleanupMarkdownFormatting(responseContent);
   } catch (error) {
     console.error("Error generating LinkedIn post:", error);
     throw new Error("Failed to generate LinkedIn post");
@@ -258,7 +265,7 @@ export async function generateColdEmail(
       throw new Error("Empty response from OpenAI");
     }
     
-    return responseContent;
+    return cleanupMarkdownFormatting(responseContent);
   } catch (error) {
     console.error("Error generating cold email:", error);
     throw new Error("Failed to generate cold email");
@@ -330,7 +337,7 @@ export async function generateWebinar(
       throw new Error("Empty response from OpenAI");
     }
     
-    return responseContent;
+    return cleanupMarkdownFormatting(responseContent);
   } catch (error) {
     console.error("Error generating webinar content:", error);
     throw new Error("Failed to generate webinar content");
@@ -405,7 +412,7 @@ export async function generateWorkshop(
       throw new Error("Empty response from OpenAI");
     }
     
-    return responseContent;
+    return cleanupMarkdownFormatting(responseContent);
   } catch (error) {
     console.error("Error generating workshop plan:", error);
     throw new Error("Failed to generate workshop plan");
