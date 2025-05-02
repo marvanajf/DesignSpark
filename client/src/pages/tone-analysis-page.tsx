@@ -529,6 +529,7 @@ export default function ToneAnalysisPage() {
                             websiteUrl: toneAnalysis.website_url ?? undefined,
                             sampleText: toneAnalysis.sample_text ?? undefined,
                             goldStandardText: toneAnalysis.gold_standard_text ?? undefined,
+                            furtherGuidance: furtherGuidance || toneAnalysis.further_guidance || undefined,
                           });
                         }}
                       >
@@ -701,6 +702,11 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
+                              {/* Further Guidance Component */}
+                              <FurtherGuidance 
+                                value={furtherGuidance}
+                                onChange={setFurtherGuidance}
+                              />
 
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
@@ -773,6 +779,11 @@ export default function ToneAnalysisPage() {
                                 </p>
                               </div>
 
+                              {/* Further Guidance Component */}
+                              <FurtherGuidance 
+                                value={furtherGuidance}
+                                onChange={setFurtherGuidance}
+                              />
 
                               
                               <div className="bg-[#0e131f]/50 border border-[#74d1ea]/10 rounded-lg p-4 mt-6">
