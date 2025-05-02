@@ -129,7 +129,7 @@ export default function Sidebar() {
       <div 
         className={`flex flex-col justify-between bg-black transition-all duration-300 ${
           isCollapsed ? 'w-0 -translate-x-full md:w-auto md:translate-x-0 md:w-16' : 'w-64'
-        } fixed md:relative z-40 h-screen`}
+        } relative z-40 h-full`}
       >
         {/* Logo section */}
         <div className="h-16 flex items-center px-4">

@@ -86,7 +86,7 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
       {!isAppPage && <Navbar showDashboardLinks={isAppPage} />}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden bg-black">
         {(showSidebar || isAppPage) && <Sidebar />}
         <main className={`flex-1 overflow-y-auto bg-background ${(showSidebar || isAppPage) ? '' : 'container mx-auto py-6'}`}>
           {children}
