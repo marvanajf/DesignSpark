@@ -2372,7 +2372,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updatedCampaign = await storage.updateCampaign(id, {
         name: req.body.name,
         description: req.body.description,
-        status: req.body.status
+        status: req.body.status,
+        persona_id: req.body.persona_id,
+        tone_analysis_id: req.body.tone_analysis_id
       });
 
       res.json(updatedCampaign);
