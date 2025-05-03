@@ -13,6 +13,22 @@ export const campaignStatusEnum = pgEnum('campaign_status', [
 
 export type SubscriptionPlanType = 'free' | 'standard' | 'professional' | 'premium';
 
+// Function to safely get environment variables or default values
+// This approach works in both Node.js and browser environments
+const getEnvVar = (key: string, defaultValue: string = ''): string => {
+  // In Node.js environment
+  if (typeof process !== 'undefined' && process.env && process.env[key]) {
+    return process.env[key] as string;
+  }
+  
+  // In browser environment with Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env as any)[key]) {
+    return (import.meta.env as any)[key];
+  }
+  
+  return defaultValue;
+};
+
 export const subscriptionPlans: Record<SubscriptionPlanType, {
   name: string;
   personas: number;
@@ -46,8 +62,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 4.99,
     currency: "GBP",
     displayPrice: "£4.99",
-    // Note: This is a placeholder. In production, you'll need to get actual price IDs from your Stripe dashboard
-    stripePrice: process.env.STRIPE_STANDARD_PRICE_ID || "price_standard"
+    // Use the environment variable if available, otherwise use a default (server will validate)
+    stripePrice: getEnvVar('STRIPE_STANDARD_PRICE_ID', 'price_standard')
   },
   professional: {
     name: "Premium",
@@ -59,8 +75,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 19.99,
     currency: "GBP",
     displayPrice: "£19.99",
-    // Note: This is a placeholder. In production, you'll need to get actual price IDs from your Stripe dashboard
-    stripePrice: process.env.STRIPE_PREMIUM_PRICE_ID || "price_premium"
+    // Use the environment variable if available, otherwise use a default (server will validate)
+    stripePrice: getEnvVar('STRIPE_PREMIUM_PRICE_ID', 'price_premium')
   },
   premium: {
     name: "Pro",
@@ -72,8 +88,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 39.99,
     currency: "GBP",
     displayPrice: "£39.99",
-    // Note: This is a placeholder. In production, you'll need to get actual price IDs from your Stripe dashboard
-    stripePrice: process.env.STRIPE_PRO_PRICE_ID || "price_pro"
+    // Use the environment variable if available, otherwise use a default (server will validate)
+    stripePrice: getEnvVar('STRIPE_PRO_PRICE_ID', 'price_pro')
   }
 };
 
