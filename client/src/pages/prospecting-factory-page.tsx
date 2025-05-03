@@ -778,7 +778,7 @@ REGISTER NOW: [Link]`,
                                   checked={selectedContentTypes.email}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, email: checked})}
                                 />
-                                <Label htmlFor="email-content" className="text-sm">Email Campaigns</Label>
+                                <Label htmlFor="email-content" className="text-sm">Email</Label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <Switch 
@@ -1208,7 +1208,7 @@ REGISTER NOW: [Link]`,
                           <div>
                             <h4 className="text-white font-medium mb-3 flex items-center">
                               <MessageSquare className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                              Email Campaigns
+                              Email
                             </h4>
                             
                             <div className="grid sm:grid-cols-2 gap-4">
