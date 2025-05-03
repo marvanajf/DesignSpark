@@ -64,6 +64,16 @@ type Campaign = {
 export default function ProspectingFactoryPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("input");
+  // Format dates as YYYY-MM-DD for inputs
+  const formatDateForInput = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+  
+  // Default date range for campaign
+  const today = new Date();
+  const twoMonthsLater = new Date(today);
+  twoMonthsLater.setMonth(today.getMonth() + 2);
+  
   const [campaignPrompt, setCampaignPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedUseCase, setSelectedUseCase] = useState<string>("");
@@ -118,15 +128,7 @@ export default function ProspectingFactoryPage() {
     { id: 'launch', name: 'Product Launch', description: 'Introduce a new product or feature to the market' }
   ];
   
-  // Default date range for campaign
-  const today = new Date();
-  const twoMonthsLater = new Date(today);
-  twoMonthsLater.setMonth(today.getMonth() + 2);
-  
-  // Format dates as YYYY-MM-DD for inputs
-  const formatDateForInput = (date: Date) => {
-    return date.toISOString().split('T')[0];
-  };
+
 
   // Function to handle campaign generation
   const handleGenerateCampaign = async () => {
@@ -223,12 +225,33 @@ Would you have 20 minutes next Tuesday to discuss how these advanced security fe
 
 Best regards,
 [Your Name]`,
-              deliveryDate: "2025-05-18",
+              deliveryDate: campaignStartDate,
               channel: "Email",
               icon: <MessageSquare className="h-5 w-5" />
             },
             {
               id: 2,
+              type: "email",
+              title: "Follow-up Email for IT Decision Makers",
+              persona: "IT Decision Maker",
+              content: `Subject: Following Up: Microsoft 365 Security Assessment
+
+Dear [IT Decision Maker],
+
+I wanted to follow up on my previous email about Microsoft 365 Business Premium's enhanced security features.
+
+In light of recent high-profile ransomware attacks targeting organizations in your industry, I thought you might be interested in our latest security assessment tool that can identify potential vulnerabilities in your current setup.
+
+Would you be available for a brief 15-minute demo this Thursday or Friday? I'd be happy to show you how other companies similar to yours have strengthened their security posture with minimal disruption to operations.
+
+Looking forward to your response,
+[Your Name]`,
+              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7)).toISOString().split('T')[0],
+              channel: "Email",
+              icon: <MessageSquare className="h-5 w-5" />
+            },
+            {
+              id: 3,
               type: "social",
               title: "LinkedIn Post for Small Business Owners",
               persona: "Small Business Owner",
@@ -245,7 +268,57 @@ Microsoft 365 Business Premium delivers:
 Calculate your potential ROI with our Business Premium Value Calculator: [Link]
 
 #SmallBusinessTech #ProductivityTools #MicrosoftPartner`,
-              deliveryDate: "2025-05-25",
+              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
+              channel: "LinkedIn",
+              icon: <FileText className="h-5 w-5" />
+            },
+            {
+              id: 4,
+              type: "social",
+              title: "Twitter Thread on Security Statistics",
+              persona: "IT Decision Maker",
+              content: `THREAD: 5 Alarming Security Statistics Every Business Should Know in 2025 👇
+
+1/ 73% of companies experienced a successful phishing attack in the last year, with the average data breach costing $4.8M for small-to-medium businesses.
+
+2/ Remote work has increased the average attack surface by 47%, with 68% of businesses reporting security incidents related to home offices.
+
+3/ Businesses using advanced threat protection tools experience 62% fewer successful attacks compared to those using standard security measures.
+
+4/ 84% of companies that experienced a ransomware attack and paid the ransom were targeted again within 6 months. Prevention > reaction.
+
+5/ Microsoft 365 Business Premium users report 65% faster threat detection and 83% less IT time spent on security incidents compared to standard license users.
+
+Learn more about strengthening your security with our free assessment: [link]`,
+              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
+              channel: "Twitter",
+              icon: <FileText className="h-5 w-5" />
+            },
+            {
+              id: 5,
+              type: "social",
+              title: "LinkedIn Article on Security ROI",
+              persona: "Operations Manager",
+              content: `# The True ROI of Advanced Security: Beyond Preventing Breaches
+
+When calculating the return on investment for security solutions, most businesses focus only on breach prevention. But advanced security delivers value far beyond avoiding attackers.
+
+Here are 5 unexpected ways Microsoft 365 Business Premium's security features drive operational efficiency:
+
+1. **Reduced IT firefighting**: Automated threat response means your IT team spends 62% less time on security incidents and more time on strategic initiatives.
+
+2. **Simplified compliance**: Built-in compliance tools reduce audit preparation time by 78% on average.
+
+3. **Accelerated employee onboarding**: Streamlined device management cuts provisioning time in half while maintaining security standards.
+
+4. **Enhanced productivity**: Employees experience 27% fewer disruptions from security-related issues.
+
+5. **Reduced shadow IT**: When security tools are intuitive, employees are 84% less likely to seek unauthorized workarounds.
+
+What's your perspective? Has your organization quantified the operational benefits of advanced security beyond breach prevention?
+
+#SecurityROI #BusinessProductivity #MicrosoftSecurity`,
+              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 17)).toISOString().split('T')[0],
               channel: "LinkedIn",
               icon: <FileText className="h-5 w-5" />
             },
@@ -392,6 +465,15 @@ REGISTER NOW: [Link]`,
       description: "Your campaign has been saved and is ready to use.",
     });
     // Here we would save the campaign to the database
+  };
+  
+  const handleAddToCampaignHub = () => {
+    toast({
+      title: "Added to Campaign Hub",
+      description: "Your campaign has been added to your Campaign Hub and is ready to manage.",
+    });
+    // Here we would add the campaign to the campaign hub collection
+    setLocation("/campaigns");
   };
 
   return (
@@ -820,6 +902,7 @@ REGISTER NOW: [Link]`,
                       
                       <div className="flex space-x-3">
                         <Button 
+                          onClick={handleAddToCampaignHub}
                           variant="outline"
                           className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
                         >
