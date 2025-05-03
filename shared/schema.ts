@@ -46,7 +46,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 4.99,
     currency: "GBP",
     displayPrice: "£4.99",
-    stripePrice: "price_standard" // Replace with actual Stripe price ID
+    stripePrice: "price_1PXbCoJv2a2eDPDyjxCU2zVq" // Standard price ID (adjust if different)
   },
   professional: {
     name: "Premium",
@@ -58,7 +58,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 19.99,
     currency: "GBP",
     displayPrice: "£19.99",
-    stripePrice: "price_professional" // Replace with actual Stripe price ID
+    stripePrice: "price_1PXbDEJv2a2eDPDybxZnQ8D6" // Premium price ID (adjust if different)
   },
   premium: {
     name: "Pro",
@@ -70,7 +70,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 39.99,
     currency: "GBP",
     displayPrice: "£39.99",
-    stripePrice: "price_premium" // Replace with actual Stripe price ID
+    stripePrice: "price_1PXbDiJv2a2eDPDyAOe7hxKl" // Pro price ID (adjust if different)
   }
 };
 
