@@ -137,12 +137,6 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                       <circle cx="4" cy="4" r="2"></circle>
                     </svg>
                   </a>
-                  <a href="https://twitter.com/tovably" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#74d1ea]">
-                    <span className="sr-only">Twitter</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-twitter">
-                      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                    </svg>
-                  </a>
                 </div>
                 <p className="mt-8 text-center text-base text-gray-400">
                   &copy; {new Date().getFullYear()} Tovably. All rights reserved.

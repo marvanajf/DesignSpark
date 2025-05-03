@@ -31,7 +31,7 @@ type Persona = {
 // Sample campaign content type
 type CampaignContent = {
   id: number;
-  type: 'email' | 'social' | 'blog' | 'ad';
+  type: 'email' | 'social' | 'blog' | 'ad' | 'webinar';
   title: string;
   content: string;
   persona: string;
@@ -83,8 +83,8 @@ export default function ProspectingFactoryPage() {
   const [personaBalance, setPersonaBalance] = useState<"equal" | "weighted">("equal");
   const [campaignStartDate, setCampaignStartDate] = useState<string>(formatDateForInput(new Date()));
   const [campaignEndDate, setCampaignEndDate] = useState<string>(formatDateForInput(twoMonthsLater));
-  const [contentCount, setContentCount] = useState<{ email: number, social: number, blog: number }>(
-    { email: 2, social: 3, blog: 1 }
+  const [contentCount, setContentCount] = useState<{ email: number, social: number, blog: number, webinar: number }>(
+    { email: 2, social: 3, blog: 1, webinar: 1 }
   );
   const { user } = useAuth();
   const [, setLocation] = useLocation();
@@ -274,25 +274,38 @@ Calculate your potential ROI with our Business Premium Value Calculator: [Link]
             },
             {
               id: 4,
-              type: "social",
-              title: "Twitter Thread on Security Statistics",
+              type: "webinar",
+              title: "Advanced Security Webinar for IT Professionals",
               persona: "IT Decision Maker",
-              content: `THREAD: 5 Alarming Security Statistics Every Business Should Know in 2025 👇
+              content: `Title: "Modern Threat Defense: Building Resilient Security with Microsoft 365 Business Premium"
 
-1/ 73% of companies experienced a successful phishing attack in the last year, with the average data breach costing $4.8M for small-to-medium businesses.
+Duration: 45 minutes + 15-minute Q&A
 
-2/ Remote work has increased the average attack surface by 47%, with 68% of businesses reporting security incidents related to home offices.
+Target Audience: IT Decision Makers and Security Professionals
 
-3/ Businesses using advanced threat protection tools experience 62% fewer successful attacks compared to those using standard security measures.
+Description:
+Join our Microsoft security specialists for an in-depth webinar on enhancing your organization's security posture through Microsoft 365 Business Premium. In this session, we'll demonstrate how Business Premium's advanced security features create a comprehensive defense system against modern threats.
 
-4/ 84% of companies that experienced a ransomware attack and paid the ransom were targeted again within 6 months. Prevention > reaction.
+Agenda:
+- The evolving threat landscape for small and mid-sized businesses in 2025
+- Live demonstration of Microsoft Defender for Office 365's threat detection capabilities
+- Device management best practices with Intune for hybrid/remote workforces
+- Implementing zero-trust security principles with Conditional Access
+- Case study: How Company X reduced security incidents by 73% in 90 days
 
-5/ Microsoft 365 Business Premium users report 65% faster threat detection and 83% less IT time spent on security incidents compared to standard license users.
+Key Takeaways:
+- Understanding of specific threat vectors targeting businesses like yours
+- Actionable configuration steps for maximizing security with Business Premium
+- Custom assessment methodology to identify your most critical security gaps
+- Implementation roadmap template for security enhancement
 
-Learn more about strengthening your security with our free assessment: [link]`,
-              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
-              channel: "Twitter",
-              icon: <FileText className="h-5 w-5" />
+Presenter:
+[Security Specialist Name], Microsoft Security Solutions Architect with 15+ years of experience in cybersecurity implementation for SMBs.
+
+Registration includes a complimentary security assessment consultation and access to our Business Premium implementation guide.`,
+              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
+              channel: "Webinar",
+              icon: <PlayCircle className="h-5 w-5" />
             },
             {
               id: 5,
@@ -656,14 +669,14 @@ REGISTER NOW: [Link]`,
                               </div>
                             </div>
                             <h4 className="text-white text-sm font-medium mb-2">Content Distribution</h4>
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                               <div>
                                 <Label htmlFor="email-count" className="text-xs text-gray-400 mb-1 block">Email Pieces</Label>
                                 <Input
                                   id="email-count"
                                   type="number"
                                   min="1"
-                                  max="5"
+                                  max="20"
                                   value={contentCount.email}
                                   onChange={(e) => setContentCount({...contentCount, email: parseInt(e.target.value) || 1})}
                                   className="h-9 bg-black border-gray-700 text-white"
@@ -675,7 +688,7 @@ REGISTER NOW: [Link]`,
                                   id="social-count"
                                   type="number"
                                   min="1"
-                                  max="5"
+                                  max="20"
                                   value={contentCount.social}
                                   onChange={(e) => setContentCount({...contentCount, social: parseInt(e.target.value) || 1})}
                                   className="h-9 bg-black border-gray-700 text-white"
@@ -687,21 +700,50 @@ REGISTER NOW: [Link]`,
                                   id="blog-count"
                                   type="number"
                                   min="1"
-                                  max="3"
+                                  max="20"
                                   value={contentCount.blog}
                                   onChange={(e) => setContentCount({...contentCount, blog: parseInt(e.target.value) || 1})}
+                                  className="h-9 bg-black border-gray-700 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="webinar-count" className="text-xs text-gray-400 mb-1 block">Webinar Pieces</Label>
+                                <Input
+                                  id="webinar-count"
+                                  type="number"
+                                  min="0"
+                                  max="20"
+                                  value={contentCount.webinar}
+                                  onChange={(e) => setContentCount({...contentCount, webinar: parseInt(e.target.value) || 0})}
                                   className="h-9 bg-black border-gray-700 text-white"
                                 />
                               </div>
                             </div>
                           </div>
                           
-                          <div className="flex items-center justify-between border border-gray-700 rounded-lg p-3">
-                            <div>
-                              <span className="text-white text-sm">Include tone analysis</span>
-                              <p className="text-xs text-gray-400">Apply your brand's tone profile</p>
+                          <div className="border border-gray-700 rounded-lg p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <span className="text-white text-sm">Include tone analysis</span>
+                                <p className="text-xs text-gray-400">Apply your brand's tone profile</p>
+                              </div>
+                              <Switch defaultChecked />
                             </div>
-                            <Switch defaultChecked />
+                            <div className="mt-3">
+                              <Label htmlFor="tone-selection" className="text-xs text-gray-400 mb-1 block">Select tone profile</Label>
+                              <Select defaultValue="professional">
+                                <SelectTrigger id="tone-selection" className="w-full bg-black border-gray-700 text-white h-9">
+                                  <SelectValue placeholder="Select a tone"/>
+                                </SelectTrigger>
+                                <SelectContent className="bg-black border-gray-700 text-white">
+                                  <SelectItem value="professional">Professional & Authoritative</SelectItem>
+                                  <SelectItem value="conversational">Conversational & Friendly</SelectItem>
+                                  <SelectItem value="persuasive">Persuasive & Sales-focused</SelectItem>
+                                  <SelectItem value="educational">Educational & Informative</SelectItem>
+                                  <SelectItem value="enthusiastic">Enthusiastic & Energetic</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
                           <div className="flex items-center justify-between border border-gray-700 rounded-lg p-3">
                             <div>
