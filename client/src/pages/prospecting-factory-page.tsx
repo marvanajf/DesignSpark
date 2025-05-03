@@ -83,6 +83,10 @@ export default function ProspectingFactoryPage() {
   const [personaBalance, setPersonaBalance] = useState<"equal" | "weighted">("equal");
   const [campaignStartDate, setCampaignStartDate] = useState<string>(formatDateForInput(new Date()));
   const [campaignEndDate, setCampaignEndDate] = useState<string>(formatDateForInput(twoMonthsLater));
+  const [selectedContentTypes, setSelectedContentTypes] = useState<{ 
+    email: boolean, social: boolean, blog: boolean, webinar: boolean, ad: boolean 
+  }>({ email: true, social: true, blog: true, webinar: false, ad: false });
+
   const [contentCount, setContentCount] = useState<{ email: number, social: number, blog: number, webinar: number }>(
     { email: 2, social: 3, blog: 1, webinar: 1 }
   );
@@ -128,7 +132,6 @@ export default function ProspectingFactoryPage() {
     { id: 'launch', name: 'Product Launch', description: 'Introduce a new product or feature to the market' }
   ];
   
-
 
   // Function to handle campaign generation
   const handleGenerateCampaign = async () => {
@@ -183,30 +186,13 @@ export default function ProspectingFactoryPage() {
         setGenerationProgress(100);
         
         // Generate mock campaign data
-        const mockedCampaign: Campaign = {
-          id: 1,
-          name: "Microsoft 365 Business Premium Upsell Campaign",
-          objective: "Increase conversion rate of standard Microsoft 365 users to Business Premium tier by highlighting advanced security features, enhanced productivity tools, and comprehensive device management capabilities.",
-          targetAudience: ["IT Decision Makers", "Small Business Owners", "Operations Managers"],
-          channels: ["Email", "LinkedIn", "Webinar", "Case Study"],
-          timeline: {
-            start: "2025-05-15",
-            end: "2025-07-15",
-          },
-          toneProfile: {
-            professional: 90,
-            conversational: 65,
-            persuasive: 80,
-            educational: 85,
-            enthusiastic: 55,
-          },
-          contents: [
-            {
-              id: 1,
-              type: "email",
-              title: "Security Enhancements Email for IT Decision Makers",
-              persona: "IT Decision Maker",
-              content: `Subject: Strengthen Your Security Posture with Microsoft 365 Business Premium
+        const allContentPieces = [
+          {
+            id: 1,
+            type: "email" as const,
+            title: "Security Enhancements Email for IT Decision Makers",
+            persona: "IT Decision Maker",
+            content: `Subject: Strengthen Your Security Posture with Microsoft 365 Business Premium
 
 Dear [IT Decision Maker],
 
@@ -225,16 +211,16 @@ Would you have 20 minutes next Tuesday to discuss how these advanced security fe
 
 Best regards,
 [Your Name]`,
-              deliveryDate: campaignStartDate,
-              channel: "Email",
-              icon: <MessageSquare className="h-5 w-5" />
-            },
-            {
-              id: 2,
-              type: "email",
-              title: "Follow-up Email for IT Decision Makers",
-              persona: "IT Decision Maker",
-              content: `Subject: Following Up: Microsoft 365 Security Assessment
+            deliveryDate: campaignStartDate,
+            channel: "Email",
+            icon: <MessageSquare className="h-5 w-5" />
+          },
+          {
+            id: 2,
+            type: "email" as const,
+            title: "Follow-up Email for IT Decision Makers",
+            persona: "IT Decision Maker",
+            content: `Subject: Following Up: Microsoft 365 Security Assessment
 
 Dear [IT Decision Maker],
 
@@ -246,16 +232,16 @@ Would you be available for a brief 15-minute demo this Thursday or Friday? I'd b
 
 Looking forward to your response,
 [Your Name]`,
-              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7)).toISOString().split('T')[0],
-              channel: "Email",
-              icon: <MessageSquare className="h-5 w-5" />
-            },
-            {
-              id: 3,
-              type: "social",
-              title: "LinkedIn Post for Small Business Owners",
-              persona: "Small Business Owner",
-              content: `"I was spending 5+ hours weekly on IT issues instead of growing my business. After upgrading to Microsoft 365 Business Premium, our team's productivity increased by 26% and I reclaimed those hours for strategic planning."
+            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7)).toISOString().split('T')[0],
+            channel: "Email",
+            icon: <MessageSquare className="h-5 w-5" />
+          },
+          {
+            id: 3,
+            type: "social" as const,
+            title: "LinkedIn Post for Small Business Owners",
+            persona: "Small Business Owner",
+            content: `"I was spending 5+ hours weekly on IT issues instead of growing my business. After upgrading to Microsoft 365 Business Premium, our team's productivity increased by 26% and I reclaimed those hours for strategic planning."
 
 Small business owners: Are manual processes and basic tools limiting your growth?
 
@@ -268,16 +254,16 @@ Microsoft 365 Business Premium delivers:
 Calculate your potential ROI with our Business Premium Value Calculator: [Link]
 
 #SmallBusinessTech #ProductivityTools #MicrosoftPartner`,
-              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
-              channel: "LinkedIn",
-              icon: <FileText className="h-5 w-5" />
-            },
-            {
-              id: 4,
-              type: "webinar",
-              title: "Advanced Security Webinar for IT Professionals",
-              persona: "IT Decision Maker",
-              content: `Title: "Modern Threat Defense: Building Resilient Security with Microsoft 365 Business Premium"
+            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
+            channel: "LinkedIn",
+            icon: <FileText className="h-5 w-5" />
+          },
+          {
+            id: 4,
+            type: "webinar" as const,
+            title: "Advanced Security Webinar for IT Professionals",
+            persona: "IT Decision Maker",
+            content: `Title: "Modern Threat Defense: Building Resilient Security with Microsoft 365 Business Premium"
 
 Duration: 45 minutes + 15-minute Q&A
 
@@ -303,16 +289,16 @@ Presenter:
 [Security Specialist Name], Microsoft Security Solutions Architect with 15+ years of experience in cybersecurity implementation for SMBs.
 
 Registration includes a complimentary security assessment consultation and access to our Business Premium implementation guide.`,
-              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
-              channel: "Webinar",
-              icon: <PlayCircle className="h-5 w-5" />
-            },
-            {
-              id: 5,
-              type: "social",
-              title: "LinkedIn Article on Security ROI",
-              persona: "Operations Manager",
-              content: `# The True ROI of Advanced Security: Beyond Preventing Breaches
+            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
+            channel: "Webinar",
+            icon: <PlayCircle className="h-5 w-5" />
+          },
+          {
+            id: 5,
+            type: "social" as const,
+            title: "LinkedIn Article on Security ROI",
+            persona: "Operations Manager",
+            content: `# The True ROI of Advanced Security: Beyond Preventing Breaches
 
 When calculating the return on investment for security solutions, most businesses focus only on breach prevention. But advanced security delivers value far beyond avoiding attackers.
 
@@ -331,16 +317,16 @@ Here are 5 unexpected ways Microsoft 365 Business Premium's security features dr
 What's your perspective? Has your organization quantified the operational benefits of advanced security beyond breach prevention?
 
 #SecurityROI #BusinessProductivity #MicrosoftSecurity`,
-              deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 17)).toISOString().split('T')[0],
-              channel: "LinkedIn",
-              icon: <FileText className="h-5 w-5" />
-            },
-            {
-              id: 3,
-              type: "blog",
-              title: "From Chaos to Clarity: How Microsoft 365 Business Premium Streamlines Operations",
-              persona: "Operations Manager",
-              content: `# From Chaos to Clarity: How Microsoft 365 Business Premium Streamlines Operations
+            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 17)).toISOString().split('T')[0],
+            channel: "LinkedIn",
+            icon: <FileText className="h-5 w-5" />
+          },
+          {
+            id: 6,
+            type: "blog" as const,
+            title: "From Chaos to Clarity: How Microsoft 365 Business Premium Streamlines Operations",
+            persona: "Operations Manager",
+            content: `# From Chaos to Clarity: How Microsoft 365 Business Premium Streamlines Operations
 
 For operations managers juggling multiple projects, teams, and workflows, the shift to hybrid work has created new challenges in maintaining productivity and process consistency. While standard collaboration tools provide basic functionality, they often lack the advanced features needed to truly optimize complex operational workflows.
 
@@ -413,16 +399,16 @@ Ready to transform your operational efficiency? Here are three ways to explore i
 3. **Join our upcoming webinar:** "Automation Strategies for Operational Excellence"
 
 *Don't let outdated tools limit your operational potential. Microsoft 365 Business Premium provides the advanced capabilities that modern operations require—all within a secure, integrated platform.*`,
-              deliveryDate: "2025-06-10",
-              channel: "Company Blog",
-              icon: <FileText className="h-5 w-5" />
-            },
-            {
-              id: 4,
-              type: "ad",
-              title: "Webinar Invitation for All Personas",
-              persona: "All",
-              content: `WEBINAR: MAXIMIZE YOUR MICROSOFT INVESTMENT
+            deliveryDate: "2025-06-10",
+            channel: "Company Blog",
+            icon: <FileText className="h-5 w-5" />
+          },
+          {
+            id: 7,
+            type: "ad" as const,
+            title: "Webinar Invitation for All Personas",
+            persona: "All",
+            content: `WEBINAR: MAXIMIZE YOUR MICROSOFT INVESTMENT
 
 Join us for an exclusive webinar on getting more value from your Microsoft 365 subscription.
 
@@ -439,11 +425,35 @@ Duration: 45 minutes + Q&A
 BONUS: All attendees receive our "Microsoft 365 Business Premium ROI Calculator" and a free 30-day trial.
 
 REGISTER NOW: [Link]`,
-              deliveryDate: "2025-06-05",
-              channel: "Email & LinkedIn",
-              icon: <Calendar className="h-5 w-5" />
-            }
-          ]
+            deliveryDate: "2025-06-05",
+            channel: "Email & LinkedIn",
+            icon: <Calendar className="h-5 w-5" />
+          }
+        ];
+
+        // Filter content based on selected content types
+        const filteredContents = allContentPieces.filter(content => 
+          selectedContentTypes[content.type as keyof typeof selectedContentTypes]
+        );
+
+        const mockedCampaign: Campaign = {
+          id: 1,
+          name: "Microsoft 365 Business Premium Upsell Campaign",
+          objective: "Increase conversion rate of standard Microsoft 365 users to Business Premium tier by highlighting advanced security features, enhanced productivity tools, and comprehensive device management capabilities.",
+          targetAudience: ["IT Decision Makers", "Small Business Owners", "Operations Managers"],
+          channels: ["Email", "LinkedIn", "Webinar", "Case Study"],
+          timeline: {
+            start: campaignStartDate,
+            end: campaignEndDate,
+          },
+          toneProfile: {
+            professional: 90,
+            conversational: 65,
+            persuasive: 80,
+            educational: 85,
+            enthusiastic: 55,
+          },
+          contents: filteredContents
         };
         
         setCampaign(mockedCampaign);
@@ -541,186 +551,214 @@ REGISTER NOW: [Link]`,
               </TabsList>
 
               <TabsContent value="input" className="space-y-8">
-                <div>
-                  <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
-                    <Lightbulb className="h-5 w-5 mr-2 text-[#74d1ea]" />
-                    Describe Your Campaign
-                  </h2>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="campaign-name" className="text-gray-300 mb-1.5 block">Campaign Brief</Label>
-                        <Textarea 
-                          id="campaign-brief" 
-                          className="min-h-[150px] bg-black border-gray-700 text-white"
-                          placeholder="Example: Build me a campaign for Microsoft 365 Business Premium - the aim is to upsell existing Office 365 users by highlighting advanced security features."
-                          value={campaignPrompt}
-                          onChange={(e) => setCampaignPrompt(e.target.value)}
-                        />
-                        <p className="text-xs text-gray-400 mt-1">Be specific about your target audience, campaign goals, and key selling points</p>
-                      </div>
-
-                      <div>
-                        <Label className="text-gray-300 mb-1.5 block">Campaign Type</Label>
-                        <div className="grid grid-cols-2 gap-3">
-                          {useCases.map(useCase => (
-                            <div 
-                              key={useCase.id}
-                              className={`
-                                cursor-pointer rounded-lg border p-3 text-sm transition-colors
-                                ${selectedUseCase === useCase.id 
-                                  ? 'border-[#74d1ea] bg-[#74d1ea]/10 text-white' 
-                                  : 'border-gray-700 bg-black text-gray-400 hover:bg-gray-900/50 hover:text-gray-300'
-                                }
-                              `}
-                              onClick={() => setSelectedUseCase(useCase.id)}
-                            >
-                              <div className="font-medium text-white">{useCase.name}</div>
-                              <div className="text-xs mt-1">{useCase.description}</div>
-                            </div>
-                          ))}
+                <Card className="bg-black border-gray-700/60">
+                  <CardHeader>
+                    <CardTitle className="text-white">Campaign Brief</CardTitle>
+                    <CardDescription>Provide information about the campaign you'd like to create</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Step 1: Campaign Type */}
+                    <div>
+                      <h3 className="text-white font-medium mb-3 flex items-center">
+                        <Target className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                        Step 1: Campaign Type & Content 
+                      </h3>
+                      
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <Label htmlFor="campaign-prompt" className="text-white mb-2 block">Campaign Description</Label>
+                          <Textarea 
+                            id="campaign-prompt"
+                            placeholder="I want to create a campaign to promote Microsoft 365 Business Premium to IT professionals and small business owners..."
+                            className="bg-black/60 border-gray-700 resize-none text-white h-32"
+                            value={campaignPrompt}
+                            onChange={(e) => setCampaignPrompt(e.target.value)}
+                          />
+                          <p className="text-xs text-gray-400 mt-1.5">
+                            Be detailed about your target audience, objectives, and desired messaging style
+                          </p>
                         </div>
-                      </div>
-                    </div>
 
-                    <div className="space-y-5">
-                      <div>
-                        <h3 className="text-white font-medium mb-2">Select Target Personas</h3>
-                        <div className="space-y-3">
-                          {personas.map(persona => (
-                            <div 
-                              key={persona.id}
-                              className={`
-                                flex items-center justify-between p-3 border rounded-lg cursor-pointer
-                                ${selectedPersonas.includes(persona.id) 
-                                  ? 'border-[#74d1ea] bg-[#74d1ea]/10' 
-                                  : 'border-gray-700 hover:bg-gray-900/50'
-                                }
-                              `}
-                              onClick={() => handleSelectPersona(persona.id)}
-                            >
-                              <div className="flex items-center">
-                                <div className={`
-                                  w-8 h-8 rounded-full flex items-center justify-center mr-3
-                                  ${selectedPersonas.includes(persona.id) 
-                                    ? 'bg-[#74d1ea]/20 text-[#74d1ea]' 
-                                    : 'bg-gray-800 text-gray-400'
-                                  }
-                                `}>
-                                  {persona.icon}
+                        <div className="space-y-4">
+                          <div>
+                            <Label className="text-white mb-2 block">Or Select a Use Case</Label>
+                            <div className="grid grid-cols-2 gap-3">
+                              {useCases.map((useCase) => (
+                                <div 
+                                  key={useCase.id}
+                                  className={`border rounded-lg p-3 cursor-pointer transition-colors duration-200 ${
+                                    selectedUseCase === useCase.id 
+                                    ? "border-[#74d1ea] bg-[#74d1ea]/10 text-white" 
+                                    : "border-gray-700 text-gray-300 hover:border-gray-500"
+                                  }`}
+                                  onClick={() => setSelectedUseCase(useCase.id)}
+                                >
+                                  <div className="font-medium text-sm">{useCase.name}</div>
+                                  <div className="text-xs mt-1 text-gray-400">{useCase.description}</div>
                                 </div>
-                                <div>
-                                  <span className="text-white font-medium">{persona.name}</span>
-                                  <p className="text-xs text-gray-400">{persona.role}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center">
-                                {selectedPersonas.includes(persona.id) && (
-                                  <Check className="h-4 w-4 text-[#74d1ea]" />
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        {selectedPersonas.length > 1 && (
-                          <div className="mt-4">
-                            <h3 className="text-white font-medium text-sm mb-2">Persona Balance</h3>
-                            <div className="flex items-center justify-between border border-gray-700 rounded-lg p-3">
-                              <div>
-                                <span className="text-white text-sm">Weighted distribution</span>
-                                <p className="text-xs text-gray-400">Prioritize primary persona in campaign</p>
-                              </div>
-                              <Switch
-                                checked={personaBalance === "weighted"}
-                                onCheckedChange={(checked) => 
-                                  setPersonaBalance(checked ? "weighted" : "equal")
-                                }
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div>
-                        <h3 className="text-white font-medium mb-2">Additional Settings</h3>
-                        <div className="space-y-3">
-                          <div className="border border-gray-700 rounded-lg p-4">
-                            <h4 className="text-white text-sm font-medium mb-2">Campaign Timeline</h4>
-                            <div className="grid grid-cols-2 gap-3 mb-3">
-                              <div>
-                                <Label htmlFor="start-date" className="text-xs text-gray-400 mb-1 block">Start Date</Label>
-                                <Input
-                                  id="start-date"
-                                  type="date"
-                                  value={campaignStartDate}
-                                  onChange={(e) => setCampaignStartDate(e.target.value)}
-                                  className="h-9 bg-black border-gray-700 text-white"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="end-date" className="text-xs text-gray-400 mb-1 block">End Date</Label>
-                                <Input
-                                  id="end-date"
-                                  type="date"
-                                  value={campaignEndDate}
-                                  onChange={(e) => setCampaignEndDate(e.target.value)}
-                                  className="h-9 bg-black border-gray-700 text-white"
-                                />
-                              </div>
-                            </div>
-                            <h4 className="text-white text-sm font-medium mb-2">Content Distribution</h4>
-                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                              <div>
-                                <Label htmlFor="email-count" className="text-xs text-gray-400 mb-1 block">Email Pieces</Label>
-                                <Input
-                                  id="email-count"
-                                  type="number"
-                                  min="1"
-                                  max="20"
-                                  value={contentCount.email}
-                                  onChange={(e) => setContentCount({...contentCount, email: parseInt(e.target.value) || 1})}
-                                  className="h-9 bg-black border-gray-700 text-white"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="social-count" className="text-xs text-gray-400 mb-1 block">Social Pieces</Label>
-                                <Input
-                                  id="social-count"
-                                  type="number"
-                                  min="1"
-                                  max="20"
-                                  value={contentCount.social}
-                                  onChange={(e) => setContentCount({...contentCount, social: parseInt(e.target.value) || 1})}
-                                  className="h-9 bg-black border-gray-700 text-white"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="blog-count" className="text-xs text-gray-400 mb-1 block">Blog Pieces</Label>
-                                <Input
-                                  id="blog-count"
-                                  type="number"
-                                  min="1"
-                                  max="20"
-                                  value={contentCount.blog}
-                                  onChange={(e) => setContentCount({...contentCount, blog: parseInt(e.target.value) || 1})}
-                                  className="h-9 bg-black border-gray-700 text-white"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="webinar-count" className="text-xs text-gray-400 mb-1 block">Webinar Pieces</Label>
-                                <Input
-                                  id="webinar-count"
-                                  type="number"
-                                  min="0"
-                                  max="20"
-                                  value={contentCount.webinar}
-                                  onChange={(e) => setContentCount({...contentCount, webinar: parseInt(e.target.value) || 0})}
-                                  className="h-9 bg-black border-gray-700 text-white"
-                                />
-                              </div>
+                              ))}
                             </div>
                           </div>
                           
+                          <div>
+                            <Label className="text-white mb-2 block">Content Types</Label>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="email-content"
+                                  checked={selectedContentTypes.email}
+                                  onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, email: checked})}
+                                />
+                                <Label htmlFor="email-content" className="text-sm">Email Campaigns</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="social-content" 
+                                  checked={selectedContentTypes.social}
+                                  onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, social: checked})}
+                                />
+                                <Label htmlFor="social-content" className="text-sm">Social Media Posts</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="blog-content" 
+                                  checked={selectedContentTypes.blog}
+                                  onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, blog: checked})}
+                                />
+                                <Label htmlFor="blog-content" className="text-sm">Blog Articles</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="webinar-content" 
+                                  checked={selectedContentTypes.webinar}
+                                  onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, webinar: checked})}
+                                />
+                                <Label htmlFor="webinar-content" className="text-sm">Webinar Content</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="ad-content" 
+                                  checked={selectedContentTypes.ad}
+                                  onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, ad: checked})}
+                                />
+                                <Label htmlFor="ad-content" className="text-sm">Ad Copy</Label>
+                              </div>
+                            </div>
+                            <p className="text-xs text-gray-400 mt-1.5">
+                              Select the content types you want to include in your campaign (maximum 20 pieces per type)
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Step 2: Target Personas */}
+                    <div>
+                      <h3 className="text-white font-medium mb-3 flex items-center">
+                        <Users className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                        Step 2: Target Personas
+                      </h3>
+                      
+                      <div className="grid md:grid-cols-3 gap-4">
+                        {personas.map((persona) => (
+                          <div 
+                            key={persona.id}
+                            className={`border rounded-lg p-4 cursor-pointer transition-colors duration-200 relative ${
+                              selectedPersonas.includes(persona.id) 
+                              ? "border-[#74d1ea] bg-[#74d1ea]/10" 
+                              : "border-gray-700 hover:border-gray-500"
+                            }`}
+                            onClick={() => handleSelectPersona(persona.id)}
+                          >
+                            {selectedPersonas.includes(persona.id) && (
+                              <Badge className="absolute top-3 right-3 bg-[#74d1ea] text-black">
+                                Selected
+                              </Badge>
+                            )}
+                            <div className="flex items-center mb-3">
+                              <div className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center text-[#74d1ea]">
+                                {persona.icon}
+                              </div>
+                              <div className="ml-3">
+                                <div className="font-medium text-white">{persona.name}</div>
+                                <div className="text-xs text-gray-400">{persona.role}</div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3 text-sm">
+                              <div>
+                                <Label className="text-[#74d1ea] text-xs mb-1 flex items-center">
+                                  <Target className="h-3.5 w-3.5 mr-1" />
+                                  Key Pains
+                                </Label>
+                                <ul className="text-gray-300 text-xs list-disc pl-4 space-y-1">
+                                  {persona.pains.map((pain, i) => (
+                                    <li key={i}>{pain}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              
+                              <div>
+                                <Label className="text-[#74d1ea] text-xs mb-1 flex items-center">
+                                  <Lightbulb className="h-3.5 w-3.5 mr-1" />
+                                  Key Goals
+                                </Label>
+                                <ul className="text-gray-300 text-xs list-disc pl-4 space-y-1">
+                                  {persona.goals.map((goal, i) => (
+                                    <li key={i}>{goal}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Step 3: Additional Settings */}
+                    <div>
+                      <h3 className="text-white font-medium mb-3 flex items-center">
+                        <SlidersHorizontal className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                        Step 3: Additional Settings
+                      </h3>
+                      
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <Label className="text-white mb-2 block">Campaign Timeline</Label>
+                          <div className="space-y-3">
+                            <div>
+                              <div className="flex justify-between items-center mb-1">
+                                <Label htmlFor="start-date" className="text-sm text-gray-300">
+                                  Start Date
+                                </Label>
+                              </div>
+                              <Input 
+                                id="start-date" 
+                                type="date" 
+                                className="bg-black border-gray-700 text-white"
+                                value={campaignStartDate}
+                                onChange={(e) => setCampaignStartDate(e.target.value)}
+                              />
+                            </div>
+                            
+                            <div>
+                              <div className="flex justify-between items-center mb-1">
+                                <Label htmlFor="end-date" className="text-sm text-gray-300">
+                                  End Date
+                                </Label>
+                              </div>
+                              <Input 
+                                id="end-date" 
+                                type="date" 
+                                className="bg-black border-gray-700 text-white"
+                                value={campaignEndDate}
+                                onChange={(e) => setCampaignEndDate(e.target.value)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-4">
                           <div className="border border-gray-700 rounded-lg p-4">
                             <div className="flex items-center justify-between">
                               <div>
@@ -755,8 +793,8 @@ REGISTER NOW: [Link]`,
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
 
                 <div className="flex justify-end">
                   <Button 
@@ -917,25 +955,25 @@ REGISTER NOW: [Link]`,
                           <div className="relative">
                             <div className="absolute -left-8 mt-1 w-3 h-3 rounded-full bg-[#74d1ea]/60"></div>
                             <div>
-                              <span className="text-[#74d1ea] text-sm">Phase 3: Follow-up & Conversion</span>
+                              <span className="text-[#74d1ea] text-sm">Phase 3: Engagement & Follow-up</span>
                               <p className="text-white mt-0.5">June 15 - July 5, 2025</p>
-                              <p className="text-gray-400 text-sm mt-1">Targeted follow-ups, case studies, and personalized demos</p>
+                              <p className="text-gray-400 text-sm mt-1">Targeted follow-ups, social media amplification, blog content promotion</p>
                             </div>
                           </div>
                           
                           <div className="relative">
                             <div className="absolute -left-8 mt-1 w-3 h-3 rounded-full bg-[#74d1ea]/40"></div>
                             <div>
-                              <span className="text-[#74d1ea] text-sm">Phase 4: Final Push & Analysis</span>
+                              <span className="text-[#74d1ea] text-sm">Phase 4: Conversion Focus</span>
                               <p className="text-white mt-0.5">July 5 - July 15, 2025</p>
-                              <p className="text-gray-400 text-sm mt-1">Final conversion activity, reporting, and analysis</p>
+                              <p className="text-gray-400 text-sm mt-1">Final outreach, limited-time offers, decision facilitation</p>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                     
-                    {/* Campaign Content */}
+                    {/* Campaign Content by Type */}
                     <div>
                       <h3 className="text-lg font-medium text-white mb-4 flex items-center">
                         <FileText className="h-5 w-5 mr-2 text-[#74d1ea]" />
@@ -943,108 +981,267 @@ REGISTER NOW: [Link]`,
                       </h3>
                       
                       <div className="space-y-6">
-                        {campaign.contents.map((content) => (
-                          <div key={content.id} className="border border-gray-700/60 rounded-xl overflow-hidden bg-gray-900/30 shadow-lg shadow-[#74d1ea]/5 hover:shadow-[#74d1ea]/10 transition-all duration-300">
-                            <div className="flex items-center justify-between bg-gradient-to-r from-gray-800/90 to-gray-800/50 p-4 border-b border-gray-700/40">
-                              <div className="flex items-center">
-                                <div className="bg-[#74d1ea]/10 p-2 rounded-lg text-[#74d1ea]">
-                                  {content.icon || <FileText className="h-4 w-4" />}
-                                </div>
-                                <div className="ml-3">
-                                  <div className="font-medium text-white text-base">{content.title}</div>
-                                  <div className="flex items-center text-xs text-gray-400 mt-1.5 flex-wrap gap-2">
-                                    <span className="text-[#74d1ea] bg-[#74d1ea]/10 border border-[#74d1ea]/20 rounded-full px-2.5 py-0.5 text-[10px] uppercase font-medium">
-                                      {content.type.charAt(0).toUpperCase() + content.type.slice(1)}
-                                    </span>
-                                    {content.persona && (
-                                      <span className="text-gray-300 flex items-center">
-                                        <Users className="h-3 w-3 mr-1 text-gray-400" />
-                                        {content.persona}
-                                      </span>
-                                    )}
-                                    {content.deliveryDate && (
-                                      <span className="text-gray-300 flex items-center">
-                                        <Calendar className="h-3 w-3 mr-1 text-gray-400" />
-                                        {content.deliveryDate}
-                                      </span>
-                                    )}
-                                    {content.channel && (
-                                      <span className="text-gray-300 flex items-center">
-                                        <MessageSquare className="h-3 w-3 mr-1 text-gray-400" />
-                                        {content.channel}
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                              <div>
-                                <Button variant="ghost" size="sm" className="h-9 text-[#74d1ea] hover:bg-[#74d1ea]/10 rounded-lg">
-                                  <Copy className="h-3.5 w-3.5 mr-1.5" />
-                                  Copy
-                                </Button>
-                              </div>
-                            </div>
+                        {/* Group content by type */}
+                        {(campaign.contents.some(c => c.type === "email")) && (
+                          <div>
+                            <h4 className="text-white font-medium mb-3 flex items-center">
+                              <MessageSquare className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                              Email Campaigns
+                            </h4>
                             
-                            {/* Apply styling based on content type */}
-                            {content.type === "email" ? (
-                              <div className="p-5 bg-black/40">
-                                <div className="bg-black/60 p-5 rounded-lg border-l-2 border-[#74d1ea]/50 text-gray-200 text-sm leading-relaxed font-sans">
-                                  <div className="whitespace-pre-wrap">{content.content}</div>
-                                </div>
-                              </div>
-                            ) : content.type === "social" ? (
-                              <div className="p-5 bg-black/40">
-                                <div className="bg-black/60 p-5 rounded-lg border-l-2 border-[#74d1ea]/50 text-gray-200 text-sm leading-relaxed">
-                                  <div className="whitespace-pre-wrap">{content.content}</div>
-                                </div>
-                              </div>
-                            ) : content.type === "blog" ? (
-                              <div className="p-5 bg-black/40">
-                                <div className="prose prose-invert prose-p:text-gray-300 prose-headings:text-white prose-headings:font-semibold prose-a:text-[#74d1ea] max-w-none">
-                                  <div className="whitespace-pre-wrap text-sm">{content.content}</div>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="p-5 bg-black/40">
-                                <div className="bg-black/60 p-5 rounded-lg text-gray-200 text-sm leading-relaxed">
-                                  <div className="whitespace-pre-wrap">{content.content}</div>
-                                </div>
-                              </div>
-                            )}
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              {campaign.contents
+                                .filter(content => content.type === "email")
+                                .map(content => (
+                                  <div key={content.id} className="border border-gray-700/60 rounded-lg p-4 bg-black/90">
+                                    <div className="flex justify-between items-start mb-3">
+                                      <div>
+                                        <Badge variant="outline" className="bg-gray-800/80 text-gray-300 mb-2">
+                                          For: {content.persona}
+                                        </Badge>
+                                        <h5 className="text-white font-medium">{content.title}</h5>
+                                      </div>
+                                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
+                                        toast({
+                                          title: "Copied to clipboard",
+                                          description: "Email content has been copied to your clipboard",
+                                        });
+                                      }}>
+                                        <Copy className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                    
+                                    <div className="mb-2">
+                                      <Label className="text-xs text-gray-400">Scheduled Date</Label>
+                                      <p className="text-gray-300 text-sm flex items-center">
+                                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                                        {content.deliveryDate}
+                                      </p>
+                                    </div>
+                                    
+                                    <pre className="text-gray-300 text-xs leading-relaxed overflow-auto p-2 border border-gray-800 rounded-md bg-gray-900/50 max-h-[200px]">
+                                      {content.content}
+                                    </pre>
+                                  </div>
+                                ))}
+                            </div>
                           </div>
-                        ))}
+                        )}
+                        
+                        {(campaign.contents.some(c => c.type === "social")) && (
+                          <div>
+                            <h4 className="text-white font-medium mb-3 flex items-center">
+                              <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                              Social Media Content
+                            </h4>
+                            
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              {campaign.contents
+                                .filter(content => content.type === "social")
+                                .map(content => (
+                                  <div key={content.id} className="border border-gray-700/60 rounded-lg p-4 bg-black/90">
+                                    <div className="flex justify-between items-start mb-3">
+                                      <div>
+                                        <div className="flex space-x-2 mb-2">
+                                          <Badge variant="outline" className="bg-gray-800/80 text-gray-300">
+                                            For: {content.persona}
+                                          </Badge>
+                                          <Badge variant="outline" className="bg-gray-800/80 text-gray-300">
+                                            {content.channel}
+                                          </Badge>
+                                        </div>
+                                        <h5 className="text-white font-medium">{content.title}</h5>
+                                      </div>
+                                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
+                                        toast({
+                                          title: "Copied to clipboard",
+                                          description: "Social content has been copied to your clipboard",
+                                        });
+                                      }}>
+                                        <Copy className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                    
+                                    <div className="mb-2">
+                                      <Label className="text-xs text-gray-400">Scheduled Date</Label>
+                                      <p className="text-gray-300 text-sm flex items-center">
+                                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                                        {content.deliveryDate}
+                                      </p>
+                                    </div>
+                                    
+                                    <pre className="text-gray-300 text-xs leading-relaxed overflow-auto p-2 border border-gray-800 rounded-md bg-gray-900/50 max-h-[200px]">
+                                      {content.content}
+                                    </pre>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {(campaign.contents.some(c => c.type === "blog")) && (
+                          <div>
+                            <h4 className="text-white font-medium mb-3 flex items-center">
+                              <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                              Blog Articles
+                            </h4>
+                            
+                            <div className="grid sm:grid-cols-1 gap-4">
+                              {campaign.contents
+                                .filter(content => content.type === "blog")
+                                .map(content => (
+                                  <div key={content.id} className="border border-gray-700/60 rounded-lg p-4 bg-black/90">
+                                    <div className="flex justify-between items-start mb-3">
+                                      <div>
+                                        <Badge variant="outline" className="bg-gray-800/80 text-gray-300 mb-2">
+                                          For: {content.persona}
+                                        </Badge>
+                                        <h5 className="text-white font-medium">{content.title}</h5>
+                                      </div>
+                                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
+                                        toast({
+                                          title: "Copied to clipboard",
+                                          description: "Blog content has been copied to your clipboard",
+                                        });
+                                      }}>
+                                        <Copy className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                    
+                                    <div className="mb-2">
+                                      <Label className="text-xs text-gray-400">Scheduled Date</Label>
+                                      <p className="text-gray-300 text-sm flex items-center">
+                                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                                        {content.deliveryDate}
+                                      </p>
+                                    </div>
+                                    
+                                    <pre className="text-gray-300 text-xs leading-relaxed overflow-auto p-2 border border-gray-800 rounded-md bg-gray-900/50 max-h-[400px]">
+                                      {content.content}
+                                    </pre>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {(campaign.contents.some(c => c.type === "webinar")) && (
+                          <div>
+                            <h4 className="text-white font-medium mb-3 flex items-center">
+                              <PlayCircle className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                              Webinar Content
+                            </h4>
+                            
+                            <div className="grid sm:grid-cols-1 gap-4">
+                              {campaign.contents
+                                .filter(content => content.type === "webinar")
+                                .map(content => (
+                                  <div key={content.id} className="border border-gray-700/60 rounded-lg p-4 bg-black/90">
+                                    <div className="flex justify-between items-start mb-3">
+                                      <div>
+                                        <Badge variant="outline" className="bg-gray-800/80 text-gray-300 mb-2">
+                                          For: {content.persona}
+                                        </Badge>
+                                        <h5 className="text-white font-medium">{content.title}</h5>
+                                      </div>
+                                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
+                                        toast({
+                                          title: "Copied to clipboard",
+                                          description: "Webinar content has been copied to your clipboard",
+                                        });
+                                      }}>
+                                        <Copy className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                    
+                                    <div className="mb-2">
+                                      <Label className="text-xs text-gray-400">Scheduled Date</Label>
+                                      <p className="text-gray-300 text-sm flex items-center">
+                                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                                        {content.deliveryDate}
+                                      </p>
+                                    </div>
+                                    
+                                    <pre className="text-gray-300 text-xs leading-relaxed overflow-auto p-2 border border-gray-800 rounded-md bg-gray-900/50 max-h-[400px]">
+                                      {content.content}
+                                    </pre>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {(campaign.contents.some(c => c.type === "ad")) && (
+                          <div>
+                            <h4 className="text-white font-medium mb-3 flex items-center">
+                              <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                              Ad Copy
+                            </h4>
+                            
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              {campaign.contents
+                                .filter(content => content.type === "ad")
+                                .map(content => (
+                                  <div key={content.id} className="border border-gray-700/60 rounded-lg p-4 bg-black/90">
+                                    <div className="flex justify-between items-start mb-3">
+                                      <div>
+                                        <div className="flex space-x-2 mb-2">
+                                          <Badge variant="outline" className="bg-gray-800/80 text-gray-300">
+                                            For: {content.persona}
+                                          </Badge>
+                                          <Badge variant="outline" className="bg-gray-800/80 text-gray-300">
+                                            {content.channel}
+                                          </Badge>
+                                        </div>
+                                        <h5 className="text-white font-medium">{content.title}</h5>
+                                      </div>
+                                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
+                                        toast({
+                                          title: "Copied to clipboard",
+                                          description: "Ad content has been copied to your clipboard",
+                                        });
+                                      }}>
+                                        <Copy className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                    
+                                    <div className="mb-2">
+                                      <Label className="text-xs text-gray-400">Scheduled Date</Label>
+                                      <p className="text-gray-300 text-sm flex items-center">
+                                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                                        {content.deliveryDate}
+                                      </p>
+                                    </div>
+                                    
+                                    <pre className="text-gray-300 text-xs leading-relaxed overflow-auto p-2 border border-gray-800 rounded-md bg-gray-900/50 max-h-[200px]">
+                                      {content.content}
+                                    </pre>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     
                     {/* Action Buttons */}
-                    <div className="flex justify-between items-center pt-4">
+                    <div className="flex justify-end space-x-4 pt-4">
                       <Button 
-                        onClick={() => setActiveTab("input")}
-                        variant="outline"
-                        className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                        variant="outline" 
+                        className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                        onClick={handleSaveCampaign}
                       >
-                        <X className="h-4 w-4 mr-2" />
-                        Regenerate
+                        <Save className="h-4 w-4 mr-2" />
+                        Save Campaign
                       </Button>
                       
-                      <div className="flex space-x-3">
-                        <Button 
-                          onClick={handleAddToCampaignHub}
-                          variant="outline"
-                          className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
-                        >
-                          <PlusCircle className="h-4 w-4 mr-2" />
-                          Add to Campaign Hub
-                        </Button>
-                        
-                        <Button 
-                          onClick={handleSaveCampaign}
-                          className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-                        >
-                          <Save className="h-4 w-4 mr-2" />
-                          Save Campaign
-                        </Button>
-                      </div>
+                      <Button 
+                        className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+                        onClick={handleAddToCampaignHub}
+                      >
+                        <PlusCircle className="h-4 w-4 mr-2" />
+                        Add to Campaign Hub
+                      </Button>
                     </div>
                   </div>
                 )}
