@@ -272,7 +272,7 @@ Microsoft 365 Business Premium delivers:
 
 Calculate your potential ROI with our Business Premium Value Calculator: [Link]
 
-#SmallBusinessTech #ProductivityTools #MicrosoftPartner`,
+#SmallBusinessTech #ProductivityTools #MicrosoftPartner #LinkedIn`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -335,7 +335,7 @@ Here are 5 unexpected ways Microsoft 365 Business Premium's security features dr
 
 What's your perspective? Has your organization quantified the operational benefits of advanced security beyond breach prevention?
 
-#SecurityROI #BusinessProductivity #MicrosoftSecurity`,
+#SecurityROI #BusinessProductivity #MicrosoftSecurity #LinkedIn`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 17)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -636,7 +636,7 @@ REGISTER NOW: [Link]`,
                                   checked={selectedContentTypes.social}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, social: checked})}
                                 />
-                                <Label htmlFor="social-content" className="text-sm">Social Media Posts</Label>
+                                <Label htmlFor="social-content" className="text-sm">LinkedIn Posts</Label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <Switch 
@@ -1064,7 +1064,7 @@ REGISTER NOW: [Link]`,
                           <div>
                             <h4 className="text-white font-medium mb-3 flex items-center">
                               <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                              Social Media Content
+                              LinkedIn Posts
                             </h4>
                             
                             <div className="grid sm:grid-cols-2 gap-4">
@@ -1087,7 +1087,7 @@ REGISTER NOW: [Link]`,
                                       <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
                                         toast({
                                           title: "Copied to clipboard",
-                                          description: "Social content has been copied to your clipboard",
+                                          description: "LinkedIn post content has been copied to your clipboard",
                                         });
                                       }}>
                                         <Copy className="h-4 w-4" />
