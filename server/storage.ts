@@ -910,14 +910,53 @@ export class DatabaseStorage implements IStorage {
   }
   
   async incrementCampaignUsage(id: number): Promise<User> {
-    const [user] = await db
-      .update(users)
-      .set({ 
-        campaigns_used: sql`${users.campaigns_used} + 1` 
-      })
-      .where(eq(users.id, id))
-      .returning();
-    return user;
+    try {
+      // First, check if the column exists
+      const columnCheck = await db.execute(sql`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'users' AND column_name = 'campaigns_used'
+      `);
+      
+      if (!columnCheck.rows || columnCheck.rows.length === 0) {
+        console.warn('Campaigns_used column missing, attempting to create it...');
+        
+        // Try to add the column if it doesn't exist
+        try {
+          await db.execute(sql`
+            ALTER TABLE users
+            ADD COLUMN campaigns_used INTEGER NOT NULL DEFAULT 0
+          `);
+          console.log('Successfully added campaigns_used column to users table.');
+        } catch (migrationError) {
+          console.error('Failed to add campaigns_used column:', migrationError);
+          // Fall back to just returning the user without incrementing
+          const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, id));
+          return user;
+        }
+      }
+      
+      // Now try to increment the column
+      const [user] = await db
+        .update(users)
+        .set({ 
+          campaigns_used: sql`COALESCE(${users.campaigns_used}, 0) + 1` 
+        })
+        .where(eq(users.id, id))
+        .returning();
+      return user;
+    } catch (error) {
+      console.error('Error in incrementCampaignUsage:', error);
+      // If anything fails, just return the user without incrementing
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, id));
+      return user;
+    }
   }
   
   async getAllUsers(): Promise<User[]> {

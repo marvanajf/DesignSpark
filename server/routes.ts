@@ -2392,11 +2392,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
       const campaignLimit = subscriptionPlans[userPlan]?.campaigns || 0;
       
-      if (userData.campaigns_used >= campaignLimit) {
+      // Safely check campaigns_used (handle case where column might be missing)
+      const campaignsUsed = userData.campaigns_used ?? 0;
+      
+      if (campaignsUsed >= campaignLimit) {
         return res.status(402).json({ 
           error: "Subscription limit reached", 
           limitType: "campaigns",
-          current: userData.campaigns_used,
+          current: campaignsUsed,
           limit: campaignLimit
         });
       }
@@ -2410,8 +2413,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const newCampaign = await storage.createCampaign(campaignData);
       
-      // Increment campaign usage counter
-      await storage.incrementCampaignUsage(req.user!.id);
+      // Try to increment campaign usage counter, but continue if it fails
+      try {
+        await storage.incrementCampaignUsage(req.user!.id);
+      } catch (incrementError) {
+        console.error("Error incrementing campaign usage (non-fatal):", incrementError);
+        // Non-fatal error, continue
+      }
       
       res.status(201).json(newCampaign);
     } catch (error) {
