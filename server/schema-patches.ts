@@ -9,6 +9,9 @@ export async function applySchemaPatches() {
   
   // Add campaign-related columns if needed
   await ensureCampaignColumns();
+  
+  // Add campaign factory usage column if needed
+  await ensureCampaignFactoryColumn();
 }
 
 /**
@@ -64,6 +67,42 @@ export async function ensureCampaignColumns() {
     }
   } catch (error) {
     console.error("Error during schema check:", error);
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Check if campaign_factory_used column exists in users table
+ * Add it if it doesn't exist
+ */
+export async function ensureCampaignFactoryColumn() {
+  const client = await pool.connect();
+  try {
+    console.log("Checking users table for campaign_factory_used column...");
+    
+    // Check if campaign_factory_used column exists
+    const columnResult = await client.query(`
+      SELECT column_name 
+      FROM information_schema.columns 
+      WHERE table_name = 'users' AND column_name = 'campaign_factory_used';
+    `);
+    
+    const hasCampaignFactoryColumn = columnResult.rows.length > 0;
+    
+    // Add the column if it doesn't exist
+    if (!hasCampaignFactoryColumn) {
+      console.log("Adding campaign_factory_used column to users table");
+      await client.query(`
+        ALTER TABLE users
+        ADD COLUMN campaign_factory_used INTEGER NOT NULL DEFAULT 0;
+      `);
+      console.log("Successfully added campaign_factory_used column to users table");
+    } else {
+      console.log("campaign_factory_used column already exists in users table");
+    }
+  } catch (error) {
+    console.error("Error during campaign factory schema check:", error);
   } finally {
     client.release();
   }

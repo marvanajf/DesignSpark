@@ -206,6 +206,12 @@ export class MemStorage implements IStorage {
       personas_used: 0,
       tone_analyses_used: 0,
       content_generated: 0,
+      campaigns_used: 0,
+      campaign_factory_used: 0,
+      stripe_customer_id: null,
+      stripe_subscription_id: null,
+      subscription_status: "inactive",
+      subscription_period_end: null,
       created_at: now
     };
     this.users.set(id, user);
@@ -318,6 +324,24 @@ export class MemStorage implements IStorage {
     const updatedUser = {
       ...user,
       content_generated: user.content_generated + 1
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async incrementCampaignFactoryUsage(id: number): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    // If campaign_factory_used doesn't exist, initialize it
+    const campaign_factory_used = user.campaign_factory_used || 0;
+    
+    const updatedUser = {
+      ...user,
+      campaign_factory_used: campaign_factory_used + 1
     };
     
     this.users.set(id, updatedUser);
@@ -1009,6 +1033,56 @@ export class DatabaseStorage implements IStorage {
       return user;
     } catch (error) {
       console.error('Error in incrementCampaignUsage:', error);
+      // If anything fails, just return the user without incrementing
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, id));
+      return user;
+    }
+  }
+  
+  async incrementCampaignFactoryUsage(id: number): Promise<User> {
+    try {
+      // First, check if the column exists
+      const columnCheck = await db.execute(sql`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'users' AND column_name = 'campaign_factory_used'
+      `);
+      
+      if (!columnCheck.rows || columnCheck.rows.length === 0) {
+        console.warn('campaign_factory_used column missing, attempting to create it...');
+        
+        // Try to add the column if it doesn't exist
+        try {
+          await db.execute(sql`
+            ALTER TABLE users
+            ADD COLUMN campaign_factory_used INTEGER NOT NULL DEFAULT 0
+          `);
+          console.log('Successfully added campaign_factory_used column to users table.');
+        } catch (migrationError) {
+          console.error('Failed to add campaign_factory_used column:', migrationError);
+          // Fall back to just returning the user without incrementing
+          const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, id));
+          return user;
+        }
+      }
+      
+      // Now try to increment the column
+      const [user] = await db
+        .update(users)
+        .set({ 
+          campaign_factory_used: sql`COALESCE(${users.campaign_factory_used}, 0) + 1` 
+        })
+        .where(eq(users.id, id))
+        .returning();
+      return user;
+    } catch (error) {
+      console.error('Error in incrementCampaignFactoryUsage:', error);
       // If anything fails, just return the user without incrementing
       const [user] = await db
         .select()
