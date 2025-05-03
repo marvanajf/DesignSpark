@@ -2,6 +2,15 @@ import { pgTable, text, serial, integer, jsonb, timestamp, boolean, pgEnum } fro
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export const campaignStatusEnum = pgEnum('campaign_status', [
+  'draft',
+  'active', 
+  'planning',
+  'running',
+  'completed',
+  'archived'
+]);
+
 export type SubscriptionPlanType = 'free' | 'standard' | 'professional' | 'premium';
 
 export const subscriptionPlans: Record<SubscriptionPlanType, {
@@ -139,8 +148,7 @@ export const blogPosts = pgTable("blog_posts", {
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Campaign status enum
-export const campaignStatusEnum = pgEnum('campaign_status', ['draft', 'active', 'planning', 'running', 'completed', 'archived']);
+// Using previously defined campaignStatusEnum
 
 export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
