@@ -31,12 +31,12 @@ export default function PaymentSuccessPage() {
       const customerEmail = params.get('customer_email'); 
       const testEmail = customerEmail || params.get('email') || 'test@example.com';
       
-      console.log("Using test mode with email:", testEmail);
+      console.log("Using test mode with email:", customerEmail || testEmail);
       
       setMessage(
         "Your payment was successful! We've created an account for you."
       );
-      setEmail(testEmail);
+      setEmail(customerEmail || testEmail);
       setShowSetupModal(true);
       setIsLoading(false);
     };
