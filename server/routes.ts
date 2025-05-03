@@ -30,6 +30,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2023-10-16" as any, // Using type assertion to avoid version compatibility error
 });
 
+// Log important Stripe configuration details
+console.log("Stripe Configuration:");
+console.log("- API Key Mode:", process.env.STRIPE_SECRET_KEY.startsWith('sk_test_') ? 'TEST MODE' : 'LIVE MODE');
+console.log("- Public Key Mode:", process.env.VITE_STRIPE_PUBLIC_KEY?.startsWith('pk_test_') ? 'TEST MODE' : 'LIVE MODE');
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Advanced database health check with diagnostics and recovery options
   app.get("/api/db-health", async (req: Request, res: Response) => {
@@ -859,6 +864,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/direct-stripe-redirect", async (req: Request, res: Response) => {
     try {
       console.log("Direct stripe redirect request received:", req.query);
+      
+      // Log Stripe key mode
+      console.log("Stripe API Key Info:");
+      console.log("- Secret Key starts with:", process.env.STRIPE_SECRET_KEY?.substring(0, 7));
+      console.log("- Public Key starts with:", process.env.VITE_STRIPE_PUBLIC_KEY?.substring(0, 7));
+      console.log("- Using mode:", process.env.STRIPE_SECRET_KEY?.startsWith('sk_test_') ? 'TEST MODE' : 'LIVE MODE');
       
       // Check if we got the plan parameter in the request
       if (!req.query.plan) {
