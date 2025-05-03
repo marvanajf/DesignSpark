@@ -358,22 +358,22 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
                   <Sparkles className="h-6 w-6 text-[#74d1ea]" />
                 </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">Content Generation</h3>
+                <h3 className="text-2xl font-semibold text-white mb-4">AI Content Generation</h3>
                 <p className="text-gray-400 mb-5">
-                  Create compelling content that maintains your brand voice while resonating with your target audience. Tovably generates LinkedIn posts and cold emails that drive engagement and conversions.
+                  Generate powerful content that perfectly balances your brand voice with audience expectations. Create compelling LinkedIn posts, cold emails, blog articles, and more that drive engagement and conversions.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Personalized LinkedIn posts that drive engagement</span>
+                    <span className="text-gray-300">Multi-format content for social media, emails, and blogs</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Effective cold emails that increase response rates</span>
+                    <span className="text-gray-300">Tone-matched writing based on your brand analysis</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Content that perfectly balances your tone and persona needs</span>
+                    <span className="text-gray-300">Persona-targeted messaging that resonates with your audience</span>
                   </li>
                 </ul>
                 <div>
@@ -391,33 +391,42 @@ export default function HomePage() {
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="text-lg font-medium text-white">Generated Content</h4>
-                    <div className="flex space-x-2">
-                      <Button variant="ghost" size="sm" className="h-8 px-2 text-[#74d1ea]">
-                        <MessageSquare className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-8 px-2 text-[#74d1ea]">
-                        <LineChart className="h-4 w-4" />
-                      </Button>
+                    <div className="flex space-x-1">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                        Professional
+                      </span>
                     </div>
                   </div>
                   <div className="rounded-lg bg-gray-900/70 p-4 mb-4 border border-gray-700/60">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-medium text-[#74d1ea]">LinkedIn Post</span>
-                      <span className="text-xs text-gray-400">Tech-Savvy Marketing Director</span>
+                      <span className="text-xs text-gray-400">For: Marketing Directors</span>
                     </div>
                     <p className="text-sm text-gray-300">
                       Excited to share how our marketing team increased content engagement by 43% last quarter through AI-powered personalization. The key? Balancing automation with authentic brand voice. Anyone else exploring this balance between efficiency and authenticity in their content strategy? #MarketingAutomation #ContentStrategy
                     </p>
+                    <div className="flex justify-end mt-2">
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-[#74d1ea] hover:bg-[#74d1ea]/10">
+                        <PenTool className="h-3 w-3 mr-1" />
+                        <span className="text-xs">Edit</span>
+                      </Button>
+                    </div>
                   </div>
                   <div className="rounded-lg bg-gray-900/40 p-4 border border-gray-700/40">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium text-gray-400">Cold Email</span>
-                      <span className="text-xs text-gray-500">Sales Executive</span>
+                      <span className="text-xs font-medium text-[#74d1ea]">Cold Email</span>
+                      <span className="text-xs text-gray-400">For: Sales Prospects</span>
                     </div>
-                    <p className="text-sm text-gray-400 opacity-70">
+                    <p className="text-sm text-gray-300">
                       Hi [Name], <br/><br/>
-                      I noticed [Company] has been expanding your content marketing efforts, and thought you might be interested in how similar companies are using AI to scale their production while maintaining quality...<span className="opacity-30">Read more</span>
+                      I noticed [Company] has been expanding your content marketing efforts, and thought you might be interested in how similar companies are using AI to scale their production while maintaining quality...
                     </p>
+                    <div className="flex justify-end mt-2">
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-[#74d1ea] hover:bg-[#74d1ea]/10">
+                        <ArrowRight className="h-3 w-3 mr-1" />
+                        <span className="text-xs">View full</span>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -429,11 +438,19 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
-                  <h4 className="text-lg font-medium text-white mb-4">Campaign Management</h4>
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-lg font-medium text-white">Campaign Dashboard</h4>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                      2 Active
+                    </span>
+                  </div>
                   <div className="space-y-4">
-                    <div className="rounded-lg bg-gray-900/70 p-4 border border-gray-700/60">
+                    <div className="rounded-lg bg-black p-4 border border-gray-700/60 shadow-[0_0_10px_rgba(116,209,234,0.05)]">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-white font-medium">Q2 Marketing Campaign</span>
+                        <div className="flex items-center">
+                          <div className="w-1 h-10 bg-[#74d1ea] rounded-full mr-3"></div>
+                          <span className="text-white font-medium">Q2 Marketing Campaign</span>
+                        </div>
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
                           Active
                         </span>
@@ -444,10 +461,12 @@ export default function HomePage() {
                           <p className="text-sm text-white">Apr - Jun 2025</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400">Status</p>
-                          <div className="flex items-center">
-                            <div className="h-2 w-2 rounded-full bg-green-400 mr-1.5"></div>
-                            <p className="text-sm text-white">Running</p>
+                          <p className="text-xs text-gray-400">Progress</p>
+                          <div className="flex items-center space-x-2">
+                            <div className="h-2 flex-grow bg-gray-700/50 rounded-full overflow-hidden">
+                              <div className="h-full bg-[#74d1ea] rounded-full" style={{ width: "65%" }}></div>
+                            </div>
+                            <span className="text-xs text-[#74d1ea]">65%</span>
                           </div>
                         </div>
                       </div>
@@ -469,21 +488,26 @@ export default function HomePage() {
                     
                     <div className="rounded-lg bg-gray-900/40 p-4 border border-gray-700/40">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-white font-medium">Product Launch</span>
+                        <div className="flex items-center">
+                          <div className="w-1 h-10 bg-gray-500 rounded-full mr-3"></div>
+                          <span className="text-white font-medium">Product Launch</span>
+                        </div>
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400 border border-gray-700/50">
-                          Draft
+                          Planning
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 mb-3">
+                      <div className="grid grid-cols-2 gap-2 mb-2">
                         <div>
                           <p className="text-xs text-gray-500">Timeframe</p>
                           <p className="text-sm text-gray-300">Jul - Sep 2025</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500">Status</p>
-                          <div className="flex items-center">
-                            <div className="h-2 w-2 rounded-full bg-gray-500 mr-1.5"></div>
-                            <p className="text-sm text-gray-300">Planning</p>
+                          <p className="text-xs text-gray-500">Progress</p>
+                          <div className="flex items-center space-x-2">
+                            <div className="h-2 flex-grow bg-gray-700/30 rounded-full overflow-hidden">
+                              <div className="h-full bg-gray-500 rounded-full" style={{ width: "20%" }}></div>
+                            </div>
+                            <span className="text-xs text-gray-500">20%</span>
                           </div>
                         </div>
                       </div>
@@ -495,22 +519,22 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
                   <CalendarClock className="h-6 w-6 text-[#74d1ea]" />
                 </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">Campaigns</h3>
+                <h3 className="text-2xl font-semibold text-white mb-4">Campaign Management</h3>
                 <p className="text-gray-400 mb-5">
-                  Organize, manage, and track your marketing campaigns in one place. Combine personas and content into cohesive campaigns that deliver measurable results.
+                  Streamline your marketing strategy with our campaign management tools. Organize personas and content into structured campaigns, track performance metrics, and optimize results in one unified platform.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Create structured campaigns with clear objectives</span>
+                    <span className="text-gray-300">Plan and execute multi-channel marketing campaigns</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Assign personas, content types, and channels</span>
+                    <span className="text-gray-300">Connect personas to targeted content deliverables</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Monitor campaign performance and engagement</span>
+                    <span className="text-gray-300">Track campaign performance with visual analytics</span>
                   </li>
                 </ul>
                 <div>
