@@ -9,7 +9,9 @@ import {
   BarChart2, 
   Mail, 
   Copy,
-  Edit
+  Edit,
+  Lightbulb,
+  Sparkles
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -305,6 +307,46 @@ export default function DashboardPage() {
                   
                   <Button variant="link" className="text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
                     Explore Tone Analysis →
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Prospecting Factory Card - Premium Feature */}
+              <div 
+                className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer"
+                onClick={() => navigate('/prospecting-factory')}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-5">
+                    <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                      <Lightbulb className="h-6 w-6 text-[#74d1ea]" />
+                    </div>
+                    <div className="bg-[#74d1ea]/10 px-2 py-1 rounded-md text-xs text-[#74d1ea] border border-[#74d1ea]/30">
+                      Premium Feature
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-white mb-3">Prospecting Factory</h3>
+                  <p className="text-gray-400 mb-5">Generate complete, strategic marketing campaigns from a single prompt. Create targeted content for multiple personas, tailored to your brand's voice.</p>
+                  
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-start">
+                      <div className="text-[#74d1ea] mr-3 mt-0.5">✓</div>
+                      <span className="text-sm text-gray-300">Multi-persona campaign strategy generation</span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="text-[#74d1ea] mr-3 mt-0.5">✓</div>
+                      <span className="text-sm text-gray-300">Full campaign content suite with email, social & ads</span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="text-[#74d1ea] mr-3 mt-0.5">✓</div>
+                      <span className="text-sm text-gray-300">Timeline & channel strategy recommendations</span>
+                    </li>
+                  </ul>
+                  
+                  <Button variant="link" className="text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
+                    Access Prospecting Factory →
                   </Button>
                 </div>
               </div>
