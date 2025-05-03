@@ -25,7 +25,7 @@ export function PersonasOverview() {
   const displayedPersonas = personas?.slice(0, 5) || [];
 
   return (
-    <Card className="border-[#1a1e29] shadow-lg bg-[#0e1015]">
+    <Card className="border-[#1a1e29] shadow-lg bg-black">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className="text-xl font-bold">
@@ -80,9 +80,9 @@ export function PersonasOverview() {
             {displayedPersonas.map((persona: any) => (
               <div 
                 key={persona.id} 
-                className="flex items-start p-3 rounded-lg border border-[#1a1e29] bg-[#0e1015] hover:bg-[#181c25] transition-colors"
+                className="flex items-start p-3 rounded-lg border border-[#1a1e29] bg-black hover:bg-[#0a0a0a] transition-colors"
               >
-                <div className="mr-3 h-10 w-10 rounded-full bg-[#181c25] flex items-center justify-center text-[#74d1ea]">
+                <div className="mr-3 h-10 w-10 rounded-full bg-black border border-[#1a1e29] flex items-center justify-center text-[#74d1ea]">
                   <User className="h-5 w-5" />
                 </div>
                 <div className="flex-1 space-y-1">
@@ -95,13 +95,13 @@ export function PersonasOverview() {
                       {persona.interests.slice(0, 3).map((interest: string, i: number) => (
                         <span 
                           key={i} 
-                          className="text-xs px-2 py-0.5 rounded-full bg-[#181c25] text-[#74d1ea]"
+                          className="text-xs px-2 py-0.5 rounded-full bg-black border border-[#1a1e29] text-[#74d1ea]"
                         >
                           {interest}
                         </span>
                       ))}
                       {persona.interests.length > 3 && (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-[#181c25] text-[#74d1ea]">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-black border border-[#1a1e29] text-[#74d1ea]">
                           +{persona.interests.length - 3} more
                         </span>
                       )}

@@ -53,7 +53,7 @@ export function CampaignOverviewDashboard() {
   };
 
   return (
-    <Card className="border-[#1a1e29] shadow-lg bg-[#0e1015]">
+    <Card className="border-[#1a1e29] shadow-lg bg-black">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className="text-xl font-bold">
@@ -125,9 +125,9 @@ export function CampaignOverviewDashboard() {
             {displayedCampaigns.map((campaign: any) => (
               <div 
                 key={campaign.id} 
-                className="flex items-start p-3 rounded-lg border border-[#1a1e29] bg-[#0e1015] hover:bg-[#181c25] transition-colors"
+                className="flex items-start p-3 rounded-lg border border-[#1a1e29] bg-black hover:bg-[#0a0a0a] transition-colors"
               >
-                <div className="mr-3 h-10 w-10 rounded bg-[#181c25] flex items-center justify-center text-[#74d1ea]">
+                <div className="mr-3 h-10 w-10 rounded bg-black border border-[#1a1e29] flex items-center justify-center text-[#74d1ea]">
                   <BarChart3 className="h-5 w-5" />
                 </div>
                 <div className="flex-1 min-w-0">
