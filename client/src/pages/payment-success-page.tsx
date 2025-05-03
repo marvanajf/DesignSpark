@@ -6,6 +6,7 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
+import AccountSetupModal from "@/components/AccountSetupModal";
 
 export default function PaymentSuccessPage() {
   const [location] = useLocation();
@@ -13,6 +14,8 @@ export default function PaymentSuccessPage() {
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
+  const [showSetupModal, setShowSetupModal] = useState(false);
+  const [accountSetup, setAccountSetup] = useState(false);
   const { user } = useAuth();
 
   // Extract session ID and plan from URL parameters
@@ -34,13 +37,14 @@ export default function PaymentSuccessPage() {
           if (data.status === "complete") {
             if (data.accountCreated) {
               setMessage(
-                data.credentialsEmailed 
-                  ? "Your payment was successful! We've created an account for you and sent your login details to your email."
-                  : "Your payment was successful! We've created an account for you."
+                "Your payment was successful! We've created an account for you."
               );
               setEmail(data.email);
-              // We don't show the password directly in the UI anymore
-              // The password is only sent via email
+              
+              // Show the account setup modal for new accounts
+              if (data.email) {
+                setShowSetupModal(true);
+              }
             } else {
               setMessage("Your payment was successful and your subscription has been updated.");
             }
@@ -87,8 +91,19 @@ export default function PaymentSuccessPage() {
                   <h3 className="font-medium text-white mb-2">Your Account Details:</h3>
                   <p className="text-sm text-gray-300 mb-3">Email: <span className="text-[#74d1ea]">{email}</span></p>
                   <p className="text-xs text-gray-400">
-                    Check your email for your temporary password. Please log in using these credentials and change your password immediately.
+                    {accountSetup 
+                      ? "Your account has been set up. You can now log in with your email and password."
+                      : "Set up your account by creating a password using the form. This will allow you to log in immediately."}
                   </p>
+                  {!accountSetup && (
+                    <Button 
+                      onClick={() => setShowSetupModal(true)} 
+                      variant="outline" 
+                      className="mt-3 w-full border-zinc-700 text-[#74d1ea] hover:text-[#74d1ea] hover:bg-zinc-900"
+                    >
+                      Set Up Account
+                    </Button>
+                  )}
                 </div>
               )}
               
@@ -112,6 +127,17 @@ export default function PaymentSuccessPage() {
           )}
         </div>
       </div>
+      
+      {/* Account Setup Modal */}
+      <AccountSetupModal 
+        email={email}
+        open={showSetupModal}
+        onClose={() => setShowSetupModal(false)}
+        onSuccess={() => {
+          setShowSetupModal(false);
+          setAccountSetup(true);
+        }}
+      />
     </Layout>
   );
 }
