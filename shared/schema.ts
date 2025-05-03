@@ -46,7 +46,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 4.99,
     currency: "GBP",
     displayPrice: "£4.99",
-    stripePrice: "price_1PXbCoJv2a2eDPDyjxCU2zVq" // Standard price ID (adjust if different)
+    // Note: This is a placeholder. In production, you'll need to get actual price IDs from your Stripe dashboard
+    stripePrice: process.env.STRIPE_STANDARD_PRICE_ID || "price_standard"
   },
   professional: {
     name: "Premium",
@@ -58,7 +59,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 19.99,
     currency: "GBP",
     displayPrice: "£19.99",
-    stripePrice: "price_1PXbDEJv2a2eDPDybxZnQ8D6" // Premium price ID (adjust if different)
+    // Note: This is a placeholder. In production, you'll need to get actual price IDs from your Stripe dashboard
+    stripePrice: process.env.STRIPE_PREMIUM_PRICE_ID || "price_premium"
   },
   premium: {
     name: "Pro",
@@ -70,7 +72,8 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     price: 39.99,
     currency: "GBP",
     displayPrice: "£39.99",
-    stripePrice: "price_1PXbDiJv2a2eDPDyAOe7hxKl" // Pro price ID (adjust if different)
+    // Note: This is a placeholder. In production, you'll need to get actual price IDs from your Stripe dashboard
+    stripePrice: process.env.STRIPE_PRO_PRICE_ID || "price_pro"
   }
 };
 

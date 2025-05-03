@@ -1,0 +1,68 @@
+Stripe Checkout Error
+Error: No such price: 'price_1PXbCoJv2a2eDPDyjxCU2zVq'
+
+{
+  "type": "StripeInvalidRequestError",
+  "raw": {
+    "code": "resource_missing",
+    "doc_url": "https://stripe.com/docs/error-codes/resource-missing",
+    "message": "No such price: 'price_1PXbCoJv2a2eDPDyjxCU2zVq'",
+    "param": "line_items[0][price]",
+    "request_log_url": "https://dashboard.stripe.com/test/logs/req_zWj4psEMpcLlgZ?t=1746285361",
+    "type": "invalid_request_error",
+    "headers": {
+      "server": "nginx",
+      "date": "Sat, 03 May 2025 15:16:01 GMT",
+      "content-type": "application/json",
+      "content-length": "360",
+      "connection": "keep-alive",
+      "access-control-allow-credentials": "true",
+      "access-control-allow-methods": "GET, HEAD, PUT, PATCH, POST, DELETE",
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required",
+      "access-control-max-age": "300",
+      "cache-control": "no-cache, no-store",
+      "content-security-policy": "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=fmgCvmHMSlBV9KUVN5c5FCPMYrFZw_a6xYuLGV1uxi-LlsOl_3gpdL2BIsUhQBBXaa94URg7ehK6BT9Q",
+      "idempotency-key": "stripe-node-retry-d2cdaddd-17b9-44e4-b704-d0127e666995",
+      "original-request": "req_zWj4psEMpcLlgZ",
+      "request-id": "req_zWj4psEMpcLlgZ",
+      "stripe-version": "2023-10-16",
+      "vary": "Origin",
+      "x-stripe-priority-routing-enabled": "true",
+      "x-stripe-routing-context-priority-tier": "api-testmode",
+      "x-wc": "ABGHI",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload"
+    },
+    "statusCode": 400,
+    "requestId": "req_zWj4psEMpcLlgZ"
+  },
+  "rawType": "invalid_request_error",
+  "code": "resource_missing",
+  "doc_url": "https://stripe.com/docs/error-codes/resource-missing",
+  "param": "line_items[0][price]",
+  "headers": {
+    "server": "nginx",
+    "date": "Sat, 03 May 2025 15:16:01 GMT",
+    "content-type": "application/json",
+    "content-length": "360",
+    "connection": "keep-alive",
+    "access-control-allow-credentials": "true",
+    "access-control-allow-methods": "GET, HEAD, PUT, PATCH, POST, DELETE",
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required",
+    "access-control-max-age": "300",
+    "cache-control": "no-cache, no-store",
+    "content-security-policy": "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=fmgCvmHMSlBV9KUVN5c5FCPMYrFZw_a6xYuLGV1uxi-LlsOl_3gpdL2BIsUhQBBXaa94URg7ehK6BT9Q",
+    "idempotency-key": "stripe-node-retry-d2cdaddd-17b9-44e4-b704-d0127e666995",
+    "original-request": "req_zWj4psEMpcLlgZ",
+    "request-id": "req_zWj4psEMpcLlgZ",
+    "stripe-version": "2023-10-16",
+    "vary": "Origin",
+    "x-stripe-priority-routing-enabled": "true",
+    "x-stripe-routing-context-priority-tier": "api-testmode",
+    "x-wc": "ABGHI",
+    "strict-transport-security": "max-age=63072000; includeSubDomains; preload"
+  },
+  "requestId": "req_zWj4psEMpcLlgZ",
+  "statusCode": 400
+}
