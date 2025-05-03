@@ -159,13 +159,13 @@ export default function Sidebar() {
                   } ${item.label === "Campaign Factory" ? "relative" : ""}`}
                 >
                   {item.label === "Campaign Factory" && (
-                    <div className="absolute inset-0 bg-[#74d1ea]/5 opacity-50 pointer-events-none shadow-[0_0_8px_#74d1ea40] rounded"></div>
+                    <div className="absolute inset-0 bg-[#74d1ea]/5 opacity-20 pointer-events-none shadow-[0_0_12px_rgba(116,209,234,0.15)] rounded-md transition-all duration-300 animate-pulse"></div>
                   )}
-                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'} ${item.label === "Campaign Factory" ? "text-[#74d1ea] z-10" : ""}`}>
+                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'} ${item.label === "Campaign Factory" ? "text-[#74d1ea] z-10 filter drop-shadow-[0_0_2px_rgba(116,209,234,0.6)]" : ""}`}>
                     {item.icon}
                   </span>
                   {!isCollapsed && (
-                    <span className={item.label === "Campaign Factory" ? "text-[#74d1ea] z-10" : ""}>
+                    <span className={item.label === "Campaign Factory" ? "text-[#74d1ea] z-10 filter drop-shadow-[0_0_2px_rgba(116,209,234,0.4)]" : ""}>
                       {item.label}
                     </span>
                   )}
