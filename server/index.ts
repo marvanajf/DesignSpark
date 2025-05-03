@@ -4,12 +4,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { 
-  migrateStripeFields,
-  migrateCampaignsUsedColumn as migrateCampaignsColumn,
-  migrateCampaignsPersonaFields as migrateCampaignFields,
-  runEmergencyMigrations
-} from "./migrations";
+import { applySchemaPatches } from "./schema-patches";
 
 const app = express();
 app.use(express.json());
@@ -97,26 +92,12 @@ process.on('unhandledRejection', async (reason, promise) => {
 // Application initialization with enhanced error handling
 (async () => {
   try {
-    // Run database migrations
-    await migrateStripeFields();
-    
-    // Run emergency migration for campaigns_used column
+    // Apply schema patches to ensure database compatibility
     try {
-      console.log("Running emergency campaigns_used column migration...");
-      await migrateCampaignsColumn();
-      console.log("Emergency column migration complete.");
-    } catch (migrationError) {
-      console.error("Error during campaigns_used column migration:", migrationError);
-      // Continue application startup even if migration fails
-    }
-
-    // Run migration for new campaign fields
-    try {
-      // We don't need to pass the pool directly since migrateCampaignFields will import it
-      await migrateCampaignFields();
-    } catch (migrationError) {
-      console.error("Error during campaign fields migration:", migrationError);
-      // Continue application startup even if migration fails
+      await applySchemaPatches();
+    } catch (error) {
+      console.error("Schema update error:", error);
+      // Continue application startup even if update fails
     }
     
     // Set up email service with Gmail
