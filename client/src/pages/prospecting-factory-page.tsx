@@ -644,7 +644,7 @@ REGISTER NOW: [Link]`,
                                   checked={selectedContentTypes.blog}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, blog: checked})}
                                 />
-                                <Label htmlFor="blog-content" className="text-sm">Blog Articles</Label>
+                                <Label htmlFor="blog-content" className="text-sm">Blog</Label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <Switch 
@@ -654,14 +654,7 @@ REGISTER NOW: [Link]`,
                                 />
                                 <Label htmlFor="webinar-content" className="text-sm">Webinar Content</Label>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <Switch 
-                                  id="ad-content" 
-                                  checked={selectedContentTypes.ad}
-                                  onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, ad: checked})}
-                                />
-                                <Label htmlFor="ad-content" className="text-sm">Ad Copy</Label>
-                              </div>
+
                             </div>
                             <p className="text-xs text-gray-400 mt-1.5">
                               Select the content types you want to include in your campaign (maximum 20 pieces per type)
@@ -1115,7 +1108,7 @@ REGISTER NOW: [Link]`,
                           <div>
                             <h4 className="text-white font-medium mb-3 flex items-center">
                               <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                              Blog Articles
+                              Blog
                             </h4>
                             
                             <div className="grid sm:grid-cols-1 gap-4">
