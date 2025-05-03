@@ -186,13 +186,6 @@ export default function BlogPage() {
             )}
           </div>
 
-          {/* Load More Button */}
-          <div className="mt-16 text-center">
-            <Button variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-900 hover:text-white">
-              Load more articles
-            </Button>
-          </div>
-
           {/* Newsletter Subscription */}
           <div className="mt-20 bg-gray-900/30 rounded-lg p-8 border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
             <div className="text-center max-w-2xl mx-auto">
@@ -209,64 +202,6 @@ export default function BlogPage() {
                 </Button>
               </div>
             </div>
-          </div>
-
-          {/* Categories Section */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-6">
-            {categories.length > 0 ? (
-              categories.map((category) => (
-                <div key={category.id} className="border-t border-[#74d1ea]/30 pt-6">
-                  <h3 className="text-lg font-medium text-white mb-3">{category.name}</h3>
-                  <p className="text-gray-400">
-                    {category.name === "Technology" && "AI, machine learning, and tech innovation insights."}
-                    {category.name === "Product Updates" && "Latest features, improvements and announcements."}
-                    {category.name === "Marketing Tips" && "Content marketing and audience engagement tactics."}
-                    {category.name === "Case Studies" && "Success stories and implementation examples."}
-                  </p>
-                  <Link href={`/blog/category/${category.slug}`}>
-                    <a className="mt-3 inline-flex items-center text-[#74d1ea]">
-                      <span className="mr-2">View all</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
-                  </Link>
-                </div>
-              ))
-            ) : (
-              <>
-                <div className="border-t border-[#74d1ea]/30 pt-6">
-                  <h3 className="text-lg font-medium text-white mb-3">Technology</h3>
-                  <p className="text-gray-400">AI, machine learning, and tech innovation insights.</p>
-                  <div className="mt-3 inline-flex items-center text-zinc-600">
-                    <span className="mr-2">View all</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </div>
-                <div className="border-t border-[#74d1ea]/30 pt-6">
-                  <h3 className="text-lg font-medium text-white mb-3">Product Updates</h3>
-                  <p className="text-gray-400">Latest features, improvements and announcements.</p>
-                  <div className="mt-3 inline-flex items-center text-zinc-600">
-                    <span className="mr-2">View all</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </div>
-                <div className="border-t border-[#74d1ea]/30 pt-6">
-                  <h3 className="text-lg font-medium text-white mb-3">Marketing Tips</h3>
-                  <p className="text-gray-400">Content marketing and audience engagement tactics.</p>
-                  <div className="mt-3 inline-flex items-center text-zinc-600">
-                    <span className="mr-2">View all</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </div>
-                <div className="border-t border-[#74d1ea]/30 pt-6">
-                  <h3 className="text-lg font-medium text-white mb-3">Case Studies</h3>
-                  <p className="text-gray-400">Success stories and implementation examples.</p>
-                  <div className="mt-3 inline-flex items-center text-zinc-600">
-                    <span className="mr-2">View all</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>
