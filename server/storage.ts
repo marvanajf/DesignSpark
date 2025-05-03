@@ -690,6 +690,22 @@ export class MemStorage implements IStorage {
     }
   }
   
+  async updateUserPassword(userId: number, hashedPassword: string): Promise<User> {
+    const user = this.users.get(userId);
+    
+    if (!user) {
+      throw new Error(`User with id ${userId} not found`);
+    }
+    
+    const updatedUser = {
+      ...user,
+      password: hashedPassword
+    };
+    
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+  
   // Lead contact methods
   async createLeadContact(contact: InsertLeadContact): Promise<LeadContact> {
     const id = this.leadContactIdCounter++;

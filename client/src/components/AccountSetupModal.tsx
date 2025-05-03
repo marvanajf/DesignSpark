@@ -72,7 +72,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
       toast({
         title: "Account setup successful!",
         description: "Your password has been set. You can now log in to your account.",
-        variant: "success",
+        variant: "default",
       });
       
       // Wait a moment before closing the modal to show success state
