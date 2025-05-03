@@ -320,7 +320,7 @@ export default function DashboardPage() {
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-5">
                     <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <Lightbulb className="h-6 w-6 text-[#74d1ea]" />
+                      <Sparkles className="h-6 w-6 text-[#74d1ea]" />
                     </div>
                     <div className="bg-[#74d1ea]/10 px-2 py-1 rounded-md text-xs text-[#74d1ea] border border-[#74d1ea]/30">
                       Premium Feature
