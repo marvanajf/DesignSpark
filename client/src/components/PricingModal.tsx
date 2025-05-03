@@ -19,6 +19,8 @@ interface PlanInfo {
   personas: number;
   toneAnalyses: number;
   contentGeneration: number;
+  campaigns: number;
+  support: boolean;
   price: number;
   currency: string;
   displayPrice: string;
@@ -80,7 +82,8 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
               <li>• {plan.personas} AI Personas</li>
               <li>• {plan.toneAnalyses} Tone Analyses</li>
               <li>• {plan.contentGeneration} Content Pieces per month</li>
-              {planId !== 'free' && <li>• Premium email support</li>}
+              <li>• {plan.campaigns} Campaigns</li>
+              {planId !== 'free' && <li>• Premium Support</li>}
               {['professional', 'premium'].includes(planId) && <li>• Priority support</li>}
               {planId === 'premium' && <li>• API Access</li>}
             </ul>
