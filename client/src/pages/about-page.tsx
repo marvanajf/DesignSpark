@@ -30,10 +30,10 @@ export default function AboutPage() {
             <div className="text-center mb-8">
               <div className="inline-flex items-center mb-4 text-[#74d1ea]">
                 <span className="flex h-2 w-2 bg-[#74d1ea] rounded-full mr-2"></span>
-                <span className="text-sm font-medium">Our Story</span>
+                <span className="text-sm font-medium">About Us</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-                The team behind <span className="text-[#74d1ea]">Tovably</span>
+                Welcome to <span className="text-[#74d1ea]">Tovably</span>
               </h1>
               <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
                 Revolutionizing how brands communicate with AI-powered tone analysis and content generation.
@@ -170,11 +170,11 @@ export default function AboutPage() {
                 creates disconnects with audiences and weakens brand perception.
               </p>
               <p className="text-gray-300 text-lg">
-                Founded by a team of communication experts and AI specialists, we set out to build a 
-                solution that would make sophisticated tone of voice analysis and content generation 
-                accessible to businesses of all sizes. After months of research, development, and testing, 
-                Tovably emerged as a powerful yet intuitive platform that helps brands speak with clarity, 
-                consistency, and conviction.
+                Driven by a passion for effective communication and technological innovation, 
+                we set out to build a solution that would make sophisticated tone analysis and content 
+                generation accessible to organizations of all sizes. After months of research, development, 
+                and testing, Tovably emerged as a powerful yet intuitive platform that helps brands speak 
+                with clarity, consistency, and conviction.
               </p>
             </div>
           </div>
@@ -290,86 +290,7 @@ export default function AboutPage() {
         </div>
       </div>
       
-      {/* Our Team Section */}
-      <div className="bg-black py-20 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center mb-4 text-[#74d1ea]">
-              <span className="flex h-2 w-2 bg-[#74d1ea] rounded-full mr-2"></span>
-              <span className="text-sm font-medium">Our Team</span>
-            </div>
-            <h2 className="text-3xl font-bold text-white mb-6">
-              The minds behind Tovably
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Tovably is powered by a diverse team of communication experts, AI specialists, designers, 
-              and developers from across the UK and Europe.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="h-60 bg-gradient-to-b from-[#74d1ea]/20 to-black flex items-center justify-center">
-                <div className="h-24 w-24 bg-[#74d1ea]/10 rounded-full flex items-center justify-center border border-[#74d1ea]/30">
-                  <Users className="h-12 w-12 text-[#74d1ea]" />
-                </div>
-              </div>
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-medium text-white mb-1">Sarah Mitchell</h3>
-                <p className="text-[#74d1ea] text-sm mb-4">Founder & CEO</p>
-                <p className="text-gray-300 text-sm">
-                  Communication strategist with 15+ years experience in brand development.
-                </p>
-              </div>
-            </div>
-            
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="h-60 bg-gradient-to-b from-[#74d1ea]/20 to-black flex items-center justify-center">
-                <div className="h-24 w-24 bg-[#74d1ea]/10 rounded-full flex items-center justify-center border border-[#74d1ea]/30">
-                  <Code className="h-12 w-12 text-[#74d1ea]" />
-                </div>
-              </div>
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-medium text-white mb-1">David Chen</h3>
-                <p className="text-[#74d1ea] text-sm mb-4">CTO</p>
-                <p className="text-gray-300 text-sm">
-                  AI specialist with background in computational linguistics and machine learning.
-                </p>
-              </div>
-            </div>
-            
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="h-60 bg-gradient-to-b from-[#74d1ea]/20 to-black flex items-center justify-center">
-                <div className="h-24 w-24 bg-[#74d1ea]/10 rounded-full flex items-center justify-center border border-[#74d1ea]/30">
-                  <Sparkles className="h-12 w-12 text-[#74d1ea]" />
-                </div>
-              </div>
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-medium text-white mb-1">Emma Rodriguez</h3>
-                <p className="text-[#74d1ea] text-sm mb-4">Head of Product</p>
-                <p className="text-gray-300 text-sm">
-                  Product design expert focused on creating intuitive user experiences.
-                </p>
-              </div>
-            </div>
-            
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/60 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <div className="h-60 bg-gradient-to-b from-[#74d1ea]/20 to-black flex items-center justify-center">
-                <div className="h-24 w-24 bg-[#74d1ea]/10 rounded-full flex items-center justify-center border border-[#74d1ea]/30">
-                  <Globe className="h-12 w-12 text-[#74d1ea]" />
-                </div>
-              </div>
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-medium text-white mb-1">James Wilson</h3>
-                <p className="text-[#74d1ea] text-sm mb-4">Growth Director</p>
-                <p className="text-gray-300 text-sm">
-                  Marketing strategist specializing in SaaS and technology companies.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
       
       {/* CTA Section */}
       <div className="bg-black py-20 border-t border-gray-800">
