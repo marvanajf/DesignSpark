@@ -1414,18 +1414,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   
                   const planInfo = subscriptionPlans[planId as SubscriptionPlanType] || subscriptionPlans.standard;
                   
-                  // Make sure we have a Stripe price ID
-                  if (!planInfo.stripePrice) {
-                    console.error(`Missing Stripe price ID for plan: ${planId}`);
-                    throw new Error(`Missing Stripe price configuration for plan: ${planId}`);
-                  }
-                  
-                  // Use Stripe API to create a subscription for this customer with price ID
+                  // Use Stripe API to create a subscription for this customer with dynamic pricing
                   const subscription = await stripe.subscriptions.create({
                     customer: customerStripeId,
                     items: [
                       {
-                        price: planInfo.stripePrice, // Use the Stripe price ID directly
+                        price_data: {
+                          currency: planInfo.currency.toLowerCase(),
+                          product_data: {
+                            name: `Tovably ${planInfo.name} Plan`,
+                            description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+                          },
+                          unit_amount: Math.round(planInfo.price * 100), // Convert to cents
+                          recurring: {
+                            interval: 'month'
+                          }
+                        }
                       },
                     ],
                     metadata: {
@@ -1497,17 +1501,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
               try {
                 const planInfo = subscriptionPlans[planId as SubscriptionPlanType] || subscriptionPlans.standard;
                 
-                // Make sure we have a Stripe price ID
-                if (!planInfo.stripePrice) {
-                  console.error(`Missing Stripe price ID for plan: ${planId}`);
-                  throw new Error(`Missing Stripe price configuration for plan: ${planId}`);
-                }
-                
+                // Create subscription with dynamic pricing
                 const subscription = await stripe.subscriptions.create({
                   customer: session.customer as string,
                   items: [
                     {
-                      price: planInfo.stripePrice, // Use the Stripe price ID directly
+                      price_data: {
+                        currency: planInfo.currency.toLowerCase(),
+                        product_data: {
+                          name: `Tovably ${planInfo.name} Plan`,
+                          description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+                        },
+                        unit_amount: Math.round(planInfo.price * 100), // Convert to cents
+                        recurring: {
+                          interval: 'month'
+                        }
+                      }
                     },
                   ],
                   metadata: {
