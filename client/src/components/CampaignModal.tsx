@@ -308,15 +308,17 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   )}
                 </div>
               </div>
-              <div className="ml-auto">
-                <Button
-                  onClick={() => setIsAddContentDialogOpen(true)}
-                  className="gap-1"
-                  style={{ backgroundColor: "#74d1ea", color: "black" }}
-                >
-                  <Plus className="h-4 w-4" /> Add Content
-                </Button>
-              </div>
+              {mode !== 'view' && (
+                <div className="ml-auto">
+                  <Button
+                    onClick={() => setIsAddContentDialogOpen(true)}
+                    className="gap-1"
+                    style={{ backgroundColor: "#74d1ea", color: "black" }}
+                  >
+                    <Plus className="h-4 w-4" /> Add Content
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -347,15 +349,18 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   <FileText className="h-10 w-10 text-muted-foreground" />
                   <h3 className="text-lg font-semibold">No content in this campaign</h3>
                   <p className="text-muted-foreground text-center max-w-md text-sm">
-                    This campaign doesn't have any content yet. Add some from your saved content.
+                    This campaign doesn't have any content yet.
+                    {mode !== 'view' && " Add some from your saved content."}
                   </p>
-                  <Button 
-                    onClick={() => setIsAddContentDialogOpen(true)}
-                    size="sm"
-                    style={{ backgroundColor: "#74d1ea", color: "black" }}
-                  >
-                    <Plus className="mr-2 h-4 w-4" /> Add Content
-                  </Button>
+                  {mode !== 'view' && (
+                    <Button 
+                      onClick={() => setIsAddContentDialogOpen(true)}
+                      size="sm"
+                      style={{ backgroundColor: "#74d1ea", color: "black" }}
+                    >
+                      <Plus className="mr-2 h-4 w-4" /> Add Content
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -369,7 +374,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                           key={content.id}
                           content={content}
                           onRemoveFromCampaign={() => handleRemoveContent(content.id)}
-                          showCampaignActions={true}
+                          showCampaignActions={mode !== 'view'}
                         />
                       ))}
                     </div>
@@ -396,28 +401,32 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="flex flex-col space-y-2">
-                    <Label htmlFor="persona-select">Select a persona for this campaign</Label>
-                    <Select 
-                      value={selectedPersonaId?.toString() || (campaign.persona_id?.toString() || '0')}
-                      onValueChange={(value) => setSelectedPersonaId(value === "0" ? null : parseInt(value))}
-                    >
-                      <SelectTrigger id="persona-select" className="w-full">
-                        <SelectValue placeholder="Select a persona" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem key="none" value="0">None</SelectItem>
-                        {personas.map((persona) => (
-                          <SelectItem key={persona.id} value={persona.id.toString()}>
-                            {persona.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Associating a persona helps maintain consistent audience targeting across all campaign content.
-                    </p>
-                  </div>
+                  {mode !== 'view' ? (
+                    <div className="flex flex-col space-y-2">
+                      <Label htmlFor="persona-select">Select a persona for this campaign</Label>
+                      <Select 
+                        value={selectedPersonaId?.toString() || (campaign.persona_id?.toString() || '0')}
+                        onValueChange={(value) => setSelectedPersonaId(value === "0" ? null : parseInt(value))}
+                      >
+                        <SelectTrigger id="persona-select" className="w-full">
+                          <SelectValue placeholder="Select a persona" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem key="none" value="0">None</SelectItem>
+                          {personas.map((persona) => (
+                            <SelectItem key={persona.id} value={persona.id.toString()}>
+                              {persona.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Associating a persona helps maintain consistent audience targeting across all campaign content.
+                      </p>
+                    </div>
+                  ) : (
+                    <h3 className="text-lg font-medium mb-2">Associated Persona</h3>
+                  )}
                   
                   {(selectedPersonaId || campaign.persona_id) && personas.length > 0 && (
                     <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
@@ -440,26 +449,28 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                     </div>
                   )}
                   
-                  <div className="flex justify-end">
-                    <Button
-                      onClick={() => {
-                        updateCampaignMutation.mutate({
-                          campaignId, 
-                          personaId: selectedPersonaId !== null ? selectedPersonaId : campaign.persona_id
-                        });
-                      }}
-                      disabled={updateCampaignMutation.isPending}
-                      style={{ backgroundColor: "#74d1ea", color: "black" }}
-                    >
-                      {updateCampaignMutation.isPending ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
-                        </>
-                      ) : (
-                        "Update Persona"
-                      )}
-                    </Button>
-                  </div>
+                  {mode !== 'view' && (
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={() => {
+                          updateCampaignMutation.mutate({
+                            campaignId, 
+                            personaId: selectedPersonaId !== null ? selectedPersonaId : campaign.persona_id
+                          });
+                        }}
+                        disabled={updateCampaignMutation.isPending}
+                        style={{ backgroundColor: "#74d1ea", color: "black" }}
+                      >
+                        {updateCampaignMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
+                          </>
+                        ) : (
+                          "Update Persona"
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </TabsContent>
@@ -482,28 +493,32 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="flex flex-col space-y-2">
-                    <Label htmlFor="tone-select">Select a tone analysis for this campaign</Label>
-                    <Select 
-                      value={selectedToneAnalysisId?.toString() || (campaign.tone_analysis_id?.toString() || '0')}
-                      onValueChange={(value) => setSelectedToneAnalysisId(value === "0" ? null : parseInt(value))}
-                    >
-                      <SelectTrigger id="tone-select" className="w-full">
-                        <SelectValue placeholder="Select a tone analysis" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem key="none-tone" value="0">None</SelectItem>
-                        {toneAnalyses.map((tone) => (
-                          <SelectItem key={tone.id} value={tone.id.toString()}>
-                            {tone.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Associating a tone analysis ensures consistent voice and tone across all campaign materials.
-                    </p>
-                  </div>
+                  {mode !== 'view' ? (
+                    <div className="flex flex-col space-y-2">
+                      <Label htmlFor="tone-select">Select a tone analysis for this campaign</Label>
+                      <Select 
+                        value={selectedToneAnalysisId?.toString() || (campaign.tone_analysis_id?.toString() || '0')}
+                        onValueChange={(value) => setSelectedToneAnalysisId(value === "0" ? null : parseInt(value))}
+                      >
+                        <SelectTrigger id="tone-select" className="w-full">
+                          <SelectValue placeholder="Select a tone analysis" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem key="none-tone" value="0">None</SelectItem>
+                          {toneAnalyses.map((tone) => (
+                            <SelectItem key={tone.id} value={tone.id.toString()}>
+                              {tone.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Associating a tone analysis ensures consistent voice and tone across all campaign materials.
+                      </p>
+                    </div>
+                  ) : (
+                    <h3 className="text-lg font-medium mb-2">Associated Tone Analysis</h3>
+                  )}
                   
                   {(selectedToneAnalysisId || campaign.tone_analysis_id) && toneAnalyses.length > 0 && (
                     <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
@@ -525,26 +540,28 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                     </div>
                   )}
                   
-                  <div className="flex justify-end">
-                    <Button
-                      onClick={() => {
-                        updateCampaignMutation.mutate({
-                          campaignId, 
-                          toneAnalysisId: selectedToneAnalysisId !== null ? selectedToneAnalysisId : campaign.tone_analysis_id
-                        });
-                      }}
-                      disabled={updateCampaignMutation.isPending}
-                      style={{ backgroundColor: "#74d1ea", color: "black" }}
-                    >
-                      {updateCampaignMutation.isPending ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
-                        </>
-                      ) : (
-                        "Update Tone Analysis"
-                      )}
-                    </Button>
-                  </div>
+                  {mode !== 'view' && (
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={() => {
+                          updateCampaignMutation.mutate({
+                            campaignId, 
+                            toneAnalysisId: selectedToneAnalysisId !== null ? selectedToneAnalysisId : campaign.tone_analysis_id
+                          });
+                        }}
+                        disabled={updateCampaignMutation.isPending}
+                        style={{ backgroundColor: "#74d1ea", color: "black" }}
+                      >
+                        {updateCampaignMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
+                          </>
+                        ) : (
+                          "Update Tone Analysis"
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </TabsContent>
