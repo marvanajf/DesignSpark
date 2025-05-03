@@ -67,7 +67,7 @@ export default function Sidebar() {
   const menuItems: MenuItem[] = [
     { href: "/dashboard", icon: <Home className="h-5 w-5" />, label: "Dashboard" },
     { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
-    { href: "/prospecting-factory", icon: <Sparkles className="h-5 w-5" />, label: "Prospecting Factory" },
+    { href: "/prospecting-factory", icon: <Sparkles className="h-5 w-5" />, label: "Campaign Factory" },
     { href: "/tone-analysis", icon: <BarChart2 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
@@ -156,12 +156,19 @@ export default function Sidebar() {
                     isActive 
                       ? "bg-zinc-800 text-white" 
                       : "text-zinc-400 hover:text-white"
-                  }`}
+                  } ${item.label === "Campaign Factory" ? "relative" : ""}`}
                 >
-                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
+                  {item.label === "Campaign Factory" && (
+                    <div className="absolute inset-0 bg-[#74d1ea]/5 opacity-50 pointer-events-none shadow-[0_0_8px_#74d1ea40] rounded"></div>
+                  )}
+                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'} ${item.label === "Campaign Factory" ? "text-[#74d1ea] z-10" : ""}`}>
                     {item.icon}
                   </span>
-                  {!isCollapsed && item.label}
+                  {!isCollapsed && (
+                    <span className={item.label === "Campaign Factory" ? "text-[#74d1ea] z-10" : ""}>
+                      {item.label}
+                    </span>
+                  )}
                 </Link>
               );
             })}
