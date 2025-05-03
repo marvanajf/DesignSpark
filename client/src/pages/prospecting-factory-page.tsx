@@ -631,6 +631,71 @@ REGISTER NOW: [Link]`,
                       <div>
                         <h3 className="text-white font-medium mb-2">Additional Settings</h3>
                         <div className="space-y-3">
+                          <div className="border border-gray-700 rounded-lg p-4">
+                            <h4 className="text-white text-sm font-medium mb-2">Campaign Timeline</h4>
+                            <div className="grid grid-cols-2 gap-3 mb-3">
+                              <div>
+                                <Label htmlFor="start-date" className="text-xs text-gray-400 mb-1 block">Start Date</Label>
+                                <Input
+                                  id="start-date"
+                                  type="date"
+                                  value={campaignStartDate}
+                                  onChange={(e) => setCampaignStartDate(e.target.value)}
+                                  className="h-9 bg-black border-gray-700 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="end-date" className="text-xs text-gray-400 mb-1 block">End Date</Label>
+                                <Input
+                                  id="end-date"
+                                  type="date"
+                                  value={campaignEndDate}
+                                  onChange={(e) => setCampaignEndDate(e.target.value)}
+                                  className="h-9 bg-black border-gray-700 text-white"
+                                />
+                              </div>
+                            </div>
+                            <h4 className="text-white text-sm font-medium mb-2">Content Distribution</h4>
+                            <div className="grid grid-cols-3 gap-3">
+                              <div>
+                                <Label htmlFor="email-count" className="text-xs text-gray-400 mb-1 block">Email Pieces</Label>
+                                <Input
+                                  id="email-count"
+                                  type="number"
+                                  min="1"
+                                  max="5"
+                                  value={contentCount.email}
+                                  onChange={(e) => setContentCount({...contentCount, email: parseInt(e.target.value) || 1})}
+                                  className="h-9 bg-black border-gray-700 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="social-count" className="text-xs text-gray-400 mb-1 block">Social Pieces</Label>
+                                <Input
+                                  id="social-count"
+                                  type="number"
+                                  min="1"
+                                  max="5"
+                                  value={contentCount.social}
+                                  onChange={(e) => setContentCount({...contentCount, social: parseInt(e.target.value) || 1})}
+                                  className="h-9 bg-black border-gray-700 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="blog-count" className="text-xs text-gray-400 mb-1 block">Blog Pieces</Label>
+                                <Input
+                                  id="blog-count"
+                                  type="number"
+                                  min="1"
+                                  max="3"
+                                  value={contentCount.blog}
+                                  onChange={(e) => setContentCount({...contentCount, blog: parseInt(e.target.value) || 1})}
+                                  className="h-9 bg-black border-gray-700 text-white"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          
                           <div className="flex items-center justify-between border border-gray-700 rounded-lg p-3">
                             <div>
                               <span className="text-white text-sm">Include tone analysis</span>
@@ -835,55 +900,75 @@ REGISTER NOW: [Link]`,
                         Campaign Deliverables
                       </h3>
                       
-                      <div className="space-y-4">
+                      <div className="space-y-6">
                         {campaign.contents.map((content) => (
-                          <div key={content.id} className="border border-gray-700/60 rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between bg-gray-900/50 px-4 py-3 border-b border-gray-700/60">
+                          <div key={content.id} className="border border-gray-700/60 rounded-xl overflow-hidden bg-gray-900/30 shadow-lg shadow-[#74d1ea]/5 hover:shadow-[#74d1ea]/10 transition-all duration-300">
+                            <div className="flex items-center justify-between bg-gradient-to-r from-gray-800/90 to-gray-800/50 p-4 border-b border-gray-700/40">
                               <div className="flex items-center">
-                                <div className="h-8 w-8 rounded-full bg-[#74d1ea]/10 flex items-center justify-center mr-3">
-                                  {content.icon || <FileText className="h-4 w-4 text-[#74d1ea]" />}
+                                <div className="bg-[#74d1ea]/10 p-2 rounded-lg text-[#74d1ea]">
+                                  {content.icon || <FileText className="h-4 w-4" />}
                                 </div>
-                                <div>
-                                  <h4 className="text-white font-medium">{content.title}</h4>
-                                  <div className="flex items-center text-xs text-gray-400 mt-0.5 space-x-3">
-                                    <span>{content.type.charAt(0).toUpperCase() + content.type.slice(1)}</span>
+                                <div className="ml-3">
+                                  <div className="font-medium text-white text-base">{content.title}</div>
+                                  <div className="flex items-center text-xs text-gray-400 mt-1.5 flex-wrap gap-2">
+                                    <span className="text-[#74d1ea] bg-[#74d1ea]/10 border border-[#74d1ea]/20 rounded-full px-2.5 py-0.5 text-[10px] uppercase font-medium">
+                                      {content.type.charAt(0).toUpperCase() + content.type.slice(1)}
+                                    </span>
                                     {content.persona && (
-                                      <>
-                                        <span>•</span>
-                                        <span className="flex items-center">
-                                          <Users className="h-3 w-3 mr-1" />
-                                          {content.persona}
-                                        </span>
-                                      </>
+                                      <span className="text-gray-300 flex items-center">
+                                        <Users className="h-3 w-3 mr-1 text-gray-400" />
+                                        {content.persona}
+                                      </span>
                                     )}
                                     {content.deliveryDate && (
-                                      <>
-                                        <span>•</span>
-                                        <span className="flex items-center">
-                                          <Calendar className="h-3 w-3 mr-1" />
-                                          {content.deliveryDate}
-                                        </span>
-                                      </>
+                                      <span className="text-gray-300 flex items-center">
+                                        <Calendar className="h-3 w-3 mr-1 text-gray-400" />
+                                        {content.deliveryDate}
+                                      </span>
                                     )}
                                     {content.channel && (
-                                      <>
-                                        <span>•</span>
-                                        <span>{content.channel}</span>
-                                      </>
+                                      <span className="text-gray-300 flex items-center">
+                                        <MessageSquare className="h-3 w-3 mr-1 text-gray-400" />
+                                        {content.channel}
+                                      </span>
                                     )}
                                   </div>
                                 </div>
                               </div>
                               <div>
-                                <Button variant="ghost" size="sm" className="h-8 text-[#74d1ea] hover:bg-[#74d1ea]/10">
-                                  <Copy className="h-3.5 w-3.5 mr-1" />
+                                <Button variant="ghost" size="sm" className="h-9 text-[#74d1ea] hover:bg-[#74d1ea]/10 rounded-lg">
+                                  <Copy className="h-3.5 w-3.5 mr-1.5" />
                                   Copy
                                 </Button>
                               </div>
                             </div>
-                            <div className="p-4 bg-black">
-                              <pre className="whitespace-pre-wrap text-gray-300 text-sm font-mono">{content.content}</pre>
-                            </div>
+                            
+                            {/* Apply styling based on content type */}
+                            {content.type === "email" ? (
+                              <div className="p-5 bg-black/40">
+                                <div className="bg-black/60 p-5 rounded-lg border-l-2 border-[#74d1ea]/50 text-gray-200 text-sm leading-relaxed font-sans">
+                                  <div className="whitespace-pre-wrap">{content.content}</div>
+                                </div>
+                              </div>
+                            ) : content.type === "social" ? (
+                              <div className="p-5 bg-black/40">
+                                <div className="bg-black/60 p-5 rounded-lg border-l-2 border-[#74d1ea]/50 text-gray-200 text-sm leading-relaxed">
+                                  <div className="whitespace-pre-wrap">{content.content}</div>
+                                </div>
+                              </div>
+                            ) : content.type === "blog" ? (
+                              <div className="p-5 bg-black/40">
+                                <div className="prose prose-invert prose-p:text-gray-300 prose-headings:text-white prose-headings:font-semibold prose-a:text-[#74d1ea] max-w-none">
+                                  <div className="whitespace-pre-wrap text-sm">{content.content}</div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="p-5 bg-black/40">
+                                <div className="bg-black/60 p-5 rounded-lg text-gray-200 text-sm leading-relaxed">
+                                  <div className="whitespace-pre-wrap">{content.content}</div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
