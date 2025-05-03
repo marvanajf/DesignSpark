@@ -786,7 +786,7 @@ REGISTER NOW: [Link]`,
                                   checked={selectedContentTypes.social}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, social: checked})}
                                 />
-                                <Label htmlFor="social-content" className="text-sm">LinkedIn Posts</Label>
+                                <Label htmlFor="social-content" className="text-sm">LinkedIn</Label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <Switch 
@@ -802,7 +802,7 @@ REGISTER NOW: [Link]`,
                                   checked={selectedContentTypes.webinar}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, webinar: checked})}
                                 />
-                                <Label htmlFor="webinar-content" className="text-sm">Webinar Content</Label>
+                                <Label htmlFor="webinar-content" className="text-sm">Webinar</Label>
                               </div>
 
                             </div>
@@ -1254,7 +1254,7 @@ REGISTER NOW: [Link]`,
                           <div>
                             <h4 className="text-white font-medium mb-3 flex items-center">
                               <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                              LinkedIn Posts
+                              LinkedIn
                             </h4>
                             
                             <div className="grid sm:grid-cols-2 gap-4">
@@ -1351,7 +1351,7 @@ REGISTER NOW: [Link]`,
                           <div>
                             <h4 className="text-white font-medium mb-3 flex items-center">
                               <PlayCircle className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                              Webinar Content
+                              Webinar
                             </h4>
                             
                             <div className="grid sm:grid-cols-1 gap-4">
