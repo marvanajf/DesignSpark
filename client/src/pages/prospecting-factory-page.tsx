@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { apiRequest } from "@/lib/queryClient";
+import { useQuery } from "@tanstack/react-query";
 
 // A sample persona type for demonstration purposes
 type Persona = {
@@ -38,6 +39,17 @@ type CampaignContent = {
   deliveryDate?: string;
   channel?: string;
   icon?: React.ReactNode;
+};
+
+// Tone Analysis type from the database
+type ToneAnalysis = {
+  id: number;
+  user_id: number;
+  name: string;
+  website_url?: string;
+  sample_text?: string;
+  tone_results?: any;
+  created_at: string;
 };
 
 // Sample campaign type
@@ -92,6 +104,13 @@ export default function ProspectingFactoryPage() {
   );
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+  const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<string>("");
+  
+  // Fetch tone analyses for the user
+  const { data: toneAnalyses, isLoading: isLoadingToneAnalyses } = useQuery<ToneAnalysis[]>({
+    queryKey: ["/api/tone-analyses"],
+    enabled: !!user,
+  });
 
   // Sample persona data
   const personas: Persona[] = [
@@ -763,24 +782,37 @@ REGISTER NOW: [Link]`,
                             <div className="flex items-center justify-between">
                               <div>
                                 <span className="text-white text-sm">Include tone analysis</span>
-                                <p className="text-xs text-gray-400">Apply your brand's tone profile</p>
+                                <p className="text-xs text-gray-400">Apply your brand's tone from previous analyses</p>
                               </div>
                               <Switch defaultChecked />
                             </div>
                             <div className="mt-3">
-                              <Label htmlFor="tone-selection" className="text-xs text-gray-400 mb-1 block">Select tone profile</Label>
-                              <Select defaultValue="professional">
-                                <SelectTrigger id="tone-selection" className="w-full bg-black border-gray-700 text-white h-9">
-                                  <SelectValue placeholder="Select a tone"/>
-                                </SelectTrigger>
-                                <SelectContent className="bg-black border-gray-700 text-white">
-                                  <SelectItem value="professional">Professional & Authoritative</SelectItem>
-                                  <SelectItem value="conversational">Conversational & Friendly</SelectItem>
-                                  <SelectItem value="persuasive">Persuasive & Sales-focused</SelectItem>
-                                  <SelectItem value="educational">Educational & Informative</SelectItem>
-                                  <SelectItem value="enthusiastic">Enthusiastic & Energetic</SelectItem>
-                                </SelectContent>
-                              </Select>
+                              <Label htmlFor="tone-selection" className="text-xs text-gray-400 mb-1 block">Select tone analysis</Label>
+                              {isLoadingToneAnalyses ? (
+                                <div className="flex items-center justify-center py-2">
+                                  <Loader2 className="h-4 w-4 text-gray-400 animate-spin" />
+                                </div>
+                              ) : !toneAnalyses || toneAnalyses.length === 0 ? (
+                                <div className="text-xs text-amber-500 py-2">
+                                  No tone analyses available. Please perform a tone analysis in the Tone Analysis section first.
+                                </div>
+                              ) : (
+                                <Select 
+                                  value={selectedToneAnalysisId}
+                                  onValueChange={(value) => setSelectedToneAnalysisId(value)}
+                                >
+                                  <SelectTrigger id="tone-selection" className="w-full bg-black border-gray-700 text-white h-9">
+                                    <SelectValue placeholder="Select a tone analysis"/>
+                                  </SelectTrigger>
+                                  <SelectContent className="bg-black border-gray-700 text-white">
+                                    {toneAnalyses.map((analysis) => (
+                                      <SelectItem key={analysis.id} value={analysis.id.toString()}>
+                                        {analysis.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              )}
                             </div>
                           </div>
                           <div className="flex items-center justify-between border border-gray-700 rounded-lg p-3">
