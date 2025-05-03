@@ -1698,6 +1698,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Account setup endpoint for new users after payment
+  app.post("/api/setup-account", async (req: Request, res: Response) => {
+    try {
+      const schema = z.object({
+        email: z.string().email("Valid email is required"),
+        password: z.string().min(8, "Password must be at least 8 characters")
+      });
+      
+      const { email, password } = schema.parse(req.body);
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found. Please contact support." });
+      }
+      
+      // Hash the new password
+      const scryptAsync = promisify(scrypt);
+      const salt = randomBytes(16).toString("hex");
+      const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+      const hashedPassword = `${buf.toString("hex")}.${salt}`;
+      
+      // Update the user's password
+      await storage.updateUserPassword(user.id, hashedPassword);
+      
+      // Return success
+      return res.status(200).json({ 
+        success: true,
+        message: "Account setup successful"
+      });
+    } catch (error) {
+      console.error("Error setting up account:", error);
+      return res.status(400).json({ 
+        error: error instanceof Error ? error.message : "Failed to setup account" 
+      });
+    }
+  });
+  
   // Lead contact submission endpoint
   app.post("/api/lead-contact", async (req: Request, res: Response) => {
     try {
