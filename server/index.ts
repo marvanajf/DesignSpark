@@ -4,9 +4,12 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { migrateStripeFields } from "./migrations";
-import { migrateCampaignsColumn } from "./migrate-campaigns";
-import { migrateCampaignFields } from "./migrate-campaign-fields";
+import { 
+  migrateStripeFields,
+  migrateCampaignsUsedColumn as migrateCampaignsColumn,
+  migrateCampaignsPersonaFields as migrateCampaignFields,
+  runEmergencyMigrations
+} from "./migrations";
 
 const app = express();
 app.use(express.json());
