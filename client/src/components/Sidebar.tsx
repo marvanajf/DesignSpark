@@ -1,26 +1,28 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import {
-  Home,
-  BarChart2,
+  LayoutDashboard,
+  BarChart3,
   Users,
-  Edit3,
+  MessageSquarePlus,
   Archive,
   Settings,
   LogOut,
   HelpCircle,
-  Book,
+  BookText,
   UserCog,
   ShieldAlert,
   CreditCard,
   Menu,
   X,
-  PieChart,
+  ActivitySquare,
   Megaphone,
-  Factory,
+  PackagePlus,
   Briefcase,
   Rocket,
-  Layers
+  Bot,
+  Laptop,
+  Gauge
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
@@ -68,14 +70,14 @@ export default function Sidebar() {
   };
 
   const menuItems: MenuItem[] = [
-    { href: "/dashboard", icon: <Home className="h-5 w-5" />, label: "Dashboard" },
+    { href: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, label: "Dashboard" },
     { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
-    { href: "/prospecting-factory", icon: <Factory className="h-5 w-5" />, label: "Campaign Factory" },
-    { href: "/tone-analysis", icon: <BarChart2 className="h-5 w-5" />, label: "Tone Analysis" },
+    { href: "/prospecting-factory", icon: <Rocket className="h-5 w-5" />, label: "Campaign Factory" },
+    { href: "/tone-analysis", icon: <BarChart3 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
-    { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
+    { href: "/content-generator", icon: <MessageSquarePlus className="h-5 w-5" />, label: "Content Generator" },
     { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" },
-    { href: "/guides", icon: <Book className="h-5 w-5" />, label: "Guides" }
+    { href: "/guides", icon: <BookText className="h-5 w-5" />, label: "Guides" }
   ];
   
   // Determine if the current user is an admin
@@ -89,7 +91,7 @@ export default function Sidebar() {
   
   const bottomMenuItems: MenuItem[] = [
     { href: "/account", icon: <UserCog className="h-5 w-5" />, label: "Account" },
-    { href: "/usage", icon: <PieChart className="h-5 w-5" />, label: "Usage Monitor" },
+    { href: "/usage", icon: <ActivitySquare className="h-5 w-5" />, label: "Usage Monitor" },
     { 
       href: "/pricing", 
       icon: <CreditCard className="h-5 w-5" />, 
