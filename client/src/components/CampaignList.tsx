@@ -78,27 +78,53 @@ export function CampaignList() {
   // Create a new campaign
   const createCampaignMutation = useMutation({
     mutationFn: async (data: Omit<InsertCampaign, "user_id">) => {
-      const res = await apiRequest("POST", "/api/campaigns", {
-        ...data,
-        user_id: user?.id,
-        status: "active",
-      });
+      try {
+        const res = await fetch("/api/campaigns", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            user_id: user?.id,
+            status: "active",
+          }),
+          credentials: "include"
+        });
 
-      // Check if we hit a subscription limit (402 Payment Required)
-      if (res.status === 402) {
-        const limitData = await res.json();
-        throw { 
-          isLimitError: true, 
-          limitData: {
-            limitType: "campaigns" as const,
-            currentUsage: limitData.currentUsage, 
-            limit: limitData.limit,
-            currentPlan: limitData.currentPlan 
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          throw { 
+            isLimitError: true, 
+            limitData: {
+              limitType: "campaigns" as const,
+              currentUsage: limitData.current || limitData.currentUsage, 
+              limit: limitData.limit,
+              currentPlan: user?.subscription_plan || "free" 
+            }
+          };
+        }
+        
+        // Check for other errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
           }
-        };
-      }
+        }
 
-      return await res.json();
+        return await res.json();
+      } catch (error: any) {
+        // Rethrow limit errors so they're caught by the onError handler
+        if (error?.isLimitError) {
+          throw error;
+        }
+        
+        // Rethrow all other errors with a friendly message
+        throw new Error(error.message || "Failed to create campaign");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
