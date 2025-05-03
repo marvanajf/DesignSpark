@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
 import { subscriptionPlans, type SubscriptionPlanType, users } from "../shared/schema";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
 import { 
   analyzeTone, 
   generateLinkedInPost, 

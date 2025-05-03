@@ -60,6 +60,7 @@ export interface IStorage {
   incrementToneAnalysisUsage(id: number): Promise<User>;
   incrementContentUsage(id: number): Promise<User>;
   getAllUsers(): Promise<User[]>;
+  updateUserPassword(userId: number, hashedPassword: string): Promise<User>;
   
   // Tone analysis methods
   createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis>;
@@ -1377,6 +1378,15 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(campaignContents)
       .where(eq(campaignContents.campaign_id, campaignId));
+  }
+  
+  async updateUserPassword(userId: number, hashedPassword: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ password: hashedPassword })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
   }
 }
 
