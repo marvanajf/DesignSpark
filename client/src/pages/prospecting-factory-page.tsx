@@ -71,6 +71,11 @@ export default function ProspectingFactoryPage() {
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [selectedPersonas, setSelectedPersonas] = useState<number[]>([]);
   const [personaBalance, setPersonaBalance] = useState<"equal" | "weighted">("equal");
+  const [campaignStartDate, setCampaignStartDate] = useState<string>(formatDateForInput(new Date()));
+  const [campaignEndDate, setCampaignEndDate] = useState<string>(formatDateForInput(twoMonthsLater));
+  const [contentCount, setContentCount] = useState<{ email: number, social: number, blog: number }>(
+    { email: 2, social: 3, blog: 1 }
+  );
   const { user } = useAuth();
   const [, setLocation] = useLocation();
 
@@ -112,6 +117,16 @@ export default function ProspectingFactoryPage() {
     { id: 'retention', name: 'Customer Retention', description: 'Improve loyalty and reduce churn with existing customers' },
     { id: 'launch', name: 'Product Launch', description: 'Introduce a new product or feature to the market' }
   ];
+  
+  // Default date range for campaign
+  const today = new Date();
+  const twoMonthsLater = new Date(today);
+  twoMonthsLater.setMonth(today.getMonth() + 2);
+  
+  // Format dates as YYYY-MM-DD for inputs
+  const formatDateForInput = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
 
   // Function to handle campaign generation
   const handleGenerateCampaign = async () => {
