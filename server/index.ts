@@ -109,8 +109,8 @@ process.on('unhandledRejection', async (reason, promise) => {
 
     // Run migration for new campaign fields
     try {
-      const { pool } = await import('./db');
-      await migrateCampaignFields(pool);
+      // We don't need to pass the pool directly since migrateCampaignFields will import it
+      await migrateCampaignFields();
     } catch (migrationError) {
       console.error("Error during campaign fields migration:", migrationError);
       // Continue application startup even if migration fails

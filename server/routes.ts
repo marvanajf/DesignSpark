@@ -2373,6 +2373,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         name: req.body.name,
         description: req.body.description,
         status: req.body.status,
+        status_display: req.body.status_display,
+        personas_count: req.body.personas_count,
+        content_count: req.body.content_count,
+        channels_count: req.body.channels_count,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date,
         persona_id: req.body.persona_id,
         tone_analysis_id: req.body.tone_analysis_id
       });

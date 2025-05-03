@@ -1,9 +1,7 @@
-import { Pool } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
 import { sql } from 'drizzle-orm';
+import { db } from './db';
 
-export async function migrateCampaignFields(pool: Pool) {
-  const db = drizzle(pool);
+export async function migrateCampaignFields() {
   console.log('Running campaign fields migration...');
 
   try {
@@ -41,10 +39,10 @@ export async function migrateCampaignFields(pool: Pool) {
         ADD COLUMN IF NOT EXISTS end_date TIMESTAMP;
       `);
 
-      // Convert existing status column to use the enum type
+      // Update the default status for new columns instead of converting existing ones
       await db.execute(sql`
         ALTER TABLE campaigns 
-        ALTER COLUMN status TYPE campaign_status USING status::campaign_status;
+        ADD COLUMN IF NOT EXISTS status_enum campaign_status NOT NULL DEFAULT 'draft';
       `);
 
       console.log('Campaign fields migration completed successfully');

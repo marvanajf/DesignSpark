@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 
 interface CampaignModalProps {
-  campaignId: number;
+  campaignId?: number;
   isOpen: boolean;
   onClose: () => void;
 }
