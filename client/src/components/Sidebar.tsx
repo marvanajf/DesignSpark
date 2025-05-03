@@ -16,8 +16,7 @@ import {
   Menu,
   X,
   PieChart,
-  Megaphone,
-  Sparkles
+  Megaphone
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
@@ -67,7 +66,7 @@ export default function Sidebar() {
   const menuItems: MenuItem[] = [
     { href: "/dashboard", icon: <Home className="h-5 w-5" />, label: "Dashboard" },
     { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
-    { href: "/prospecting-factory", icon: <Sparkles className="h-5 w-5" />, label: "Campaign Factory" },
+    { href: "/prospecting-factory", icon: <Edit3 className="h-5 w-5" />, label: "Campaign Factory" },
     { href: "/tone-analysis", icon: <BarChart2 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <Edit3 className="h-5 w-5" />, label: "Content Generator" },
@@ -156,19 +155,13 @@ export default function Sidebar() {
                     isActive 
                       ? "bg-zinc-800 text-white" 
                       : "text-zinc-400 hover:text-white"
-                  } ${item.label === "Campaign Factory" ? "relative" : ""}`}
+                  }`}
                 >
-                  {item.label === "Campaign Factory" && (
-                    <div className="absolute inset-0 bg-[#74d1ea]/5 pointer-events-none rounded-md"></div>
-                  )}
-                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'} ${item.label === "Campaign Factory" ? "z-10" : ""}`}>
-                    {item.label === "Campaign Factory" ? <Sparkles className="h-5 w-5 text-[#74d1ea]" /> : item.icon}
+                  <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'}`}>
+                    {item.icon}
                   </span>
                   {!isCollapsed && (
-                    <span className={isActive 
-                      ? "text-white" 
-                      : "text-zinc-400 group-hover:text-white"
-                    }>
+                    <span className="ml-3">
                       {item.label}
                     </span>
                   )}
