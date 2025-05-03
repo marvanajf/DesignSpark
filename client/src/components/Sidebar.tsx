@@ -159,10 +159,10 @@ export default function Sidebar() {
                   } ${item.label === "Campaign Factory" ? "relative" : ""}`}
                 >
                   {item.label === "Campaign Factory" && (
-                    <div className="absolute inset-0 bg-[#74d1ea]/5 opacity-20 pointer-events-none shadow-[0_0_12px_rgba(116,209,234,0.3)] rounded-md transition-all duration-500 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-[#74d1ea]/5 pointer-events-none rounded-md"></div>
                   )}
                   <span className={`${isActive ? "text-white" : "text-zinc-500 group-hover:text-white"} ${!isCollapsed && 'mr-3'} ${item.label === "Campaign Factory" ? "z-10" : ""}`}>
-                    {item.label === "Campaign Factory" ? <Sparkles className="h-5 w-5 text-[#74d1ea] filter drop-shadow-[0_0_3px_rgba(116,209,234,0.7)]" /> : item.icon}
+                    {item.label === "Campaign Factory" ? <Sparkles className="h-5 w-5 text-[#74d1ea]" /> : item.icon}
                   </span>
                   {!isCollapsed && (
                     <span className={isActive 
