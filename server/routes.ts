@@ -893,63 +893,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       try {
-        let priceId: string;
-        const hasValidPriceId = planInfo.stripePrice && planInfo.stripePrice.startsWith('price_');
-        
-        if (hasValidPriceId) {
-          // Use the existing Stripe price ID
-          console.log(`Using existing Stripe price ID: ${planInfo.stripePrice}`);
-          priceId = planInfo.stripePrice;
-        } else {
-          // We need to create a product and price dynamically
-          console.log(`No valid price ID found for ${plan}, creating dynamic product and price`);
-          
-          // First, check if we already have a product with this name
-          const existingProducts = await stripe.products.list({
-            active: true,
-            limit: 10
-          });
-          
-          let productId: string;
-          const productName = `Tovably ${planInfo.name} Plan`;
-          const existingProduct = existingProducts.data.find(p => p.name === productName);
-          
-          if (existingProduct) {
-            console.log(`Found existing product: ${existingProduct.id}`);
-            productId = existingProduct.id;
-          } else {
-            // Create a new product
-            console.log(`Creating new product: ${productName}`);
-            const newProduct = await stripe.products.create({
-              name: productName,
-              description: `${planInfo.name} subscription plan (£${planInfo.price}/month)`,
-              active: true,
-            });
-            productId = newProduct.id;
-            console.log(`Created new product with ID: ${productId}`);
-          }
-          
-          // Create a price for this product
-          console.log(`Creating price for product ${productId}`);
-          const newPrice = await stripe.prices.create({
-            product: productId,
-            unit_amount: Math.round(planInfo.price * 100), // Convert to cents
-            currency: planInfo.currency.toLowerCase(),
-            recurring: {
-              interval: 'month',
-            },
-          });
-          
-          priceId = newPrice.id;
-          console.log(`Created price with ID: ${priceId}`);
-        }
-        
-        // Create subscription session options with the price ID
+        console.log("Creating products and prices on-demand directly within checkout");
+
+        // Completely skip price ID lookup and always create line_items directly with price_data
+
+        // Create subscription session options with dynamic price data instead of price ID reference
         const sessionOptions: Stripe.Checkout.SessionCreateParams = {
           payment_method_types: ['card'],
           line_items: [
             {
-              price: priceId,
+              price_data: {
+                currency: planInfo.currency.toLowerCase(),
+                product_data: {
+                  name: `Tovably ${planInfo.name} Plan`,
+                  description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+                },
+                unit_amount: Math.round(planInfo.price * 100), // Convert to cents
+                recurring: {
+                  interval: 'month'
+                }
+              },
               quantity: 1,
             },
           ],
@@ -1064,12 +1027,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).send(`Invalid plan selected: ${plan}`);
       }
       
-      // Ensure we have a Stripe price ID for this plan
-      if (!planInfo.stripePrice) {
-        console.error(`No Stripe price ID for plan: ${plan}`);
-        return res.status(400).send(`Missing Stripe price configuration for plan: ${plan}`);
-      }
-      
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
       const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
@@ -1086,21 +1043,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create subscription session options for Stripe checkout using price IDs
+      // Create subscription session options with dynamic price data instead of price ID reference
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            // Use the Stripe Price ID from our schema instead of creating a price on the fly
-            price: planInfo.stripePrice,
+            price_data: {
+              currency: planInfo.currency.toLowerCase(),
+              product_data: {
+                name: `Tovably ${planInfo.name} Plan`,
+                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+              },
+              unit_amount: Math.round(planInfo.price * 100), // Convert to cents
+              recurring: {
+                interval: 'month'
+              }
+            },
             quantity: 1,
           },
         ],
-        mode: 'subscription', // Changed from 'payment' to 'subscription'
+        mode: 'subscription',
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
-        // Collect billing address information
         billing_address_collection: 'required',
       };
       
@@ -1191,21 +1156,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: `Missing Stripe price configuration for plan: ${plan}` });
       }
       
-      // Create subscription session options for Stripe checkout using price IDs
+      // Create subscription session options with dynamic price data instead of price ID reference
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            // Use the Stripe Price ID from our schema instead of creating a price on the fly
-            price: planInfo.stripePrice,
+            price_data: {
+              currency: planInfo.currency.toLowerCase(),
+              product_data: {
+                name: `Tovably ${planInfo.name} Plan`,
+                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+              },
+              unit_amount: Math.round(planInfo.price * 100), // Convert to cents
+              recurring: {
+                interval: 'month'
+              }
+            },
             quantity: 1,
           },
         ],
-        mode: 'subscription', // Changed from 'payment' to 'subscription'
+        mode: 'subscription',
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
-        // Collect billing address information
         billing_address_collection: 'required',
       };
       
@@ -1271,23 +1244,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create a Checkout Session for subscription payment
-      // Ensure we have a Stripe price ID for this plan
-      if (!planInfo.stripePrice) {
-        console.error(`No Stripe price ID for plan: ${plan}`);
-        return res.status(400).json({ error: `Missing Stripe price configuration for plan: ${plan}` });
-      }
-      
+      // Create a Checkout Session for subscription payment using dynamic pricing
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            // Use the Stripe Price ID from our schema instead of creating a price on the fly
-            price: planInfo.stripePrice,
+            price_data: {
+              currency: planInfo.currency.toLowerCase(),
+              product_data: {
+                name: `Tovably ${planInfo.name} Plan`,
+                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+              },
+              unit_amount: Math.round(planInfo.price * 100), // Convert to cents
+              recurring: {
+                interval: 'month'
+              }
+            },
             quantity: 1,
           },
         ],
-        mode: 'subscription', // Changed from 'payment' to 'subscription'
+        mode: 'subscription',
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata: {
