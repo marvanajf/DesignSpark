@@ -360,12 +360,12 @@ export default function PersonaSelectionPage() {
       {/* Subscription Limit Modal */}
       {showLimitModal && limitData && (
         <SubscriptionLimitModal
-          open={showLimitModal}
-          onOpenChange={setShowLimitModal}
+          isOpen={showLimitModal}
+          onClose={() => setShowLimitModal(false)}
           limitType={limitData.limitType}
-          current={limitData.current}
+          currentUsage={limitData.current}
           limit={limitData.limit}
-          user={user}
+          currentPlan={user?.subscription_plan || "free"}
         />
       )}
       
