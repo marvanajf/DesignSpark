@@ -19,7 +19,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
   toneAnalyses: number;
   contentGeneration: number;
   campaigns: number;
-  customerService: boolean;
+  support: boolean;
   price: number;
   currency: string;
   displayPrice: string;
@@ -31,7 +31,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 5,
     contentGeneration: 10,
     campaigns: 2,
-    customerService: false,
+    support: false,
     price: 0,
     currency: "GBP",
     displayPrice: "Free"
@@ -42,7 +42,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 50,
     contentGeneration: 100,
     campaigns: 5,
-    customerService: true,
+    support: true,
     price: 4.99,
     currency: "GBP",
     displayPrice: "£4.99",
@@ -54,7 +54,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 100,
     contentGeneration: 150,
     campaigns: 20,
-    customerService: true,
+    support: true,
     price: 19.99,
     currency: "GBP",
     displayPrice: "£19.99",
@@ -66,7 +66,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 200,
     contentGeneration: 300,
     campaigns: 30,
-    customerService: true,
+    support: true,
     price: 39.99,
     currency: "GBP",
     displayPrice: "£39.99",
