@@ -170,7 +170,7 @@ export default function CampaignFactoryPage() {
     if (user?.subscription_plan === 'free' || user?.subscription_plan === 'standard') {
       toast({
         title: "Premium Feature",
-        description: "Prospecting Factory is only available on Premium and Pro plans. Please upgrade to access this feature.",
+        description: "Campaign Factory is only available on Premium and Pro plans. Please upgrade to access this feature.",
         variant: "destructive"
       });
       setLocation("/pricing");
@@ -681,14 +681,47 @@ REGISTER NOW: [Link]`,
                   <span className="mx-2">›</span>
                   <span>Premium Features</span>
                   <span className="mx-2">›</span>
-                  <span>Prospecting Factory</span>
+                  <span>Campaign Factory</span>
                 </div>
                 <h1 className="text-2xl font-semibold text-white mt-1 flex items-center">
-                  Prospecting Factory
+                  Campaign Factory
                   <Badge variant="outline" className="ml-3 bg-[#74d1ea]/10 text-[#74d1ea] border-[#74d1ea]/30">
                     Premium
                   </Badge>
                 </h1>
+              </div>
+            </div>
+          </div>
+          
+          {/* Campaign Factory Promo Banner */}
+          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
+            
+            <div className="relative z-10 flex items-start">
+              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+                <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+              </div>
+              
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-white mb-3">AI-Powered Campaign Generation</h2>
+                <p className="text-gray-300 mb-6 max-w-3xl">
+                  Create comprehensive, multi-channel marketing campaigns in minutes with our AI Campaign Factory. Define your goals and target audience once, then let our advanced AI generate cohesive content across multiple platforms.
+                </p>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Generate complete campaigns including Email, LinkedIn, Blog, and Webinar content</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">AI-generated personas based on your campaign brief and target audience</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#74d1ea] mr-3">✓</div>
+                    <span className="text-gray-300">Consistent messaging and brand voice across all campaign elements</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
