@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import React, { useState, useRef } from "react";
-import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle } from "lucide-react";
+import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle, CalendarClock } from "lucide-react";
 import tovablyLogo from "@/assets/tovably-logo.png";
 
 interface NavbarProps {
@@ -238,6 +238,9 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   </Link>
                   <Link href="/content-generation-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
                     Content Generation
+                  </Link>
+                  <Link href="/campaigns-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    Campaigns
                   </Link>
                 </div>
                 
