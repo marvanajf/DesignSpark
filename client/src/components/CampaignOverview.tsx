@@ -7,6 +7,7 @@ import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CampaignModal } from "@/components/CampaignModal"; 
 import { 
   Calendar, 
   CalendarDays, 
@@ -14,7 +15,8 @@ import {
   FileText, 
   Share2, 
   ChevronRight,
-  Edit2
+  Edit2,
+  PlusCircle
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -33,6 +35,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const queryClient = useQueryClient();
+  const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
   
   // Get all campaigns for the user
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
@@ -160,11 +163,21 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
     );
   }
 
+  // Get active campaigns first (limit to 5)
+  const activeCampaigns = campaigns
+    .filter(campaign => campaign.status === 'active')
+    .slice(0, 5);
+  
+  // Get remaining campaigns if there are fewer than 5 active campaigns
+  const displayedCampaigns = activeCampaigns.length < 5 
+    ? [...activeCampaigns, ...campaigns.filter(campaign => campaign.status !== 'active').slice(0, 5 - activeCampaigns.length)]
+    : activeCampaigns;
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-white mb-4">Campaign Management</h2>
       
-      {campaigns.map((campaign) => (
+      {displayedCampaigns.map((campaign) => (
         <div key={campaign.id} className="bg-[#0e1117] border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors">
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-medium text-white mb-4">{campaign.name}</h3>
@@ -259,7 +272,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
               variant="ghost"
               size="sm"
               className="text-[#74d1ea] hover:bg-[#181c25] hover:text-[#74d1ea]"
-              onClick={() => navigate(`/campaign/${campaign.id}`)}
+              onClick={() => setSelectedCampaignId(campaign.id)}
             >
               View Details
               <ChevronRight className="ml-1 h-4 w-4" />
@@ -267,6 +280,30 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
           </div>
         </div>
       ))}
+      
+      {/* View Details Modal */}
+      {selectedCampaignId && (
+        <CampaignModal 
+          isOpen={true} 
+          onClose={() => setSelectedCampaignId(null)}
+          campaignId={selectedCampaignId}
+          mode="view"
+        />
+      )}
+      
+      {/* Show message if more campaigns are available */}
+      {campaigns.length > 5 && (
+        <div className="mt-4 text-center">
+          <Button
+            variant="link"
+            className="text-[#74d1ea]"
+            onClick={() => navigate('/campaigns')}
+          >
+            View All Campaigns ({campaigns.length})
+            <ChevronRight className="ml-1 h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

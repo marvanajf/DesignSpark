@@ -36,9 +36,10 @@ interface CampaignModalProps {
   campaignId?: number;
   isOpen: boolean;
   onClose: () => void;
+  mode?: 'create' | 'edit' | 'view';
 }
 
-export function CampaignModal({ campaignId, isOpen, onClose }: CampaignModalProps) {
+export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: CampaignModalProps) {
   const [isAddContentDialogOpen, setIsAddContentDialogOpen] = useState(false);
   const [selectedContentIds, setSelectedContentIds] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState("content");
