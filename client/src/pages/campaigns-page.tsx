@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { CampaignList } from "@/components/CampaignList";
+import { CampaignOverview } from "@/components/CampaignOverview";
 import Layout from "@/components/Layout";
 import { Megaphone } from "lucide-react";
+import { CampaignModal } from "@/components/CampaignModal";
 
 export default function CampaignsPage() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   return (
     <Layout showSidebar={true}>
       <Helmet>
@@ -59,7 +64,24 @@ export default function CampaignsPage() {
             </div>
           </div>
 
-          <CampaignList />
+          {/* Campaign Overview (New Card-Based View) */}
+          <div className="mb-8">
+            <CampaignOverview onAddCampaign={() => setIsCreateModalOpen(true)} />
+          </div>
+
+          {/* Traditional Campaign List */}
+          <div className="mt-12">
+            <h2 className="text-xl font-semibold text-white mb-6">All Campaigns</h2>
+            <CampaignList />
+          </div>
+
+          {/* Campaign Modal for creating new campaigns */}
+          {isCreateModalOpen && (
+            <CampaignModal 
+              isOpen={isCreateModalOpen} 
+              onClose={() => setIsCreateModalOpen(false)}
+            />
+          )}
         </div>
       </div>
     </Layout>

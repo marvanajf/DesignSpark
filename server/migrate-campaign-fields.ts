@@ -14,7 +14,10 @@ export async function migrateCampaignFields(pool: Pool) {
       WHERE table_name = 'campaigns' AND column_name = 'status_display'
     `);
 
-    if (checkStatusDisplayResult.length === 0) {
+    // Check if we have any results
+    const hasStatusDisplay = (checkStatusDisplayResult.rows && checkStatusDisplayResult.rows.length > 0);
+    
+    if (!hasStatusDisplay) {
       console.log('Adding new campaign fields...');
       
       // Create campaign_status enum if it doesn't exist

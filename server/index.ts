@@ -6,6 +6,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { migrateStripeFields } from "./migrations";
 import { migrateCampaignsColumn } from "./migrate-campaigns";
+import { migrateCampaignFields } from "./migrate-campaign-fields";
 
 const app = express();
 app.use(express.json());
@@ -103,6 +104,15 @@ process.on('unhandledRejection', async (reason, promise) => {
       console.log("Emergency column migration complete.");
     } catch (migrationError) {
       console.error("Error during campaigns_used column migration:", migrationError);
+      // Continue application startup even if migration fails
+    }
+
+    // Run migration for new campaign fields
+    try {
+      const { pool } = await import('./db');
+      await migrateCampaignFields(pool);
+    } catch (migrationError) {
+      console.error("Error during campaign fields migration:", migrationError);
       // Continue application startup even if migration fails
     }
     
