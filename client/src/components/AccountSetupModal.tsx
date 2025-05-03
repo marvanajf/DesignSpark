@@ -58,7 +58,11 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
     setError(null);
 
     try {
-      const response = await apiRequest("POST", "/api/setup-account", {
+      // Check if we're in development/test mode
+      const testMode = process.env.NODE_ENV === 'development';
+      const queryParams = testMode ? '?testMode=true' : '';
+      
+      const response = await apiRequest("POST", `/api/setup-account${queryParams}`, {
         email,
         password: data.password
       });
