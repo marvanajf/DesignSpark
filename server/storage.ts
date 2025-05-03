@@ -59,6 +59,7 @@ export interface IStorage {
   incrementPersonaUsage(id: number): Promise<User>;
   incrementToneAnalysisUsage(id: number): Promise<User>;
   incrementContentUsage(id: number): Promise<User>;
+  incrementCampaignFactoryUsage(id: number): Promise<User>;
   getAllUsers(): Promise<User[]>;
   updateUserPassword(userId: number, hashedPassword: string): Promise<User>;
   deleteUser(id: number): Promise<boolean>;

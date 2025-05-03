@@ -35,6 +35,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
   toneAnalyses: number;
   contentGeneration: number;
   campaigns: number;
+  campaignFactory: number;
   support: boolean;
   price: number;
   currency: string;
@@ -47,6 +48,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 5,
     contentGeneration: 10,
     campaigns: 2,
+    campaignFactory: 0,
     support: true,
     price: 0,
     currency: "GBP",
@@ -58,6 +60,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 50,
     contentGeneration: 100,
     campaigns: 5,
+    campaignFactory: 5,
     support: true,
     price: 4.99,
     currency: "GBP",
@@ -71,6 +74,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 100,
     contentGeneration: 150,
     campaigns: 20,
+    campaignFactory: 15,
     support: true,
     price: 19.99,
     currency: "GBP",
@@ -84,6 +88,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 200,
     contentGeneration: 300,
     campaigns: 30,
+    campaignFactory: 30,
     support: true,
     price: 39.99,
     currency: "GBP",
@@ -106,6 +111,7 @@ export const users = pgTable("users", {
   tone_analyses_used: integer("tone_analyses_used").default(0).notNull(),
   content_generated: integer("content_generated").default(0).notNull(),
   campaigns_used: integer("campaigns_used").default(0).notNull(),
+  campaign_factory_used: integer("campaign_factory_used").default(0).notNull(),
   stripe_customer_id: text("stripe_customer_id"),
   stripe_subscription_id: text("stripe_subscription_id"),
   subscription_status: text("subscription_status").default("inactive"),
@@ -213,6 +219,7 @@ export const insertUserSchema = createInsertSchema(users)
     tone_analyses_used: true, 
     content_generated: true,
     campaigns_used: true,
+    campaign_factory_used: true,
     stripe_customer_id: true,
     stripe_subscription_id: true,
     subscription_status: true,
