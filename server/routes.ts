@@ -1309,14 +1309,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const accountCreated = !session.metadata?.userId;
       const email = session.customer_details?.email || null;
       
-      // For security reasons, we wouldn't actually return a real password here
-      // This is just for demonstration - in production we'd use a secure token system
-      // or send credentials via email
-      const password = accountCreated ? '********' : null;
+      // For security reasons, don't return a real password here - we send it via email instead
+      // We just indicate whether account creation happened and if credentials were emailed
+      const credentialsEmailed = accountCreated && email;
+      const password = null; // We never return the actual password in the API response
       
       res.json({
         status: session.status,
         accountCreated,
+        credentialsEmailed,
         email,
         password,
         plan: session.metadata?.planId

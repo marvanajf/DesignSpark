@@ -32,15 +32,17 @@ export default function PaymentSuccessPage() {
         })
         .then((data) => {
           if (data.status === "complete") {
-            setMessage(
-              data.accountCreated 
-                ? "Your payment was successful and we've created an account for you."
-                : "Your payment was successful and your subscription has been updated."
-            );
-            
             if (data.accountCreated) {
+              setMessage(
+                data.credentialsEmailed 
+                  ? "Your payment was successful! We've created an account for you and sent your login details to your email."
+                  : "Your payment was successful! We've created an account for you."
+              );
               setEmail(data.email);
-              setPassword(data.password);
+              // We don't show the password directly in the UI anymore
+              // The password is only sent via email
+            } else {
+              setMessage("Your payment was successful and your subscription has been updated.");
             }
             
             // Refresh user data if the user is logged in
@@ -80,12 +82,13 @@ export default function PaymentSuccessPage() {
               <h1 className="text-2xl font-bold text-white mb-4 text-center">Payment Successful!</h1>
               <p className="text-gray-300 text-center mb-6">{message}</p>
               
-              {email && password && (
+              {email && (
                 <div className="w-full bg-zinc-900 rounded-md p-4 mb-6 border border-zinc-800">
                   <h3 className="font-medium text-white mb-2">Your Account Details:</h3>
-                  <p className="text-sm text-gray-300 mb-1">Email: <span className="text-[#74d1ea]">{email}</span></p>
-                  <p className="text-sm text-gray-300 mb-3">Temporary Password: <span className="text-[#74d1ea] font-mono">{password}</span></p>
-                  <p className="text-xs text-gray-400">Please log in using these credentials and change your password immediately.</p>
+                  <p className="text-sm text-gray-300 mb-3">Email: <span className="text-[#74d1ea]">{email}</span></p>
+                  <p className="text-xs text-gray-400">
+                    Check your email for your temporary password. Please log in using these credentials and change your password immediately.
+                  </p>
                 </div>
               )}
               
