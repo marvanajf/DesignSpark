@@ -157,10 +157,10 @@ export default function ProspectingFactoryPage() {
 
   // Function to handle campaign generation
   const handleGenerateCampaign = async () => {
-    if (!campaignPrompt.trim() && !selectedUseCase) {
+    if (!campaignPrompt.trim() || !selectedUseCase) {
       toast({
         title: "Missing information",
-        description: "Please provide a campaign description or select a use case",
+        description: "Please provide both a campaign description and select a use case",
         variant: "destructive"
       });
       return;
@@ -463,17 +463,55 @@ REGISTER NOW: [Link]`,
           }
         ];
 
+        // Get the selected use case display name
+        const selectedUseCaseObj = useCases.find(uc => uc.id === selectedUseCase);
+        
+        // Get all available personas - either default or AI-generated based on user selection
+        const availablePersonas = useGeneratedPersonas ? generatedPersonas : personas;
+        
+        // Get the names of the selected personas 
+        const selectedPersonaNames = selectedPersonas.map(id => {
+            const persona = availablePersonas.find(p => p.id === id);
+            return persona ? persona.name : "";
+        }).filter(name => name !== "");
+        
         // Filter content based on selected content types
-        const filteredContents = allContentPieces.filter(content => 
-          selectedContentTypes[content.type as keyof typeof selectedContentTypes]
-        );
+        const filteredContents = allContentPieces.filter(content => {
+            // First, check if the content type is selected
+            const isTypeSelected = selectedContentTypes[content.type as keyof typeof selectedContentTypes];
+            
+            // For 'All' personas, always include if type is selected
+            if (content.persona === "All") {
+                return isTypeSelected;
+            }
+            
+            // For specific personas, check if it's one of the selected ones or related
+            const isPersonaRelevant = selectedPersonaNames.some(name => 
+                content.persona === name || 
+                content.persona.includes(name) ||
+                name.includes(content.persona)
+            );
+            
+            return isTypeSelected && (isPersonaRelevant || selectedPersonaNames.length === 0);
+        });
 
         const mockedCampaign: Campaign = {
           id: 1,
-          name: "Microsoft 365 Business Premium Upsell Campaign",
-          objective: "Increase conversion rate of standard Microsoft 365 users to Business Premium tier by highlighting advanced security features, enhanced productivity tools, and comprehensive device management capabilities.",
-          targetAudience: ["IT Decision Makers", "Small Business Owners", "Operations Managers"],
-          channels: ["Email", "LinkedIn", "Webinar", "Case Study"],
+          name: `${selectedUseCaseObj?.name || ""} - ${campaignPrompt.split(".")[0]}`.trim(),
+          objective: campaignPrompt || `${selectedUseCaseObj?.description || ""} campaign targeting specific personas with customized content.`,
+          targetAudience: selectedPersonaNames.length > 0 ? selectedPersonaNames : ["IT Decision Makers", "Small Business Owners", "Operations Managers"],
+          channels: Object.entries(selectedContentTypes)
+            .filter(([_, isSelected]) => isSelected)
+            .map(([type, _]) => {
+              switch(type) {
+                case 'email': return "Email";
+                case 'social': return "LinkedIn";
+                case 'blog': return "Blog";
+                case 'webinar': return "Webinar";
+                default: return "";
+              }
+            })
+            .filter(channel => channel !== ""),
           timeline: {
             start: campaignStartDate,
             end: campaignEndDate,
@@ -516,10 +554,10 @@ REGISTER NOW: [Link]`,
   
   // Function to generate personas based on campaign brief
   const handleGeneratePersonas = async () => {
-    if (!campaignPrompt.trim() && !selectedUseCase) {
+    if (!campaignPrompt.trim() || !selectedUseCase) {
       toast({
         title: "Missing information",
-        description: "Please provide a campaign description or select a use case to generate relevant personas",
+        description: "Please provide both a campaign description and select a use case to generate relevant personas",
         variant: "destructive"
       });
       return;
@@ -594,9 +632,12 @@ REGISTER NOW: [Link]`,
       
       setGeneratedPersonas(generatedPersonasMock);
       
+      // Get the selected use case display name
+      const selectedUseCaseObj = useCases.find(uc => uc.id === selectedUseCase);
+      
       toast({
         title: "Personas generated",
-        description: "AI has generated 3 relevant personas based on your campaign brief",
+        description: `AI has generated 3 relevant personas based on your campaign brief and ${selectedUseCaseObj?.name || ''} use case`,
       });
     } catch (error) {
       console.error("Error generating personas:", error);
@@ -697,7 +738,7 @@ REGISTER NOW: [Link]`,
                           <Label htmlFor="campaign-prompt" className="text-white mb-2 block">Campaign Description</Label>
                           <Textarea 
                             id="campaign-prompt"
-                            placeholder="I want to create a campaign to promote Microsoft 365 Business Premium to IT professionals and small business owners..."
+                            placeholder="Describe your campaign goals, target audience, key messaging points, and any specific requirements..."
                             className="bg-black/60 border-gray-700 resize-none text-white h-32"
                             value={campaignPrompt}
                             onChange={(e) => setCampaignPrompt(e.target.value)}
@@ -709,7 +750,7 @@ REGISTER NOW: [Link]`,
 
                         <div className="space-y-4">
                           <div>
-                            <Label className="text-white mb-2 block">Or Select a Use Case</Label>
+                            <Label className="text-white mb-2 block">And Select a Use Case</Label>
                             <div className="grid grid-cols-2 gap-3">
                               {useCases.map((useCase) => (
                                 <div 
