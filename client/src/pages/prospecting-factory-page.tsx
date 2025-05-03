@@ -32,7 +32,7 @@ type Persona = {
 // Sample campaign content type
 type CampaignContent = {
   id: number;
-  type: 'email' | 'social' | 'blog' | 'ad' | 'webinar';
+  type: 'email' | 'social' | 'blog' | 'webinar';
   title: string;
   content: string;
   persona: string;
@@ -96,8 +96,8 @@ export default function ProspectingFactoryPage() {
   const [campaignStartDate, setCampaignStartDate] = useState<string>(formatDateForInput(new Date()));
   const [campaignEndDate, setCampaignEndDate] = useState<string>(formatDateForInput(twoMonthsLater));
   const [selectedContentTypes, setSelectedContentTypes] = useState<{ 
-    email: boolean, social: boolean, blog: boolean, webinar: boolean, ad: boolean 
-  }>({ email: true, social: true, blog: true, webinar: false, ad: false });
+    email: boolean, social: boolean, blog: boolean, webinar: boolean 
+  }>({ email: true, social: true, blog: true, webinar: false });
 
   const [contentCount, setContentCount] = useState<{ email: number, social: number, blog: number, webinar: number }>(
     { email: 2, social: 3, blog: 1, webinar: 1 }
@@ -424,7 +424,7 @@ Ready to transform your operational efficiency? Here are three ways to explore i
           },
           {
             id: 7,
-            type: "ad" as const,
+            type: "email" as const,
             title: "Webinar Invitation for All Personas",
             persona: "All",
             content: `WEBINAR: MAXIMIZE YOUR MICROSOFT INVESTMENT
@@ -1196,56 +1196,7 @@ REGISTER NOW: [Link]`,
                           </div>
                         )}
                         
-                        {(campaign.contents.some(c => c.type === "ad")) && (
-                          <div>
-                            <h4 className="text-white font-medium mb-3 flex items-center">
-                              <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
-                              Ad Copy
-                            </h4>
-                            
-                            <div className="grid sm:grid-cols-2 gap-4">
-                              {campaign.contents
-                                .filter(content => content.type === "ad")
-                                .map(content => (
-                                  <div key={content.id} className="border border-gray-700/60 rounded-lg p-4 bg-black/90">
-                                    <div className="flex justify-between items-start mb-3">
-                                      <div>
-                                        <div className="flex space-x-2 mb-2">
-                                          <Badge variant="outline" className="bg-gray-800/80 text-gray-300">
-                                            For: {content.persona}
-                                          </Badge>
-                                          <Badge variant="outline" className="bg-gray-800/80 text-gray-300">
-                                            {content.channel}
-                                          </Badge>
-                                        </div>
-                                        <h5 className="text-white font-medium">{content.title}</h5>
-                                      </div>
-                                      <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => {
-                                        toast({
-                                          title: "Copied to clipboard",
-                                          description: "Ad content has been copied to your clipboard",
-                                        });
-                                      }}>
-                                        <Copy className="h-4 w-4" />
-                                      </Button>
-                                    </div>
-                                    
-                                    <div className="mb-2">
-                                      <Label className="text-xs text-gray-400">Scheduled Date</Label>
-                                      <p className="text-gray-300 text-sm flex items-center">
-                                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                                        {content.deliveryDate}
-                                      </p>
-                                    </div>
-                                    
-                                    <pre className="text-gray-300 text-xs leading-relaxed overflow-auto p-2 border border-gray-800 rounded-md bg-gray-900/50 max-h-[200px]">
-                                      {content.content}
-                                    </pre>
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        )}
+
                       </div>
                     </div>
                     
