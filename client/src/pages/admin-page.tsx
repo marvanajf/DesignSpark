@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -39,12 +39,23 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
-import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download, ChevronLeft, BookOpen } from "lucide-react";
+import { Loader2, UserIcon, Search, Mail, Trash2, FileText, Download, ChevronLeft, BookOpen, UserPlus } from "lucide-react";
 import BlogManagement from "@/components/admin/BlogManagement";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 // Utility function to convert data to CSV
 function convertToCSV<T extends Record<string, any>>(data: T[], headers: Record<string, string>): string {
   // Create header row
@@ -86,7 +97,6 @@ function downloadCSV(csvContent: string, fileName: string) {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
-import { Redirect, Link } from "wouter";
 
 interface LeadContact {
   id: number;
@@ -117,6 +127,8 @@ export default function AdminPage() {
   const [selectedLead, setSelectedLead] = useState<LeadContact | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isUserDeleteDialogOpen, setIsUserDeleteDialogOpen] = useState(false);
+  const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
   const [isLeadDetailsOpen, setIsLeadDetailsOpen] = useState(false);
   const [isUserDetailsOpen, setIsUserDetailsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -282,9 +294,43 @@ export default function AdminPage() {
     }
   };
 
+  // Delete user mutation
+  const deleteUserMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/admin/users/${id}`, {
+        method: "DELETE",
+      });
+      
+      if (!res.ok) throw new Error("Failed to delete user");
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+      setIsUserDeleteDialogOpen(false);
+      setIsUserDetailsOpen(false);
+      toast({
+        title: "User deleted",
+        description: "The user account has been permanently deleted along with all their data.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Delete failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleUserRoleChange = (role: string) => {
     if (selectedUser) {
       updateUserRoleMutation.mutate({ id: selectedUser.id, role });
+    }
+  };
+  
+  const handleDeleteUser = () => {
+    if (selectedUser) {
+      deleteUserMutation.mutate(selectedUser.id);
     }
   };
 
@@ -468,7 +514,19 @@ export default function AdminPage() {
               </div>
             </div>
             
-            <div className="pt-4 flex justify-end">
+            <div className="pt-4 flex justify-between">
+              {/* Don't allow deletion of current user or the admin viewing the page */}
+              {user.id !== selectedUser.id && (
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    setIsUserDeleteDialogOpen(true);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete User
+                </Button>
+              )}
               <SheetClose asChild>
                 <Button>Done</Button>
               </SheetClose>
@@ -650,6 +708,15 @@ export default function AdminPage() {
                 variant="outline" 
                 size="sm"
                 className="bg-zinc-900 hover:bg-zinc-800 border-zinc-800"
+                onClick={() => setIsAddUserDialogOpen(true)}
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Add User
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-zinc-900 hover:bg-zinc-800 border-zinc-800"
                 onClick={() => {
                   if (filteredUsers.length > 0) {
                     const headers = {
@@ -774,6 +841,7 @@ export default function AdminPage() {
       {LeadDetails()}
       {UserDetails()}
 
+      {/* Lead delete confirmation dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent className="bg-zinc-950 border-zinc-800">
           <AlertDialogHeader>
@@ -786,6 +854,32 @@ export default function AdminPage() {
             <AlertDialogCancel className="bg-zinc-900 hover:bg-zinc-800 text-white">Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteLead} className="bg-red-600 hover:bg-red-700 text-white">
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      {/* User delete confirmation dialog */}
+      <AlertDialog open={isUserDeleteDialogOpen} onOpenChange={setIsUserDeleteDialogOpen}>
+        <AlertDialogContent className="bg-zinc-950 border-zinc-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete User Account</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this user account? This will permanently remove all of their data, including:
+              <ul className="list-disc mt-2 ml-6">
+                <li>User profile information</li>
+                <li>All personas created by the user</li>
+                <li>All tone analyses</li>
+                <li>All generated content</li>
+                <li>All campaigns and related data</li>
+              </ul>
+              <p className="mt-2 font-semibold">This action cannot be undone.</p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-zinc-900 hover:bg-zinc-800 text-white">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteUser} className="bg-red-600 hover:bg-red-700 text-white">
+              Delete User
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
