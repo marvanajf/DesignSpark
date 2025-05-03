@@ -83,8 +83,8 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
               <li>• {plan.toneAnalyses} Tone Analyses</li>
               <li>• {plan.contentGeneration} Content Pieces per month</li>
               <li>• {plan.campaigns} Campaigns</li>
-              {planId !== 'free' && <li>• Premium Support</li>}
-              {['professional', 'premium'].includes(planId) && <li>• Priority support</li>}
+              {planId === 'free' && <li>• Standard Support</li>}
+              {planId !== 'free' && <li>• Priority Support</li>}
               {planId === 'premium' && <li>• API Access</li>}
             </ul>
           </div>

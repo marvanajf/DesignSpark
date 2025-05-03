@@ -31,7 +31,7 @@ export const subscriptionPlans: Record<SubscriptionPlanType, {
     toneAnalyses: 5,
     contentGeneration: 10,
     campaigns: 2,
-    support: false,
+    support: true,
     price: 0,
     currency: "GBP",
     displayPrice: "Free"

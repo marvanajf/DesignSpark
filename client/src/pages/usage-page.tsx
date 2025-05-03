@@ -180,7 +180,7 @@ export default function UsagePage() {
                       status={userData.campaigns_used < plan.campaigns ? "Available" : "Limit Reached"} 
                     />
                     <FeatureRow 
-                      feature="Support" 
+                      feature={userPlan === 'free' ? 'Standard Support' : 'Priority Support'} 
                       limit="Unlimited" 
                       status="Available" 
                     />
