@@ -61,6 +61,8 @@ export interface IStorage {
   incrementContentUsage(id: number): Promise<User>;
   getAllUsers(): Promise<User[]>;
   updateUserPassword(userId: number, hashedPassword: string): Promise<User>;
+  deleteUser(id: number): Promise<boolean>;
+  adminCreateUser(user: InsertUser): Promise<User>;
   
   // Tone analysis methods
   createToneAnalysis(analysis: InsertToneAnalysis): Promise<ToneAnalysis>;
@@ -324,6 +326,62 @@ export class MemStorage implements IStorage {
   async getAllUsers(): Promise<User[]> {
     return Array.from(this.users.values())
       .sort((a, b) => a.created_at.getTime() - b.created_at.getTime());
+  }
+  
+  async deleteUser(id: number): Promise<boolean> {
+    try {
+      const user = this.users.get(id);
+      if (!user) {
+        throw new Error(`User with id ${id} not found`);
+      }
+      
+      // Delete related data
+      // Personas
+      for (const [personaId, persona] of this.personas.entries()) {
+        if (persona.user_id === id) {
+          this.personas.delete(personaId);
+        }
+      }
+      
+      // Tone analyses
+      for (const [analysisId, analysis] of this.toneAnalyses.entries()) {
+        if (analysis.user_id === id) {
+          this.toneAnalyses.delete(analysisId);
+        }
+      }
+      
+      // Generated contents
+      for (const [contentId, content] of this.generatedContents.entries()) {
+        if (content.user_id === id) {
+          this.generatedContents.delete(contentId);
+        }
+      }
+      
+      // Campaigns
+      for (const [campaignId, campaign] of this.campaigns.entries()) {
+        if (campaign.user_id === id) {
+          // Delete campaign contents
+          for (const [contentId, campaignContent] of this.campaignContents.entries()) {
+            if (campaignContent.campaign_id === campaignId) {
+              this.campaignContents.delete(contentId);
+            }
+          }
+          this.campaigns.delete(campaignId);
+        }
+      }
+      
+      // Delete the user
+      this.users.delete(id);
+      
+      return true;
+    } catch (error) {
+      console.error(`Error deleting user with ID ${id}:`, error);
+      return false;
+    }
+  }
+  
+  async adminCreateUser(insertUser: InsertUser): Promise<User> {
+    return this.createUser(insertUser);
   }
 
   // Tone analysis methods
@@ -1441,6 +1499,48 @@ export class DatabaseStorage implements IStorage {
       .set({ password: hashedPassword })
       .where(eq(users.id, userId))
       .returning();
+    return user;
+  }
+
+  async deleteUser(id: number): Promise<boolean> {
+    try {
+      // Begin a transaction to ensure all related data is deleted
+      return await db.transaction(async (tx) => {
+        // Get user to verify existence
+        const [user] = await tx.select().from(users).where(eq(users.id, id));
+        
+        if (!user) {
+          throw new Error(`User with id ${id} not found`);
+        }
+        
+        // Delete related content (just a selection of common tables, can be expanded)
+        // Personas
+        await tx.delete(personas).where(eq(personas.user_id, id));
+        
+        // Tone analyses
+        await tx.delete(toneAnalyses).where(eq(toneAnalyses.user_id, id));
+        
+        // Generated content
+        await tx.delete(generatedContents).where(eq(generatedContents.user_id, id));
+        
+        // Campaigns (and related campaign contents will be deleted by cascade)
+        await tx.delete(campaigns).where(eq(campaigns.user_id, id));
+        
+        // Finally delete the user
+        await tx.delete(users).where(eq(users.id, id));
+        
+        return true;
+      });
+    } catch (error) {
+      console.error(`Error deleting user with ID ${id}:`, error);
+      return false;
+    }
+  }
+  
+  async adminCreateUser(insertUser: InsertUser): Promise<User> {
+    // This is essentially the same as createUser, but separated to make it clear
+    // that it's an admin operation and could have different behavior if needed
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 }
