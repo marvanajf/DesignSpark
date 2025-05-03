@@ -108,7 +108,14 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
             <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
             <p className="text-white text-lg font-medium mb-2">Account Setup Complete!</p>
             <p className="text-gray-400 mb-4">You can now log in with your email and password.</p>
-            <Button onClick={onSuccess} className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+            <Button 
+              onClick={() => {
+                // Ensure modal properly closes
+                setSuccess(false);
+                onSuccess();
+              }} 
+              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+            >
               Continue
             </Button>
           </div>

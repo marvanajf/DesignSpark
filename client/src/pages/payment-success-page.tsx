@@ -26,8 +26,12 @@ export default function PaymentSuccessPage() {
   useEffect(() => {
     // Function to handle the test/development mode scenario
     const handleTestMode = () => {
-      // This is test/development mode behavior
-      const testEmail = params.get('email') || 'test@example.com';
+      // Check if customer email is provided in the URL (from actual checkout)
+      // This way Stripe customer email takes precedence over test email
+      const customerEmail = params.get('customer_email'); 
+      const testEmail = customerEmail || params.get('email') || 'test@example.com';
+      
+      console.log("Using test mode with email:", testEmail);
       
       setMessage(
         "Your payment was successful! We've created an account for you."
@@ -52,10 +56,14 @@ export default function PaymentSuccessPage() {
               setMessage(
                 "Your payment was successful! We've created an account for you."
               );
-              setEmail(data.email);
+              
+              // If we have a customer_email in the URL params, use that (most reliable)
+              // Otherwise fall back to the email from the session data
+              const customerEmail = params.get('customer_email');
+              setEmail(customerEmail || data.email);
               
               // Show the account setup modal for new accounts
-              if (data.email) {
+              if (customerEmail || data.email) {
                 setShowSetupModal(true);
               }
             } else {
