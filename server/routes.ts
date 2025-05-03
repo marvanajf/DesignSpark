@@ -880,7 +880,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
-      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}&customer_email={CUSTOMER_EMAIL}`;
       const cancelUrl = `${baseUrl}/pricing`;
       
       // Create metadata about the customer
@@ -1031,7 +1031,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
-      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}&customer_email={CUSTOMER_EMAIL}`;
       const cancelUrl = `${baseUrl}/pricing`;
       
       // Create metadata about the customer
@@ -1138,7 +1138,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
-      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}&customer_email={CUSTOMER_EMAIL}`;
       const cancelUrl = `${baseUrl}/pricing`;
       
       // Create metadata about the customer
@@ -1233,7 +1233,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
-      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+      const successUrl = `${baseUrl}/payment-success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}&customer_email={CUSTOMER_EMAIL}`;
       const cancelUrl = `${baseUrl}/pricing`;
       
       // Create metadata about the customer
