@@ -155,8 +155,49 @@ export function CampaignList() {
   // Update a campaign
   const updateCampaignMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Campaign> }) => {
-      const res = await apiRequest("PATCH", `/api/campaigns/${id}`, data);
-      return await res.json();
+      try {
+        const res = await fetch(`/api/campaigns/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include"
+        });
+
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          throw { 
+            isLimitError: true, 
+            limitData: {
+              limitType: "campaigns" as const,
+              currentUsage: limitData.current || limitData.currentUsage, 
+              limit: limitData.limit,
+              currentPlan: user?.subscription_plan || "free" 
+            }
+          };
+        }
+        
+        // Check for other errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
+          }
+        }
+
+        return await res.json();
+      } catch (error: any) {
+        // Rethrow limit errors so they're caught by the onError handler
+        if (error?.isLimitError) {
+          throw error;
+        }
+        
+        // Rethrow all other errors with a friendly message
+        throw new Error(error.message || "Failed to update campaign");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
@@ -168,6 +209,14 @@ export function CampaignList() {
       });
     },
     onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
+        setShowLimitModal(true);
+        setIsEditModalOpen(false);
+        return;
+      }
+      
       toast({
         title: "Failed to update campaign",
         description: error.message || "An error occurred",
@@ -179,7 +228,47 @@ export function CampaignList() {
   // Delete a campaign
   const deleteCampaignMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/campaigns/${id}`);
+      try {
+        const res = await fetch(`/api/campaigns/${id}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          throw { 
+            isLimitError: true, 
+            limitData: {
+              limitType: "campaigns" as const,
+              currentUsage: limitData.current || limitData.currentUsage, 
+              limit: limitData.limit,
+              currentPlan: user?.subscription_plan || "free" 
+            }
+          };
+        }
+        
+        // Check for other errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
+          }
+        }
+
+        return;
+      } catch (error: any) {
+        // Rethrow limit errors so they're caught by the onError handler
+        if (error?.isLimitError) {
+          throw error;
+        }
+        
+        // Rethrow all other errors with a friendly message
+        throw new Error(error.message || "Failed to delete campaign");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
@@ -191,6 +280,14 @@ export function CampaignList() {
       });
     },
     onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
+        setShowLimitModal(true);
+        setIsDeleteModalOpen(false);
+        return;
+      }
+      
       toast({
         title: "Failed to delete campaign",
         description: error.message || "An error occurred",

@@ -98,9 +98,14 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
       try {
         // Create an array of promises that add each content one by one
         const promises = contentIds.map(async contentId => {
-          const res = await apiRequest("POST", "/api/campaign-contents", {
-            campaign_id: campaignId,
-            content_id: contentId
+          const res = await fetch("/api/campaign-contents", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              campaign_id: campaignId,
+              content_id: contentId
+            }),
+            credentials: "include"
           });
           
           // Check if we hit a subscription limit (402 Payment Required)
@@ -110,14 +115,25 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
               isLimitError: true, 
               limitData: {
                 limitType: "campaigns" as const,
-                currentUsage: limitData.currentUsage, 
+                currentUsage: limitData.current || limitData.currentUsage, 
                 limit: limitData.limit,
-                currentPlan: limitData.currentPlan 
+                currentPlan: user?.subscription_plan || "free" 
               }
             };
           }
           
-          return res;
+          // Check for other errors
+          if (!res.ok) {
+            const errorText = await res.text();
+            try {
+              const errorJson = JSON.parse(errorText);
+              throw new Error(errorJson.error || errorJson.message || "An error occurred");
+            } catch (e) {
+              throw new Error(errorText || res.statusText || "An error occurred");
+            }
+          }
+          
+          return await res.json();
         });
         
         // Wait for all promises to complete
@@ -148,11 +164,63 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
   // Remove content from campaign mutation
   const removeContentMutation = useMutation({
     mutationFn: async (contentId: number) => {
-      return await apiRequest("DELETE", `/api/campaign-contents/${campaignId}/${contentId}`);
+      try {
+        const res = await fetch(`/api/campaign-contents/${campaignId}/${contentId}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+        
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          throw { 
+            isLimitError: true, 
+            limitData: {
+              limitType: "campaigns" as const,
+              currentUsage: limitData.current || limitData.currentUsage, 
+              limit: limitData.limit,
+              currentPlan: user?.subscription_plan || "free" 
+            }
+          };
+        }
+        
+        // Check for other errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
+          }
+        }
+        
+        return;
+      } catch (error: any) {
+        // If it's a limit error, rethrow it to be handled in onError
+        if (error?.isLimitError) {
+          throw error;
+        }
+        throw new Error(error.message || "Failed to remove content from campaign");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}/contents`] });
     },
+    onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
+        setShowLimitModal(true);
+        return;
+      }
+      
+      toast({
+        title: "Failed to remove content",
+        description: error.message || "An error occurred",
+        variant: "destructive",
+      });
+    }
   });
   
   // Update campaign mutation for persona or tone analysis
@@ -166,18 +234,57 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
       personaId?: number | null; 
       toneAnalysisId?: number | null; 
     }) => {
-      const updateData: any = {};
-      
-      if (personaId !== undefined) {
-        updateData.persona_id = personaId;
+      try {
+        const updateData: any = {};
+        
+        if (personaId !== undefined) {
+          updateData.persona_id = personaId;
+        }
+        
+        if (toneAnalysisId !== undefined) {
+          updateData.tone_analysis_id = toneAnalysisId;
+        }
+        
+        const res = await fetch(`/api/campaigns/${campaignId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updateData),
+          credentials: "include"
+        });
+        
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          throw { 
+            isLimitError: true, 
+            limitData: {
+              limitType: "campaigns" as const,
+              currentUsage: limitData.current || limitData.currentUsage, 
+              limit: limitData.limit,
+              currentPlan: user?.subscription_plan || "free" 
+            }
+          };
+        }
+        
+        // Check for other errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
+          }
+        }
+        
+        return await res.json();
+      } catch (error: any) {
+        // If it's a limit error, rethrow it to be handled in onError
+        if (error?.isLimitError) {
+          throw error;
+        }
+        throw new Error(error.message || "Failed to update campaign");
       }
-      
-      if (toneAnalysisId !== undefined) {
-        updateData.tone_analysis_id = toneAnalysisId;
-      }
-      
-      const res = await apiRequest("PATCH", `/api/campaigns/${campaignId}`, updateData);
-      return await res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}`] });
@@ -187,6 +294,13 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
       });
     },
     onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
+        setShowLimitModal(true);
+        return;
+      }
+      
       toast({
         title: "Update failed",
         description: error.message || "Failed to update campaign",
