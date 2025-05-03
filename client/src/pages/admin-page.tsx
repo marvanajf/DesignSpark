@@ -56,6 +56,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Link, useLocation } from "wouter";
+
+// Schema for new user validation
+const newUserSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters").max(50),
+  email: z.string().email("Please enter a valid email address"),
+  full_name: z.string().min(2, "Full name is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  role: z.enum(["user", "admin"]).default("user"),
+  subscription_plan: z.enum(["free", "standard", "professional", "premium"]).default("free"),
+  company: z.string().optional(),
+});
 // Utility function to convert data to CSV
 function convertToCSV<T extends Record<string, any>>(data: T[], headers: Record<string, string>): string {
   // Create header row
@@ -133,9 +145,12 @@ export default function AdminPage() {
   const [isUserDetailsOpen, setIsUserDetailsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
+  const [_, navigate] = useLocation();
+  
   // Only admins can access this page
   if (!user || user.role !== "admin") {
-    return <Redirect to="/" />;
+    navigate("/");
+    return null;
   }
 
   // Fetch leads
@@ -316,6 +331,38 @@ export default function AdminPage() {
     onError: (error) => {
       toast({
         title: "Delete failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  
+  // Create user mutation
+  const createUserMutation = useMutation({
+    mutationFn: async (formData: z.infer<typeof newUserSchema>) => {
+      const res = await fetch(`/api/admin/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to create user");
+      }
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+      setIsAddUserDialogOpen(false);
+      toast({
+        title: "User created",
+        description: "The new user account has been created successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Create failed",
         description: error.message,
         variant: "destructive",
       });
@@ -884,6 +931,206 @@ export default function AdminPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      
+      {/* Create User Dialog */}
+      <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>
+        <DialogContent className="bg-zinc-950 border-zinc-800 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">Create New User</DialogTitle>
+            <DialogDescription>
+              Add a new user account to the platform. All fields are required except company.
+            </DialogDescription>
+          </DialogHeader>
+          <CreateUserForm onSubmit={(data) => {
+            createUserMutation.mutate(data);
+          }} isSubmitting={createUserMutation.isPending} />
+        </DialogContent>
+      </Dialog>
     </div>
+  );
+}
+
+// Create User Form Component
+function CreateUserForm({ onSubmit, isSubmitting }: { onSubmit: (data: z.infer<typeof newUserSchema>) => void, isSubmitting: boolean }) {
+  const form = useForm<z.infer<typeof newUserSchema>>({
+    resolver: zodResolver(newUserSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      full_name: "",
+      password: "",
+      role: "user",
+      subscription_plan: "free",
+      company: "",
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Username</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="johndoe" 
+                  className="bg-zinc-900 border-zinc-800 text-white" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Email</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="john.doe@example.com"
+                  type="email"
+                  className="bg-zinc-900 border-zinc-800 text-white" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="full_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Full Name</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="John Doe"
+                  className="bg-zinc-900 border-zinc-800 text-white" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Password</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Minimum 8 characters"
+                  type="password"
+                  className="bg-zinc-900 border-zinc-800 text-white" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="company"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Company (Optional)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Company name"
+                  className="bg-zinc-900 border-zinc-800 text-white" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-white">Role</FormLabel>
+                <Select 
+                  defaultValue={field.value} 
+                  onValueChange={field.onChange}
+                >
+                  <FormControl>
+                    <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-zinc-900 border-zinc-800">
+                    <SelectItem value="user">User</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="subscription_plan"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-white">Subscription</FormLabel>
+                <Select 
+                  defaultValue={field.value} 
+                  onValueChange={field.onChange}
+                >
+                  <FormControl>
+                    <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
+                      <SelectValue placeholder="Select plan" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-zinc-900 border-zinc-800">
+                    <SelectItem value="free">Free</SelectItem>
+                    <SelectItem value="standard">Standard</SelectItem>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="premium">Premium</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        
+        <DialogFooter>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="bg-[#74d1ea] hover:bg-[#57c0dd] text-black font-medium"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              'Create User'
+            )}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
   );
 }
