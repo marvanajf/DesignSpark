@@ -178,7 +178,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
       <h2 className="text-xl font-semibold text-white mb-4">Campaign Management</h2>
       
       {displayedCampaigns.map((campaign) => (
-        <div key={campaign.id} className="bg-[#0e1117] border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors">
+        <div key={campaign.id} className="bg-black border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors">
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-medium text-white mb-4">{campaign.name}</h3>
             <div>
@@ -271,7 +271,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="text-[#74d1ea] hover:bg-[#181c25] hover:text-[#74d1ea]"
+              className="text-[#74d1ea] hover:bg-[#0a0a0a] hover:text-[#74d1ea]"
               onClick={() => setSelectedCampaignId(campaign.id)}
             >
               View Details
