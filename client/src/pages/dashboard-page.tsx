@@ -18,6 +18,8 @@ import Layout from "@/components/Layout";
 import { ToneAnalysis, Persona, GeneratedContent } from "@shared/schema";
 import { formatDistanceToNow } from "date-fns";
 import { Progress } from "@/components/ui/progress";
+import { CampaignOverviewDashboard } from "@/components/CampaignOverviewDashboard";
+import { PersonasOverview } from "@/components/PersonasOverview";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -251,6 +253,19 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Campaign and Personas Overview Section */}
+          <div className="mb-10">
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white">Campaign & Persona Management</h2>
+              <p className="text-sm text-gray-400 mt-1">Manage your active campaigns and AI personas</p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <CampaignOverviewDashboard />
+              <PersonasOverview />
+            </div>
+          </div>
+
           {/* Platform Feature Cards - Enhanced with platform style */}
           <div className="mb-10">
             <div className="mb-6">
@@ -305,8 +320,8 @@ export default function DashboardPage() {
                     <Users className="h-6 w-6 text-[#74d1ea]" />
                   </div>
                   
-                  <h3 className="text-xl font-bold text-white mb-3">Targeted Personas</h3>
-                  <p className="text-gray-400 mb-5">Connect with your ideal audience using tailored personas. Our platform helps you create, manage, and target specific professional personas.</p>
+                  <h3 className="text-xl font-bold text-white mb-3">AI Personas</h3>
+                  <p className="text-gray-400 mb-5">Connect with your ideal audience using tailored AI personas. Our platform helps you create, manage, and target specific professional personas.</p>
                   
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-start">
