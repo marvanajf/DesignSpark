@@ -88,9 +88,69 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
       {!isAppPage && <Navbar showDashboardLinks={isAppPage} />}
       <div className="flex flex-1 overflow-hidden bg-black">
         {(showSidebar || isAppPage) && <Sidebar />}
-        <main className={`flex-1 overflow-y-auto bg-background ${(showSidebar || isAppPage) ? '' : 'container mx-auto py-6'}`}>
-          {children}
-        </main>
+        <div className="flex flex-col flex-1 overflow-y-auto">
+          <main className={`flex-1 bg-background ${(showSidebar || isAppPage) ? '' : 'container mx-auto py-6'}`}>
+            {children}
+          </main>
+          
+          {!isAppPage && (
+            <footer className="bg-black border-t border-gray-700/60">
+              <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+                <nav className="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
+                  <div className="px-5 py-2">
+                    <a href="/about" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      About
+                    </a>
+                  </div>
+                  <div className="px-5 py-2">
+                    <a href="/features" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      Features
+                    </a>
+                  </div>
+                  <div className="px-5 py-2">
+                    <a href="/pricing" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      Pricing
+                    </a>
+                  </div>
+                  <div className="px-5 py-2">
+                    <a href="/blog" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      Blog
+                    </a>
+                  </div>
+                  <div className="px-5 py-2">
+                    <a href="/contact" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      Contact
+                    </a>
+                  </div>
+                  <div className="px-5 py-2">
+                    <a href="/privacy-policy" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      Privacy Policy
+                    </a>
+                  </div>
+                </nav>
+                <div className="mt-8 flex justify-center space-x-6">
+                  <a href="https://www.linkedin.com/company/tovably" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#74d1ea]">
+                    <span className="sr-only">LinkedIn</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin">
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                      <rect width="4" height="12" x="2" y="9"></rect>
+                      <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                  </a>
+                  <a href="https://twitter.com/tovably" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#74d1ea]">
+                    <span className="sr-only">Twitter</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-twitter">
+                      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                    </svg>
+                  </a>
+                </div>
+                <p className="mt-8 text-center text-base text-gray-400">
+                  &copy; {new Date().getFullYear()} Tovably. All rights reserved.
+                </p>
+              </div>
+            </footer>
+          )}
+        </div>
       </div>
     </div>
   );
