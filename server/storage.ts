@@ -1504,6 +1504,8 @@ export class DatabaseStorage implements IStorage {
 
   async deleteUser(id: number): Promise<boolean> {
     try {
+      console.log(`Starting deletion process for user ID ${id}`);
+      
       // Begin a transaction to ensure all related data is deleted
       return await db.transaction(async (tx) => {
         // Get user to verify existence
@@ -1513,37 +1515,73 @@ export class DatabaseStorage implements IStorage {
           throw new Error(`User with id ${id} not found`);
         }
         
-        // First, delete any campaign_contents relationships
-        // We need to find all campaign IDs for this user
-        const userCampaigns = await tx.select().from(campaigns).where(eq(campaigns.user_id, id));
+        console.log(`User found, preparing to delete all associated data for user ID ${id}`);
         
-        // For each campaign, delete the campaign_contents
+        // Get all campaigns for this user for logging purposes
+        const userCampaigns = await tx.select().from(campaigns).where(eq(campaigns.user_id, id));
+        console.log(`Found ${userCampaigns.length} campaigns to delete for user ID ${id}`);
+        
+        // First, delete any campaign_contents relationships
         for (const campaign of userCampaigns) {
-          await tx.delete(campaignContents).where(eq(campaignContents.campaign_id, campaign.id));
+          const contentRelations = await tx.select().from(campaignContents).where(eq(campaignContents.campaign_id, campaign.id));
+          console.log(`Deleting ${contentRelations.length} campaign content relations for campaign ID ${campaign.id}`);
+          
+          // Delete each content relation
+          for (const relation of contentRelations) {
+            await tx.delete(campaignContents).where(eq(campaignContents.id, relation.id));
+          }
         }
         
         // Now delete all user campaigns
+        console.log(`Deleting all campaigns for user ID ${id}`);
         await tx.delete(campaigns).where(eq(campaigns.user_id, id));
         
-        // Delete generated content
-        await tx.delete(generatedContent).where(eq(generatedContent.user_id, id));
+        // Find and log all generated content
+        const userContent = await tx.select().from(generatedContent).where(eq(generatedContent.user_id, id));
+        console.log(`Deleting ${userContent.length} generated content items for user ID ${id}`);
         
-        // Delete tone analyses
-        await tx.delete(toneAnalyses).where(eq(toneAnalyses.user_id, id));
+        // Delete each content item individually to ensure deletion
+        for (const content of userContent) {
+          await tx.delete(generatedContent).where(eq(generatedContent.id, content.id));
+        }
         
-        // Delete personas
-        await tx.delete(personas).where(eq(personas.user_id, id));
+        // Find and log all tone analyses
+        const userAnalyses = await tx.select().from(toneAnalyses).where(eq(toneAnalyses.user_id, id));
+        console.log(`Deleting ${userAnalyses.length} tone analyses for user ID ${id}`);
         
-        // Delete blog posts authored by the user
-        await tx.delete(blogPosts).where(eq(blogPosts.author_id, id));
+        // Delete each tone analysis individually
+        for (const analysis of userAnalyses) {
+          await tx.delete(toneAnalyses).where(eq(toneAnalyses.id, analysis.id));
+        }
+        
+        // Find and log all personas
+        const userPersonas = await tx.select().from(personas).where(eq(personas.user_id, id));
+        console.log(`Deleting ${userPersonas.length} personas for user ID ${id}`);
+        
+        // Delete each persona individually
+        for (const persona of userPersonas) {
+          await tx.delete(personas).where(eq(personas.id, persona.id));
+        }
+        
+        // Find and log all blog posts by the user
+        const userBlogPosts = await tx.select().from(blogPosts).where(eq(blogPosts.author_id, id));
+        console.log(`Deleting ${userBlogPosts.length} blog posts authored by user ID ${id}`);
+        
+        // Delete each blog post individually
+        for (const post of userBlogPosts) {
+          await tx.delete(blogPosts).where(eq(blogPosts.id, post.id));
+        }
         
         // Finally delete the user
+        console.log(`Deleting user account with ID ${id}`);
         await tx.delete(users).where(eq(users.id, id));
         
+        console.log(`Successfully completed deletion of user ID ${id} and all associated data`);
         return true;
       });
     } catch (error) {
       console.error(`Error deleting user with ID ${id}:`, error);
+      console.error(error instanceof Error ? error.stack : String(error));
       return false;
     }
   }
