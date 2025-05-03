@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { Sparkles, Loader2, Calendar, FileText, Lightbulb, Target, Clock, Users, Copy, Check, ChevronRight, Clipboard, ArrowRight, X, PlusCircle, Save, PlayCircle, BarChart3, SlidersHorizontal, MessageSquare, Settings } from "lucide-react";
+import { Sparkles, Loader2, Calendar, FileText, Lightbulb, Target, Clock, Users, Copy, Check, ChevronRight, Clipboard, ArrowRight, X, PlusCircle, Save, PlayCircle, BarChart3, SlidersHorizontal, MessageSquare, Settings, Shield, Server as ServerIcon } from "lucide-react";
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -93,6 +93,9 @@ export default function ProspectingFactoryPage() {
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [selectedPersonas, setSelectedPersonas] = useState<number[]>([]);
   const [personaBalance, setPersonaBalance] = useState<"equal" | "weighted">("equal");
+  const [useGeneratedPersonas, setUseGeneratedPersonas] = useState<boolean>(false);
+  const [isGeneratingPersonas, setIsGeneratingPersonas] = useState<boolean>(false);
+  const [generatedPersonas, setGeneratedPersonas] = useState<Persona[]>([]);
   const [campaignStartDate, setCampaignStartDate] = useState<string>(formatDateForInput(new Date()));
   const [campaignEndDate, setCampaignEndDate] = useState<string>(formatDateForInput(twoMonthsLater));
   const [selectedContentTypes, setSelectedContentTypes] = useState<{ 
@@ -185,8 +188,18 @@ export default function ProspectingFactoryPage() {
         setGenerationProgress(10);
         await new Promise(resolve => setTimeout(resolve, 800));
         
-        // Step 2: Generate personas
+        // Step 2: Use or generate personas
         setGenerationProgress(30);
+        // Auto-generate personas if that option is selected but none exist yet
+        if (useGeneratedPersonas && generatedPersonas.length === 0) {
+          await handleGeneratePersonas();
+        }
+        
+        // Auto-select the first generated persona if none are selected
+        if (selectedPersonas.length === 0 && useGeneratedPersonas && generatedPersonas.length > 0) {
+          setSelectedPersonas([generatedPersonas[0].id]);
+        }
+        
         await new Promise(resolve => setTimeout(resolve, 1200));
         
         // Step 3: Create campaign structure
@@ -500,6 +513,102 @@ REGISTER NOW: [Link]`,
       setSelectedPersonas([...selectedPersonas, id]);
     }
   };
+  
+  // Function to generate personas based on campaign brief
+  const handleGeneratePersonas = async () => {
+    if (!campaignPrompt.trim() && !selectedUseCase) {
+      toast({
+        title: "Missing information",
+        description: "Please provide a campaign description or select a use case to generate relevant personas",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsGeneratingPersonas(true);
+    
+    try {
+      // Simulate API call to generate personas
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Generate mock personas based on the campaign brief or selected use case
+      const generatedPersonasMock: Persona[] = [
+        {
+          id: 101,
+          name: "Enterprise Security Director",
+          role: "CISO",
+          pains: [
+            "Advanced persistent threats", 
+            "Compliance with industry regulations", 
+            "Securing remote workforce",
+            "Limited security budget"
+          ],
+          goals: [
+            "Implement zero-trust architecture", 
+            "Improve threat detection", 
+            "Streamline security operations",
+            "Secure cloud migration"
+          ],
+          daysInUse: 0,
+          icon: <Shield className="h-5 w-5" />
+        },
+        {
+          id: 102,
+          name: "Digital Transformation Leader",
+          role: "VP of Digital Strategy",
+          pains: [
+            "Legacy system integration", 
+            "Change management resistance", 
+            "Technical skill gaps",
+            "Budget constraints for innovation"
+          ],
+          goals: [
+            "Accelerate cloud adoption", 
+            "Implement AI/ML solutions", 
+            "Improve customer digital experience",
+            "Data-driven decision making"
+          ],
+          daysInUse: 0,
+          icon: <Lightbulb className="h-5 w-5" />
+        },
+        {
+          id: 103,
+          name: "IT Infrastructure Manager",
+          role: "IT Manager",
+          pains: [
+            "System reliability issues", 
+            "Scaling infrastructure", 
+            "Talent retention",
+            "Managing hybrid infrastructure"
+          ],
+          goals: [
+            "Infrastructure automation", 
+            "Cost optimization", 
+            "Improved system performance",
+            "Simplified management"
+          ],
+          daysInUse: 0,
+          icon: <ServerIcon className="h-5 w-5" />
+        }
+      ];
+      
+      setGeneratedPersonas(generatedPersonasMock);
+      
+      toast({
+        title: "Personas generated",
+        description: "AI has generated 3 relevant personas based on your campaign brief",
+      });
+    } catch (error) {
+      console.error("Error generating personas:", error);
+      toast({
+        title: "Generation failed",
+        description: "Failed to generate personas. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingPersonas(false);
+    }
+  };
 
   const handleSaveCampaign = () => {
     toast({
@@ -671,8 +780,46 @@ REGISTER NOW: [Link]`,
                         Step 2: Target Personas
                       </h3>
                       
+                      {/* Toggle between existing and AI-generated personas */}
+                      <div className="flex items-center justify-start mb-4">
+                        <div className="mr-4 flex items-center">
+                          <Switch 
+                            id="use-generated-personas"
+                            checked={useGeneratedPersonas}
+                            onCheckedChange={setUseGeneratedPersonas}
+                            className="mr-2"
+                          />
+                          <Label htmlFor="use-generated-personas" className="text-sm cursor-pointer">
+                            Generate AI personas based on campaign brief
+                          </Label>
+                        </div>
+                        
+                        {useGeneratedPersonas && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={handleGeneratePersonas}
+                            disabled={isGeneratingPersonas}
+                            className="text-xs"
+                          >
+                            {isGeneratingPersonas ? (
+                              <>
+                                <Loader2 className="mr-1.5 h-3 w-3 animate-spin" />
+                                Generating...
+                              </>
+                            ) : (
+                              <>
+                                <Sparkles className="mr-1.5 h-3 w-3" />
+                                Generate Personas
+                              </>
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                      
                       <div className="grid md:grid-cols-3 gap-4">
-                        {personas.map((persona) => (
+                        {/* If using AI-generated personas, show those instead of predefined personas */}
+                        {(useGeneratedPersonas ? generatedPersonas : personas).map((persona) => (
                           <div 
                             key={persona.id}
                             className={`border rounded-lg p-4 cursor-pointer transition-colors duration-200 relative ${
@@ -724,6 +871,15 @@ REGISTER NOW: [Link]`,
                             </div>
                           </div>
                         ))}
+                        
+                        {/* Empty state when using AI personas but none are generated yet */}
+                        {useGeneratedPersonas && generatedPersonas.length === 0 && (
+                          <div className="col-span-3 border border-dashed border-gray-700 rounded-lg p-8 text-center">
+                            <Sparkles className="h-10 w-10 text-[#74d1ea] mb-3 mx-auto opacity-70" />
+                            <p className="text-gray-300 mb-2">No AI personas generated yet</p>
+                            <p className="text-xs text-gray-500 mb-4">Generate personas based on your campaign brief to see them here</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                     
