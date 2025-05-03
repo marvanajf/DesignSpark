@@ -139,12 +139,21 @@ export const blogPosts = pgTable("blog_posts", {
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
 
+// Campaign status enum
+export const campaignStatusEnum = pgEnum('campaign_status', ['draft', 'active', 'planning', 'running', 'completed', 'archived']);
+
 export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id").notNull().references(() => users.id),
   name: text("name").notNull(),
   description: text("description"),
-  status: text("status").default("active").notNull(), // active, archived
+  status: campaignStatusEnum("status").default("draft").notNull(),
+  status_display: text("status_display").default("Draft").notNull(), // Human readable status
+  personas_count: integer("personas_count").default(0).notNull(),
+  content_count: integer("content_count").default(0).notNull(),
+  channels_count: integer("channels_count").default(0).notNull(),
+  start_date: timestamp("start_date"),
+  end_date: timestamp("end_date"),
   persona_id: integer("persona_id").references(() => personas.id),
   tone_analysis_id: integer("tone_analysis_id").references(() => toneAnalyses.id),
   created_at: timestamp("created_at").defaultNow().notNull(),
@@ -248,6 +257,12 @@ export const insertCampaignSchema = createInsertSchema(campaigns).pick({
   name: true,
   description: true,
   status: true,
+  status_display: true,
+  personas_count: true,
+  content_count: true,
+  channels_count: true,
+  start_date: true,
+  end_date: true,
   persona_id: true,
   tone_analysis_id: true
 });
