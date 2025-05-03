@@ -876,8 +876,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).send(`Invalid plan selected: ${plan}`);
       }
       
-      // Calculate the amount in cents
-      const amountInCents = Math.round(planInfo.price * 100);
+      // Ensure we have a Stripe price ID for this plan
+      if (!planInfo.stripePrice) {
+        console.error(`No Stripe price ID for plan: ${plan}`);
+        return res.status(400).send(`Missing Stripe price configuration for plan: ${plan}`);
+      }
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
@@ -895,26 +898,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create simplified session options for Stripe checkout
+      // Create subscription session options for Stripe checkout using price IDs
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: `${planInfo.name} Plan - First Month`,
-                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
-              },
-              unit_amount: amountInCents,
-            },
+            // Use the Stripe Price ID from our schema instead of creating a price on the fly
+            price: planInfo.stripePrice,
             quantity: 1,
           },
         ],
-        mode: 'payment',
+        mode: 'subscription', // Changed from 'payment' to 'subscription'
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
+        // Collect billing address information
+        billing_address_collection: 'required',
       };
       
       console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
