@@ -1024,8 +1024,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).send(`Invalid plan selected: ${plan}`);
       }
       
-      // Calculate the amount in cents
-      const amountInCents = Math.round(planInfo.price * 100);
+      // Ensure we have a Stripe price ID for this plan
+      if (!planInfo.stripePrice) {
+        console.error(`No Stripe price ID for plan: ${plan}`);
+        return res.status(400).send(`Missing Stripe price configuration for plan: ${plan}`);
+      }
       
       // Build the success and cancel URLs
       const baseUrl = `${req.protocol}://${req.get('host')}`;
@@ -1043,26 +1046,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create simplified session options for Stripe checkout
+      // Create subscription session options for Stripe checkout using price IDs
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: `${planInfo.name} Plan - First Month`,
-                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
-              },
-              unit_amount: amountInCents,
-            },
+            // Use the Stripe Price ID from our schema instead of creating a price on the fly
+            price: planInfo.stripePrice,
             quantity: 1,
           },
         ],
-        mode: 'payment',
+        mode: 'subscription', // Changed from 'payment' to 'subscription'
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
+        // Collect billing address information
+        billing_address_collection: 'required',
       };
       
       console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
@@ -1146,26 +1145,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create simplified session options for Stripe checkout
+      // Ensure we have a Stripe price ID for this plan
+      if (!planInfo.stripePrice) {
+        console.error(`No Stripe price ID for plan: ${plan}`);
+        return res.status(400).json({ error: `Missing Stripe price configuration for plan: ${plan}` });
+      }
+      
+      // Create subscription session options for Stripe checkout using price IDs
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: `${planInfo.name} Plan - First Month`,
-                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
-              },
-              unit_amount: amountInCents,
-            },
+            // Use the Stripe Price ID from our schema instead of creating a price on the fly
+            price: planInfo.stripePrice,
             quantity: 1,
           },
         ],
-        mode: 'payment',
+        mode: 'subscription', // Changed from 'payment' to 'subscription'
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata,
+        // Collect billing address information
+        billing_address_collection: 'required',
       };
       
       console.log("Creating Stripe checkout session with options:", JSON.stringify(sessionOptions, null, 2));
@@ -1230,25 +1231,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.userId = req.user.id.toString();
       }
 
-      // Create a Checkout Session for one-time payment
-      // We'll handle subscription creation in the webhook
+      // Create a Checkout Session for subscription payment
+      // Ensure we have a Stripe price ID for this plan
+      if (!planInfo.stripePrice) {
+        console.error(`No Stripe price ID for plan: ${plan}`);
+        return res.status(400).json({ error: `Missing Stripe price configuration for plan: ${plan}` });
+      }
+      
       const sessionOptions: Stripe.Checkout.SessionCreateParams = {
         payment_method_types: ['card'],
         line_items: [
           {
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: `${planInfo.name} Plan - Monthly Payment`,
-                description: `Tovably ${planInfo.name} Plan - ${planInfo.personas} Personas, ${planInfo.toneAnalyses} Tone Analyses, ${planInfo.contentGeneration} Content Pieces`,
-                images: [],
-              },
-              unit_amount: amountInCents,
-            },
+            // Use the Stripe Price ID from our schema instead of creating a price on the fly
+            price: planInfo.stripePrice,
             quantity: 1,
           },
         ],
-        mode: 'payment',
+        mode: 'subscription', // Changed from 'payment' to 'subscription'
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata: {
@@ -1256,10 +1255,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           create_subscription: 'true'
         },
         billing_address_collection: 'required',
-        payment_intent_data: {
-          // Save payment method for future usage
-          setup_future_usage: 'off_session',
-        }
       };
       
       // If user is already logged in, use their customer info
@@ -1396,27 +1391,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
               
               console.log("Created new user:", newUser ? "Success" : "Failed");
               
-              // If we're in payment mode, create a subscription manually
+              // Check if we're in subscription mode (already created) or need to create manually
               if (shouldCreateSubscription && newUser) {
                 try {
                   console.log("Creating subscription for customer:", customerStripeId);
                   
-                  // Use Stripe API to create a subscription for this customer
+                  const planInfo = subscriptionPlans[planId as SubscriptionPlanType] || subscriptionPlans.standard;
+                  
+                  // Make sure we have a Stripe price ID
+                  if (!planInfo.stripePrice) {
+                    console.error(`Missing Stripe price ID for plan: ${planId}`);
+                    throw new Error(`Missing Stripe price configuration for plan: ${planId}`);
+                  }
+                  
+                  // Use Stripe API to create a subscription for this customer with price ID
                   const subscription = await stripe.subscriptions.create({
                     customer: customerStripeId,
                     items: [
                       {
-                        price_data: {
-                          currency: 'gbp',
-                          product_data: {
-                            name: `${subscriptionPlans[planId as SubscriptionPlanType]?.name || 'Standard'} Plan`,
-                            description: `Monthly subscription to Tovably ${subscriptionPlans[planId as SubscriptionPlanType]?.name || 'Standard'} Plan`,
-                          },
-                          unit_amount: Math.round((subscriptionPlans[planId as SubscriptionPlanType]?.price || 9.99) * 100),
-                          recurring: {
-                            interval: 'month',
-                          },
-                        },
+                        price: planInfo.stripePrice, // Use the Stripe price ID directly
                       },
                     ],
                     metadata: {
@@ -1484,23 +1477,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 periodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
               });
             } else if (shouldCreateSubscription) {
-              // For payment mode, create a subscription manually
+              // For payment mode, create a subscription manually using price ID
               try {
+                const planInfo = subscriptionPlans[planId as SubscriptionPlanType] || subscriptionPlans.standard;
+                
+                // Make sure we have a Stripe price ID
+                if (!planInfo.stripePrice) {
+                  console.error(`Missing Stripe price ID for plan: ${planId}`);
+                  throw new Error(`Missing Stripe price configuration for plan: ${planId}`);
+                }
+                
                 const subscription = await stripe.subscriptions.create({
                   customer: session.customer as string,
                   items: [
                     {
-                      price_data: {
-                        currency: 'gbp',
-                        product_data: {
-                          name: `${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
-                          description: `Monthly subscription to Tovably ${subscriptionPlans[planId as SubscriptionPlanType].name} Plan`,
-                        },
-                        unit_amount: Math.round(subscriptionPlans[planId as SubscriptionPlanType].price * 100),
-                        recurring: {
-                          interval: 'month',
-                        },
-                      },
+                      price: planInfo.stripePrice, // Use the Stripe price ID directly
                     },
                   ],
                   metadata: {
