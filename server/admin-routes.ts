@@ -2,6 +2,17 @@ import { Request, Response, NextFunction, Express } from "express";
 import { storage } from "./storage";
 import { z } from "zod";
 import { SubscriptionPlanType } from "@shared/schema";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
+
+const scryptAsync = promisify(scrypt);
+
+// This should be the same function used in auth.ts
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
 
 // Middleware to check if user is an admin
 export function requireAdmin(req: Request, res: Response, next: NextFunction) {
@@ -60,6 +71,86 @@ export function registerAdminRoutes(app: Express) {
     } catch (error) {
       console.error("Error updating user subscription:", error);
       res.status(500).json({ error: "Failed to update user subscription" });
+    }
+  });
+  
+  // Delete user
+  app.delete("/api/admin/users/:id", requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const userId = Number(req.params.id);
+      
+      // Don't allow admins to delete themselves
+      if (req.user.id === userId) {
+        return res.status(400).json({ error: "Cannot delete your own account" });
+      }
+      
+      const result = await storage.deleteUser(userId);
+      
+      if (result) {
+        res.json({ success: true, message: "User deleted successfully" });
+      } else {
+        res.status(404).json({ error: "User not found or could not be deleted" });
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ error: "Failed to delete user" });
+    }
+  });
+  
+  // Create new user (admin function)
+  app.post("/api/admin/users", requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const userSchema = z.object({
+        username: z.string().min(3),
+        email: z.string().email(),
+        password: z.string().min(6),
+        full_name: z.string(),
+        company: z.string().optional(),
+        role: z.enum(["user", "admin"]).optional().default("user"),
+        subscription_plan: z.enum(["free", "standard", "professional", "premium"]).optional().default("free")
+      });
+      
+      const userData = userSchema.parse(req.body);
+      
+      // Check if user with this email or username already exists
+      const existingEmailUser = await storage.getUserByEmail(userData.email);
+      if (existingEmailUser) {
+        return res.status(400).json({ error: "Email is already in use" });
+      }
+      
+      const existingUsernameUser = await storage.getUserByUsername(userData.username);
+      if (existingUsernameUser) {
+        return res.status(400).json({ error: "Username is already in use" });
+      }
+      
+      // Create a new user
+      const hashedPassword = await hashPassword(userData.password);
+      
+      const newUser = await storage.adminCreateUser({
+        ...userData,
+        password: hashedPassword,
+      });
+      
+      // Automatically update the subscription if it's not free
+      if (userData.subscription_plan !== "free") {
+        await storage.updateUserSubscription(newUser.id, {
+          plan: userData.subscription_plan as SubscriptionPlanType
+        });
+      }
+      
+      // Return the user without the password
+      const userWithoutPassword = {
+        ...newUser,
+        password: undefined
+      };
+      
+      res.status(201).json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors });
+      }
+      res.status(500).json({ error: "Failed to create user" });
     }
   });
 

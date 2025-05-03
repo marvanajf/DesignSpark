@@ -1513,18 +1513,29 @@ export class DatabaseStorage implements IStorage {
           throw new Error(`User with id ${id} not found`);
         }
         
-        // Delete related content (just a selection of common tables, can be expanded)
-        // Personas
-        await tx.delete(personas).where(eq(personas.user_id, id));
+        // First, delete any campaign_contents relationships
+        // We need to find all campaign IDs for this user
+        const userCampaigns = await tx.select().from(campaigns).where(eq(campaigns.user_id, id));
         
-        // Tone analyses
+        // For each campaign, delete the campaign_contents
+        for (const campaign of userCampaigns) {
+          await tx.delete(campaignContents).where(eq(campaignContents.campaign_id, campaign.id));
+        }
+        
+        // Now delete all user campaigns
+        await tx.delete(campaigns).where(eq(campaigns.user_id, id));
+        
+        // Delete generated content
+        await tx.delete(generatedContent).where(eq(generatedContent.user_id, id));
+        
+        // Delete tone analyses
         await tx.delete(toneAnalyses).where(eq(toneAnalyses.user_id, id));
         
-        // Generated content
-        await tx.delete(generatedContents).where(eq(generatedContents.user_id, id));
+        // Delete personas
+        await tx.delete(personas).where(eq(personas.user_id, id));
         
-        // Campaigns (and related campaign contents will be deleted by cascade)
-        await tx.delete(campaigns).where(eq(campaigns.user_id, id));
+        // Delete blog posts authored by the user
+        await tx.delete(blogPosts).where(eq(blogPosts.author_id, id));
         
         // Finally delete the user
         await tx.delete(users).where(eq(users.id, id));
