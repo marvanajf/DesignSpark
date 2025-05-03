@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown, BarChart3, MessageSquare, LineChart, Lightbulb, Sparkles } from "lucide-react";
+import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown, BarChart3, MessageSquare, LineChart, Lightbulb, Sparkles, CalendarClock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import {
@@ -207,7 +207,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
-                  <h4 className="text-lg font-medium text-white mb-4">Target Personas</h4>
+                  <h4 className="text-lg font-medium text-white mb-4">AI Personas</h4>
                   <div className="space-y-4">
                     <div className="border-l-2 border-[#74d1ea] pl-4 py-1">
                       <h5 className="text-white font-medium">Tech-Savvy Marketing Director</h5>
@@ -258,7 +258,7 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
                   <Users className="h-6 w-6 text-[#74d1ea]" />
                 </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">Targeted Personas</h3>
+                <h3 className="text-2xl font-semibold text-white mb-4">AI Personas</h3>
                 <p className="text-gray-400 mb-5">
                   Connect with your ideal audience using tailored personas. Our platform helps you create, manage, and target specific professional personas for more effective content.
                 </p>
@@ -358,6 +358,109 @@ export default function HomePage() {
                       I noticed [Company] has been expanding your content marketing efforts, and thought you might be interested in how similar companies are using AI to scale their production while maintaining quality...<span className="opacity-30">Read more</span>
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Campaigns Section */}
+          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+              <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
+                <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
+                  <h4 className="text-lg font-medium text-white mb-4">Campaign Management</h4>
+                  <div className="space-y-4">
+                    <div className="rounded-lg bg-gray-900/70 p-4 border border-gray-700/60">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-white font-medium">Q2 Marketing Campaign</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#74d1ea]/10 text-[#74d1ea] border border-[#74d1ea]/20">
+                          Active
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div>
+                          <p className="text-xs text-gray-400">Timeframe</p>
+                          <p className="text-sm text-white">Apr - Jun 2025</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400">Status</p>
+                          <div className="flex items-center">
+                            <div className="h-2 w-2 rounded-full bg-green-400 mr-1.5"></div>
+                            <p className="text-sm text-white">Running</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <p className="text-xs text-gray-400">Personas</p>
+                          <p className="text-sm text-white">3</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400">Content</p>
+                          <p className="text-sm text-white">12</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400">Channels</p>
+                          <p className="text-sm text-white">2</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="rounded-lg bg-gray-900/40 p-4 border border-gray-700/40">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-white font-medium">Product Launch</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400 border border-gray-700/50">
+                          Draft
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div>
+                          <p className="text-xs text-gray-500">Timeframe</p>
+                          <p className="text-sm text-gray-300">Jul - Sep 2025</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500">Status</p>
+                          <div className="flex items-center">
+                            <div className="h-2 w-2 rounded-full bg-gray-500 mr-1.5"></div>
+                            <p className="text-sm text-gray-300">Planning</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="order-1 md:order-2 p-8 flex flex-col justify-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
+                  <CalendarClock className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-4">Campaigns</h3>
+                <p className="text-gray-400 mb-5">
+                  Organize, manage, and track your marketing campaigns in one place. Combine personas and content into cohesive campaigns that deliver measurable results.
+                </p>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Create structured campaigns with clear objectives</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Assign personas, content types, and channels</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300">Monitor campaign performance and engagement</span>
+                  </li>
+                </ul>
+                <div>
+                  <Button 
+                    onClick={() => window.location.href = "/campaigns-info"}
+                    variant="outline"
+                    className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10"
+                  >
+                    Explore Campaigns
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             </div>

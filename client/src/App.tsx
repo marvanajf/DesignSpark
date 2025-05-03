@@ -35,6 +35,7 @@ import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import CampaignPage from "@/pages/campaign-page";
 import CampaignsPage from "@/pages/campaigns-page";
+import CampaignsInfoPage from "@/pages/campaigns-info";
 import AdminPage from "@/pages/admin-page";
 import ModalPreviewPage from "@/pages/modal-preview-page";
 import NotFound from "@/pages/not-found";
@@ -65,6 +66,7 @@ function Router() {
       <Route path="/tone-analysis-info" component={ToneAnalysisMarketingPage} />
       <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
       <Route path="/personas-info" component={PersonasMarketingPage} />
+      <Route path="/campaigns-info" component={CampaignsInfoPage} />
       <Route path="/guides-info" component={GuidesMarketingPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
