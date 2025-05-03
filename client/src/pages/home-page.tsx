@@ -35,9 +35,9 @@ export default function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <div className="py-6 bg-black relative overflow-hidden">
+      <div className="py-8 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] text-center">
+          <div className="border border-gray-700/60 rounded-lg py-10 px-8 shadow-[0_0_25px_rgba(116,209,234,0.15)] text-center">
             <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto">
               <span className="block text-white">Supercharge your comms with</span>
               <span className="block text-[#74d1ea]">AI-powered precision</span>
@@ -58,6 +58,67 @@ export default function HomePage() {
               <p className="mt-3 text-sm text-gray-400">
                 No credit card required. Start generating in minutes.
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* About Tovably Section */}
+      <div className="py-12 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg p-8 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="inline-flex items-center mb-4 text-[#74d1ea]">
+                  <span className="flex h-2 w-2 bg-[#74d1ea] rounded-full mr-2"></span>
+                  <span className="text-sm font-medium">About Tovably</span>
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  Communication platform for the AI era
+                </h2>
+                <p className="text-gray-400 mb-4">
+                  Tovably was born from a simple observation: even the most innovative companies struggle 
+                  to maintain a consistent tone of voice across their communications. This inconsistency 
+                  creates disconnects with audiences and weakens brand perception.
+                </p>
+                <p className="text-gray-400">
+                  Driven by a passion for effective communication and technological innovation, 
+                  we built a solution that makes sophisticated tone analysis and content generation 
+                  accessible to organizations of all sizes. Our platform helps brands speak with clarity, 
+                  consistency, and conviction.
+                </p>
+              </div>
+              <div className="relative">
+                <div className="bg-gradient-to-br from-[#74d1ea]/20 to-transparent absolute inset-0 rounded-xl opacity-20"></div>
+                <div className="relative bg-black border border-gray-700/60 rounded-lg p-6 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="h-12 w-12 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4 border border-[#74d1ea]/20">
+                        <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <h3 className="text-xl font-medium text-white">Innovation</h3>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="h-12 w-12 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4 border border-[#74d1ea]/20">
+                        <BarChart3 className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <h3 className="text-xl font-medium text-white">Precision</h3>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="h-12 w-12 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4 border border-[#74d1ea]/20">
+                        <Lightbulb className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <h3 className="text-xl font-medium text-white">Creativity</h3>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="h-12 w-12 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4 border border-[#74d1ea]/20">
+                        <Users className="h-6 w-6 text-[#74d1ea]" />
+                      </div>
+                      <h3 className="text-xl font-medium text-white">Accessibility</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
