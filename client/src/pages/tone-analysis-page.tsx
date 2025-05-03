@@ -708,7 +708,7 @@ export default function ToneAnalysisPage() {
           limitType={limitData.limitType}
           currentUsage={limitData.current}
           limit={limitData.limit}
-          currentPlan={user.subscription_plan}
+          currentPlan={user.subscription_plan || "free"}
         />
       )}
     </Layout>
