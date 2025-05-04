@@ -105,53 +105,68 @@ export default function LandingPage() {
 
   const pricingTiers = [
     {
-      name: "Standard",
-      price: "$49",
-      period: "/month",
-      description: "Perfect for individual marketers or small teams getting started",
+      name: "Starter",
+      price: "Free",
+      period: "",
+      description: "Get started with basic AI-powered tools",
       features: [
-        "5 Advanced AI Personas",
-        "10 Tone Analyses per month",
+        "5 AI Personas",
+        "5 Tone Analyses",
+        "10 Content generations",
+        "2 Campaign slots",
+        "No Campaign Factory access",
+        "Standard support"
+      ],
+      cta: "Get Started",
+      popular: false
+    },
+    {
+      name: "Standard",
+      price: "£4.99",
+      period: "/month",
+      description: "Perfect for individual marketers or small teams",
+      features: [
+        "20 AI Personas",
+        "50 Tone Analyses",
+        "100 Content generations",
+        "5 Campaign slots",
         "5 Campaign Factory uses",
-        "100 AI content generations",
-        "Email support",
-        "Basic analytics"
+        "Priority support"
       ],
       cta: "Get Started",
       popular: false
     },
     {
       name: "Premium",
-      price: "$99",
+      price: "£19.99",
       period: "/month",
       description: "Ideal for growing marketing teams with moderate content needs",
       features: [
-        "15 Advanced AI Personas",
-        "30 Tone Analyses per month",
+        "30 AI Personas",
+        "100 Tone Analyses",
+        "150 Content generations",
+        "20 Campaign slots",
         "15 Campaign Factory uses",
-        "250 AI content generations",
-        "Priority email support",
-        "Advanced analytics",
+        "Priority support",
         "Team collaboration features"
       ],
       cta: "Get Premium",
       popular: true
     },
     {
-      name: "Professional",
-      price: "$199",
+      name: "Pro",
+      price: "£39.99",
       period: "/month",
       description: "Full suite solution for agencies and enterprise marketing teams",
       features: [
-        "Unlimited Advanced AI Personas",
-        "Unlimited Tone Analyses",
+        "50 AI Personas",
+        "200 Tone Analyses",
+        "300 Content generations",
+        "30 Campaign slots",
         "30 Campaign Factory uses",
-        "Unlimited AI content generations",
-        "Priority phone & email support",
-        "Enterprise analytics",
+        "Priority support",
         "Advanced team collaboration",
-        "Custom integrations",
-        "Dedicated account manager"
+        "Custom integrations"
       ],
       cta: "Contact Sales",
       popular: false
