@@ -167,7 +167,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                               <BookOpen className="h-5 w-5 text-[#5db8d0]" />
                             </div>
                             <div>
-                              <p className="font-medium text-white">Guides</p>
+                              <p className="font-medium text-white">Knowledge Base</p>
                               <p className="text-xs text-gray-400">Best AI practices</p>
                             </div>
                           </Link>
@@ -333,7 +333,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                         <BookOpen className="h-4 w-4 text-[#5db8d0]" />
                       </div>
                       <div>
-                        <p className="font-medium text-white">Guides</p>
+                        <p className="font-medium text-white">Knowledge Base</p>
                         <p className="text-xs text-gray-400">Best AI practices</p>
                       </div>
                     </Link>
