@@ -17,7 +17,8 @@ import {
   ArrowRight,
   Pencil,
   PlusCircle,
-  ChevronRight
+  ChevronRight,
+  Trash2
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -27,6 +28,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface CampaignOverviewProps {
   onAddCampaign?: () => void;
@@ -37,6 +48,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
   const [, navigate] = useLocation();
   const queryClient = useQueryClient();
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
+  const [campaignToDelete, setCampaignToDelete] = useState<Campaign | null>(null);
   
   // Get all campaigns for the user
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
