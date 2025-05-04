@@ -859,20 +859,37 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                           <h4 className="text-sm font-medium">Campaign Status</h4>
                           <Badge 
                             className={
-                              campaign?.status === 'active' ? 'bg-green-600' : 
-                              campaign?.status === 'draft' ? 'bg-gray-600' : 
-                              campaign?.status === 'planning' ? 'bg-yellow-600' :
-                              campaign?.status === 'running' ? 'bg-blue-600' :
-                              campaign?.status === 'completed' ? 'bg-purple-600' :
+                              (campaignStatus || campaign?.status) === 'active' ? 'bg-green-600' : 
+                              (campaignStatus || campaign?.status) === 'draft' ? 'bg-gray-600' : 
+                              (campaignStatus || campaign?.status) === 'planning' ? 'bg-yellow-600' :
+                              (campaignStatus || campaign?.status) === 'running' ? 'bg-blue-600' :
+                              (campaignStatus || campaign?.status) === 'completed' ? 'bg-purple-600' :
                               'bg-gray-500'
                             }
                           >
-                            {campaign?.status_display || 'Draft'}
+                            {campaignStatus ? campaignStatus.charAt(0).toUpperCase() + campaignStatus.slice(1) : campaign?.status_display || 'Draft'}
                           </Badge>
                         </div>
                         <Select 
                           value={campaignStatus || campaign?.status || 'draft'}
-                          onValueChange={(value) => setCampaignStatus(value)}
+                          onValueChange={(value) => {
+                            setCampaignStatus(value);
+                            // Save immediately when status is changed
+                            fetch(`/api/campaigns/${campaignId}`, {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ status: value }),
+                              credentials: "include"
+                            }).then(res => {
+                              if (res.ok) {
+                                queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}`] });
+                                toast({
+                                  title: "Status updated",
+                                  description: `Campaign status set to ${value}`,
+                                });
+                              }
+                            });
+                          }}
                         >
                           <SelectTrigger className="w-full bg-black border-gray-800">
                             <SelectValue placeholder="Select status" />
