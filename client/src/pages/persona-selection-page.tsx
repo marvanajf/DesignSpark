@@ -888,26 +888,35 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Continue Button Section */}
-          <div className="mt-10 text-center">
-            <div className="inline-flex items-center text-gray-400 text-sm mb-4">
-              <Info className="mr-1.5 h-5 w-5 text-[#74d1ea]" />
-              {selectedPersonaIds.length} of 5 maximum personas selected
-            </div>
-            
-            <div>
-              <Button 
-                onClick={() => navigate('/content-generator')}
-                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-md"
-                disabled={selectedPersonaIds.length === 0}
-              >
-                Continue to Content Generation
-              </Button>
+          <div className="mt-10 border border-gray-800/60 rounded-xl p-8 bg-gradient-to-b from-black/60 to-black/40">
+            <div className="text-center max-w-2xl mx-auto">
+              <h3 className="text-xl font-semibold text-white mb-3">Ready to Create Targeted Content?</h3>
+              <p className="text-gray-300 mb-6">Generate personalized marketing content that speaks directly to your selected audience segments</p>
               
-              {selectedPersonaIds.length === 0 && (
-                <p className="mt-2 text-sm text-gray-400">
-                  Please select at least one persona to continue
-                </p>
-              )}
+              <div className="inline-flex items-center justify-center bg-black/30 px-4 py-2 rounded-full text-gray-300 text-sm mb-6 border border-gray-800/80">
+                <Info className="mr-1.5 h-5 w-5 text-[#74d1ea]" />
+                <span className="font-medium">{selectedPersonaIds.length}</span> of <span className="font-medium">5</span> maximum personas selected
+              </div>
+              
+              <div>
+                <Button 
+                  onClick={() => navigate('/content-generator')}
+                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-10 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)] font-medium flex items-center justify-center mx-auto"
+                  disabled={selectedPersonaIds.length === 0}
+                >
+                  <ArrowRight className="mr-2 h-5 w-5" />
+                  Continue to Content Generator
+                </Button>
+                
+                {selectedPersonaIds.length === 0 && (
+                  <div className="mt-4 p-3 bg-amber-950/30 border border-amber-500/20 rounded-md">
+                    <p className="text-amber-300 flex items-center justify-center">
+                      <AlertCircle className="h-4 w-4 mr-2" />
+                      Please select at least one persona to continue
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
