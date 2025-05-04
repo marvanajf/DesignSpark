@@ -394,7 +394,7 @@ export default function LandingPage() {
                             
                             <div>
                               <h4 className="text-white font-semibold">Social Media Post</h4>
-                              <p className="text-sm text-gray-400 mt-1">Tweet promoting new product feature</p>
+                              <p className="text-sm text-gray-400 mt-1">LinkedIn post promoting new product feature</p>
                               <div className="mt-3 bg-[#090e17] p-3 rounded-md border border-gray-800/60">
                                 <p className="text-sm text-gray-300">Excited to launch our game-changing feature today! Can't wait to hear what you think! 🚀 #Innovation</p>
                               </div>
