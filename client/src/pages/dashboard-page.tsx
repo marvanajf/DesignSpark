@@ -46,8 +46,18 @@ export default function DashboardPage() {
     queryKey: ["/api/content"],
   });
   
+  // Define Campaign type
+  interface Campaign {
+    id: number;
+    name: string;
+    personas_count: number;
+    content_count: number;
+    user_id: number;
+    created_at: Date;
+  }
+  
   // Fetch campaigns
-  const { data: campaigns, isLoading: isLoadingCampaigns } = useQuery({
+  const { data: campaigns, isLoading: isLoadingCampaigns } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
   });
 
@@ -141,7 +151,7 @@ export default function DashboardPage() {
               <p className="text-sm text-gray-400 mt-1">AI-powered campaign planning and generation</p>
             </div>
             
-            <div className="bg-gradient-to-r from-[#0c1a2c] to-[#0e1b33] border border-[#74d1ea]/20 rounded-xl overflow-hidden">
+            <div className="bg-black border border-[#74d1ea]/20 rounded-xl overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#74d1ea]/10">
                 {/* Usage Stats */}
                 <div className="p-6">
@@ -192,10 +202,10 @@ export default function DashboardPage() {
                   <div className="space-y-3">
                     {campaigns && campaigns.length > 0 ? (
                       <>
-                        {campaigns.slice(0, 2).map((campaign: any) => (
-                          <div key={campaign.id} className="flex items-center rounded-md bg-black/30 p-3 cursor-pointer" 
+                        {campaigns.slice(0, 2).map((campaign) => (
+                          <div key={campaign.id} className="flex items-center rounded-md bg-[#0e131f] p-3 cursor-pointer hover:bg-[#131d2f] transition-colors" 
                                onClick={() => navigate(`/campaigns/${campaign.id}`)}>
-                            <div className="mr-3 bg-black/50 h-8 w-8 rounded-md flex items-center justify-center">
+                            <div className="mr-3 bg-black h-8 w-8 rounded-md flex items-center justify-center">
                               <FileText className="h-4 w-4 text-[#74d1ea]" />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -217,7 +227,7 @@ export default function DashboardPage() {
                         </Button>
                       </>
                     ) : (
-                      <div className="text-center py-3">
+                      <div className="text-center py-5 px-3 bg-[#0e131f] rounded-md">
                         <p className="text-gray-400 text-sm mb-3">No campaigns yet</p>
                         <Button
                           size="sm"
