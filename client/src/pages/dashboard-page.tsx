@@ -15,7 +15,16 @@ import {
   Sparkles,
   BookText,
   Factory,
-  ArrowRight
+  ArrowRight,
+  Rocket,
+  Zap,
+  Brain,
+  Bot,
+  Cpu,
+  Target,
+  Stars,
+  SparkleIcon,
+  Wand2
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -144,147 +153,86 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Campaign Factory Overview */}
+          {/* Campaign Factory - Simplified */}
           <div className="mb-8">
-            <div className="mb-4">
-              <h2 className="text-xl font-bold text-white">Campaign Factory</h2>
-              <p className="text-sm text-gray-400 mt-1">AI-powered campaign planning and generation</p>
+            <div className="mb-4 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-white">Campaign Factory</h2>
+                <p className="text-sm text-gray-400 mt-1">AI-powered campaign planning</p>
+              </div>
+              <Button 
+                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                onClick={() => navigate('/campaign-factory')}
+              >
+                <Rocket className="h-4 w-4 mr-2" />
+                Create Campaign
+              </Button>
             </div>
             
-            <div className="bg-black border border-[#74d1ea]/20 rounded-xl overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#74d1ea]/10">
-                {/* Usage Stats */}
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(116,209,234,0.1)]">
-                      <Factory className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">Usage Statistics</h3>
-                      <p className="text-xs text-gray-400">Plan generation and usage</p>
-                    </div>
+            <div className="bg-black border border-[#74d1ea]/20 rounded-xl p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center">
+                  <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4">
+                    <Rocket className="h-5 w-5 text-[#74d1ea]" />
                   </div>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs text-gray-400">Campaigns Created</span>
-                        <span className="text-sm text-white">{user?.campaign_factory_used || 0} / {subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 0}</span>
-                      </div>
-                      <Progress value={(user?.campaign_factory_used || 0) / (subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 1) * 100} className="h-1" />
-                    </div>
-                    
-                    <div className="flex flex-col">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-400">Current Plan</span>
-                        <span className="text-sm text-white">{subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.name}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-400">Campaigns Remaining</span>
-                        <span className="text-sm text-white">{Math.max(0, (subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 0) - (user?.campaign_factory_used || 0))}</span>
-                      </div>
-                    </div>
+                  <div>
+                    <h3 className="text-white font-medium">Usage</h3>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {user?.campaign_factory_used || 0} of {subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 0} campaigns used
+                    </p>
                   </div>
                 </div>
-                
-                {/* Recent Campaigns */}
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(116,209,234,0.1)]">
-                      <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">Recent Campaigns</h3>
-                      <p className="text-xs text-gray-400">Your most recent AI campaigns</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    {campaigns && campaigns.length > 0 ? (
-                      <>
-                        {campaigns.slice(0, 2).map((campaign) => (
-                          <div key={campaign.id} className="flex items-center rounded-md bg-[#0e131f] p-3 cursor-pointer hover:bg-[#131d2f] transition-colors" 
-                               onClick={() => navigate(`/campaigns/${campaign.id}`)}>
-                            <div className="mr-3 bg-black h-8 w-8 rounded-md flex items-center justify-center">
-                              <FileText className="h-4 w-4 text-[#74d1ea]" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm text-white truncate">{campaign.name}</p>
-                              <p className="text-xs text-gray-400">
-                                {campaign.personas_count} persona{campaign.personas_count !== 1 ? 's' : ''}, {campaign.content_count} content item{campaign.content_count !== 1 ? 's' : ''}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                        
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="w-full mt-2 bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
-                          onClick={() => navigate('/campaigns')}
-                        >
-                          View All Campaigns
-                        </Button>
-                      </>
-                    ) : (
-                      <div className="text-center py-5 px-3 bg-[#0e131f] rounded-md">
-                        <p className="text-gray-400 text-sm mb-3">No campaigns yet</p>
-                        <Button
-                          size="sm"
-                          className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
-                          onClick={() => navigate('/campaign-factory')}
-                        >
-                          <Factory className="h-3.5 w-3.5 mr-1.5" />
-                          Create Your First Campaign
-                        </Button>
+                <Progress 
+                  value={(user?.campaign_factory_used || 0) / (subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 1) * 100} 
+                  className="h-1.5 w-32" 
+                />
+              </div>
+              
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                {campaigns && campaigns.length > 0 ? (
+                  <>
+                    {campaigns.slice(0, 2).map((campaign) => (
+                      <div key={campaign.id} className="flex items-center rounded-md bg-[#0e131f] p-3 cursor-pointer hover:bg-[#131d2f] transition-colors" 
+                           onClick={() => navigate(`/campaigns/${campaign.id}`)}>
+                        <div className="mr-3 bg-black h-8 w-8 rounded-md flex items-center justify-center">
+                          <FileText className="h-4 w-4 text-[#74d1ea]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-white truncate">{campaign.name}</p>
+                          <p className="text-xs text-gray-400">
+                            {campaign.personas_count} persona{campaign.personas_count !== 1 ? 's' : ''}, {campaign.content_count} item{campaign.content_count !== 1 ? 's' : ''}
+                          </p>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Quick Actions */}
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(116,209,234,0.1)]">
-                      <Sparkles className="h-5 w-5 text-[#74d1ea]" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">Quick Actions</h3>
-                      <p className="text-xs text-gray-400">Common campaign operations</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <Button 
-                      className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+                    ))}
+                  </>
+                ) : (
+                  <div className="text-center py-5 px-3 bg-[#0e131f] rounded-md col-span-2">
+                    <p className="text-gray-400 text-sm mb-3">No campaigns yet</p>
+                    <Button
+                      size="sm"
+                      className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                       onClick={() => navigate('/campaign-factory')}
                     >
-                      <Factory className="h-4 w-4 mr-2" />
-                      Create New Campaign
+                      <Rocket className="h-3.5 w-3.5 mr-1.5" />
+                      Create Your First Campaign
                     </Button>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button 
-                        variant="outline" 
-                        className="w-full bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
-                        onClick={() => navigate('/campaigns')}
-                      >
-                        <Archive className="h-4 w-4 mr-2" />
-                        Manage
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        className="w-full bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
-                        onClick={() => navigate('/campaign-factory-info')}
-                      >
-                        <BookText className="h-4 w-4 mr-2" />
-                        Learn More
-                      </Button>
-                    </div>
                   </div>
-                </div>
+                )}
               </div>
+              
+              {campaigns && campaigns.length > 0 && (
+                <div className="flex justify-end mt-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
+                    onClick={() => navigate('/campaigns')}
+                  >
+                    View All Campaigns
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -348,7 +296,7 @@ export default function DashboardPage() {
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-5">
                     <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <Factory className="h-6 w-6 text-[#74d1ea]" />
+                      <Rocket className="h-6 w-6 text-[#74d1ea]" />
                     </div>
                     <div className="bg-[#74d1ea]/10 px-2 py-1 rounded-md text-xs text-[#74d1ea] border border-[#74d1ea]/30">
                       Premium Feature
