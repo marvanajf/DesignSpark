@@ -1,354 +1,688 @@
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Link } from "wouter";
-import Layout from "@/components/Layout";
+import { Badge } from "@/components/ui/badge";
 import { 
-  CheckCircle, 
-  Sparkles, 
-  BarChart3, 
-  User, 
-  MessageSquare,
-  ArrowRight,
-  CheckCheck
+  ArrowRight, 
+  Zap, 
+  Users2, 
+  BarChart2, 
+  MessageSquareText, 
+  Rocket, 
+  Check, 
+  Star, 
+  BrainCircuit, 
+  Clock, 
+  Lightbulb, 
+  Target,
+  CalendarClock
 } from "lucide-react";
 
-// Form validation schema
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  company: z.string().optional(),
-  message: z.string().min(1, {
-    message: "Message is required",
-  }),
-});
-
-// TypeScript type for form values
-type FormValues = z.infer<typeof formSchema>;
-
 export default function LandingPage() {
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [, navigate] = useLocation();
+  const { user, isLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState<string>("personas");
 
-  // Initialize form
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      company: "",
-      message: "",
+  const features = [
+    {
+      id: "personas",
+      title: "AI Persona Generation",
+      description: "Create detailed buyer personas in seconds that inform all your marketing decisions",
+      icon: <Users2 className="h-6 w-6 text-[#74d1ea]" />,
+      benefits: [
+        "Generate complete persona profiles with one click",
+        "Build detailed customer segments based on real data",
+        "Identify hidden insights about your target audience",
+        "Personalize every campaign to specific audience needs"
+      ],
+      image: "/persona-generator.webp"
     },
-  });
-
-  // Handle form submission
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    try {
-      const response = await apiRequest("POST", "/api/lead-contact", data);
-      const result = await response.json();
-      
-      if (result.success) {
-        setSubmitted(true);
-        toast({
-          title: "Message sent",
-          description: "Thank you for your message. We will be in touch soon.",
-        });
-      } else {
-        throw new Error(result.error || "Failed to send message");
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send message",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+    {
+      id: "tone",
+      title: "Tone Analysis",
+      description: "Analyze and perfect your brand voice across all content to maintain consistency",
+      icon: <MessageSquareText className="h-6 w-6 text-[#74d1ea]" />,
+      benefits: [
+        "Ensure brand voice consistency across channels",
+        "Analyze competitor content for tone insights",
+        "Adapt tone to different audience segments",
+        "Fine-tune emotional impact of your messaging"
+      ],
+      image: "/tone-analysis.webp"
+    },
+    {
+      id: "campaigns",
+      title: "Campaign Factory",
+      description: "Build complete marketing campaigns in minutes instead of days or weeks",
+      icon: <CalendarClock className="h-6 w-6 text-[#74d1ea]" />,
+      benefits: [
+        "Create multi-channel campaigns with 70% less effort",
+        "Generate coordinated content across platforms",
+        "Save 35+ hours monthly on campaign planning",
+        "Scale your marketing output without increasing headcount"
+      ],
+      image: "/campaign-factory.webp"
+    },
+    {
+      id: "content",
+      title: "AI Content Generation",
+      description: "Create high-converting, SEO-optimized content for any channel",
+      icon: <BrainCircuit className="h-6 w-6 text-[#74d1ea]" />,
+      benefits: [
+        "Generate SEO-optimized blog posts and articles",
+        "Create engaging social media content in seconds",
+        "Build email sequences that convert",
+        "Produce ad copy that drives clicks and conversions"
+      ],
+      image: "/content-generation.webp"
     }
-  };
+  ];
+
+  const testimonials = [
+    {
+      quote: "We increased our content output by 300% while reducing time spent on campaign creation by 65%.",
+      author: "Sarah Johnson",
+      position: "Marketing Director",
+      company: "TechNova Solutions",
+      avatar: "/avatar1.webp"
+    },
+    {
+      quote: "The Campaign Factory feature saved our team over 40 hours per month on campaign planning and execution.",
+      author: "Michael Chen",
+      position: "Growth Marketing Lead",
+      company: "Elevate Brands",
+      avatar: "/avatar2.webp"
+    },
+    {
+      quote: "The detailed AI personas revolutionized how we target our audience. Our conversion rates are up 47%.",
+      author: "Emma Rodriguez",
+      position: "CMO",
+      company: "Spark Digital",
+      avatar: "/avatar3.webp"
+    }
+  ];
+
+  const pricingTiers = [
+    {
+      name: "Standard",
+      price: "$49",
+      period: "/month",
+      description: "Perfect for individual marketers or small teams getting started",
+      features: [
+        "5 Advanced AI Personas",
+        "10 Tone Analyses per month",
+        "5 Campaign Factory uses",
+        "100 AI content generations",
+        "Email support",
+        "Basic analytics"
+      ],
+      cta: "Get Started",
+      popular: false
+    },
+    {
+      name: "Premium",
+      price: "$99",
+      period: "/month",
+      description: "Ideal for growing marketing teams with moderate content needs",
+      features: [
+        "15 Advanced AI Personas",
+        "30 Tone Analyses per month",
+        "15 Campaign Factory uses",
+        "250 AI content generations",
+        "Priority email support",
+        "Advanced analytics",
+        "Team collaboration features"
+      ],
+      cta: "Get Premium",
+      popular: true
+    },
+    {
+      name: "Professional",
+      price: "$199",
+      period: "/month",
+      description: "Full suite solution for agencies and enterprise marketing teams",
+      features: [
+        "Unlimited Advanced AI Personas",
+        "Unlimited Tone Analyses",
+        "30 Campaign Factory uses",
+        "Unlimited AI content generations",
+        "Priority phone & email support",
+        "Enterprise analytics",
+        "Advanced team collaboration",
+        "Custom integrations",
+        "Dedicated account manager"
+      ],
+      cta: "Contact Sales",
+      popular: false
+    }
+  ];
 
   return (
-    <Layout>
+    <div className="bg-gradient-to-b from-black to-[#070b15] min-h-screen">
+      {/* Navigation */}
+      <nav className="border-b border-gray-800/60 bg-black/50 backdrop-blur-md fixed w-full z-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <img className="h-8" src="/logo.webp" alt="Tovably Logo" />
+              </div>
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-center space-x-6">
+                  <a href="#features" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+                    Features
+                  </a>
+                  <a href="#benefits" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+                    Benefits
+                  </a>
+                  <a href="#testimonials" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+                    Testimonials
+                  </a>
+                  <a href="#pricing" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+                    Pricing
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              {user ? (
+                <Button 
+                  onClick={() => navigate('/dashboard')}
+                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    className="text-white hover:text-[#74d1ea] hover:bg-black/30"
+                    onClick={() => navigate('/login')}
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    onClick={() => navigate('/signup')}
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                  >
+                    Sign Up
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <div className="py-6 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="border border-gray-700/60 rounded-lg py-8 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="max-w-xl">
-                <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl">
-                  <span className="block text-white">Transform Your</span>
-                  <span className="block text-[#74d1ea]">Professional Communication</span>
-                </h1>
-                <p className="mt-6 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                  Tovably is an AI-powered platform for intelligent content generation and tone analysis. Create engaging, on-brand content that resonates with your audience.
-                </p>
-                <div className="mt-8 flex flex-wrap gap-x-6 gap-y-4">
-                  <Link href="/auth">
-                    <Button className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]">
-                      Get started
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="/pricing">
-                    <Button variant="outline" className="border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white">
-                      View pricing
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="border border-gray-700/60 rounded-lg p-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] bg-black">
-                {submitted ? (
-                  <div className="flex flex-col items-center justify-center h-full py-12">
-                    <div className="rounded-full bg-[#74d1ea]/20 p-4 mb-6 border border-[#74d1ea]/30">
-                      <CheckCheck className="h-16 w-16 text-[#74d1ea]" />
-                    </div>
-                    <h2 className="text-2xl font-bold mb-4 text-center text-white">Message Received!</h2>
-                    <p className="text-gray-400 text-center mb-8">
-                      Thank you for reaching out. Our team will be in touch with you shortly.
-                    </p>
-                    <Button 
-                      onClick={() => setSubmitted(false)} 
-                      variant="outline" 
-                      className="border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white"
-                    >
-                      Send another message
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="mb-6">
-                      <h2 className="text-2xl font-semibold mb-2 text-white">Contact Us</h2>
-                      <p className="text-gray-400">
-                        Interested in learning more? Fill out the form below and we'll be in touch.
-                      </p>
-                    </div>
-                    <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <FormField
-                          control={form.control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-gray-300">Name</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="Your name" 
-                                  {...field} 
-                                  className="bg-gray-900 border-gray-700 text-white"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-gray-300">Email</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="your.email@example.com" 
-                                  {...field} 
-                                  className="bg-gray-900 border-gray-700 text-white"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="company"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-gray-300">Company (Optional)</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="Your company" 
-                                  {...field} 
-                                  className="bg-gray-900 border-gray-700 text-white"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="message"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-gray-300">Message</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="How can we help you?"
-                                  className="min-h-32 bg-gray-900 border-gray-700 text-white"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button 
-                          type="submit" 
-                          className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-                          disabled={isSubmitting}
-                        >
-                          {isSubmitting ? "Sending..." : "Send Message"}
-                        </Button>
-                      </form>
-                    </Form>
-                  </>
-                )}
-              </div>
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#74d1ea]/10 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[#74d1ea]/5 via-transparent to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto relative">
+          <div className="max-w-3xl">
+            <Badge className="mb-5 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1.5 px-3 text-sm">
+              AI-Powered Marketing Platform
+            </Badge>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Transform Your <span className="bg-gradient-to-r from-[#74d1ea] to-[#a3e6fa] text-transparent bg-clip-text">Marketing</span> with AI-Powered Creativity
+            </h1>
+            <p className="text-xl text-gray-300 mb-8 max-w-2xl">
+              Generate personas, analyze tone, create content, and build full marketing campaigns in minutes instead of days with our intelligent AI platform.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button 
+                onClick={() => navigate('/signup')}
+                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+              >
+                Start Free Trial
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button 
+                variant="outline" 
+                className="border-gray-700 hover:border-[#74d1ea] text-white hover:text-[#74d1ea] px-8 py-6 text-lg rounded-lg"
+                onClick={() => navigate('/demo')}
+              >
+                Request Demo
+              </Button>
+            </div>
+            <div className="mt-6 text-sm text-gray-400">
+              No credit card required • 14-day free trial • Cancel anytime
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Platform Features Sections */}
-      <div className="py-6 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Powerful Features
+      {/* Stats Section */}
+      <section className="py-12 border-y border-gray-800/60 bg-black/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">300%</div>
+              <p className="text-gray-400">Increase in Content Production</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">35+</div>
+              <p className="text-gray-400">Hours Saved Monthly</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">70%</div>
+              <p className="text-gray-400">Higher Campaign Output</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-3 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1 px-3 text-sm">
+              FEATURES
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Everything You Need to Excel at Digital Marketing
             </h2>
-            <p className="mt-4 text-lg leading-8 text-gray-400">
-              Discover how Tovably can transform your professional communication.
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Our comprehensive platform provides all the tools you need to create, analyze, and optimize your marketing campaigns.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mt-10">
-            {/* Feature 1 */}
-            <div className="flex flex-col items-start">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
-                <BarChart3 className="h-6 w-6 text-[#74d1ea]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Advanced Tone Analysis</h3>
-              <p className="text-gray-400">
-                Get detailed insights into your communication style. Analyze tone, sentiment, and engagement potential of your content.
-              </p>
-              <ul className="space-y-3 mt-4">
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-300">Quantitative tone metrics across 5 key dimensions</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex flex-col items-start">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
-                <Sparkles className="h-6 w-6 text-[#74d1ea]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">AI Content Generation</h3>
-              <p className="text-gray-400">
-                Create professional content that matches your brand voice. Generate LinkedIn posts, emails, and more with our AI-powered tools.
-              </p>
-              <ul className="space-y-3 mt-4">
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-300">Generate content based on your unique brand voice</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex flex-col items-start">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
-                <User className="h-6 w-6 text-[#74d1ea]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Persona Management</h3>
-              <p className="text-gray-400">
-                Create and save multiple personas to tailor your communication for different audiences and purposes.
-              </p>
-              <ul className="space-y-3 mt-4">
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-300">Target specific audiences with customized messaging</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Testimonials */}
-      <div className="py-6 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
-            <div className="px-8 py-10">
-              <h2 className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl mb-8">
-                What Our Users Say
-              </h2>
-              <div className="max-w-3xl mx-auto">
-                <div className="text-center">
-                  <p className="text-lg text-white">
-                    "Tovably has transformed the way our marketing team communicates. The tone analysis helps us maintain brand consistency, and the content generation saves us hours of work."
-                  </p>
-                  <div className="mt-6">
-                    <p className="font-semibold text-white">Sarah Johnson</p>
-                    <p className="text-sm text-gray-400">Marketing Director, TechCorp</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {features.map((feature) => (
+              <div 
+                key={feature.id}
+                className={`rounded-xl p-6 cursor-pointer transition-all duration-300 ${
+                  activeTab === feature.id 
+                    ? 'bg-[#0e131f] border border-[#74d1ea]/30 shadow-[0_0_25px_rgba(116,209,234,0.15)]' 
+                    : 'bg-black/40 border border-gray-800/60 hover:border-gray-700/80'
+                }`}
+                onClick={() => setActiveTab(feature.id)}
+              >
+                <div className="flex items-center mb-4">
+                  <div className={`p-3 rounded-lg ${
+                    activeTab === feature.id 
+                      ? 'bg-[#74d1ea]/20' 
+                      : 'bg-gray-800/50'
+                  }`}>
+                    {feature.icon}
                   </div>
+                  <h3 className="ml-4 text-lg font-semibold text-white">{feature.title}</h3>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA section */}
-      <div className="py-6 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="border border-gray-700/60 rounded-lg py-10 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-              Ready to transform your communication?
-            </h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
-              Join thousands of professionals who are elevating their communication with Tovably.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/auth">
-                <Button className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]">
-                  Get started for free
-                </Button>
-              </Link>
-              <Link href="/guides-info">
-                <Button variant="outline" className="px-8 py-3 md:py-4 md:text-lg md:px-10 border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white">
+                <p className="text-gray-400 mb-4">{feature.description}</p>
+                <Button 
+                  variant="ghost" 
+                  className={`px-0 ${
+                    activeTab === feature.id 
+                      ? 'text-[#74d1ea]' 
+                      : 'text-gray-400'
+                  }`}
+                >
                   Learn more
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
+              </div>
+            ))}
+          </div>
+
+          {/* Feature Details */}
+          <div className="bg-[#0a0d14] border border-gray-800/60 rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="p-8 lg:p-12">
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  {features.find(f => f.id === activeTab)?.title}
+                </h3>
+                <p className="text-gray-300 mb-6">
+                  {features.find(f => f.id === activeTab)?.description}
+                </p>
+                <ul className="space-y-4">
+                  {features.find(f => f.id === activeTab)?.benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-start">
+                      <div className="flex-shrink-0 p-1 bg-[#74d1ea]/20 rounded-full mr-3 mt-1">
+                        <Check className="h-4 w-4 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className="mt-8 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                >
+                  Try It Now
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              <div className="bg-[#0e131f] p-4 flex items-center justify-center">
+                <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl w-full h-full max-h-[400px]">
+                  <img 
+                    src={features.find(f => f.id === activeTab)?.image || "/placeholder.webp"} 
+                    alt={features.find(f => f.id === activeTab)?.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </section>
+
+      {/* Benefits Section */}
+      <section id="benefits" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#070b15] to-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-3 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1 px-3 text-sm">
+              BENEFITS
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Amplify Your Marketing Results
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Discover how our AI-powered platform can transform your marketing efforts and deliver measurable results.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-black/40 border border-gray-800/60 rounded-xl p-8 hover:border-gray-700/80 transition-colors">
+              <div className="w-14 h-14 rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 flex items-center justify-center mb-6">
+                <Clock className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Save Countless Hours</h3>
+              <p className="text-gray-400">
+                Reduce campaign creation time by up to 70% with our AI-powered automation. Focus on strategy while our platform handles the execution.
+              </p>
+            </div>
+
+            <div className="bg-black/40 border border-gray-800/60 rounded-xl p-8 hover:border-gray-700/80 transition-colors">
+              <div className="w-14 h-14 rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 flex items-center justify-center mb-6">
+                <Target className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Enhance Targeting</h3>
+              <p className="text-gray-400">
+                Create detailed audience personas that help you understand your customers better and craft messages that resonate perfectly.
+              </p>
+            </div>
+
+            <div className="bg-black/40 border border-gray-800/60 rounded-xl p-8 hover:border-gray-700/80 transition-colors">
+              <div className="w-14 h-14 rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 flex items-center justify-center mb-6">
+                <BarChart2 className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Improve ROI</h3>
+              <p className="text-gray-400">
+                Achieve higher conversion rates and better campaign performance through AI-optimized content and strategic audience targeting.
+              </p>
+            </div>
+
+            <div className="bg-black/40 border border-gray-800/60 rounded-xl p-8 hover:border-gray-700/80 transition-colors">
+              <div className="w-14 h-14 rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 flex items-center justify-center mb-6">
+                <Rocket className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Scale Content Production</h3>
+              <p className="text-gray-400">
+                Generate high-quality content across multiple channels simultaneously, allowing you to scale your marketing efforts without increasing headcount.
+              </p>
+            </div>
+
+            <div className="bg-black/40 border border-gray-800/60 rounded-xl p-8 hover:border-gray-700/80 transition-colors">
+              <div className="w-14 h-14 rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 flex items-center justify-center mb-6">
+                <MessageSquareText className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Consistent Brand Voice</h3>
+              <p className="text-gray-400">
+                Maintain a consistent tone across all marketing channels with our advanced tone analysis and generation capabilities.
+              </p>
+            </div>
+
+            <div className="bg-black/40 border border-gray-800/60 rounded-xl p-8 hover:border-gray-700/80 transition-colors">
+              <div className="w-14 h-14 rounded-lg bg-[#0e131f] border border-[#74d1ea]/20 flex items-center justify-center mb-6">
+                <Lightbulb className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Creative Breakthrough</h3>
+              <p className="text-gray-400">
+                Overcome creative blocks with AI-powered suggestions and innovative campaign ideas that push boundaries and captivate audiences.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0a0d14]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-3 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1 px-3 text-sm">
+              TESTIMONIALS
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Trusted by Marketing Professionals
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              See what our customers are saying about how our platform has transformed their marketing operations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-black border border-gray-800/60 rounded-xl p-8 relative">
+                <div className="absolute top-6 right-8 text-[#74d1ea]">
+                  <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.5 0C8.4 0 5.9 1.1 4 3.4C2.1 5.6 1 8.5 1 12C1 15.1 2.1 17.7 4.2 19.8C6.4 21.9 9.1 23 12.3 23C12.8 23 13.2 23 13.7 22.9C13.1 24.4 12.1 25.6 10.7 26.5C9.4 27.4 7.9 27.9 6.3 28C5.9 28 5.6 28.2 5.4 28.4C5.2 28.6 5.1 28.9 5.1 29.3C5.1 29.6 5.2 29.9 5.5 30.1C5.7 30.3 6 30.4 6.4 30.4C9.2 30.2 11.8 29.1 14.1 27C16.4 24.9 17.8 22.3 18.5 19.1C18.8 17.8 19 16.5 19 15.2V12.1C19 8.4 17.9 5.4 15.8 3.2C13.7 1.1 10.9 0 11.5 0ZM32.5 0C29.4 0 26.9 1.1 25 3.4C23.1 5.6 22 8.5 22 12C22 15.1 23.1 17.7 25.2 19.8C27.4 21.9 30.1 23 33.3 23C33.8 23 34.2 23 34.7 22.9C34.1 24.4 33.1 25.6 31.7 26.5C30.4 27.4 28.9 27.9 27.3 28C26.9 28 26.6 28.2 26.4 28.4C26.2 28.6 26.1 28.9 26.1 29.3C26.1 29.6 26.2 29.9 26.5 30.1C26.7 30.3 27 30.4 27.4 30.4C30.2 30.2 32.8 29.1 35.1 27C37.4 24.9 38.8 22.3 39.5 19.1C39.8 17.8 40 16.5 40 15.2V12.1C40 8.4 38.9 5.4 36.8 3.2C34.7 1.1 31.9 0 32.5 0Z" fill="currentColor" fillOpacity="0.2"/>
+                  </svg>
+                </div>
+                <p className="text-gray-300 mb-6 text-lg">"{testimonial.quote}"</p>
+                <div className="flex items-center">
+                  <div className="h-12 w-12 rounded-full overflow-hidden mr-4">
+                    <img src={testimonial.avatar} alt={testimonial.author} className="h-full w-full object-cover" />
+                  </div>
+                  <div>
+                    <div className="text-white font-medium">{testimonial.author}</div>
+                    <div className="text-sm text-gray-400">{testimonial.position}, {testimonial.company}</div>
+                  </div>
+                </div>
+                <div className="mt-4 flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-[#74d1ea] fill-[#74d1ea]" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-3 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1 px-3 text-sm">
+              PRICING
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Choose the plan that's right for your business needs, with no hidden fees or surprises.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {pricingTiers.map((tier, index) => (
+              <div 
+                key={index} 
+                className={`rounded-xl overflow-hidden ${
+                  tier.popular 
+                    ? 'border-2 border-[#74d1ea] relative bg-gradient-to-b from-[#0e131f] to-black' 
+                    : 'border border-gray-800/60 bg-black/40'
+                }`}
+              >
+                {tier.popular && (
+                  <div className="absolute top-0 right-0 bg-[#74d1ea] text-black px-4 py-1 text-sm font-medium rounded-bl-lg">
+                    Most Popular
+                  </div>
+                )}
+                <div className="p-8">
+                  <h3 className="text-xl font-semibold text-white mb-2">{tier.name}</h3>
+                  <div className="flex items-end mb-4">
+                    <span className="text-4xl font-bold text-white">{tier.price}</span>
+                    <span className="text-gray-400 ml-1">{tier.period}</span>
+                  </div>
+                  <p className="text-gray-400 mb-6">{tier.description}</p>
+                  
+                  <Button 
+                    className={`w-full mb-8 ${
+                      tier.popular 
+                        ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black' 
+                        : 'bg-gray-800 hover:bg-gray-700 text-white'
+                    }`}
+                  >
+                    {tier.cta}
+                  </Button>
+                  
+                  <div className="space-y-3">
+                    {tier.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start">
+                        <div className={`flex-shrink-0 p-1 rounded-full mr-3 ${
+                          tier.popular ? 'bg-[#74d1ea]/20' : 'bg-gray-800'
+                        }`}>
+                          <Check className={`h-4 w-4 ${
+                            tier.popular ? 'text-[#74d1ea]' : 'text-gray-400'
+                          }`} />
+                        </div>
+                        <span className="text-gray-300 text-sm">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center max-w-3xl mx-auto">
+            <h3 className="text-xl font-semibold text-white mb-4">Need a custom plan?</h3>
+            <p className="text-gray-400 mb-6">
+              For enterprise needs or custom requirements, contact our sales team for a tailored solution.
+            </p>
+            <Button 
+              variant="outline" 
+              className="border-gray-700 hover:border-[#74d1ea] text-white hover:text-[#74d1ea]"
+            >
+              Contact Sales
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0a0d14] border-t border-gray-800/60">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+            Ready to Revolutionize Your Marketing?
+          </h2>
+          <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            Join thousands of marketing professionals who are creating better content faster with our AI-powered platform.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => navigate('/signup')}
+              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)]"
+            >
+              Start Free Trial
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <Button 
+              variant="outline" 
+              className="border-gray-700 hover:border-[#74d1ea] text-white hover:text-[#74d1ea] px-8 py-6 text-lg rounded-lg"
+              onClick={() => navigate('/demo')}
+            >
+              Schedule Demo
+            </Button>
+          </div>
+          <div className="mt-6 text-sm text-gray-400">
+            Start transforming your marketing today. No credit card required.
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black border-t border-gray-800/60 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+              <h4 className="text-white font-semibold mb-4">Product</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Features</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Pricing</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Case Studies</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Reviews</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Blog</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Documentation</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Guides</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Support</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">About Us</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Careers</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Contact</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Partners</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Terms of Service</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">Cookie Policy</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#74d1ea]">GDPR</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-12 pt-8 border-t border-gray-800/60 flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0">
+              <img className="h-8" src="/logo.webp" alt="Tovably Logo" />
+            </div>
+            <div className="text-gray-400 text-sm">
+              © {new Date().getFullYear()} Tovably. All rights reserved.
+            </div>
+            <div className="flex space-x-4 mt-4 md:mt-0">
+              <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clipRule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
