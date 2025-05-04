@@ -914,7 +914,15 @@ export default function LandingPage() {
                           ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)]' 
                           : 'bg-transparent border border-[#74d1ea]/30 hover:border-[#74d1ea] text-[#74d1ea] hover:text-white hover:shadow-[0_0_15px_rgba(116,209,234,0.3)]'
                       }`}
-                      onClick={() => navigate('/pricing')}
+                      onClick={() => {
+                        // For free plan, navigate to signup. For paid plans, go directly to Stripe checkout
+                        if (isFreePlan) {
+                          navigate('/signup');
+                        } else {
+                          // Use the direct Stripe redirect endpoint
+                          window.location.href = `/api/direct-stripe-redirect?plan=${planId}`;
+                        }
+                      }}
                     >
                       {isFreePlan ? "Get Started" : `Get ${plan.name}`}
                     </Button>
