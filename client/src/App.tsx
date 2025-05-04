@@ -17,11 +17,11 @@ import ContentGeneratorPage from "@/pages/content-generator-page";
 import SavedContentPage from "@/pages/saved-content-page";
 import AccountPage from "@/pages/account-page";
 import SupportPage from "@/pages/support-page";
-import GuidesPage from "@/pages/guides-page";
+import KnowledgeBasePage from "@/pages/knowledge-base-page";
 import UsagePage from "@/pages/usage-page";
 import CampaignFactoryPage from "@/pages/campaign-factory-page";
 import CampaignFactoryInfoPage from "@/pages/campaign-factory-info";
-import GuidesMarketingPage from "@/pages/guides-marketing-page";
+import KnowledgeBaseMarketingPage from "@/pages/knowledge-base-marketing-page";
 import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
 import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
 import PersonasMarketingPage from "@/pages/personas-marketing-page";
@@ -71,7 +71,7 @@ function Router() {
       <Route path="/personas-info" component={PersonasMarketingPage} />
       <Route path="/campaigns-info" component={CampaignsInfoPage} />
       <Route path="/campaign-factory-info" component={CampaignFactoryInfoPage} />
-      <Route path="/guides-info" component={GuidesMarketingPage} />
+      <Route path="/knowledge-base-info" component={KnowledgeBaseMarketingPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/payment-success" component={PaymentSuccessPage} />
@@ -87,7 +87,7 @@ function Router() {
       <ProtectedRoute path="/saved-content" component={SavedContentPage} />
       <ProtectedRoute path="/campaigns" component={CampaignsPage} />
       <ProtectedRoute path="/campaign/:id" component={CampaignPage} />
-      <ProtectedRoute path="/guides" component={GuidesPage} />
+      <ProtectedRoute path="/knowledge-base" component={KnowledgeBasePage} />
       <ProtectedRoute path="/campaign-factory" component={CampaignFactoryPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
       <ProtectedRoute path="/usage" component={UsagePage} />

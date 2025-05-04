@@ -5,14 +5,14 @@ import Layout from "@/components/Layout";
 import { ArrowRight, BookOpen, Lightbulb, GraduationCap, Sparkles } from "lucide-react";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 
-export default function GuidesMarketingPage() {
+export default function KnowledgeBaseMarketingPage() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
   const { openAuthModal } = useAuthModal();
 
   const handleGetStarted = () => {
     if (user) {
-      navigate("/guides");
+      navigate("/knowledge-base");
     } else {
       openAuthModal();
     }
@@ -26,7 +26,7 @@ export default function GuidesMarketingPage() {
           <div className="text-left max-w-3xl">
             <div className="inline-flex items-center mb-4 text-[#74d1ea]">
               <span className="flex h-2 w-2 bg-[#74d1ea] rounded-full mr-2"></span>
-              <span className="text-sm font-medium">Tovably Expert Guides</span>
+              <span className="text-sm font-medium">Tovably Knowledge Base</span>
             </div>
             <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl text-white mb-6">
               Master <span className="text-[#74d1ea]">AI-powered</span> communication for your business
@@ -40,7 +40,7 @@ export default function GuidesMarketingPage() {
                 onClick={handleGetStarted}
                 className="px-8 py-3 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
               >
-                Explore guides
+                Explore Knowledge Base
               </Button>
               <Button 
                 variant="outline"
@@ -227,7 +227,7 @@ export default function GuidesMarketingPage() {
               onClick={handleGetStarted}
               className="px-8 py-3 md:py-4 md:text-lg md:px-10 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
             >
-              Access guides now
+              Access Knowledge Base
             </Button>
           </div>
         </div>

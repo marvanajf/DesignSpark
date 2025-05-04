@@ -162,7 +162,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                               <p className="text-xs text-gray-400">News and updates</p>
                             </div>
                           </Link>
-                          <Link href="/guides-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                          <Link href="/knowledge-base-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
                             <div className="flex-shrink-0 w-10 h-10 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-4">
                               <BookOpen className="h-5 w-5 text-[#5db8d0]" />
                             </div>
@@ -328,7 +328,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                         <p className="text-xs text-gray-400">News and updates</p>
                       </div>
                     </Link>
-                    <Link href="/guides-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                    <Link href="/knowledge-base-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
                       <div className="flex-shrink-0 w-8 h-8 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-3">
                         <BookOpen className="h-4 w-4 text-[#5db8d0]" />
                       </div>

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 
-export default function GuidesPage() {
+export default function KnowledgeBasePage() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
 
@@ -28,7 +28,7 @@ export default function GuidesPage() {
                 <div className="flex items-center text-sm text-gray-400">
                   <span>Tovably</span>
                   <span className="mx-2">›</span>
-                  <span>Guides</span>
+                  <span>Knowledge Base</span>
                 </div>
                 <h1 className="text-2xl font-semibold text-white mt-1">Using Tovably</h1>
               </div>
