@@ -91,6 +91,11 @@
   display: none !important;
 }
 
+/* Mint blue text glow effect */
+.text-glow {
+  text-shadow: 0 0 15px rgba(116, 209, 234, 0.6), 0 0 30px rgba(116, 209, 234, 0.3);
+}
+
 /* Input focus styling */
 .dark input:focus,
 .dark textarea:focus,
