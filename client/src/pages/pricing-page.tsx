@@ -224,6 +224,20 @@ export default function PricingPage() {
                       </li>
                       <li className="flex items-center">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          {plan.campaignFactory > 0 ? (
+                            <Check className="h-3 w-3 text-[#74d1ea]" />
+                          ) : (
+                            <X className="h-3 w-3 text-red-500" />
+                          )}
+                        </div>
+                        <span className="text-gray-300">
+                          {plan.campaignFactory > 0 
+                            ? `${plan.campaignFactory} Campaign Factory Credits` 
+                            : 'No Campaign Factory Access'}
+                        </span>
+                      </li>
+                      <li className="flex items-center">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
                           <Check className="h-3 w-3 text-[#74d1ea]" />
                         </div>
                         <span className="text-gray-300">{planId === 'free' ? 'Standard Support' : 'Priority Support'}</span>
@@ -304,7 +318,7 @@ export default function PricingPage() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               {/* Feature 1: AI Personas */}
               <div className="relative bg-gradient-to-b from-black via-black to-black/90 border border-gray-700/60 rounded-lg p-8 overflow-hidden transform transition-all duration-300 hover:scale-105 group">
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#74d1ea]/5"></div>
@@ -357,6 +371,30 @@ export default function PricingPage() {
                   <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#74d1ea] transition-colors duration-300">Content Generation</h3>
                   <p className="text-gray-400 mb-6">
                     Generate professional content instantly based on your tone analysis and personas. Create emails, posts, and more tailored to your brand voice.
+                  </p>
+                  <div className="flex items-center text-[#74d1ea] group-hover:translate-x-1 transition-transform duration-300">
+                    <span className="text-sm font-medium">Learn more</span>
+                    <Zap className="ml-2 h-4 w-4 group-hover:animate-pulse" />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Feature 4: Campaign Factory */}
+              <div className="relative bg-gradient-to-b from-black via-black to-black/90 border border-[#74d1ea]/40 rounded-lg p-8 overflow-hidden transform transition-all duration-300 hover:scale-105 group shadow-[0_0_15px_rgba(116,209,234,0.2)]">
+                <div className="absolute inset-0 opacity-5 group-hover:opacity-100 transition-opacity duration-500 bg-[#74d1ea]/5"></div>
+                <div className="absolute -inset-1 opacity-10 group-hover:opacity-30 blur-xl bg-[#74d1ea]/20 group-hover:animate-pulse transition-opacity duration-700"></div>
+                
+                <div className="absolute top-0 right-0 bg-[#74d1ea] text-black text-xs font-bold px-3 py-1 rounded-bl-lg">
+                  PREMIUM
+                </div>
+                
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-full bg-[#74d1ea]/20 flex items-center justify-center mb-5 group-hover:shadow-[0_0_20px_rgba(116,209,234,0.6)] transition-all duration-300">
+                    <LineChart className="h-7 w-7 text-[#74d1ea] group-hover:animate-pulse" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#74d1ea] mb-3 group-hover:text-white transition-colors duration-300">Campaign Factory</h3>
+                  <p className="text-gray-300 mb-6">
+                    Generate complete marketing campaigns with our premium Campaign Factory feature. Create targeted content across multiple channels with a few clicks.
                   </p>
                   <div className="flex items-center text-[#74d1ea] group-hover:translate-x-1 transition-transform duration-300">
                     <span className="text-sm font-medium">Learn more</span>
