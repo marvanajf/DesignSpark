@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Persona, ToneAnalysis } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Dialog,
   DialogContent,
@@ -47,6 +48,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
   
   // Subscription limit modal state
   const [showLimitModal, setShowLimitModal] = useState(false);
@@ -358,6 +360,152 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
     }
   }, [isAddContentDialogOpen]);
 
+  // Create campaign mutation
+  const [campaignName, setCampaignName] = useState("");
+  const [campaignDescription, setCampaignDescription] = useState("");
+  
+  const createCampaignMutation = useMutation({
+    mutationFn: async (campaignData: { name: string; description?: string }) => {
+      try {
+        const res = await fetch("/api/campaigns", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(campaignData),
+          credentials: "include"
+        });
+        
+        // Check if we hit a subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitData = await res.json();
+          throw { 
+            isLimitError: true, 
+            limitData: {
+              limitType: "campaigns" as const,
+              currentUsage: limitData.current || limitData.currentUsage, 
+              limit: limitData.limit,
+              currentPlan: user?.subscription_plan || "free" 
+            }
+          };
+        }
+        
+        // Check for other errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
+          }
+        }
+        
+        return await res.json();
+      } catch (error: any) {
+        // If it's a limit error, rethrow it to be handled in onError
+        if (error?.isLimitError) {
+          throw error;
+        }
+        throw new Error(error.message || "Failed to create campaign");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      toast({
+        title: "Campaign created",
+        description: "Your new campaign has been created successfully",
+      });
+      onClose();
+    },
+    onError: (error: any) => {
+      // Check if this was a subscription limit error
+      if (error?.isLimitError && error?.limitData) {
+        setLimitData(error.limitData);
+        setShowLimitModal(true);
+        return;
+      }
+      
+      toast({
+        title: "Creation failed",
+        description: error.message || "Failed to create campaign",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleCreateCampaign = () => {
+    if (!campaignName.trim()) {
+      toast({
+        title: "Campaign name required",
+        description: "Please enter a name for your campaign",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    createCampaignMutation.mutate({
+      name: campaignName,
+      description: campaignDescription.trim() || undefined
+    });
+  };
+
+  // If it's create mode, show the creation form
+  if (mode === 'create') {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Create New Campaign</DialogTitle>
+            <DialogDescription>
+              Create a new campaign to organize your marketing content
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Campaign Name</Label>
+              <input
+                id="name"
+                value={campaignName}
+                onChange={(e) => setCampaignName(e.target.value)}
+                className="w-full p-2 rounded-md border border-gray-700 bg-black focus:outline-none focus:ring-2 focus:ring-[#74d1ea] focus:border-transparent"
+                placeholder="Enter campaign name"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (optional)</Label>
+              <textarea
+                id="description"
+                value={campaignDescription}
+                onChange={(e) => setCampaignDescription(e.target.value)}
+                className="w-full p-2 rounded-md border border-gray-700 bg-black h-24 focus:outline-none focus:ring-2 focus:ring-[#74d1ea] focus:border-transparent"
+                placeholder="Enter campaign description"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleCreateCampaign} 
+              disabled={createCampaignMutation.isPending}
+              style={{ backgroundColor: "#74d1ea", color: "black" }}
+            >
+              {createCampaignMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...
+                </>
+              ) : "Create Campaign"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // For edit/view mode, check if campaign is loaded
   if (isLoadingCampaign || !campaign) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
