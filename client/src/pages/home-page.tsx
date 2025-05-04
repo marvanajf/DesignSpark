@@ -43,11 +43,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="border border-gray-700/60 rounded-lg py-12 px-8 md:px-10 shadow-[0_0_25px_rgba(116,209,234,0.15)] backdrop-blur-sm bg-black/30 text-center">
             <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto leading-tight">
-              <span className="block text-white mb-2">Supercharge your comms with</span>
-              <span className="block text-[#74d1ea] text-glow">AI-powered precision</span>
+              <span className="block text-white mb-2">Build better campaigns with</span>
+              <span className="block text-[#74d1ea] text-glow">AI-powered workflows</span>
             </h1>
             <p className="mt-6 text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto leading-relaxed">
-              From tone analysis to personalized content creation, our AI engine delivers 
+              From tone analysis to complete campaign creation, our AI engine delivers
               targeted communications that engage, convert, and elevate your brand.
             </p>
             <div className="mt-8 sm:mt-10 flex flex-col items-center">
@@ -110,6 +110,97 @@ export default function HomePage() {
                 <p className="text-gray-400">
                   Generate precisely tailored content that adapts to your brand voice and resonates with your target personas automatically.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Campaign Factory Promo Section */}
+      <div className="py-10 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(116,209,234,0.20)]">
+            <div className="bg-gradient-to-r from-black via-[#74d1ea]/5 to-black p-1">
+              <div className="bg-black p-6 md:p-8 text-center md:text-left">
+                <div className="grid grid-cols-1 md:grid-cols-7 gap-8 items-center">
+                  <div className="md:col-span-4">
+                    <div className="inline-flex items-center justify-center mb-4 px-3 py-1 bg-[#74d1ea]/10 border border-[#74d1ea]/30 rounded-full">
+                      <Sparkles className="h-4 w-4 text-[#74d1ea] mr-2" />
+                      <span className="text-[#74d1ea] text-sm font-medium">Premium Feature</span>
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Campaign Factory</h2>
+                    <p className="text-gray-300 text-lg mb-6 max-w-2xl">
+                      Create complete marketing campaigns in minutes, not weeks. Our AI-powered Campaign Factory automatically generates all the content you need across multiple channels.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0 bg-[#74d1ea]/10 p-2 rounded-lg border border-[#74d1ea]/20 mr-3">
+                          <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium mb-1">Save 20+ hours</h3>
+                          <p className="text-sm text-gray-400">Generate weeks of content in just minutes</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0 bg-[#74d1ea]/10 p-2 rounded-lg border border-[#74d1ea]/20 mr-3">
+                          <LineChart className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium mb-1">Multi-channel</h3>
+                          <p className="text-sm text-gray-400">LinkedIn, blogs, emails, webinars & more</p>
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => window.location.href = "/pricing"}
+                      className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-6 py-2.5 rounded-md shadow-[0_0_12px_rgba(116,209,234,0.3)]"
+                    >
+                      Upgrade to unlock
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="md:col-span-3 bg-zinc-900/50 rounded-lg p-4 border border-gray-800/60 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
+                    <div className="text-center mb-4">
+                      <h3 className="text-white font-medium">What you get with Campaign Factory</h3>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                        <div className="flex items-center">
+                          <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
+                            <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
+                          <span className="text-sm text-white">LinkedIn posts (4-6 per campaign)</span>
+                        </div>
+                      </div>
+                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                        <div className="flex items-center">
+                          <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
+                            <FileText className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
+                          <span className="text-sm text-white">Blog outline & full article</span>
+                        </div>
+                      </div>
+                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                        <div className="flex items-center">
+                          <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
+                            <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
+                          <span className="text-sm text-white">Email sequence (3 emails)</span>
+                        </div>
+                      </div>
+                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                        <div className="flex items-center">
+                          <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
+                            <Users className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
+                          <span className="text-sm text-white">Webinar outline & key talking points</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
