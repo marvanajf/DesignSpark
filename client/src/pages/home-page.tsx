@@ -165,7 +165,7 @@ export default function HomePage() {
                         onClick={() => window.location.href = "/pricing"}
                         className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-6 py-2.5 rounded-md shadow-[0_0_12px_rgba(116,209,234,0.3)]"
                       >
-                        Upgrade to unlock
+                        View Plans
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </div>
