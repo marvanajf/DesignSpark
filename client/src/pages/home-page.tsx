@@ -600,87 +600,116 @@ export default function HomePage() {
       {/* Benefits & Time Savings Section */}
       <div className="py-14 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-[#74d1ea]/3 rounded-full blur-[100px] opacity-40" />
+        <div className="absolute top-0 right-0 w-[30%] h-[30%] bg-[#74d1ea]/5 rounded-full blur-[70px] opacity-30" />
+        <div className="absolute bottom-0 left-0 w-[25%] h-[25%] bg-[#74d1ea]/4 rounded-full blur-[60px] opacity-30" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center mb-4 px-4 py-1.5 bg-[#74d1ea]/10 border border-[#74d1ea]/30 rounded-full">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center mb-4 px-4 py-1.5 bg-[#74d1ea]/10 border border-[#74d1ea]/30 rounded-full animate-pulse">
               <Clock className="h-4 w-4 text-[#74d1ea] mr-2" />
-              <span className="text-[#74d1ea] text-sm font-medium">Time-Saving Benefits</span>
+              <span className="text-[#74d1ea] text-sm font-medium">Time is Money</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Save Time</h2>
+            <h2 className="text-3xl md:text-5xl font-semibold text-white mb-5 leading-tight">
+              Create in <span className="text-[#74d1ea]">Minutes</span>, Not Days
+            </h2>
             <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-              Our platform helps you create more content in less time using OpenAI's advanced language models to automate repetitive tasks.
+              Our AI-powered platform transforms your content workflow, automating repetitive tasks so you can focus on what matters most: <span className="text-white font-medium">strategy and growth</span>.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-black/50 border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.10)]">
-              <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-4">
-                <Timer className="h-7 w-7 text-[#74d1ea]" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-gradient-to-br from-black/80 to-gray-900/30 backdrop-blur-sm border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.15)] hover:shadow-[0_0_30px_rgba(116,209,234,0.30)] transition-all duration-300 group">
+              <div className="h-16 w-16 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <Timer className="h-8 w-8 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">10+ hours saved</h3>
-              <p className="text-gray-400 mb-4">
-                Automated tone analysis completes in seconds, not hours, with machine learning identifying patterns human editors might miss.
+              <div className="flex items-center mb-3">
+                <h3 className="text-2xl font-bold text-white mr-3">10+ hours saved</h3>
+                <span className="text-xs font-medium text-white bg-[#74d1ea] px-2 py-0.5 rounded-md">WEEKLY</span>
+              </div>
+              <p className="text-gray-400 mb-5 text-base">
+                Automated tone analysis completes in seconds, not hours. Our AI identifies nuanced patterns human editors often miss, delivering detailed insights instantly.
               </p>
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex items-center">
-                  <div className="w-full bg-gray-700/30 rounded-full h-2 w-48">
-                    <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "90%" }}></div>
+              <div className="flex items-center justify-between mt-3 group-hover:scale-105 transition-transform duration-200">
+                <div className="flex items-center flex-1 mr-3">
+                  <div className="w-full bg-gray-800/70 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] h-3 rounded-full" style={{ width: "90%" }}></div>
                   </div>
                 </div>
-                <span className="text-[#74d1ea] text-sm">90% faster</span>
+                <div className="flex items-center text-white">
+                  <span className="text-lg font-bold mr-1">90%</span>
+                  <span className="text-sm text-[#74d1ea]">faster</span>
+                </div>
               </div>
             </div>
             
-            <div className="bg-black/50 border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.10)]">
-              <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-4">
-                <Pencil className="h-7 w-7 text-[#74d1ea]" />
+            <div className="bg-gradient-to-br from-black/80 to-gray-900/30 backdrop-blur-sm border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.15)] hover:shadow-[0_0_30px_rgba(116,209,234,0.30)] transition-all duration-300 group">
+              <div className="h-16 w-16 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <Pencil className="h-8 w-8 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">5+ hours saved</h3>
-              <p className="text-gray-400 mb-4">
-                Content creation workflows that used to take days now happen in minutes, with persona-specific content generated instantly.
+              <div className="flex items-center mb-3">
+                <h3 className="text-2xl font-bold text-white mr-3">5+ hours saved</h3>
+                <span className="text-xs font-medium text-white bg-[#74d1ea] px-2 py-0.5 rounded-md">PER PROJECT</span>
+              </div>
+              <p className="text-gray-400 mb-5 text-base">
+                Content creation workflows reduced from days to minutes. Generate persona-specific content instantly with our AI-driven platform that understands your audience.
               </p>
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex items-center">
-                  <div className="w-full bg-gray-700/30 rounded-full h-2 w-48">
-                    <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "85%" }}></div>
+              <div className="flex items-center justify-between mt-3 group-hover:scale-105 transition-transform duration-200">
+                <div className="flex items-center flex-1 mr-3">
+                  <div className="w-full bg-gray-800/70 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] h-3 rounded-full" style={{ width: "85%" }}></div>
                   </div>
                 </div>
-                <span className="text-[#74d1ea] text-sm">85% faster</span>
+                <div className="flex items-center text-white">
+                  <span className="text-lg font-bold mr-1">85%</span>
+                  <span className="text-sm text-[#74d1ea]">faster</span>
+                </div>
               </div>
             </div>
             
-            <div className="bg-black/50 border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.10)]">
-              <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-4">
-                <LayoutGrid className="h-7 w-7 text-[#74d1ea]" />
+            <div className="bg-gradient-to-br from-black/80 to-gray-900/30 backdrop-blur-sm border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.15)] hover:shadow-[0_0_30px_rgba(116,209,234,0.30)] transition-all duration-300 group">
+              <div className="h-16 w-16 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <LayoutGrid className="h-8 w-8 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">20+ hours saved</h3>
-              <p className="text-gray-400 mb-4">
-                Campaign Factory builds entire multi-channel campaigns in minutes, eliminating weeks of planning, writing, and coordination.
+              <div className="flex items-center mb-3">
+                <h3 className="text-2xl font-bold text-white mr-3">20+ hours saved</h3>
+                <span className="text-xs font-medium text-white bg-[#74d1ea] px-2 py-0.5 rounded-md">PER CAMPAIGN</span>
+              </div>
+              <p className="text-gray-400 mb-5 text-base">
+                Campaign Factory builds complete multi-channel marketing campaigns in minutes, eliminating weeks of planning, writing, and coordination with AI-powered tone consistency.
               </p>
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex items-center">
-                  <div className="w-full bg-gray-700/30 rounded-full h-2 w-48">
-                    <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "95%" }}></div>
+              <div className="flex items-center justify-between mt-3 group-hover:scale-105 transition-transform duration-200">
+                <div className="flex items-center flex-1 mr-3">
+                  <div className="w-full bg-gray-800/70 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] h-3 rounded-full" style={{ width: "95%" }}></div>
                   </div>
                 </div>
-                <span className="text-[#74d1ea] text-sm">95% faster</span>
+                <div className="flex items-center text-white">
+                  <span className="text-lg font-bold mr-1">95%</span>
+                  <span className="text-sm text-[#74d1ea]">faster</span>
+                </div>
               </div>
             </div>
           </div>
           
-          <div className="border border-gray-700/60 rounded-lg p-6 bg-black/60 text-center backdrop-blur-sm">
+          <div className="border border-gray-700/60 rounded-xl p-8 bg-gradient-to-r from-gray-900/90 to-black/90 text-center backdrop-blur-sm shadow-[0_0_30px_rgba(116,209,234,0.20)]">
             <div className="max-w-3xl mx-auto">
-              <h3 className="text-xl md:text-2xl font-semibold text-white mb-4">What would you do with 35+ extra hours per month?</h3>
-              <p className="text-gray-300 mb-6">
-                Our users are focusing on strategy, client relationships, and business growth instead of getting stuck in content creation cycles.
+              <div className="inline-flex items-center justify-center mb-5">
+                <div className="h-12 w-12 rounded-full bg-[#74d1ea]/20 border border-[#74d1ea]/40 flex items-center justify-center">
+                  <Clock className="h-6 w-6 text-[#74d1ea]" />
+                </div>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                What would you do with <span className="text-[#74d1ea]">35+ extra hours</span> per month?
+              </h3>
+              <p className="text-gray-300 mb-8 text-lg">
+                Our users are focusing on strategy, deepening client relationships, and accelerating business growth instead of getting bogged down in endless content creation cycles.
               </p>
               <Button
                 onClick={() => window.location.href = "/pricing"}
-                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-8 py-3 rounded-md shadow-[0_0_12px_rgba(116,209,234,0.3)]"
+                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-semibold px-10 py-4 rounded-lg shadow-[0_0_20px_rgba(116,209,234,0.4)] hover:shadow-[0_0_30px_rgba(116,209,234,0.6)] transition-all duration-300 text-base"
               >
                 Start saving time today
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </div>
