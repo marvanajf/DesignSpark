@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { subscriptionPlans } from "@shared/schema";
@@ -25,6 +26,7 @@ import {
 export default function LandingPage() {
   const [, navigate] = useLocation();
   const { user, isLoading } = useAuth();
+  const { openAuthModal } = useAuthModal();
   const [activeTab, setActiveTab] = useState<string>("personas");
 
   const features = [
@@ -149,12 +151,12 @@ export default function LandingPage() {
                   <Button 
                     variant="ghost" 
                     className="text-white hover:text-[#74d1ea] hover:bg-black/30"
-                    onClick={() => navigate('/auth')}
+                    onClick={openAuthModal}
                   >
                     Login
                   </Button>
                   <Button 
-                    onClick={() => navigate('/auth')}
+                    onClick={openAuthModal}
                     className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                   >
                     Sign Up
@@ -187,7 +189,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                onClick={() => navigate('/auth')}
+                onClick={openAuthModal}
                 className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)]"
               >
                 Start Free Trial
@@ -1000,7 +1002,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              onClick={() => navigate('/auth')}
+              onClick={openAuthModal}
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)]"
             >
               Start Free Trial
