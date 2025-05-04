@@ -29,9 +29,22 @@ export default function LandingPage() {
   const [, navigate] = useLocation();
   const { user, isLoading } = useAuth();
   const { openAuthModal } = useAuthModal();
-  const [activeTab, setActiveTab] = useState<string>("personas");
+  const [activeTab, setActiveTab] = useState<string>("campaigns");
 
   const features = [
+    {
+      id: "campaigns",
+      title: "Campaign Factory",
+      description: "Build complete marketing campaigns in minutes instead of days or weeks",
+      icon: <CalendarClock className="h-6 w-6 text-[#74d1ea]" />,
+      benefits: [
+        "Create multi-channel campaigns with 70% less effort",
+        "Generate coordinated content across platforms",
+        "Save 35+ hours monthly on campaign planning",
+        "Scale your marketing output without increasing headcount"
+      ],
+      image: "/campaign-factory.webp"
+    },
     {
       id: "personas",
       title: "AI Persona Generation",
@@ -57,19 +70,6 @@ export default function LandingPage() {
         "Fine-tune emotional impact of your messaging"
       ],
       image: "/tone-analysis.webp"
-    },
-    {
-      id: "campaigns",
-      title: "Campaign Factory",
-      description: "Build complete marketing campaigns in minutes instead of days or weeks",
-      icon: <CalendarClock className="h-6 w-6 text-[#74d1ea]" />,
-      benefits: [
-        "Create multi-channel campaigns with 70% less effort",
-        "Generate coordinated content across platforms",
-        "Save 35+ hours monthly on campaign planning",
-        "Scale your marketing output without increasing headcount"
-      ],
-      image: "/campaign-factory.webp"
     },
     {
       id: "content",
