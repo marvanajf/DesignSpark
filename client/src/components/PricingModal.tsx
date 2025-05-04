@@ -83,6 +83,14 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, plan, plan
               <li>• {plan.toneAnalyses} Tone Analyses</li>
               <li>• {plan.contentGeneration} Content Pieces per month</li>
               <li>• {plan.campaigns} Campaigns</li>
+              {plan.campaignFactory > 0 ? (
+                <li className="text-[#74d1ea] font-medium">
+                  • {plan.campaignFactory} Campaign Factory Credits
+                  <span className="block text-xs text-gray-400 ml-2 mt-0.5">Save 20+ hours per campaign!</span>
+                </li>
+              ) : (
+                <li className="text-gray-500">• No Campaign Factory Access</li>
+              )}
               {planId === 'free' && <li>• Standard Support</li>}
               {planId !== 'free' && <li>• Priority Support</li>}
               {planId === 'premium' && <li>• API Access</li>}
