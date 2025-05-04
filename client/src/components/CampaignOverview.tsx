@@ -9,14 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CampaignModal } from "@/components/CampaignModal"; 
 import { 
-  Calendar, 
+  CalendarClock, 
   CalendarDays, 
-  Users, 
+  Users2, 
   FileText, 
-  Share2, 
-  ChevronRight,
-  Edit2,
-  PlusCircle
+  Share, 
+  ArrowRight,
+  Pencil,
+  PlusCircle,
+  ChevronRight
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -146,7 +147,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
     return (
       <div className="flex flex-col items-center justify-center py-12 space-y-4">
         <div className="rounded-full bg-[#181c25] p-4">
-          <Calendar className="h-8 w-8 text-[#74d1ea]" />
+          <CalendarClock className="h-8 w-8 text-[#74d1ea]" />
         </div>
         <h2 className="text-xl font-bold">No campaigns yet</h2>
         <p className="text-muted-foreground text-center max-w-md">
@@ -207,7 +208,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
               <div className="mb-2 md:mb-0">
                 <div className="text-sm text-gray-500 mb-1">Personas</div>
                 <div className="text-white flex items-center">
-                  <Users className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                  <Users2 className="h-4 w-4 mr-2 text-[#74d1ea]" />
                   {campaign.personas_count || "0"}
                 </div>
               </div>
@@ -223,7 +224,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
               <div>
                 <div className="text-sm text-gray-500 mb-1">Channels</div>
                 <div className="text-white flex items-center">
-                  <Share2 className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                  <Share className="h-4 w-4 mr-2 text-[#74d1ea]" />
                   {campaign.channels_count || "0"}
                 </div>
               </div>
@@ -234,7 +235,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="text-sm">
-                  <Edit2 className="h-3.5 w-3.5 mr-1" />
+                  <Pencil className="h-3.5 w-3.5 mr-1" />
                   Change Status
                 </Button>
               </DropdownMenuTrigger>
@@ -275,7 +276,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
               onClick={() => setSelectedCampaignId(campaign.id)}
             >
               View Details
-              <ChevronRight className="ml-1 h-4 w-4" />
+              <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -300,7 +301,7 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
             onClick={() => navigate('/campaigns')}
           >
             View All Campaigns ({campaigns.length})
-            <ChevronRight className="ml-1 h-4 w-4" />
+            <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
         </div>
       )}
