@@ -758,13 +758,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="text-white font-medium">{testimonial.author}</div>
-                    <div className="text-sm text-gray-400">{testimonial.position}, {testimonial.company}</div>
                   </div>
-                </div>
-                <div className="mt-4 flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-[#74d1ea] fill-[#74d1ea]" />
-                  ))}
                 </div>
               </div>
             ))}
