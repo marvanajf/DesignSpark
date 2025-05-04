@@ -72,7 +72,7 @@ export default function Sidebar() {
   const menuItems: MenuItem[] = [
     { href: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, label: "Dashboard" },
     { href: "/campaigns", icon: <Megaphone className="h-5 w-5" />, label: "Campaigns" },
-    { href: "/prospecting-factory", icon: <Rocket className="h-5 w-5" />, label: "Campaign Factory" },
+    { href: "/campaign-factory", icon: <Rocket className="h-5 w-5" />, label: "Campaign Factory" },
     { href: "/tone-analysis", icon: <BarChart3 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <MessageSquarePlus className="h-5 w-5" />, label: "Content Generator" },
