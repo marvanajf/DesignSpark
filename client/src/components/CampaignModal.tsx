@@ -615,22 +615,13 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[1100px] w-[95vw] max-h-[90vh] bg-black border-gray-800">
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div>
             <DialogTitle className="flex items-center gap-3 text-2xl">
               <div className="flex items-center justify-center h-10 w-10 rounded-md bg-[#181c25] text-base font-medium uppercase text-[#74d1ea]">
                 {campaign.name.substring(0, 2)}
               </div>
               {campaign.name}
             </DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
-              onClick={handleDeleteCampaign}
-              title="Delete campaign"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
           </div>
           {campaign.description && (
             <DialogDescription className="mt-1">{campaign.description}</DialogDescription>
@@ -1422,6 +1413,18 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
           </DialogContent>
         </Dialog>
         
+        {/* Delete Button */}
+        <div className="border-t border-gray-800/30 mt-6 pt-6 flex justify-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
+            onClick={handleDeleteCampaign}
+          >
+            <Trash2 className="mr-2 h-4 w-4" /> Delete Campaign
+          </Button>
+        </div>
+
         {/* Subscription Limit Modal */}
         {showLimitModal && limitData && (
           <SubscriptionLimitModal
