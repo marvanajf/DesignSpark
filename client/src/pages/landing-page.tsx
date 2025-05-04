@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { subscriptionPlans } from "@shared/schema";
 import { 
   ArrowRight, 
   Zap, 
@@ -16,7 +17,8 @@ import {
   Clock, 
   Lightbulb, 
   Target,
-  CalendarClock
+  CalendarClock,
+  X
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -103,75 +105,7 @@ export default function LandingPage() {
     }
   ];
 
-  const pricingTiers = [
-    {
-      name: "Starter",
-      price: "Free",
-      period: "",
-      description: "Get started with basic AI-powered tools",
-      features: [
-        "5 AI Personas",
-        "5 Tone Analyses",
-        "10 Content generations",
-        "2 Campaign slots",
-        "No Campaign Factory access",
-        "Standard support"
-      ],
-      cta: "Get Started",
-      popular: false
-    },
-    {
-      name: "Standard",
-      price: "£4.99",
-      period: "/month",
-      description: "Perfect for individual marketers or small teams",
-      features: [
-        "20 AI Personas",
-        "50 Tone Analyses",
-        "100 Content generations",
-        "5 Campaign slots",
-        "5 Campaign Factory uses",
-        "Priority support"
-      ],
-      cta: "Get Started",
-      popular: false
-    },
-    {
-      name: "Premium",
-      price: "£19.99",
-      period: "/month",
-      description: "Ideal for growing marketing teams with moderate content needs",
-      features: [
-        "30 AI Personas",
-        "100 Tone Analyses",
-        "150 Content generations",
-        "20 Campaign slots",
-        "15 Campaign Factory uses",
-        "Priority support",
-        "Team collaboration features"
-      ],
-      cta: "Get Premium",
-      popular: true
-    },
-    {
-      name: "Pro",
-      price: "£39.99",
-      period: "/month",
-      description: "Full suite solution for agencies and enterprise marketing teams",
-      features: [
-        "50 AI Personas",
-        "200 Tone Analyses",
-        "300 Content generations",
-        "30 Campaign slots",
-        "30 Campaign Factory uses",
-        "Priority support",
-        "Advanced team collaboration",
-        "Custom integrations"
-      ],
-      cta: "Contact Sales",
-      popular: false
-    }
-  ];
+
 
   return (
     <div className="bg-gradient-to-b from-black to-[#070b15] min-h-screen">
@@ -515,76 +449,216 @@ export default function LandingPage() {
               PRICING
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Simple, Transparent Pricing
+              <span className="block text-white">Choose Your</span>
+              <span className="block text-[#74d1ea]">Subscription Plan</span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Choose the plan that's right for your business needs, with no hidden fees or surprises.
+            <p className="text-gray-400 max-w-3xl mx-auto text-lg">
+              Select the plan that best fits your needs. All plans include access to our AI-powered tone analysis
+              and content generation. Premium tiers unlock our revolutionary <span className="text-[#74d1ea] font-semibold">Campaign Factory</span> feature
+              that transforms how you create marketing campaigns.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pricingTiers.map((tier, index) => (
-              <div 
-                key={index} 
-                className={`rounded-xl overflow-hidden ${
-                  tier.popular 
-                    ? 'border-2 border-[#74d1ea] relative bg-gradient-to-b from-[#0e131f] to-black' 
-                    : 'border border-gray-800/60 bg-black/40'
-                }`}
-              >
-                {tier.popular && (
-                  <div className="absolute top-0 right-0 bg-[#74d1ea] text-black px-4 py-1 text-sm font-medium rounded-bl-lg">
-                    Most Popular
-                  </div>
-                )}
-                <div className="p-8">
-                  <h3 className="text-xl font-semibold text-white mb-2">{tier.name}</h3>
-                  <div className="flex items-end mb-4">
-                    <span className="text-4xl font-bold text-white">{tier.price}</span>
-                    <span className="text-gray-400 ml-1">{tier.period}</span>
-                  </div>
-                  <p className="text-gray-400 mb-6">{tier.description}</p>
+          {/* Pricing cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {Object.entries(subscriptionPlans).map(([planId, plan], index) => {
+              // Calculate different visual styling based on plan
+              const isProPlan = planId === 'premium'; // Pro plan is now the premium tier
+              const isPremiumPlan = planId === 'professional'; // Premium plan is now the professional tier
+              const isFreePlan = planId === 'free';
+              const isPaidPlan = !isFreePlan;
+              
+              return (
+                <div 
+                  key={planId} 
+                  className={`relative group transform transition-all duration-300 hover:scale-105 bg-black rounded-lg overflow-hidden h-full ${
+                    isProPlan 
+                      ? 'border-[1.5px] border-[#74d1ea] shadow-[0_0_35px_rgba(116,209,234,0.4)]' 
+                      : isPremiumPlan
+                        ? 'border-[1.5px] border-[#5db8d0] shadow-[0_0_25px_rgba(116,209,234,0.25)]'
+                        : 'border border-gray-700/60'
+                  }`}
+                >
+                  {/* Glowing background effect */}
+                  {isPaidPlan && (
+                    <div 
+                      className="absolute inset-0 opacity-5 bg-[#74d1ea] blur-3xl rounded-full -z-10 group-hover:opacity-10 transition-opacity"
+                      style={{
+                        width: '150%',
+                        height: '150%',
+                        top: '-25%',
+                        left: '-25%',
+                      }}
+                    ></div>
+                  )}
                   
-                  <Button 
-                    className={`w-full mb-8 ${
-                      tier.popular 
-                        ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black' 
-                        : 'bg-gray-800 hover:bg-gray-700 text-white'
-                    }`}
-                  >
-                    {tier.cta}
-                  </Button>
+                  {/* Top accent gradient */}
+                  <div className={`h-2 w-full bg-gradient-to-r ${
+                    isFreePlan ? 'from-gray-800 to-gray-700' :
+                    planId === 'standard' ? 'from-[#53b0c9] to-[#74d1ea]' :
+                    isProPlan ? 'from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]' :
+                    'from-[#74d1ea] via-[#53b0c9] to-[#40a3bd]'
+                  }`}></div>
                   
-                  <div className="space-y-3">
-                    {tier.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start">
-                        <div className={`flex-shrink-0 p-1 rounded-full mr-3 ${
-                          tier.popular ? 'bg-[#74d1ea]/20' : 'bg-gray-800'
-                        }`}>
-                          <Check className={`h-4 w-4 ${
-                            tier.popular ? 'text-[#74d1ea]' : 'text-gray-400'
-                          }`} />
+                  {/* Premium plan highlighted styling with extra glow */}
+                  {isProPlan && (
+                    <>
+                      {/* Top glow bar */}
+                      <div className="absolute -top-1 -left-1 -right-1 h-1 bg-gradient-to-r from-[#74d1ea]/30 via-[#74d1ea] to-[#74d1ea]/30 blur-md"></div>
+                      
+                      {/* Subtle corner glows */}
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#74d1ea]/20 rounded-full blur-md"></div>
+                      <div className="absolute -top-2 -left-2 w-8 h-8 bg-[#74d1ea]/20 rounded-full blur-md"></div>
+                      
+                      {/* Extra border brightness */}
+                      <div className="absolute inset-0 border border-[#74d1ea]/30 rounded-[7px] pointer-events-none"></div>
+                    </>
+                  )}
+                  
+                  <div className="p-6 text-center mt-2">
+                    {/* Plan name */}
+                    <h3 className={`text-xl font-bold mb-2 ${isPaidPlan ? 'text-[#74d1ea]' : 'text-white'}`}>
+                      {plan.name}
+                    </h3>
+                    
+                    {/* Price display */}
+                    <div className="text-center mb-3">
+                      <span className="text-4xl font-bold text-white">{plan.displayPrice}</span>
+                      {!isFreePlan && <span className="text-xl text-gray-400 ml-1">/month</span>}
+                    </div>
+                    
+                    {/* Plan description */}
+                    <p className="text-gray-400 text-sm mb-5 pb-3 border-b border-gray-800/50">
+                      {isFreePlan ? 'Get started with basic features' : 
+                      planId === 'standard' ? 'Perfect for professionals' : 
+                      isProPlan ? 'Ideal for growing businesses' : 
+                      'For demanding content creators'}
+                    </p>
+                    
+                    {/* Features list */}
+                    <ul className="space-y-3 text-sm text-left mb-8">
+                      <li className="flex items-center">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
                         </div>
-                        <span className="text-gray-300 text-sm">{feature}</span>
-                      </div>
-                    ))}
+                        <span className="text-gray-300">{plan.personas} AI Personas</span>
+                      </li>
+                      <li className="flex items-center">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
+                        </div>
+                        <span className="text-gray-300">{plan.toneAnalyses} Tone Analyses</span>
+                      </li>
+                      <li className="flex items-center">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
+                        </div>
+                        <span className="text-gray-300">{plan.contentGeneration} Content Creations</span>
+                      </li>
+                      <li className="flex items-center">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
+                        </div>
+                        <span className="text-gray-300">{plan.campaigns} Campaigns</span>
+                      </li>
+                      <li className={`flex items-center ${plan.campaignFactory > 0 ? 'bg-[#74d1ea]/10 p-1.5 rounded-md -mx-1.5 my-2' : ''}`}>
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          {plan.campaignFactory > 0 ? (
+                            <Check className="h-3 w-3 text-[#74d1ea]" />
+                          ) : (
+                            <X className="h-3 w-3 text-red-500" />
+                          )}
+                        </div>
+                        {plan.campaignFactory > 0 ? (
+                          <span>
+                            <span className="text-[#74d1ea] font-medium">
+                              {plan.campaignFactory} Campaign Factory Credits
+                            </span>
+                            <span className="block text-xs text-gray-400 mt-0.5">Save 20+ hours per campaign!</span>
+                          </span>
+                        ) : (
+                          <span className="text-gray-300">
+                            No Campaign Factory Access
+                          </span>
+                        )}
+                      </li>
+                      <li className="flex items-center">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
+                        </div>
+                        <span className="text-gray-300">{planId === 'free' ? 'Standard Support' : 'Priority Support'}</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="px-6 pb-6">
+                    <Button 
+                      className={`w-full font-medium transition-all duration-300 ${
+                        !isFreePlan 
+                          ? 'bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)]' 
+                          : 'bg-transparent border border-[#74d1ea]/30 hover:border-[#74d1ea] text-[#74d1ea] hover:text-white hover:shadow-[0_0_15px_rgba(116,209,234,0.3)]'
+                      }`}
+                      onClick={() => navigate('/pricing')}
+                    >
+                      {isFreePlan ? "Get Started" : `Get ${plan.name}`}
+                    </Button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="mt-12 text-center max-w-3xl mx-auto">
-            <h3 className="text-xl font-semibold text-white mb-4">Need a custom plan?</h3>
-            <p className="text-gray-400 mb-6">
-              For enterprise needs or custom requirements, contact our sales team for a tailored solution.
-            </p>
-            <Button 
-              variant="outline" 
-              className="border-gray-700 hover:border-[#74d1ea] text-white hover:text-[#74d1ea]"
-            >
-              Contact Sales
-            </Button>
+          {/* Enterprise & Agency Plans Section */}
+          <div className="mb-16">
+            <div className="relative overflow-hidden bg-black border border-gray-700/60 rounded-lg shadow-xl transform transition-all duration-300 hover:shadow-[0_0_35px_rgba(116,209,234,0.15)]">
+              <div className="absolute inset-0 opacity-5 bg-gradient-to-r from-[#74d1ea] via-black to-[#74d1ea] blur-md"></div>
+              
+              {/* Top accent gradient */}
+              <div className="h-1 w-full bg-gradient-to-r from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]"></div>
+              
+              <div className="px-6 py-12 md:px-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between relative z-10">
+                <div className="md:max-w-2xl mb-8 md:mb-0">
+                  <h2 className="text-3xl font-bold text-white mb-4">Need a Custom Enterprise or Agency Solution?</h2>
+                  <p className="text-gray-300 text-lg mb-4">
+                    We offer tailored plans for agencies and enterprise clients with custom volumes, dedicated support, and specialized features.
+                  </p>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 text-left">
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Customizable usage limits</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Dedicated account manager</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">API access</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Custom integrations</span>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <Button 
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-6 py-3 font-medium rounded-lg shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)]" 
+                    onClick={() => navigate('/contact')}
+                  >
+                    Contact Sales
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
