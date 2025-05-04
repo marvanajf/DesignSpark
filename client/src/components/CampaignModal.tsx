@@ -26,7 +26,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Plus, Search, FileText, User, BarChart, Trash2, Rocket, Zap, Mail, Sparkles, LineChart, ArrowRight } from "lucide-react";
+import { 
+  Loader2, Plus, Search, FileText, User, BarChart, Trash2, Rocket, Zap, Mail, 
+  Sparkles, LineChart, ArrowRight, Calendar, Clock, Settings, BarChart2, 
+  PenTool, Target, MessageSquare, Share2, ListChecks, ChevronDown
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import { SiLinkedin } from "react-icons/si";
 import SavedContentListItem from "./SavedContentListItem";
 import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
@@ -52,6 +60,10 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
   const [selectedPersonaId, setSelectedPersonaId] = useState<number | null>(null);
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [campaignStatus, setCampaignStatus] = useState<string>("draft");
+  const [activeCampaignTab, setActiveCampaignTab] = useState("overview");
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { user } = useAuth();
