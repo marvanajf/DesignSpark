@@ -35,32 +35,31 @@ export default function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <div className="py-12 md:py-16 bg-black relative overflow-hidden">
+      <div className="py-10 bg-black relative overflow-hidden">
         {/* Background glow effects */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] bg-[#74d1ea]/5 rounded-full blur-[100px] opacity-70" />
-        <div className="absolute top-1/4 right-1/3 w-[30%] h-[30%] bg-[#74d1ea]/10 rounded-full blur-[120px] opacity-50" />
-        <div className="absolute bottom-1/4 left-1/3 w-[30%] h-[30%] bg-[#74d1ea]/10 rounded-full blur-[120px] opacity-50" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-[#74d1ea]/3 rounded-full blur-[100px] opacity-60" />
+        <div className="absolute top-1/4 right-1/3 w-[25%] h-[25%] bg-[#74d1ea]/5 rounded-full blur-[80px] opacity-40" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="border border-gray-700/60 rounded-lg py-14 px-8 md:px-12 shadow-[0_0_35px_rgba(116,209,234,0.20)] backdrop-blur-sm bg-black/30 text-center">
+          <div className="border border-gray-700/60 rounded-lg py-12 px-8 md:px-10 shadow-[0_0_25px_rgba(116,209,234,0.15)] backdrop-blur-sm bg-black/30 text-center">
             <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl max-w-4xl mx-auto leading-tight">
               <span className="block text-white mb-2">Supercharge your comms with</span>
               <span className="block text-[#74d1ea] text-glow">AI-powered precision</span>
             </h1>
-            <p className="mt-8 text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto leading-relaxed">
+            <p className="mt-6 text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto leading-relaxed">
               From tone analysis to personalized content creation, our AI engine delivers 
               targeted communications that engage, convert, and elevate your brand.
             </p>
-            <div className="mt-10 sm:mt-12 flex flex-col items-center">
+            <div className="mt-8 sm:mt-10 flex flex-col items-center">
               <div className="rounded-md">
                 <Button 
                   onClick={handleGetStarted}
-                  className="w-full sm:w-auto px-10 py-4 text-lg bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_15px_rgba(116,209,234,0.5)] transition-all duration-200 hover:shadow-[0_0_25px_rgba(116,209,234,0.7)]"
+                  className="w-full sm:w-auto px-10 py-4 text-lg bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_12px_rgba(116,209,234,0.4)] transition-all duration-200 hover:shadow-[0_0_18px_rgba(116,209,234,0.5)]"
                 >
                   Get started free
                 </Button>
               </div>
-              <p className="mt-4 text-sm text-gray-400">
+              <p className="mt-3 text-sm text-gray-400">
                 No credit card required. Start generating in minutes.
               </p>
             </div>
@@ -69,7 +68,7 @@ export default function HomePage() {
       </div>
 
       {/* AI Native App Section */}
-      <div className="py-12 bg-black relative overflow-hidden">
+      <div className="py-8 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="border border-gray-700/60 rounded-lg py-10 px-6 shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="text-center mb-10">
