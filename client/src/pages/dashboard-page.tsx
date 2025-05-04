@@ -127,11 +127,6 @@ export default function DashboardPage() {
 
           {/* Campaign and Personas Overview Section */}
           <div className="mb-10">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-white">Campaign & Persona Management</h2>
-              <p className="text-sm text-gray-400 mt-1">Manage your active campaigns and AI personas</p>
-            </div>
-            
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <CampaignOverviewDashboard />
               <PersonasOverview />
