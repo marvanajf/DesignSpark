@@ -826,53 +826,49 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
               
               {/* Campaign Factory Details */}
               <div className="border-t border-gray-800/30 pt-6">
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                  <Rocket className="h-5 w-5 text-[#74d1ea]" /> Campaign Factory
+                <h3 className="text-xl font-bold mb-4">
+                  Campaign Factory
                 </h3>
                 
                 <div className="space-y-6">
-                  {/* Campaign Channels */}
+                  {/* Campaign Strategy */}
                   <div className="border border-[#1a1e29] rounded-lg bg-[#0e1015] p-5">
-                    <h4 className="text-base font-medium mb-3 flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-[#74d1ea]" /> Campaign Channels
+                    <h4 className="text-base font-medium mb-3">
+                      Campaign Strategy Overview
                     </h4>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                        <Mail className="h-5 w-5 text-[#74d1ea]" />
-                        <div>
-                          <p className="text-sm font-medium">Email Campaigns</p>
-                          <p className="text-xs text-gray-400">Personalized email sequences</p>
+                    <div className="space-y-4">
+                      <p className="text-sm text-gray-300">
+                        The Campaign Factory has analyzed your content and persona data to create a comprehensive marketing strategy.
+                        This campaign is designed to maximize engagement through a multi-channel approach, delivered with your preferred tone and style.
+                      </p>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                        <div className="p-3 rounded-md bg-black/20 border border-gray-800/30">
+                          <div>
+                            <p className="text-sm font-medium">Audience Targeting</p>
+                            <p className="text-xs text-gray-400">Optimized for your target personas with focused messaging</p>
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-md bg-black/20 border border-gray-800/30">
+                          <div>
+                            <p className="text-sm font-medium">Content Alignment</p>
+                            <p className="text-xs text-gray-400">Message consistency across all marketing channels</p>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                        <SiLinkedin className="h-5 w-5 text-[#0A66C2]" />
-                        <div>
-                          <p className="text-sm font-medium">LinkedIn Content</p>
-                          <p className="text-xs text-gray-400">Professional network posts</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                        <FileText className="h-5 w-5 text-[#74d1ea]" />
-                        <div>
-                          <p className="text-sm font-medium">Blog Articles</p>
-                          <p className="text-xs text-gray-400">In-depth content marketing</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                        <LineChart className="h-5 w-5 text-[#74d1ea]" />
-                        <div>
-                          <p className="text-sm font-medium">Performance Tracking</p>
-                          <p className="text-xs text-gray-400">Metrics and analytics</p>
-                        </div>
-                      </div>
+                      
+                      <p className="text-sm text-gray-300 mt-2">
+                        This campaign is ready to deploy with your chosen content, matching your brand voice and marketing goals.
+                        Use the content preview below to review your campaign materials.
+                      </p>
                     </div>
                   </div>
                   
                   {/* Content Preview */}
                   <div className="border border-[#1a1e29] rounded-lg bg-[#0e1015] p-5">
-                    <h4 className="text-base font-medium mb-3 flex items-center gap-2">
-                      <Zap className="h-4 w-4 text-[#74d1ea]" /> Content Overview
+                    <h4 className="text-base font-medium mb-3">
+                      Content Overview
                     </h4>
                     
                     <div>
@@ -882,7 +878,6 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                         </div>
                       ) : campaignContents.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-6 space-y-2">
-                          <FileText className="h-8 w-8 text-muted-foreground" />
                           <p className="text-sm text-muted-foreground text-center">
                             No content has been added to this campaign yet.
                           </p>
@@ -895,9 +890,6 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                                 <div key={content.id} className="p-3 border border-gray-800/60 rounded-md bg-black/30">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
-                                      {content.type === 'email' && <Mail className="h-3.5 w-3.5 text-[#74d1ea]" />}
-                                      {content.type === 'linkedin_post' && <SiLinkedin className="h-3.5 w-3.5 text-[#0A66C2]" />}
-                                      {content.type === 'blog_post' && <FileText className="h-3.5 w-3.5 text-[#74d1ea]" />}
                                       <span className="font-medium text-sm capitalize">{content.type.replace('_', ' ')}</span>
                                     </div>
                                     <div className="text-xs text-gray-500">
@@ -936,7 +928,6 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                 </div>
               ) : availableContents.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
-                  <FileText className="h-10 w-10 text-muted-foreground" />
                   <h3 className="text-lg font-semibold">No content available</h3>
                   <p className="text-muted-foreground text-center max-w-md text-sm">
                     You don't have any content that can be added to this campaign. All your content is already part of this campaign, or you haven't created any content yet.

@@ -135,25 +135,12 @@ export default function CampaignsPage() {
               </div>
               
               <div className="flex items-center">
-                <div className="flex space-x-3 mr-3">
-                  <div className="h-7 w-7 rounded-md bg-[#0e131f] flex items-center justify-center">
-                    <Mail className="h-3.5 w-3.5 text-[#74d1ea]" />
-                  </div>
-                  <div className="h-7 w-7 rounded-md bg-[#0e131f] flex items-center justify-center">
-                    <SiLinkedin className="h-3.5 w-3.5 text-[#0A66C2]" />
-                  </div>
-                  <div className="h-7 w-7 rounded-md bg-[#0e131f] flex items-center justify-center">
-                    <FileText className="h-3.5 w-3.5 text-[#74d1ea]" />
-                  </div>
-                </div>
-                
                 <span className="text-gray-400 text-sm mr-5">Generate all campaign assets in one go</span>
                 
                 <Button
                   onClick={() => navigate('/campaign-factory')}
                   className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                 >
-                  <Rocket className="h-4 w-4 mr-2" />
                   Launch Campaign Factory
                 </Button>
               </div>
