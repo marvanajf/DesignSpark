@@ -699,15 +699,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                     )}
                   </div>
                 </div>
-                <div className="ml-auto">
-                  <Button
-                    onClick={() => setIsAddContentDialogOpen(true)}
-                    className="gap-1"
-                    style={{ backgroundColor: "#74d1ea", color: "black" }}
-                  >
-                    <Plus className="h-4 w-4" /> Add Content
-                  </Button>
-                </div>
+
               </div>
             </div>
 
