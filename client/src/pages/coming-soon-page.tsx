@@ -137,9 +137,9 @@ export default function ComingSoonPage() {
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
                     <BarChart className="h-6 w-6 text-[#74d1ea]" />
                   </div>
-                  <h3 className="text-xl font-medium text-white mb-2">GPT-4 Powered Analysis</h3>
+                  <h3 className="text-xl font-medium text-white mb-2">OpenAI Powered Analysis</h3>
                   <p className="text-gray-400">
-                    Our platform utilizes the latest GPT-4 models to precisely analyze content tone, identify patterns, and extract key insights.
+                    Our platform utilizes the latest OpenAI models to precisely analyze content tone, identify patterns, and extract key insights.
                   </p>
                 </div>
                 
