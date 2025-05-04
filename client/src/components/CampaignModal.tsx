@@ -613,7 +613,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[1100px] w-[95vw] max-h-[90vh]">
+      <DialogContent className="sm:max-w-[1100px] w-[95vw] max-h-[90vh] bg-black border-gray-800">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-3 text-2xl">
@@ -1265,7 +1265,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
 
         {/* Add Content Dialog */}
         <Dialog open={isAddContentDialogOpen} onOpenChange={setIsAddContentDialogOpen}>
-          <DialogContent className="max-w-3xl">
+          <DialogContent className="max-w-3xl bg-black border-gray-800">
             <DialogHeader>
               <DialogTitle>Add Content to Campaign</DialogTitle>
               <DialogDescription>
@@ -1346,11 +1346,16 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
         </Dialog>
         
         {/* Subscription Limit Modal */}
-        <SubscriptionLimitModal
-          isOpen={showLimitModal}
-          onClose={() => setShowLimitModal(false)}
-          limitData={limitData}
-        />
+        {showLimitModal && limitData && (
+          <SubscriptionLimitModal
+            isOpen={showLimitModal}
+            onClose={() => setShowLimitModal(false)}
+            limitType={limitData.limitType}
+            currentUsage={limitData.currentUsage}
+            limit={limitData.limit}
+            currentPlan={limitData.currentPlan}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
