@@ -37,7 +37,7 @@ export default function Sidebar() {
   const { avatarColor } = useUserAvatar();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isSettingsExpanded, setIsSettingsExpanded] = useState(true);
+  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
 
   // Check if we're on mobile
   useEffect(() => {
