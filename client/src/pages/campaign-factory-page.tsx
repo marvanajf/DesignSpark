@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { Sparkles, Loader2, Calendar, FileText, Lightbulb, Target, Clock, Users, Copy, Check, ChevronRight, Clipboard, ArrowRight, X, PlusCircle, Save, PlayCircle, BarChart3, SlidersHorizontal, MessageSquare, Settings, Shield, Server as ServerIcon } from "lucide-react";
+import { Sparkles, Loader2, Calendar, FileText, Lightbulb, Target, Clock, Users, Copy, Check, ChevronRight, Clipboard, ArrowRight, X, PlusCircle, Save, PlayCircle, BarChart3, SlidersHorizontal, MessageSquare, Settings, Shield, Server as ServerIcon, Zap } from "lucide-react";
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -699,7 +699,7 @@ REGISTER NOW: [Link]`,
             
             <div className="relative z-10 flex items-start">
               <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+                <Zap className="h-6 w-6 text-[#74d1ea]" />
               </div>
               
               <div className="flex-1">
