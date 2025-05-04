@@ -76,7 +76,7 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                     location.startsWith('/usage') ||
                     (location.startsWith('/campaigns') && !location.startsWith('/campaigns-info')) ||
                     location.startsWith('/campaign/') ||
-                    location.startsWith('/campaign-factory');
+                    (location.startsWith('/campaign-factory') && !location.startsWith('/campaign-factory-info'));
   
   // For app pages, only show sidebar; for other non-homepage pages, show navbar
   return (
