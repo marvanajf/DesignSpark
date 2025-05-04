@@ -972,10 +972,12 @@ REGISTER NOW: [Link]`,
                     {/* Step 3: Additional Settings */}
                     <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
                       <h3 className="text-white font-medium mb-4 flex items-center">
-                        <div className="bg-[#74d1ea]/10 p-2 rounded-md mr-3">
-                          <SlidersHorizontal className="h-5 w-5 text-[#74d1ea]" />
+                        <div className="flex items-center justify-center h-9 w-9 rounded-md bg-gradient-to-br from-[#74d1ea]/20 to-[#74d1ea]/5 shadow-sm border border-[#74d1ea]/10 mr-3">
+                          <div className="h-6 w-6 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                            <SlidersHorizontal className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
                         </div>
-                        Step 3: Additional Settings
+                        Step 3: Finishing Touches
                       </h3>
                       
                       <div className="grid md:grid-cols-2 gap-6">
