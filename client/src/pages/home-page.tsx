@@ -92,7 +92,7 @@ export default function HomePage() {
                 </p>
               </div>
               
-              <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+              <div className="bg-black rounded-lg p-6 border border-gray-800/60">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
                   <Users className="h-6 w-6 text-[#74d1ea]" />
                 </div>
@@ -102,7 +102,7 @@ export default function HomePage() {
                 </p>
               </div>
               
-              <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+              <div className="bg-black rounded-lg p-6 border border-gray-800/60">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
                   <MessageSquare className="h-6 w-6 text-[#74d1ea]" />
                 </div>
@@ -161,12 +161,12 @@ export default function HomePage() {
                     </Button>
                   </div>
 
-                  <div className="md:col-span-3 bg-zinc-900/50 rounded-lg p-4 border border-gray-800/60 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
+                  <div className="md:col-span-3 bg-black rounded-lg p-4 border border-gray-800/60 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
                     <div className="text-center mb-4">
                       <h3 className="text-white font-medium">Boost Your Marketing Power</h3>
                     </div>
                     <div className="space-y-3">
-                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                      <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
@@ -174,7 +174,7 @@ export default function HomePage() {
                           <span className="text-sm text-white">Generate multiple LinkedIn posts instantly</span>
                         </div>
                       </div>
-                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                      <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <FileText className="h-4 w-4 text-[#74d1ea]" />
@@ -182,7 +182,7 @@ export default function HomePage() {
                           <span className="text-sm text-white">Create entire blog articles in seconds</span>
                         </div>
                       </div>
-                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                      <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
@@ -190,7 +190,7 @@ export default function HomePage() {
                           <span className="text-sm text-white">Build full email sequences automatically</span>
                         </div>
                       </div>
-                      <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
+                      <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <Users className="h-4 w-4 text-[#74d1ea]" />
@@ -597,9 +597,9 @@ export default function HomePage() {
               <Clock className="h-4 w-4 text-[#74d1ea] mr-2" />
               <span className="text-[#74d1ea] text-sm font-medium">Time-Saving Benefits</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Save hours every week with AI</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Save Time</h2>
             <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-              Our OpenAI-powered platform dramatically reduces the time spent on content creation, analysis, and campaign management.
+              Our platform helps you create more content in less time using OpenAI's advanced language models to automate repetitive tasks.
             </p>
           </div>
           
