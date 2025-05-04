@@ -277,54 +277,42 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
           </div>
           
           <div className="mt-4 flex justify-between items-center">
-            <div className="flex space-x-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="text-sm">
-                    <Pencil className="h-3.5 w-3.5 mr-1" />
-                    Change Status
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Set Status</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'draft', 'Draft')}>
-                    <div className="h-2 w-2 rounded-full bg-slate-500 mr-2"></div>
-                    Draft
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'planning', 'Planning')}>
-                    <div className="h-2 w-2 rounded-full bg-[#2196F3] mr-2"></div>
-                    Planning
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'active', 'Active')}>
-                    <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
-                    Active
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'running', 'Running')}>
-                    <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
-                    Running
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'completed', 'Completed')}>
-                    <div className="h-2 w-2 rounded-full bg-[#9C27B0] mr-2"></div>
-                    Completed
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'archived', 'Archived')}>
-                    <div className="h-2 w-2 rounded-full bg-[#795548] mr-2"></div>
-                    Archived
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-sm text-red-500 hover:text-red-600 hover:bg-red-100/10"
-                onClick={() => handleDelete(campaign)}
-              >
-                <Trash2 className="h-3.5 w-3.5 mr-1" />
-                Delete
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="text-sm">
+                  <Pencil className="h-3.5 w-3.5 mr-1" />
+                  Change Status
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Set Status</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'draft', 'Draft')}>
+                  <div className="h-2 w-2 rounded-full bg-slate-500 mr-2"></div>
+                  Draft
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'planning', 'Planning')}>
+                  <div className="h-2 w-2 rounded-full bg-[#2196F3] mr-2"></div>
+                  Planning
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'active', 'Active')}>
+                  <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
+                  Active
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'running', 'Running')}>
+                  <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
+                  Running
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'completed', 'Completed')}>
+                  <div className="h-2 w-2 rounded-full bg-[#9C27B0] mr-2"></div>
+                  Completed
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'archived', 'Archived')}>
+                  <div className="h-2 w-2 rounded-full bg-[#795548] mr-2"></div>
+                  Archived
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <Button
               variant="ghost"

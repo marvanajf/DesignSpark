@@ -32,7 +32,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Plus, Search, FileText, User, BarChart, Trash2 } from "lucide-react";
+import { Loader2, Plus, Search, FileText, User, BarChart, Trash2, Rocket, Zap, Mail, Sparkles, LineChart } from "lucide-react";
+import { SiLinkedin } from "react-icons/si";
 import SavedContentListItem from "./SavedContentListItem";
 import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 import {
@@ -608,6 +609,41 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
             <DialogDescription className="mt-1">{campaign.description}</DialogDescription>
           )}
         </DialogHeader>
+        
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <AlertDialogContent className="bg-[#0a0c10] border border-gray-800 text-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-white">Delete Campaign</AlertDialogTitle>
+              <AlertDialogDescription className="text-gray-400">
+                Are you sure you want to delete the campaign "{campaign.name}"? This action cannot be undone 
+                and will remove all campaign data and associations.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex space-x-2 pt-5">
+              <AlertDialogCancel 
+                className="text-gray-300 hover:text-white bg-[#1a1e29] hover:bg-[#272e3f] border-gray-700"
+                onClick={() => setIsDeleteDialogOpen(false)}
+              >
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction 
+                className="bg-red-600 hover:bg-red-700 text-white border-none"
+                onClick={confirmDeleteCampaign}
+                disabled={deleteCampaignMutation.isPending}
+              >
+                {deleteCampaignMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>Delete Campaign</>
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <div className="space-y-6 mt-2">
           {/* Campaign overview card */}
@@ -656,7 +692,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
             </div>
           </div>
 
-          {/* Tabs for Content, Persona and Tone Analysis */}
+          {/* Tabs for Content, Persona, Tone Analysis, and Campaign Factory */}
           <Tabs defaultValue="content" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-4">
               <TabsTrigger value="content" className="gap-2">
@@ -667,6 +703,9 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
               </TabsTrigger>
               <TabsTrigger value="tone" className="gap-2">
                 <BarChart className="h-4 w-4" /> Tone Analysis
+              </TabsTrigger>
+              <TabsTrigger value="campaign-factory" className="gap-2">
+                <Rocket className="h-4 w-4" /> Campaign Factory
               </TabsTrigger>
             </TabsList>
             
@@ -883,6 +922,161 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   </div>
                 </div>
               )}
+            </TabsContent>
+            
+            {/* Campaign Factory Tab */}
+            <TabsContent value="campaign-factory" className="space-y-4">
+              <h3 className="text-xl font-bold mb-4">Campaign Factory Output</h3>
+              
+              <div className="bg-[#0e1015] border border-[#1a1e29] rounded-lg p-5 space-y-6">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-medium flex items-center gap-2">
+                      <Rocket className="h-5 w-5 text-[#74d1ea]" /> Campaign Factory Details
+                    </h4>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-[#74d1ea] hover:bg-[#74d1ea]/10 border-[#74d1ea]/30"
+                      onClick={() => window.open('/campaign-factory', '_blank')}
+                    >
+                      Launch Campaign Factory
+                    </Button>
+                  </div>
+                  
+                  <p className="text-sm text-gray-400">
+                    The Campaign Factory creates comprehensive, multi-channel content based on your target audience and brand voice.
+                  </p>
+                </div>
+                
+                {/* Factory Output Summary */}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Campaign Strategy */}
+                    <div className="bg-black/40 border border-gray-800 rounded-lg p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-[#0e131f] p-2 rounded-md">
+                          <Sparkles className="h-4 w-4 text-[#74d1ea]" />
+                        </div>
+                        <h5 className="font-medium">Campaign Strategy</h5>
+                      </div>
+                      
+                      <p className="text-sm text-gray-400">
+                        {campaign?.description || "This campaign was created to target specific audience segments with consistent messaging across channels."}
+                      </p>
+                    </div>
+                    
+                    {/* Channels Used */}
+                    <div className="bg-black/40 border border-gray-800 rounded-lg p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-[#0e131f] p-2 rounded-md">
+                          <LineChart className="h-4 w-4 text-[#74d1ea]" />
+                        </div>
+                        <h5 className="font-medium">Channels Used</h5>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2">
+                        <div className="flex items-center gap-1 text-sm bg-[#181c25] px-2 py-1 rounded-md">
+                          <Mail className="h-3.5 w-3.5 text-[#74d1ea]" /> Email
+                        </div>
+                        <div className="flex items-center gap-1 text-sm bg-[#181c25] px-2 py-1 rounded-md">
+                          <SiLinkedin className="h-3.5 w-3.5 text-[#0A66C2]" /> LinkedIn
+                        </div>
+                        <div className="flex items-center gap-1 text-sm bg-[#181c25] px-2 py-1 rounded-md">
+                          <FileText className="h-3.5 w-3.5 text-[#74d1ea]" /> Blog
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Performance Metrics */}
+                    <div className="bg-black/40 border border-gray-800 rounded-lg p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-[#0e131f] p-2 rounded-md">
+                          <Zap className="h-4 w-4 text-[#74d1ea]" />
+                        </div>
+                        <h5 className="font-medium">Generation Details</h5>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Content Items:</span>
+                          <span>{campaignContents?.length || 0}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Persona Used:</span>
+                          <span className="text-[#74d1ea]">{personas?.find(p => p.id === campaign.persona_id)?.name || 'None'}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Tone Analysis:</span>
+                          <span className="text-[#74d1ea]">{toneAnalyses?.find(t => t.id === campaign.tone_analysis_id)?.name || 'None'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Campaign Content Preview */}
+                  <div className="mt-4">
+                    <h5 className="font-medium mb-3">Generated Content Overview</h5>
+                    
+                    {!campaignContents || campaignContents.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-6 space-y-3 border border-gray-800 rounded-lg bg-black/20">
+                        <FileText className="h-8 w-8 text-gray-500" />
+                        <div className="text-center">
+                          <h6 className="font-medium text-gray-300">No Campaign Factory content yet</h6>
+                          <p className="text-sm text-gray-500 max-w-md mt-1">
+                            Use the Campaign Factory to generate comprehensive, multi-channel content for this campaign.
+                          </p>
+                        </div>
+                        
+                        <Button
+                          onClick={() => window.open('/campaign-factory', '_blank')}
+                          className="mt-2 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                          size="sm"
+                        >
+                          <Rocket className="h-3.5 w-3.5 mr-2" /> Generate Content
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="border border-gray-800 rounded-lg bg-black/20 p-4">
+                          <ScrollArea className="h-[200px]">
+                            <div className="space-y-3">
+                              {campaignContents.map((content: any) => (
+                                <div key={content.id} className="p-3 border border-gray-800/60 rounded-md bg-black/30">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      {content.type === 'email' && <Mail className="h-3.5 w-3.5 text-[#74d1ea]" />}
+                                      {content.type === 'linkedin_post' && <SiLinkedin className="h-3.5 w-3.5 text-[#0A66C2]" />}
+                                      {content.type === 'blog_post' && <FileText className="h-3.5 w-3.5 text-[#74d1ea]" />}
+                                      <span className="font-medium text-sm capitalize">{content.type.replace('_', ' ')}</span>
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                      {new Date(content.created_at).toLocaleDateString()}
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-gray-300 line-clamp-2">{content.content_text.substring(0, 120)}...</p>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                        </div>
+                        
+                        <div className="flex justify-end">
+                          <Button
+                            onClick={() => setActiveTab("content")}
+                            variant="outline"
+                            size="sm"
+                            className="text-[#74d1ea] border-[#74d1ea]/30 hover:bg-[#74d1ea]/10"
+                          >
+                            View All Content <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
