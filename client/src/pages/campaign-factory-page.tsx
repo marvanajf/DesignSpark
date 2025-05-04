@@ -756,7 +756,9 @@ REGISTER NOW: [Link]`,
                 <Card className="bg-black border-gray-700/60 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
                   <CardHeader className="border-b border-gray-800">
                     <CardTitle className="text-white text-xl flex items-center">
-                      <FileText className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                      <div className="h-5 w-5 mr-2 text-[#74d1ea] flex items-center justify-center bg-[#74d1ea]/10 rounded-md">
+                        <FileText className="h-4 w-4" />
+                      </div>
                       Campaign Brief
                     </CardTitle>
                     <CardDescription>Provide information about the campaign you'd like to create</CardDescription>
@@ -765,8 +767,10 @@ REGISTER NOW: [Link]`,
                     {/* Step 1: Campaign Type */}
                     <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
                       <h3 className="text-white font-medium mb-4 flex items-center">
-                        <div className="bg-[#74d1ea]/10 p-2 rounded-md mr-3">
-                          <Target className="h-5 w-5 text-[#74d1ea]" />
+                        <div className="flex items-center justify-center h-9 w-9 rounded-md bg-gradient-to-br from-[#74d1ea]/20 to-[#74d1ea]/5 shadow-sm border border-[#74d1ea]/10 mr-3">
+                          <div className="h-6 w-6 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                            <Target className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
                         </div>
                         Step 1: Campaign Type & Content 
                       </h3>
@@ -854,8 +858,10 @@ REGISTER NOW: [Link]`,
                     {/* Step 2: Target Personas */}
                     <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
                       <h3 className="text-white font-medium mb-4 flex items-center">
-                        <div className="bg-[#74d1ea]/10 p-2 rounded-md mr-3">
-                          <Users className="h-5 w-5 text-[#74d1ea]" />
+                        <div className="flex items-center justify-center h-9 w-9 rounded-md bg-gradient-to-br from-[#74d1ea]/20 to-[#74d1ea]/5 shadow-sm border border-[#74d1ea]/10 mr-3">
+                          <div className="h-6 w-6 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                            <Users className="h-4 w-4 text-[#74d1ea]" />
+                          </div>
                         </div>
                         Step 2: Target Personas
                       </h3>
