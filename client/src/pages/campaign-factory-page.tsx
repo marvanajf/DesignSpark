@@ -728,7 +728,7 @@ REGISTER NOW: [Link]`,
 
           <div className="border border-gray-700/60 rounded-lg p-6 shadow-[0_0_25px_rgba(116,209,234,0.15)] mb-8">
             <Tabs defaultValue="input" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3 mb-8">
+              <TabsList className="grid w-full grid-cols-3 mb-8 bg-black border border-gray-700/60">
                 <TabsTrigger 
                   value="input" 
                   disabled={isGenerating}
