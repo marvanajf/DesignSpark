@@ -662,7 +662,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
         <ScrollArea className="max-h-[75vh]">
           <div className="space-y-6 pr-4 py-2">
             {/* Key Details Section */}
-            <div className="bg-[#0e1015] rounded-xl p-4 border border-gray-800/30">
+            <div className="bg-black rounded-xl p-4 border border-gray-800/30">
               <div className="flex flex-col md:flex-row gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground mb-1">
@@ -730,7 +730,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                     <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
                   </div>
                 ) : !campaignContents || campaignContents.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
+                  <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-black rounded-lg overflow-hidden">
                     <FileText className="h-10 w-10 text-muted-foreground" />
                     <h3 className="text-lg font-semibold">No content in this campaign</h3>
                     <p className="text-muted-foreground text-center max-w-md text-sm">
@@ -775,7 +775,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {/* Persona Display */}
                     {campaign.persona_id && personas?.find(p => p.id === campaign.persona_id) && (
-                      <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
+                      <div className="p-4 border border-[#1a1e29] rounded-lg bg-black">
                         <h4 className="text-base font-medium mb-2 flex items-center gap-2">
                           <User className="h-4 w-4 text-[#74d1ea]" /> Target Persona
                         </h4>
@@ -804,7 +804,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                     
                     {/* Tone Analysis Display */}
                     {campaign.tone_analysis_id && toneAnalyses?.find(t => t.id === campaign.tone_analysis_id) && (
-                      <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
+                      <div className="p-4 border border-[#1a1e29] rounded-lg bg-black">
                         <h4 className="text-base font-medium mb-2 flex items-center gap-2">
                           <BarChart className="h-4 w-4 text-[#74d1ea]" /> Tone Analysis
                         </h4>
@@ -827,46 +827,12 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
               {/* Campaign Factory Details */}
               <div className="border-t border-gray-800/30 pt-6">
                 <h3 className="text-xl font-bold mb-4">
-                  Campaign Factory
+                  Campaign Content Overview
                 </h3>
                 
                 <div className="space-y-6">
-                  {/* Campaign Strategy */}
-                  <div className="border border-[#1a1e29] rounded-lg bg-[#0e1015] p-5">
-                    <h4 className="text-base font-medium mb-3">
-                      Campaign Strategy Overview
-                    </h4>
-                    
-                    <div className="space-y-4">
-                      <p className="text-sm text-gray-300">
-                        The Campaign Factory has analyzed your content and persona data to create a comprehensive marketing strategy.
-                        This campaign is designed to maximize engagement through a multi-channel approach, delivered with your preferred tone and style.
-                      </p>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                        <div className="p-3 rounded-md bg-black/20 border border-gray-800/30">
-                          <div>
-                            <p className="text-sm font-medium">Audience Targeting</p>
-                            <p className="text-xs text-gray-400">Optimized for your target personas with focused messaging</p>
-                          </div>
-                        </div>
-                        <div className="p-3 rounded-md bg-black/20 border border-gray-800/30">
-                          <div>
-                            <p className="text-sm font-medium">Content Alignment</p>
-                            <p className="text-xs text-gray-400">Message consistency across all marketing channels</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <p className="text-sm text-gray-300 mt-2">
-                        This campaign is ready to deploy with your chosen content, matching your brand voice and marketing goals.
-                        Use the content preview below to review your campaign materials.
-                      </p>
-                    </div>
-                  </div>
-                  
                   {/* Content Preview */}
-                  <div className="border border-[#1a1e29] rounded-lg bg-[#0e1015] p-5">
+                  <div className="border border-[#1a1e29] rounded-lg bg-black p-5">
                     <h4 className="text-base font-medium mb-3">
                       Content Overview
                     </h4>
@@ -927,7 +893,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
                 </div>
               ) : availableContents.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
+                <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-black rounded-lg overflow-hidden">
                   <h3 className="text-lg font-semibold">No content available</h3>
                   <p className="text-muted-foreground text-center max-w-md text-sm">
                     You don't have any content that can be added to this campaign. All your content is already part of this campaign, or you haven't created any content yet.
