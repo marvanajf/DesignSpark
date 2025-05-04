@@ -302,7 +302,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
-                  <h4 className="text-lg font-medium text-white mb-4">AI Personas</h4>
+                  <h4 className="text-lg font-medium text-white mb-4">OpenAI Personas</h4>
                   <div className="space-y-4">
                     <div className="border-l-2 border-[#74d1ea] pl-4 py-1">
                       <h5 className="text-white font-medium">Tech-Savvy Marketing Director</h5>
@@ -353,14 +353,14 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
                   <Users className="h-6 w-6 text-[#74d1ea]" />
                 </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">AI Personas</h3>
+                <h3 className="text-2xl font-semibold text-white mb-4">OpenAI Personas</h3>
                 <p className="text-gray-400 mb-5">
                   Connect with your ideal audience using tailored personas. Our platform helps you create, manage, and target specific professional personas for more effective content.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">Create AI-generated or custom personas</span>
+                    <span className="text-gray-300">Create OpenAI-generated or custom personas</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#74d1ea] mr-2 mt-0.5 flex-shrink-0" />
@@ -392,7 +392,7 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
                   <Sparkles className="h-6 w-6 text-[#74d1ea]" />
                 </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">AI Content Generation</h3>
+                <h3 className="text-2xl font-semibold text-white mb-4">OpenAI Content Generation</h3>
                 <p className="text-gray-400 mb-5">
                   Generate powerful content that perfectly balances your brand voice with audience expectations. Create compelling LinkedIn posts, cold emails, blog articles, and more that drive engagement and conversions.
                 </p>
@@ -437,7 +437,7 @@ export default function HomePage() {
                       <span className="text-xs text-gray-400">For: Marketing Directors</span>
                     </div>
                     <p className="text-sm text-gray-300">
-                      Excited to share how our marketing team increased content engagement by 43% last quarter through AI-powered personalization. The key? Balancing automation with authentic brand voice. Anyone else exploring this balance between efficiency and authenticity in their content strategy? #MarketingAutomation #ContentStrategy
+                      Excited to share how our marketing team increased content engagement by 43% last quarter through OpenAI-powered personalization. The key? Balancing automation with authentic brand voice. Anyone else exploring this balance between efficiency and authenticity in their content strategy? #MarketingAutomation #ContentStrategy
                     </p>
                     <div className="flex justify-end mt-2">
                       <Button variant="ghost" size="sm" className="h-6 px-2 text-[#74d1ea] hover:bg-[#74d1ea]/10">
@@ -453,7 +453,7 @@ export default function HomePage() {
                     </div>
                     <p className="text-sm text-gray-300">
                       Hi [Name], <br/><br/>
-                      I noticed [Company] has been expanding your content marketing efforts, and thought you might be interested in how similar companies are using AI to scale their production while maintaining quality...
+                      I noticed [Company] has been expanding your content marketing efforts, and thought you might be interested in how similar companies are using OpenAI to scale their production while maintaining quality...
                     </p>
                     <div className="flex justify-end mt-2">
                       <Button variant="ghost" size="sm" className="h-6 px-2 text-[#74d1ea] hover:bg-[#74d1ea]/10">
@@ -770,7 +770,7 @@ export default function HomePage() {
                       How does tone analysis work?
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-400 pb-4">
-                      Our AI analyzes your existing content to identify key characteristics of your brand's tone, including professionalism level, conversational style, technical complexity, and formality.
+                      Our platform uses OpenAI to analyze your existing content and identify key characteristics of your brand's tone, including professionalism level, conversational style, technical complexity, and formality.
                     </AccordionContent>
                   </AccordionItem>
                   
@@ -779,7 +779,7 @@ export default function HomePage() {
                       How many personas can I create?
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-400 pb-4">
-                      There's no limit to the number of personas you can create. You can generate AI-powered personas or create custom personas manually to target specific audience segments.
+                      There's no limit to the number of personas you can create. You can generate OpenAI-powered personas or create custom personas manually to target specific audience segments.
                     </AccordionContent>
                   </AccordionItem>
                   
