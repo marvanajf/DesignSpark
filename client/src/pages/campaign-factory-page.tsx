@@ -970,19 +970,17 @@ REGISTER NOW: [Link]`,
                     </div>
                     
                     {/* Step 3: Additional Settings */}
-                    <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
+                    <div className="bg-gray-900/30 rounded-lg p-5">
                       <h3 className="text-white font-medium mb-4 flex items-center">
-                        <div className="flex items-center justify-center h-9 w-9 rounded-md bg-gradient-to-br from-[#74d1ea]/20 to-[#74d1ea]/5 shadow-sm border border-[#74d1ea]/10 mr-3">
-                          <div className="h-6 w-6 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
-                            <SlidersHorizontal className="h-4 w-4 text-[#74d1ea]" />
-                          </div>
+                        <div className="flex items-center justify-center h-9 w-9 rounded-md bg-gradient-to-br from-[#74d1ea]/20 to-[#74d1ea]/5 mr-3">
+                          <SlidersHorizontal className="h-5 w-5 text-[#74d1ea]" />
                         </div>
                         Step 3: Finishing Touches
                       </h3>
                       
                       <div className="grid md:grid-cols-2 gap-6">
-                        <div className="bg-black/30 rounded-md p-4 border border-gray-800">
-                          <Label className="text-white mb-3 block font-medium">Campaign Timeline</Label>
+                        <div className="bg-black/40 rounded-md p-5">
+                          <Label className="text-white mb-4 block font-medium">Campaign Timeline</Label>
                           <div className="space-y-4">
                             <div>
                               <div className="flex justify-between items-center mb-1">
@@ -1017,7 +1015,7 @@ REGISTER NOW: [Link]`,
                         </div>
                         
                         <div className="space-y-4">
-                          <div className="border border-gray-800 rounded-lg p-4 bg-black/30">
+                          <div className="bg-black/40 rounded-md p-5">
                             <div className="flex items-center justify-between">
                               <div>
                                 <span className="text-white text-sm font-medium">Include tone analysis</span>
@@ -1054,12 +1052,14 @@ REGISTER NOW: [Link]`,
                               )}
                             </div>
                           </div>
-                          <div className="flex items-center justify-between border border-gray-800 rounded-lg p-4 bg-black/30">
-                            <div>
-                              <span className="text-white text-sm font-medium">Generate all deliverables</span>
-                              <p className="text-xs text-gray-400">Create full content for all campaign pieces</p>
+                          <div className="bg-black/40 rounded-md p-5">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <span className="text-white text-sm font-medium">Generate all deliverables</span>
+                                <p className="text-xs text-gray-400">Create full content for all campaign pieces</p>
+                              </div>
+                              <Switch defaultChecked />
                             </div>
-                            <Switch defaultChecked />
                           </div>
                         </div>
                       </div>

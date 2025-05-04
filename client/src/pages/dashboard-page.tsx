@@ -12,7 +12,9 @@ import {
   Edit,
   Lightbulb,
   Sparkles,
-  BookText
+  BookText,
+  Factory,
+  ArrowRight
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -126,6 +128,35 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Campaign Factory Banner */}
+          <div className="mb-6">
+            <div className="bg-gradient-to-r from-[#0c1a2c] to-[#0e1b33] border border-[#74d1ea]/20 rounded-xl p-5 shadow-[0_0_20px_rgba(116,209,234,0.1)]">
+              <div className="flex items-start md:items-center justify-between flex-col md:flex-row">
+                <div className="flex items-center mb-4 md:mb-0">
+                  <div className="h-14 w-14 bg-[#0e131f] border border-[#74d1ea]/30 rounded-xl flex items-center justify-center mr-5 shadow-[0_0_15px_rgba(116,209,234,0.2)]">
+                    <Factory className="h-7 w-7 text-[#74d1ea]" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white mb-1">Campaign Factory</h2>
+                    <p className="text-gray-400">Build complete marketing campaigns in minutes using AI</p>
+                  </div>
+                </div>
+                <div className="flex flex-col md:flex-row items-start md:items-center">
+                  <div className="flex flex-col mr-6 mb-4 md:mb-0">
+                    <span className="text-gray-400 text-sm mb-1">Campaigns Created</span>
+                    <span className="text-2xl font-bold text-white">{user?.campaign_factory_used || 0}</span>
+                  </div>
+                  <Button 
+                    onClick={() => navigate('/campaign-factory')} 
+                    className="px-4 py-2 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+                  >
+                    Create Campaign <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Campaign and Personas Overview Section */}
           <div className="mb-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -186,7 +217,7 @@ export default function DashboardPage() {
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-5">
                     <div className="bg-[#0e131f] border border-[#74d1ea]/20 h-12 w-12 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                      <Sparkles className="h-6 w-6 text-[#74d1ea]" />
+                      <Factory className="h-6 w-6 text-[#74d1ea]" />
                     </div>
                     <div className="bg-[#74d1ea]/10 px-2 py-1 rounded-md text-xs text-[#74d1ea] border border-[#74d1ea]/30">
                       Premium Feature
