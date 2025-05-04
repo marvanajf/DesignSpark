@@ -33,7 +33,7 @@ export default function CampaignFactoryInfoPage() {
               Build <span className="text-[#74d1ea]">marketing campaigns</span> in minutes
             </h1>
             <p className="text-xl text-gray-400 max-w-2xl mb-8">
-              Design and create marketing campaigns with AI-powered tools that save time and provide a structured approach to your marketing efforts.
+              Design and create marketing campaigns with AI-powered tools including tone analysis that save time, maintain consistent brand voice, and provide a structured approach to your marketing efforts.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button 
@@ -304,7 +304,7 @@ export default function CampaignFactoryInfoPage() {
                 </li>
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
-                  <span>Develop consistent messaging across campaign touchpoints</span>
+                  <span>Develop consistent messaging across campaign touchpoints using AI-powered tone analysis</span>
                 </li>
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
