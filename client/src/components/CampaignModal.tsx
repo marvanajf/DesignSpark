@@ -13,6 +13,16 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Tabs,
   TabsContent,
   TabsList,
@@ -22,7 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Plus, Search, FileText, User, BarChart } from "lucide-react";
+import { Loader2, Plus, Search, FileText, User, BarChart, Trash2 } from "lucide-react";
 import SavedContentListItem from "./SavedContentListItem";
 import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 import {
@@ -46,6 +56,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
   const [activeTab, setActiveTab] = useState("content");
   const [selectedPersonaId, setSelectedPersonaId] = useState<number | null>(null);
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -360,6 +371,58 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
     }
   }, [isAddContentDialogOpen]);
 
+  // Delete campaign mutation
+  const deleteCampaignMutation = useMutation({
+    mutationFn: async (campaignId: number) => {
+      try {
+        const res = await fetch(`/api/campaigns/${campaignId}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+        
+        // Check for errors
+        if (!res.ok) {
+          const errorText = await res.text();
+          try {
+            const errorJson = JSON.parse(errorText);
+            throw new Error(errorJson.error || errorJson.message || "An error occurred");
+          } catch (e) {
+            throw new Error(errorText || res.statusText || "An error occurred");
+          }
+        }
+        
+        return;
+      } catch (error: any) {
+        throw new Error(error.message || "Failed to delete campaign");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      toast({
+        title: "Campaign deleted",
+        description: "The campaign has been deleted successfully",
+      });
+      onClose();
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Deletion failed",
+        description: error.message || "Failed to delete campaign",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleDeleteCampaign = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteCampaign = async () => {
+    if (campaignId) {
+      await deleteCampaignMutation.mutateAsync(campaignId);
+    }
+  };
+
   // Create campaign mutation
   const [campaignName, setCampaignName] = useState("");
   const [campaignDescription, setCampaignDescription] = useState("");
@@ -522,14 +585,25 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[900px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-2xl">
-            <span className="flex items-center justify-center h-8 w-8 rounded-full bg-[#181c25]">
-              <span className="text-base font-medium uppercase text-[#74d1ea]">
-                {campaign.name.substring(0, 2)}
+          <div className="flex items-center justify-between">
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              <span className="flex items-center justify-center h-8 w-8 rounded-full bg-[#181c25]">
+                <span className="text-base font-medium uppercase text-[#74d1ea]">
+                  {campaign.name.substring(0, 2)}
+                </span>
               </span>
-            </span>
-            {campaign.name}
-          </DialogTitle>
+              {campaign.name}
+            </DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
+              onClick={handleDeleteCampaign}
+              title="Delete campaign"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
           {campaign.description && (
             <DialogDescription className="mt-1">{campaign.description}</DialogDescription>
           )}
