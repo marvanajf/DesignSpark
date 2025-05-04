@@ -22,7 +22,9 @@ import {
   Rocket,
   Bot,
   Laptop,
-  Gauge
+  Gauge,
+  ChevronDown,
+  ChevronRight
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import tovablyLogo from "@/assets/tovably-logo.png";
@@ -35,6 +37,7 @@ export default function Sidebar() {
   const { avatarColor } = useUserAvatar();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isSettingsExpanded, setIsSettingsExpanded] = useState(true);
 
   // Check if we're on mobile
   useEffect(() => {
@@ -177,10 +180,23 @@ export default function Sidebar() {
           
           {/* Settings navigation items */}
           <div className="mt-8">
-            {!isCollapsed && (
-              <h3 className="px-4 text-xs text-zinc-500 font-medium mb-2">Settings</h3>
-            )}
-            <nav className="space-y-1">
+            <button 
+              onClick={() => setIsSettingsExpanded(!isSettingsExpanded)} 
+              className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 text-xs text-zinc-500 font-medium mb-2 hover:text-zinc-300`}
+            >
+              {isCollapsed ? (
+                <Settings className="h-5 w-5" />
+              ) : (
+                <>
+                  <span>Settings</span>
+                  {isSettingsExpanded 
+                    ? <ChevronDown className="h-3 w-3" /> 
+                    : <ChevronRight className="h-3 w-3" />
+                  }
+                </>
+              )}
+            </button>
+            <nav className={`space-y-1 ${isSettingsExpanded || isCollapsed ? 'block' : 'hidden'}`}>
               {bottomMenuItems.map((item) => {
                 const isActive = location === item.href;
                 
