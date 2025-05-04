@@ -149,12 +149,12 @@ export default function LandingPage() {
                   <Button 
                     variant="ghost" 
                     className="text-white hover:text-[#74d1ea] hover:bg-black/30"
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate('/auth')}
                   >
                     Login
                   </Button>
                   <Button 
-                    onClick={() => navigate('/signup')}
+                    onClick={() => navigate('/auth')}
                     className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
                   >
                     Sign Up
@@ -174,9 +174,11 @@ export default function LandingPage() {
         
         <div className="max-w-7xl mx-auto relative text-center">
           <div className="max-w-3xl mx-auto">
-            <Badge className="mb-5 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1.5 px-3 text-sm">
-              AI-Powered Marketing Platform
-            </Badge>
+            <div className="flex justify-center">
+              <Badge className="mb-5 bg-[#74d1ea]/20 text-[#74d1ea] border-0 py-1.5 px-3 text-sm">
+                AI-Powered Marketing Platform
+              </Badge>
+            </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Transform Your <span className="bg-gradient-to-r from-[#74d1ea] to-[#a3e6fa] text-transparent bg-clip-text">Marketing</span> with AI-Powered Creativity
             </h1>
@@ -185,7 +187,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                onClick={() => navigate('/signup')}
+                onClick={() => navigate('/auth')}
                 className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)]"
               >
                 Start Free Trial
@@ -917,7 +919,7 @@ export default function LandingPage() {
                       onClick={() => {
                         // For free plan, navigate to signup. For paid plans, go directly to Stripe checkout
                         if (isFreePlan) {
-                          navigate('/signup');
+                          navigate('/auth');
                         } else {
                           // Use the direct Stripe redirect endpoint
                           window.location.href = `/api/direct-stripe-redirect?plan=${planId}`;
@@ -998,7 +1000,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              onClick={() => navigate('/signup')}
+              onClick={() => navigate('/auth')}
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black px-8 py-6 text-lg rounded-lg shadow-[0_0_25px_rgba(116,209,234,0.25)]"
             >
               Start Free Trial
