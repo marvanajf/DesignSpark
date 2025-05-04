@@ -14,7 +14,9 @@ import {
   Search,
   Sparkles,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
+  ArrowRight,
+  AlertCircle
 } from "lucide-react";
 import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 import { Button } from "@/components/ui/button";
