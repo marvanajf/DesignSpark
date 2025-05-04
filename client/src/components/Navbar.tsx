@@ -84,42 +84,52 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                       <div 
                         onMouseEnter={handlePlatformMouseEnter} 
                         onMouseLeave={handlePlatformMouseLeave}
-                        className="absolute left-0 mt-2 w-64 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.15)] bg-black border border-gray-700/60 ring-1 ring-black ring-opacity-5 z-50"
+                        className="absolute left-0 mt-2 w-72 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.2)] bg-[#0a0d14] border border-gray-700/60 py-4 z-50"
                       >
-                        <div className="py-1">
-                          <Link href="/tone-analysis-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <BarChart4 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                        <div className="space-y-2">
+                          <Link href="/tone-analysis-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-4">
+                              <BarChart4 className="h-5 w-5 text-[#5db8d0]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Tone Analysis</p>
-                              <p className="text-xs text-gray-500">Analyze content tone and style</p>
+                              <p className="font-medium text-white">Tone Analysis</p>
+                              <p className="text-xs text-gray-400">Analyze content tone and style</p>
                             </div>
                           </Link>
-                          <Link href="/personas-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <Users className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Link href="/personas-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-4">
+                              <Users className="h-5 w-5 text-[#74d1ea]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Persona Factory</p>
-                              <p className="text-xs text-gray-500">Create targeted personas</p>
+                              <p className="font-medium text-white">Persona Factory</p>
+                              <p className="text-xs text-gray-400">Create targeted personas</p>
                             </div>
                           </Link>
-                          <Link href="/content-generation-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <MessageSquareText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Link href="/content-generation-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#4fa3bb]/20 flex items-center justify-center mr-4">
+                              <MessageSquareText className="h-5 w-5 text-[#4fa3bb]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Content</p>
-                              <p className="text-xs text-gray-500">Create tailored content</p>
+                              <p className="font-medium text-white">Content</p>
+                              <p className="text-xs text-gray-400">Create tailored content</p>
                             </div>
                           </Link>
-                          <Link href="/campaign-factory-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <Sparkles className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Link href="/campaign-factory-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-4">
+                              <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Campaign Factory</p>
-                              <p className="text-xs text-gray-500">Automate marketing campaigns</p>
+                              <p className="font-medium text-white">Campaign Factory</p>
+                              <p className="text-xs text-gray-400">Automate marketing campaigns</p>
                             </div>
                           </Link>
-                          <Link href="/campaigns-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <CalendarClock className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Link href="/campaigns-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-4">
+                              <CalendarClock className="h-5 w-5 text-[#5db8d0]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Campaigns</p>
-                              <p className="text-xs text-gray-500">Organize marketing campaigns</p>
+                              <p className="font-medium text-white">Campaigns</p>
+                              <p className="text-xs text-gray-400">Organize marketing campaigns</p>
                             </div>
                           </Link>
                         </div>
@@ -140,28 +150,34 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                       <div 
                         onMouseEnter={handleResourcesMouseEnter} 
                         onMouseLeave={handleResourcesMouseLeave}
-                        className="absolute left-0 mt-2 w-64 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.15)] bg-black border border-gray-700/60 ring-1 ring-black ring-opacity-5 z-50"
+                        className="absolute left-0 mt-2 w-72 rounded-md shadow-[0_0_15px_rgba(116,209,234,0.2)] bg-[#0a0d14] border border-gray-700/60 py-4 z-50"
                       >
-                        <div className="py-1">
-                          <Link href="/blog" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                        <div className="space-y-2">
+                          <Link href="/blog" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-4">
+                              <FileText className="h-5 w-5 text-[#74d1ea]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Blog</p>
-                              <p className="text-xs text-gray-500">News and updates</p>
+                              <p className="font-medium text-white">Blog</p>
+                              <p className="text-xs text-gray-400">News and updates</p>
                             </div>
                           </Link>
-                          <Link href="/guides-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <BookOpen className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Link href="/guides-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-4">
+                              <BookOpen className="h-5 w-5 text-[#5db8d0]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Guides</p>
-                              <p className="text-xs text-gray-500">Best AI practices</p>
+                              <p className="font-medium text-white">Guides</p>
+                              <p className="text-xs text-gray-400">Best AI practices</p>
                             </div>
                           </Link>
-                          <Link href="/contact" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <HelpCircle className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Link href="/contact" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
+                            <div className="flex-shrink-0 w-10 h-10 rounded bg-[#4fa3bb]/20 flex items-center justify-center mr-4">
+                              <HelpCircle className="h-5 w-5 text-[#4fa3bb]" />
+                            </div>
                             <div>
-                              <p className="font-medium">Contact Us</p>
-                              <p className="text-xs text-gray-500">Get in touch with our team</p>
+                              <p className="font-medium text-white">Contact Us</p>
+                              <p className="text-xs text-gray-400">Get in touch with our team</p>
                             </div>
                           </Link>
                         </div>
@@ -250,52 +266,103 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
             {!showDashboardLinks && (
               <>
                 <div className="px-3 py-2">
-                  <div className="font-medium text-white text-base">Platform</div>
-                  <Link href="/tone-analysis-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
-                    <BarChart4 className="mr-3 h-5 w-5 text-gray-400" />
-                    Tone Analysis
-                  </Link>
-                  <Link href="/personas-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                    <Users className="mr-3 h-5 w-5 text-gray-400" />
-                    Persona Factory
-                  </Link>
-                  <Link href="/content-generation-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                    <MessageSquareText className="mr-3 h-5 w-5 text-gray-400" />
-                    Content
-                  </Link>
-                  <Link href="/campaign-factory-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                    <Sparkles className="mr-3 h-5 w-5 text-gray-400" />
-                    Campaign Factory
-                  </Link>
-                  <Link href="/campaigns-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                    <CalendarClock className="mr-3 h-5 w-5 text-gray-400" />
-                    Campaigns
-                  </Link>
+                  <div className="font-medium text-white text-base mb-3">Platform</div>
+                  <div className="space-y-2">
+                    <Link href="/tone-analysis-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-3">
+                        <BarChart4 className="h-4 w-4 text-[#5db8d0]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Tone Analysis</p>
+                        <p className="text-xs text-gray-400">Analyze content tone and style</p>
+                      </div>
+                    </Link>
+                    <Link href="/personas-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-3">
+                        <Users className="h-4 w-4 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Persona Factory</p>
+                        <p className="text-xs text-gray-400">Create targeted personas</p>
+                      </div>
+                    </Link>
+                    <Link href="/content-generation-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#4fa3bb]/20 flex items-center justify-center mr-3">
+                        <MessageSquareText className="h-4 w-4 text-[#4fa3bb]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Content</p>
+                        <p className="text-xs text-gray-400">Create tailored content</p>
+                      </div>
+                    </Link>
+                    <Link href="/campaign-factory-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-3">
+                        <Sparkles className="h-4 w-4 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Campaign Factory</p>
+                        <p className="text-xs text-gray-400">Automate marketing campaigns</p>
+                      </div>
+                    </Link>
+                    <Link href="/campaigns-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-3">
+                        <CalendarClock className="h-4 w-4 text-[#5db8d0]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Campaigns</p>
+                        <p className="text-xs text-gray-400">Organize marketing campaigns</p>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
                 
-                <div className="px-3 py-2">
-                  <div className="font-medium text-white text-base">Resources</div>
-                  <Link href="/blog" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
-                    <FileText className="mr-3 h-5 w-5 text-gray-400" />
-                    Blog
-                  </Link>
-                  <Link href="/guides-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                    <BookOpen className="mr-3 h-5 w-5 text-gray-400" />
-                    Guides
-                  </Link>
-                  <Link href="/contact" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
-                    <HelpCircle className="mr-3 h-5 w-5 text-gray-400" />
-                    Contact Us
-                  </Link>
+                <div className="px-3 py-2 mt-4">
+                  <div className="font-medium text-white text-base mb-3">Resources</div>
+                  <div className="space-y-2">
+                    <Link href="/blog" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-3">
+                        <FileText className="h-4 w-4 text-[#74d1ea]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Blog</p>
+                        <p className="text-xs text-gray-400">News and updates</p>
+                      </div>
+                    </Link>
+                    <Link href="/guides-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-3">
+                        <BookOpen className="h-4 w-4 text-[#5db8d0]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Guides</p>
+                        <p className="text-xs text-gray-400">Best AI practices</p>
+                      </div>
+                    </Link>
+                    <Link href="/contact" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-[#4fa3bb]/20 flex items-center justify-center mr-3">
+                        <HelpCircle className="h-4 w-4 text-[#4fa3bb]" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Contact Us</p>
+                        <p className="text-xs text-gray-400">Get in touch with our team</p>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
                 
-                <Link
-                  href="/pricing"
-                  className="text-gray-300 hover:bg-gray-900 hover:text-white flex items-center px-3 py-2 rounded-md text-base font-medium"
-                >
-                  <BarChart4 className="mr-3 h-5 w-5 text-gray-400" />
-                  Pricing
-                </Link>
+                <div className="px-3 py-2 mt-4">
+                  <Link
+                    href="/pricing"
+                    className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded"
+                  >
+                    <div className="flex-shrink-0 w-8 h-8 rounded bg-[#5db8d0]/20 flex items-center justify-center mr-3">
+                      <BarChart4 className="h-4 w-4 text-[#5db8d0]" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-white">Pricing</p>
+                      <p className="text-xs text-gray-400">View subscription plans</p>
+                    </div>
+                  </Link>
+                </div>
               </>
             )}
             
