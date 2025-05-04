@@ -1065,7 +1065,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               currency: planInfo.currency.toLowerCase(),
               product_data: {
                 name: `Tovably ${planInfo.name} Plan`,
-                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns, and ${planInfo.campaignFactory} campaign factory uses.`
               },
               unit_amount: Math.round(planInfo.price * 100), // Convert to cents
               recurring: {
@@ -1178,7 +1178,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               currency: planInfo.currency.toLowerCase(),
               product_data: {
                 name: `Tovably ${planInfo.name} Plan`,
-                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns, and ${planInfo.campaignFactory} campaign factory uses.`
               },
               unit_amount: Math.round(planInfo.price * 100), // Convert to cents
               recurring: {
@@ -1266,7 +1266,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               currency: planInfo.currency.toLowerCase(),
               product_data: {
                 name: `Tovably ${planInfo.name} Plan`,
-                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns.`
+                description: `${planInfo.name} subscription with ${planInfo.personas} personas, ${planInfo.toneAnalyses} tone analyses, ${planInfo.contentGeneration} content generations, and ${planInfo.campaigns} campaigns, and ${planInfo.campaignFactory} campaign factory uses.`
               },
               unit_amount: Math.round(planInfo.price * 100), // Convert to cents
               recurring: {
