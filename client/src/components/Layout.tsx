@@ -84,8 +84,8 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
       {!isAppPage && <Navbar />}
       <div className="flex flex-1 overflow-hidden bg-black">
         {(showSidebar || isAppPage) && <Sidebar />}
-        <div className="flex flex-col flex-1 overflow-y-auto">
-          <main className={`flex-1 bg-background ${(showSidebar || isAppPage) ? '' : 'container mx-auto py-6'}`}>
+        <div className="flex flex-col flex-1 overflow-y-auto" style={{backgroundImage: 'none'}}>
+          <main className={`flex-1 ${(showSidebar || isAppPage) ? '' : 'container mx-auto py-6'}`} style={{backgroundImage: 'none'}}>
             {children}
           </main>
           
