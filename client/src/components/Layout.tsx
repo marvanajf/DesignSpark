@@ -54,12 +54,7 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                 </a>
               </div>
             </nav>
-            <div className="mt-8 flex justify-center space-x-6">
-              <a href="#" className="text-gray-400 hover:text-[#74d1ea]">
-                <span className="sr-only">LinkedIn</span>
-                <i className="fab fa-linkedin fa-lg"></i>
-              </a>
-            </div>
+
             <p className="mt-8 text-center text-base text-gray-400">
               &copy; {new Date().getFullYear()} Tovably. All rights reserved.
             </p>
@@ -80,12 +75,13 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                     (location.startsWith('/guides') && !location.startsWith('/guides-info')) ||
                     location.startsWith('/usage') ||
                     (location.startsWith('/campaigns') && !location.startsWith('/campaigns-info')) ||
-                    location.startsWith('/campaign/');
+                    location.startsWith('/campaign/') ||
+                    location.startsWith('/campaign-factory');
   
-  // For app pages, only show sidebar; for other non-homepage pages, show both navbar and sidebar
+  // For app pages, only show sidebar; for other non-homepage pages, show navbar
   return (
     <div className="min-h-screen flex flex-col">
-      {!isAppPage && <Navbar showDashboardLinks={isAppPage} />}
+      {!isAppPage && <Navbar />}
       <div className="flex flex-1 overflow-hidden bg-black">
         {(showSidebar || isAppPage) && <Sidebar />}
         <div className="flex flex-col flex-1 overflow-y-auto">

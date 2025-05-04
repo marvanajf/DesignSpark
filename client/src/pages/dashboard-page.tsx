@@ -311,10 +311,10 @@ export default function DashboardPage() {
                 </div>
               </div>
               
-              {/* Prospecting Factory Card - Premium Feature */}
+              {/* Campaign Factory Card - Premium Feature */}
               <div 
                 className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer"
-                onClick={() => navigate('/prospecting-factory')}
+                onClick={() => navigate('/campaign-factory')}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
                 <div className="p-6">
@@ -327,7 +327,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-white mb-3">Prospecting Factory</h3>
+                  <h3 className="text-xl font-bold text-white mb-3">Campaign Factory</h3>
                   <p className="text-gray-400 mb-5">Generate complete, strategic marketing campaigns from a single prompt. Create targeted content for multiple personas, tailored to your brand's voice.</p>
                   
                   <ul className="space-y-2 mb-6">
@@ -346,7 +346,7 @@ export default function DashboardPage() {
                   </ul>
                   
                   <Button variant="link" className="text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
-                    Access Prospecting Factory →
+                    Access Campaign Factory →
                   </Button>
                 </div>
               </div>
