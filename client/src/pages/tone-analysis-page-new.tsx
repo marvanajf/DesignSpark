@@ -229,12 +229,6 @@ export default function ToneAnalysisPage() {
             </div>
           </div>
 
-          {/* Tone Analysis Section Title */}
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-white">Tone Analysis</h2>
-            <p className="text-sm text-gray-400 mt-1">Analyze your brand's unique communication style</p>
-          </div>
-
           {/* Tone Analysis Promo Banner */}
           <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
