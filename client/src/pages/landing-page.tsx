@@ -231,7 +231,7 @@ export default function LandingPage() {
               FEATURES
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Everything You Need to Excel at Digital Marketing
+              How Our Platform Powers Your Marketing Success
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Our comprehensive platform provides all the tools you need to create, analyze, and optimize your marketing campaigns.
@@ -655,7 +655,7 @@ export default function LandingPage() {
               BENEFITS
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Amplify Your Marketing Results
+              What You'll Achieve With Our Platform
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Discover how our AI-powered platform can transform your marketing efforts and deliver measurable results.
@@ -734,7 +734,7 @@ export default function LandingPage() {
               TESTIMONIALS
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Trusted by Marketing Professionals
+              How Our Platform Changed Their Work
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               See what our customers are saying about how our platform has transformed their marketing operations.
@@ -995,7 +995,7 @@ export default function LandingPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0a0d14] border-t border-gray-800/60">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to Revolutionize Your Marketing?
+            When Will You Transform Your Marketing?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
             Join thousands of marketing professionals who are creating better content faster with our AI-powered platform.
