@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { 
   Loader2, Plus, Search, FileText, User, BarChart, Trash2, Rocket, Zap, Mail, 
   Sparkles, LineChart, ArrowRight, Calendar, Clock, Settings, BarChart2, 
@@ -873,9 +874,16 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                       <div className="border border-[#1a1e29] rounded-lg bg-black p-4">
                         <div className="flex items-center justify-between mb-3">
                           <h4 className="text-sm font-medium">Campaign Status</h4>
-                          <Badge variant={campaign?.status === 'active' ? 'default' : 'outline'} 
-                                 className={campaign?.status === 'active' ? 'bg-green-600' : 
-                                            campaign?.status === 'draft' ? 'bg-gray-600' : 'bg-blue-600'}>
+                          <Badge 
+                            className={
+                              campaign?.status === 'active' ? 'bg-green-600' : 
+                              campaign?.status === 'draft' ? 'bg-gray-600' : 
+                              campaign?.status === 'planning' ? 'bg-yellow-600' :
+                              campaign?.status === 'running' ? 'bg-blue-600' :
+                              campaign?.status === 'completed' ? 'bg-purple-600' :
+                              'bg-gray-500'
+                            }
+                          >
                             {campaign?.status_display || 'Draft'}
                           </Badge>
                         </div>
