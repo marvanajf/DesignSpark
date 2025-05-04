@@ -116,11 +116,11 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                           </Link>
                           <Link href="/campaign-factory-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
                             <div className="flex-shrink-0 w-10 h-10 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-4">
-                              <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                              <Factory className="h-5 w-5 text-[#74d1ea]" />
                             </div>
                             <div>
                               <p className="font-medium text-white">Campaign Factory</p>
-                              <p className="text-xs text-gray-400">Automate marketing campaigns</p>
+                              <p className="text-xs text-gray-400">Build marketing campaigns in minutes</p>
                             </div>
                           </Link>
                           <Link href="/campaigns-info" className="group flex items-center px-5 py-2 text-sm text-gray-300 hover:bg-[#090c13]">
@@ -297,11 +297,11 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                     </Link>
                     <Link href="/campaign-factory-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
                       <div className="flex-shrink-0 w-8 h-8 rounded bg-[#74d1ea]/20 flex items-center justify-center mr-3">
-                        <Sparkles className="h-4 w-4 text-[#74d1ea]" />
+                        <Factory className="h-4 w-4 text-[#74d1ea]" />
                       </div>
                       <div>
                         <p className="font-medium text-white">Campaign Factory</p>
-                        <p className="text-xs text-gray-400">Automate marketing campaigns</p>
+                        <p className="text-xs text-gray-400">Build marketing campaigns in minutes</p>
                       </div>
                     </Link>
                     <Link href="/campaigns-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-[#090c13] rounded">
