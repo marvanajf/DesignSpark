@@ -30,7 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Loader2, Plus, Search, FileText, User, BarChart, Trash2, Rocket, Zap, Mail, 
   Sparkles, LineChart, ArrowRight, Calendar, Clock, Settings, BarChart2, 
-  PenTool, Target, MessageSquare, Share2, ListChecks, ChevronDown
+  PenTool, Target, MessageSquare, Share2, ListChecks, ChevronDown, Pencil
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -907,27 +907,112 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                       
                       {/* Campaign Timeline */}
                       <div className="border border-[#1a1e29] rounded-lg bg-black p-4">
-                        <h4 className="text-sm font-medium mb-3">Campaign Timeline</h4>
-                        <div className="space-y-2">
-                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
-                            <Clock className="h-4 w-4 text-gray-400" />
-                            <div className="text-sm">
-                              {campaign?.start_date ? (
-                                <span>Starts: {new Date(campaign.start_date).toLocaleDateString()}</span>
-                              ) : (
-                                <span className="text-gray-400">No start date set</span>
-                              )}
-                            </div>
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="text-sm font-medium">Campaign Timeline</h4>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 rounded text-muted-foreground hover:text-[#74d1ea]"
+                            onClick={() => setActiveCampaignTab('schedule')}
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-xs text-gray-400">Start Date</label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="justify-start text-left font-normal h-8 text-sm border-gray-800 hover:bg-[#1a1e29] w-full"
+                                >
+                                  <Clock className="mr-2 h-3.5 w-3.5 text-gray-400" />
+                                  {campaign?.start_date ? (
+                                    format(new Date(campaign.start_date), "PPP")
+                                  ) : (
+                                    <span className="text-gray-400">Pick a start date</span>
+                                  )}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0 bg-black border-gray-800">
+                                <CalendarComponent
+                                  mode="single"
+                                  selected={startDate || (campaign?.start_date ? new Date(campaign.start_date) : undefined)}
+                                  onSelect={(date) => {
+                                    setStartDate(date);
+                                    // Save immediately when selected
+                                    if (date) {
+                                      fetch(`/api/campaigns/${campaignId}`, {
+                                        method: "PATCH",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ start_date: date }),
+                                        credentials: "include"
+                                      }).then(res => {
+                                        if (res.ok) {
+                                          queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}`] });
+                                          toast({
+                                            title: "Start date updated",
+                                            description: "Campaign timeline has been updated",
+                                          });
+                                        }
+                                      });
+                                    }
+                                  }}
+                                  className="bg-black"
+                                />
+                              </PopoverContent>
+                            </Popover>
                           </div>
-                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
-                            <Calendar className="h-4 w-4 text-gray-400" />
-                            <div className="text-sm">
-                              {campaign?.end_date ? (
-                                <span>Ends: {new Date(campaign.end_date).toLocaleDateString()}</span>
-                              ) : (
-                                <span className="text-gray-400">No end date set</span>
-                              )}
-                            </div>
+                          
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-xs text-gray-400">End Date</label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="justify-start text-left font-normal h-8 text-sm border-gray-800 hover:bg-[#1a1e29] w-full"
+                                >
+                                  <Calendar className="mr-2 h-3.5 w-3.5 text-gray-400" />
+                                  {campaign?.end_date ? (
+                                    format(new Date(campaign.end_date), "PPP")
+                                  ) : (
+                                    <span className="text-gray-400">Pick an end date</span>
+                                  )}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0 bg-black border-gray-800">
+                                <CalendarComponent
+                                  mode="single"
+                                  selected={endDate || (campaign?.end_date ? new Date(campaign.end_date) : undefined)}
+                                  onSelect={(date) => {
+                                    setEndDate(date);
+                                    // Save immediately when selected
+                                    if (date) {
+                                      fetch(`/api/campaigns/${campaignId}`, {
+                                        method: "PATCH",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ end_date: date }),
+                                        credentials: "include"
+                                      }).then(res => {
+                                        if (res.ok) {
+                                          queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}`] });
+                                          toast({
+                                            title: "End date updated",
+                                            description: "Campaign timeline has been updated",
+                                          });
+                                        }
+                                      });
+                                    }
+                                  }}
+                                  disabled={(date) => {
+                                    const startDateValue = startDate || (campaign?.start_date ? new Date(campaign.start_date) : undefined);
+                                    return startDateValue ? date < startDateValue : false;
+                                  }}
+                                  className="bg-black"
+                                />
+                              </PopoverContent>
+                            </Popover>
                           </div>
                         </div>
                       </div>
