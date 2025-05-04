@@ -208,14 +208,14 @@ export default function LandingPage() {
       {/* Stats Section */}
       <section className="py-12 border-y border-gray-800/60 bg-gradient-to-r from-black via-[#050a15] to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-6 bg-black/30 rounded-xl border border-gray-800/60 transform transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)] hover:-translate-y-1 hover:border-gray-700/80 group">
               <div className="flex items-center justify-center mb-4">
                 <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center group-hover:bg-[#74d1ea]/20 transition-colors">
                   <Zap className="h-5 w-5 text-[#74d1ea]" />
                 </div>
               </div>
-              <div className="font-mono text-3xl font-bold text-white mb-1 flex items-center justify-center">
+              <div className="text-3xl font-bold text-white mb-1 flex items-center justify-center">
                 <span className="mr-1 text-[#74d1ea]">+</span>
                 <CountUp 
                   end={5} 
@@ -235,7 +235,7 @@ export default function LandingPage() {
                   <Clock className="h-5 w-5 text-[#74d1ea]" />
                 </div>
               </div>
-              <div className="font-mono text-3xl font-bold text-white mb-1 flex items-center justify-center">
+              <div className="text-3xl font-bold text-white mb-1 flex items-center justify-center">
                 <CountUp 
                   end={35} 
                   suffix="+" 
@@ -254,7 +254,7 @@ export default function LandingPage() {
                   <FileText className="h-5 w-5 text-[#74d1ea]" />
                 </div>
               </div>
-              <div className="font-mono text-3xl font-bold text-white mb-1 flex items-center justify-center">
+              <div className="text-3xl font-bold text-white mb-1 flex items-center justify-center">
                 <CountUp 
                   end={300} 
                   suffix="%" 
@@ -265,25 +265,6 @@ export default function LandingPage() {
                 />
               </div>
               <p className="text-gray-400 text-sm">More Content Produced</p>
-            </div>
-
-            <div className="text-center p-6 bg-black/30 rounded-xl border border-gray-800/60 transform transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)] hover:-translate-y-1 hover:border-gray-700/80 group">
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#74d1ea]/10 flex items-center justify-center group-hover:bg-[#74d1ea]/20 transition-colors">
-                  <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
-                </div>
-              </div>
-              <div className="font-mono text-3xl font-bold text-white mb-1 flex items-center justify-center">
-                <CountUp 
-                  end={96} 
-                  suffix="%" 
-                  delay={0.8}
-                  duration={2.5}
-                  enableScrollSpy={true}
-                  scrollSpyOnce={true}
-                />
-              </div>
-              <p className="text-gray-400 text-sm">Customer Satisfaction</p>
             </div>
           </div>
         </div>
