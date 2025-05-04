@@ -315,6 +315,44 @@ export default function CampaignFactoryInfoPage() {
           </div>
         </div>
       </div>
+      
+      {/* Time-Saving Section */}
+      <div className="bg-black py-16 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-gray-900/80 to-gray-900/30 backdrop-blur-sm rounded-2xl p-8 border border-[#74d1ea]/20 shadow-[0_0_30px_rgba(116,209,234,0.25)]">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-semibold text-white mb-2">Time is Your Most Valuable Asset</h2>
+              <div className="h-1 w-24 bg-gradient-to-r from-[#74d1ea] to-[#74d1ea]/40 mx-auto"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="text-5xl font-bold text-[#74d1ea] mb-2">5x</div>
+                <h3 className="text-lg font-medium text-white mb-2">Faster Campaign Creation</h3>
+                <p className="text-gray-400">What once took days now takes just hours with AI-assisted campaign building</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-5xl font-bold text-[#74d1ea] mb-2">70%</div>
+                <h3 className="text-lg font-medium text-white mb-2">Less Manual Work</h3>
+                <p className="text-gray-400">Automate repetitive campaign planning tasks so you can focus on strategy</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-5xl font-bold text-[#74d1ea] mb-2">24/7</div>
+                <h3 className="text-lg font-medium text-white mb-2">Always Available</h3>
+                <p className="text-gray-400">Create powerful campaigns whenever inspiration strikes, not just during business hours</p>
+              </div>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Campaign Factory doesn't just save you time—it gives you back the freedom to focus on what matters most: creating compelling campaigns that drive real business results.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </Layout>
   );
 }
