@@ -430,7 +430,7 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Create Persona Section */}
-          <div className="mb-8">
+          <div className="mb-8 border border-gray-800/60 rounded-xl p-6 bg-black/40">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <UserCircle className="h-5 w-5 text-[#74d1ea]" />
@@ -605,7 +605,7 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Example Personas Section */}
-          <div className="mb-8">
+          <div className="mb-8 border border-gray-800/60 rounded-xl p-6 bg-black/40">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <Users className="h-5 w-5 text-[#74d1ea]" />
@@ -737,7 +737,7 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Your Personas Section */}
-          <div className="mb-8 mt-12">
+          <div className="mb-8 mt-8 border border-gray-800/60 rounded-xl p-6 bg-black/40">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <UserCircle className="h-5 w-5 text-[#74d1ea]" />
