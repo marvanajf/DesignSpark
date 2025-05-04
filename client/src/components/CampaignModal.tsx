@@ -1414,14 +1414,14 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
         </Dialog>
         
         {/* Delete Button */}
-        <div className="border-t border-gray-800/30 mt-6 pt-6 flex justify-end">
+        <div className="border-t border-gray-800/30 mt-6 pt-4 flex justify-center">
           <Button
-            variant="ghost"
+            variant="link"
             size="sm"
-            className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
+            className="text-gray-500 hover:text-red-500 transition-colors"
             onClick={handleDeleteCampaign}
           >
-            <Trash2 className="mr-2 h-4 w-4" /> Delete Campaign
+            <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete Campaign
           </Button>
         </div>
 
