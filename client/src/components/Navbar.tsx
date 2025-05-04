@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import React, { useState, useRef } from "react";
-import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle, CalendarClock } from "lucide-react";
+import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle, CalendarClock, Factory } from "lucide-react";
 import tovablyLogo from "@/assets/tovably-logo.png";
 
 interface NavbarProps {
@@ -92,6 +92,13 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                             <div>
                               <p className="font-medium">Content</p>
                               <p className="text-xs text-gray-500">Create tailored content</p>
+                            </div>
+                          </Link>
+                          <Link href="/campaign-factory-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
+                            <Factory className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <div>
+                              <p className="font-medium">Content Factory</p>
+                              <p className="text-xs text-gray-500">Streamline content creation</p>
                             </div>
                           </Link>
                           <Link href="/campaigns-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
@@ -238,6 +245,9 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                   </Link>
                   <Link href="/content-generation-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
                     Content
+                  </Link>
+                  <Link href="/campaign-factory-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    Content Factory
                   </Link>
                   <Link href="/campaigns-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
                     Campaigns
