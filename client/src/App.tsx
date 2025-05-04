@@ -20,6 +20,7 @@ import SupportPage from "@/pages/support-page";
 import GuidesPage from "@/pages/guides-page";
 import UsagePage from "@/pages/usage-page";
 import CampaignFactoryPage from "@/pages/campaign-factory-page";
+import CampaignFactoryInfo from "@/pages/campaign-factory-info";
 import GuidesMarketingPage from "@/pages/guides-marketing-page";
 import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
 import ContentGenerationMarketingPage from "@/pages/content-generation-marketing-page";
@@ -68,6 +69,7 @@ function Router() {
       <Route path="/content-generation-info" component={ContentGenerationMarketingPage} />
       <Route path="/personas-info" component={PersonasMarketingPage} />
       <Route path="/campaigns-info" component={CampaignsInfoPage} />
+      <Route path="/campaign-factory-info" component={CampaignFactoryInfo} />
       <Route path="/guides-info" component={GuidesMarketingPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
