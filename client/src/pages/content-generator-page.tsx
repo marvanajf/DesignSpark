@@ -507,53 +507,65 @@ export default function ContentGeneratorPage() {
                   {/* Content Type Selection */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-300">Content Type</label>
-                    <Tabs 
-                      defaultValue="linkedin_post" 
+                    <Select
                       value={contentType}
                       onValueChange={(value) => setContentType(value as "linkedin_post" | "email" | "webinar" | "workshop")}
-                      className="w-full"
                     >
-                      <TabsList className="w-full bg-gray-900 p-1">
-                        <div className="w-full grid grid-cols-4 gap-1">
-                          <TabsTrigger 
-                            value="linkedin_post" 
-                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
-                          >
-                            <div className="flex items-center justify-center">
+                      <SelectTrigger className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]">
+                        <SelectValue placeholder="Select content type">
+                          {contentType === "linkedin_post" && (
+                            <div className="flex items-center">
                               <SiLinkedin className="h-4 w-4 mr-1.5" />
-                              <span className="text-xs">LinkedIn</span>
+                              <span>LinkedIn Post</span>
                             </div>
-                          </TabsTrigger>
-                          <TabsTrigger 
-                            value="email" 
-                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
-                          >
-                            <div className="flex items-center justify-center">
+                          )}
+                          {contentType === "email" && (
+                            <div className="flex items-center">
                               <Mail className="h-4 w-4 mr-1.5" />
-                              <span className="text-xs">Email</span>
+                              <span>Email</span>
                             </div>
-                          </TabsTrigger>
-                          <TabsTrigger 
-                            value="webinar" 
-                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
-                          >
-                            <div className="flex items-center justify-center">
+                          )}
+                          {contentType === "webinar" && (
+                            <div className="flex items-center">
                               <Video className="h-4 w-4 mr-1.5" />
-                              <span className="text-xs">Webinar</span>
+                              <span>Webinar</span>
                             </div>
-                          </TabsTrigger>
-                          <TabsTrigger 
-                            value="workshop" 
-                            className="h-9 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black flex justify-center items-center"
-                          >
-                            <div className="flex items-center justify-center">
+                          )}
+                          {contentType === "workshop" && (
+                            <div className="flex items-center">
                               <ClipboardList className="h-4 w-4 mr-1.5" />
-                              <span className="text-xs">Workshop</span>
+                              <span>Workshop</span>
                             </div>
-                          </TabsTrigger>
-                        </div>
-                      </TabsList>
-                    </Tabs>
+                          )}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent className="bg-black border-gray-800">
+                        <SelectItem value="linkedin_post">
+                          <div className="flex items-center">
+                            <SiLinkedin className="h-4 w-4 mr-1.5" />
+                            <span>LinkedIn Post</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="email">
+                          <div className="flex items-center">
+                            <Mail className="h-4 w-4 mr-1.5" />
+                            <span>Email</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="webinar">
+                          <div className="flex items-center">
+                            <Video className="h-4 w-4 mr-1.5" />
+                            <span>Webinar</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="workshop">
+                          <div className="flex items-center">
+                            <ClipboardList className="h-4 w-4 mr-1.5" />
+                            <span>Workshop</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   
                   {/* Topic Input */}
