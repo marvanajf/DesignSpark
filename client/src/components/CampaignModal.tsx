@@ -707,38 +707,23 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
               </div>
             </div>
 
-            {/* Navigation Links */}
-            <div className="flex flex-wrap gap-2 border-b border-gray-800/50 pb-2">
-              <button 
-                onClick={() => setActiveTab("content")}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-t-md ${activeTab === "content" ? "border-b-2 border-[#74d1ea] text-[#74d1ea]" : "text-gray-400 hover:text-gray-300"}`}
-              >
-                <FileText className="h-4 w-4" /> Content
-              </button>
-              <button 
-                onClick={() => setActiveTab("persona")}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-t-md ${activeTab === "persona" ? "border-b-2 border-[#74d1ea] text-[#74d1ea]" : "text-gray-400 hover:text-gray-300"}`}
-              >
-                <User className="h-4 w-4" /> Persona
-              </button>
-              <button 
-                onClick={() => setActiveTab("tone")}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-t-md ${activeTab === "tone" ? "border-b-2 border-[#74d1ea] text-[#74d1ea]" : "text-gray-400 hover:text-gray-300"}`}
-              >
-                <BarChart className="h-4 w-4" /> Tone Analysis
-              </button>
-              <button 
-                onClick={() => setActiveTab("campaign-factory")}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-t-md ${activeTab === "campaign-factory" ? "border-b-2 border-[#74d1ea] text-[#74d1ea]" : "text-gray-400 hover:text-gray-300"}`}
-              >
-                <Rocket className="h-4 w-4" /> Campaign Factory
-              </button>
-            </div>
-            
-            {/* Content Section */}
-            {activeTab === "content" && (
-              <div className="space-y-4 mt-4">
-                <h3 className="text-xl font-bold mb-4">Campaign Content</h3>
+            {/* Campaign Content Section */}
+            <div className="space-y-8 mt-4">
+              {/* Campaign Content */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-[#74d1ea]" /> Campaign Content
+                  </h3>
+                  <Button
+                    onClick={() => setIsAddContentDialogOpen(true)}
+                    size="sm"
+                    className="gap-1"
+                    style={{ backgroundColor: "#74d1ea", color: "black" }}
+                  >
+                    <Plus className="h-4 w-4" /> Add Content
+                  </Button>
+                </div>
                 
                 {isLoadingContents ? (
                   <div className="flex justify-center items-center h-[200px]">
@@ -764,7 +749,7 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <span>{campaignContents.length} item{campaignContents.length !== 1 ? 's' : ''}</span>
                     </div>
-                    <ScrollArea className="h-[400px]">
+                    <ScrollArea className="h-[300px]">
                       <div className="grid gap-4 pr-2">
                         {campaignContents.map((content: any) => (
                           <SavedContentListItem
@@ -779,260 +764,116 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   </div>
                 )}
               </div>
-            )}
-            
-            {/* Persona Section */}
-            {activeTab === "persona" && (
-              <div className="space-y-4 mt-4">
-                <h3 className="text-xl font-bold mb-4">Campaign Persona</h3>
-                
-                {isLoadingPersonas ? (
-                  <div className="flex justify-center items-center h-[200px]">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
-                  </div>
-                ) : !personas || personas.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
-                    <User className="h-10 w-10 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold">No personas available</h3>
-                    <p className="text-muted-foreground text-center max-w-md text-sm">
-                      You haven't created any personas yet. Create personas to associate with this campaign.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="flex flex-col space-y-2">
-                      <Label htmlFor="persona-select">Select a persona for this campaign</Label>
-                      <Select 
-                        value={selectedPersonaId?.toString() || (campaign.persona_id?.toString() || '0')}
-                        onValueChange={(value) => setSelectedPersonaId(value === "0" ? null : parseInt(value))}
-                      >
-                        <SelectTrigger id="persona-select" className="w-full">
-                          <SelectValue placeholder="Select a persona" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem key="none" value="0">None</SelectItem>
-                          {personas.map((persona) => (
-                            <SelectItem key={persona.id} value={persona.id.toString()}>
-                              {persona.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Associating a persona helps maintain consistent audience targeting across all campaign content.
-                      </p>
-                    </div>
-                    
-                    {(selectedPersonaId || campaign.persona_id) && personas.length > 0 && (
+              
+              {/* Persona and Tone Display Section */}
+              {(campaign.persona_id || campaign.tone_analysis_id) && (
+                <div className="border-t border-gray-800/30 pt-6">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <User className="h-5 w-5 text-[#74d1ea]" /> Campaign Strategy
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* Persona Display */}
+                    {campaign.persona_id && personas?.find(p => p.id === campaign.persona_id) && (
                       <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
-                        <h4 className="font-medium mb-2">
-                          {personas.find(p => p.id === (selectedPersonaId || campaign.persona_id))?.name}
+                        <h4 className="text-base font-medium mb-2 flex items-center gap-2">
+                          <User className="h-4 w-4 text-[#74d1ea]" /> Target Persona
                         </h4>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          {personas.find(p => p.id === (selectedPersonaId || campaign.persona_id))?.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {personas.find(p => p.id === (selectedPersonaId || campaign.persona_id))?.interests?.map((interest: string, i: number) => (
-                            <span 
-                              key={i} 
-                              className="text-xs py-1 px-2 rounded-full bg-[#1a1e29] text-white"
-                            >
-                              {interest}
-                            </span>
-                          ))}
+                        <div className="space-y-3">
+                          <h5 className="font-medium text-[#74d1ea]">
+                            {personas.find(p => p.id === campaign.persona_id)?.name}
+                          </h5>
+                          <p className="text-sm text-gray-300">
+                            {personas.find(p => p.id === campaign.persona_id)?.description}
+                          </p>
+                          {personas.find(p => p.id === campaign.persona_id)?.interests?.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {personas.find(p => p.id === campaign.persona_id)?.interests?.map((interest: string, i: number) => (
+                                <span 
+                                  key={i} 
+                                  className="text-xs py-1 px-2 rounded-full bg-[#1a1e29] text-white"
+                                >
+                                  {interest}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
-
-                    <div className="mt-4">
-                      <Button 
-                        onClick={() => handleUpdateCampaign(campaignId as number, selectedPersonaId)}
-                        disabled={!campaignId || updateCampaignMutation.isPending || selectedPersonaId === campaign.persona_id}
-                        style={{ backgroundColor: "#74d1ea", color: "black" }}
-                      >
-                        {updateCampaignMutation.isPending ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Updating...
-                          </>
-                        ) : (
-                          <>Save Changes</>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-            
-            {/* Tone Analysis Section */}
-            {activeTab === "tone" && (
-              <div className="space-y-4 mt-4">
-                <h3 className="text-xl font-bold mb-4">Campaign Tone Analysis</h3>
-                
-                {isLoadingToneAnalyses ? (
-                  <div className="flex justify-center items-center h-[200px]">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
-                  </div>
-                ) : !toneAnalyses || toneAnalyses.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 space-y-4 border border-[#1a1e29] bg-[#0e1015] rounded-lg overflow-hidden">
-                    <BarChart className="h-10 w-10 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold">No tone analyses available</h3>
-                    <p className="text-muted-foreground text-center max-w-md text-sm">
-                      You haven't created any tone analyses yet. Create a tone analysis to associate with this campaign.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="flex flex-col space-y-2">
-                      <Label htmlFor="tone-select">Select a tone analysis for this campaign</Label>
-                      <Select 
-                        value={selectedToneAnalysisId?.toString() || (campaign.tone_analysis_id?.toString() || '0')}
-                        onValueChange={(value) => setSelectedToneAnalysisId(value === "0" ? null : parseInt(value))}
-                      >
-                        <SelectTrigger id="tone-select" className="w-full">
-                          <SelectValue placeholder="Select a tone analysis" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem key="none" value="0">None</SelectItem>
-                          {toneAnalyses.map((tone) => (
-                            <SelectItem key={tone.id} value={tone.id.toString()}>
-                              {tone.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Associating a tone analysis helps maintain consistent tone and voice across all campaign content.
-                      </p>
-                    </div>
                     
-                    {(selectedToneAnalysisId || campaign.tone_analysis_id) && toneAnalyses.length > 0 && (
+                    {/* Tone Analysis Display */}
+                    {campaign.tone_analysis_id && toneAnalyses?.find(t => t.id === campaign.tone_analysis_id) && (
                       <div className="p-4 border border-[#1a1e29] rounded-lg bg-[#0e1015]">
-                        <h4 className="font-medium mb-2">
-                          {toneAnalyses.find(t => t.id === (selectedToneAnalysisId || campaign.tone_analysis_id))?.name}
+                        <h4 className="text-base font-medium mb-2 flex items-center gap-2">
+                          <BarChart className="h-4 w-4 text-[#74d1ea]" /> Tone Analysis
                         </h4>
-                        {toneAnalyses.find(t => t.id === (selectedToneAnalysisId || campaign.tone_analysis_id))?.sample_text && (
-                          <p className="text-sm text-muted-foreground mb-3">
-                            Sample: {toneAnalyses.find(t => t.id === (selectedToneAnalysisId || campaign.tone_analysis_id))?.sample_text?.substring(0, 100)}...
-                          </p>
-                        )}
+                        <div className="space-y-3">
+                          <h5 className="font-medium text-[#74d1ea]">
+                            {toneAnalyses.find(t => t.id === campaign.tone_analysis_id)?.name}
+                          </h5>
+                          {toneAnalyses.find(t => t.id === campaign.tone_analysis_id)?.sample_text && (
+                            <p className="text-sm text-gray-300">
+                              {toneAnalyses.find(t => t.id === campaign.tone_analysis_id)?.sample_text?.substring(0, 150)}...
+                            </p>
+                          )}
+                        </div>
                       </div>
                     )}
-
-                    <div className="mt-4">
-                      <Button 
-                        onClick={() => handleUpdateCampaign(campaignId as number, undefined, selectedToneAnalysisId)}
-                        disabled={!campaignId || updateCampaignMutation.isPending || selectedToneAnalysisId === campaign.tone_analysis_id}
-                        style={{ backgroundColor: "#74d1ea", color: "black" }}
-                      >
-                        {updateCampaignMutation.isPending ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Updating...
-                          </>
-                        ) : (
-                          <>Save Changes</>
-                        )}
-                      </Button>
-                    </div>
                   </div>
-                )}
-              </div>
-            )}
-            
-            {/* Campaign Factory Section */}
-            {activeTab === "campaign-factory" && (
-              <div className="space-y-4 mt-4">
-                <h3 className="text-xl font-bold mb-4">Campaign Factory Details</h3>
+                </div>
+              )}
+              
+              {/* Campaign Factory Details */}
+              <div className="border-t border-gray-800/30 pt-6">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <Rocket className="h-5 w-5 text-[#74d1ea]" /> Campaign Factory
+                </h3>
                 
                 <div className="space-y-6">
+                  {/* Campaign Channels */}
                   <div className="border border-[#1a1e29] rounded-lg bg-[#0e1015] p-5">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h4 className="text-lg font-medium flex items-center gap-2">
-                          <Rocket className="h-5 w-5 text-[#74d1ea]" /> Campaign Strategy
-                        </h4>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Comprehensive marketing strategy tailored to your campaign goals.
-                        </p>
-                      </div>
-                    </div>
+                    <h4 className="text-base font-medium mb-3 flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-[#74d1ea]" /> Campaign Channels
+                    </h4>
                     
-                    <div className="space-y-4">
-                      {campaign.persona_id && personas?.find(p => p.id === campaign.persona_id) && (
-                        <div className="border-t border-gray-800 pt-4">
-                          <h5 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <User className="h-4 w-4 text-[#74d1ea]" /> Target Audience
-                          </h5>
-                          <div className="py-3 px-4 bg-black/20 rounded-md">
-                            <p className="text-sm text-gray-300">
-                              {personas.find(p => p.id === campaign.persona_id)?.description}
-                            </p>
-                          </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
+                        <Mail className="h-5 w-5 text-[#74d1ea]" />
+                        <div>
+                          <p className="text-sm font-medium">Email Campaigns</p>
+                          <p className="text-xs text-gray-400">Personalized email sequences</p>
                         </div>
-                      )}
-                      
-                      {campaign.tone_analysis_id && toneAnalyses?.find(t => t.id === campaign.tone_analysis_id) && (
-                        <div className="border-t border-gray-800 pt-4">
-                          <h5 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <BarChart className="h-4 w-4 text-[#74d1ea]" /> Tone Analysis
-                          </h5>
-                          <div className="py-3 px-4 bg-black/20 rounded-md">
-                            <p className="text-sm text-gray-300">
-                              Communication style based on "{toneAnalyses.find(t => t.id === campaign.tone_analysis_id)?.name}" tone analysis.
-                            </p>
-                          </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
+                        <SiLinkedin className="h-5 w-5 text-[#0A66C2]" />
+                        <div>
+                          <p className="text-sm font-medium">LinkedIn Content</p>
+                          <p className="text-xs text-gray-400">Professional network posts</p>
                         </div>
-                      )}
-                      
-                      <div className="border-t border-gray-800 pt-4">
-                        <h5 className="text-sm font-medium mb-2 flex items-center gap-2">
-                          <Sparkles className="h-4 w-4 text-[#74d1ea]" /> Campaign Channels
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                            <Mail className="h-5 w-5 text-[#74d1ea]" />
-                            <div>
-                              <p className="text-sm font-medium">Email Campaigns</p>
-                              <p className="text-xs text-gray-400">Personalized email sequences</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                            <SiLinkedin className="h-5 w-5 text-[#0A66C2]" />
-                            <div>
-                              <p className="text-sm font-medium">LinkedIn Content</p>
-                              <p className="text-xs text-gray-400">Professional network posts</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                            <FileText className="h-5 w-5 text-[#74d1ea]" />
-                            <div>
-                              <p className="text-sm font-medium">Blog Articles</p>
-                              <p className="text-xs text-gray-400">In-depth content marketing</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
-                            <LineChart className="h-5 w-5 text-[#74d1ea]" />
-                            <div>
-                              <p className="text-sm font-medium">Performance Tracking</p>
-                              <p className="text-xs text-gray-400">Metrics and analytics</p>
-                            </div>
-                          </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
+                        <FileText className="h-5 w-5 text-[#74d1ea]" />
+                        <div>
+                          <p className="text-sm font-medium">Blog Articles</p>
+                          <p className="text-xs text-gray-400">In-depth content marketing</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-md bg-black/20 border border-gray-800/30">
+                        <LineChart className="h-5 w-5 text-[#74d1ea]" />
+                        <div>
+                          <p className="text-sm font-medium">Performance Tracking</p>
+                          <p className="text-xs text-gray-400">Metrics and analytics</p>
                         </div>
                       </div>
                     </div>
                   </div>
                   
+                  {/* Content Preview */}
                   <div className="border border-[#1a1e29] rounded-lg bg-[#0e1015] p-5">
-                    <div className="mb-4">
-                      <h4 className="text-lg font-medium flex items-center gap-2">
-                        <Zap className="h-5 w-5 text-[#74d1ea]" /> Content Preview
-                      </h4>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Generated campaign content using your persona and tone settings.
-                      </p>
-                    </div>
+                    <h4 className="text-base font-medium mb-3 flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-[#74d1ea]" /> Content Overview
+                    </h4>
                     
                     <div>
                       {(isLoadingContents || !campaignContents) ? (
@@ -1047,47 +888,34 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                           </p>
                         </div>
                       ) : (
-                        <div className="space-y-4">
-                          <div className="border border-gray-800/60 rounded-lg bg-black/20 p-4">
-                            <ScrollArea className="h-[200px]">
-                              <div className="space-y-3">
-                                {campaignContents.map((content: any) => (
-                                  <div key={content.id} className="p-3 border border-gray-800/60 rounded-md bg-black/30">
-                                    <div className="flex items-center justify-between mb-2">
-                                      <div className="flex items-center gap-2">
-                                        {content.type === 'email' && <Mail className="h-3.5 w-3.5 text-[#74d1ea]" />}
-                                        {content.type === 'linkedin_post' && <SiLinkedin className="h-3.5 w-3.5 text-[#0A66C2]" />}
-                                        {content.type === 'blog_post' && <FileText className="h-3.5 w-3.5 text-[#74d1ea]" />}
-                                        <span className="font-medium text-sm capitalize">{content.type.replace('_', ' ')}</span>
-                                      </div>
-                                      <div className="text-xs text-gray-500">
-                                        {new Date(content.created_at).toLocaleDateString()}
-                                      </div>
+                        <div className="border border-gray-800/60 rounded-lg bg-black/20 p-4">
+                          <ScrollArea className="h-[200px]">
+                            <div className="space-y-3">
+                              {campaignContents.map((content: any) => (
+                                <div key={content.id} className="p-3 border border-gray-800/60 rounded-md bg-black/30">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      {content.type === 'email' && <Mail className="h-3.5 w-3.5 text-[#74d1ea]" />}
+                                      {content.type === 'linkedin_post' && <SiLinkedin className="h-3.5 w-3.5 text-[#0A66C2]" />}
+                                      {content.type === 'blog_post' && <FileText className="h-3.5 w-3.5 text-[#74d1ea]" />}
+                                      <span className="font-medium text-sm capitalize">{content.type.replace('_', ' ')}</span>
                                     </div>
-                                    <p className="text-sm text-gray-300 line-clamp-2">{content.content_text.substring(0, 120)}...</p>
+                                    <div className="text-xs text-gray-500">
+                                      {new Date(content.created_at).toLocaleDateString()}
+                                    </div>
                                   </div>
-                                ))}
-                              </div>
-                            </ScrollArea>
-                          </div>
-                          
-                          <div className="flex justify-end">
-                            <Button
-                              onClick={() => setActiveTab("content")}
-                              variant="outline"
-                              size="sm"
-                              className="text-[#74d1ea] border-[#74d1ea]/30 hover:bg-[#74d1ea]/10"
-                            >
-                              View All Content <ArrowRight className="ml-2 h-3.5 w-3.5" />
-                            </Button>
-                          </div>
+                                  <p className="text-sm text-gray-300 line-clamp-2">{content.content_text.substring(0, 120)}...</p>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </ScrollArea>
 
