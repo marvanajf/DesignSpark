@@ -163,7 +163,7 @@ export default function HomePage() {
 
                   <div className="md:col-span-3 bg-zinc-900/50 rounded-lg p-4 border border-gray-800/60 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
                     <div className="text-center mb-4">
-                      <h3 className="text-white font-medium">What you get with Campaign Factory</h3>
+                      <h3 className="text-white font-medium">Boost Your Marketing Power</h3>
                     </div>
                     <div className="space-y-3">
                       <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
@@ -171,7 +171,7 @@ export default function HomePage() {
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">LinkedIn posts (4-6 per campaign)</span>
+                          <span className="text-sm text-white">Generate multiple LinkedIn posts instantly</span>
                         </div>
                       </div>
                       <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
@@ -179,7 +179,7 @@ export default function HomePage() {
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <FileText className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Blog outline & full article</span>
+                          <span className="text-sm text-white">Create entire blog articles in seconds</span>
                         </div>
                       </div>
                       <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
@@ -187,7 +187,7 @@ export default function HomePage() {
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Email sequence (3 emails)</span>
+                          <span className="text-sm text-white">Build full email sequences automatically</span>
                         </div>
                       </div>
                       <div className="bg-black/40 rounded-md p-3 border border-gray-700/50">
@@ -195,7 +195,7 @@ export default function HomePage() {
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <Users className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Webinar outline & key talking points</span>
+                          <span className="text-sm text-white">Develop webinar content with zero effort</span>
                         </div>
                       </div>
                     </div>
