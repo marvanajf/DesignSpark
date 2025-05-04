@@ -72,7 +72,7 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                     location.startsWith('/saved-content') || 
                     location.startsWith('/account') || 
                     location.startsWith('/support') ||
-                    (location.startsWith('/guides') && !location.startsWith('/guides-info')) ||
+                    (location.startsWith('/knowledge-base') && !location.startsWith('/knowledge-base-info')) ||
                     location.startsWith('/usage') ||
                     (location.startsWith('/campaigns') && !location.startsWith('/campaigns-info')) ||
                     location.startsWith('/campaign/') ||
