@@ -117,7 +117,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate('/home')}>
                 <img className="h-8" src={tovablyLogo} alt="Tovably Logo" />
               </div>
               <div className="hidden md:block">
@@ -1019,7 +1019,9 @@ export default function LandingPage() {
       <footer className="bg-black border-t border-gray-700/60">
         <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
           <div className="flex justify-center mb-8">
-            <img className="h-8" src={tovablyLogo} alt="Tovably Logo" />
+            <div className="cursor-pointer" onClick={() => navigate('/home')}>
+              <img className="h-8" src={tovablyLogo} alt="Tovably Logo" />
+            </div>
           </div>
           <nav className="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
             <div className="px-5 py-2">
