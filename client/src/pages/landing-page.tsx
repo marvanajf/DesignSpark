@@ -182,7 +182,7 @@ export default function LandingPage() {
               </Badge>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Build fully-fledged, <span className="bg-gradient-to-r from-[#74d1ea] to-[#a3e6fa] text-transparent bg-clip-text">ai-powered</span> marketing campaigns in minutes
+              Build <span className="bg-gradient-to-r from-[#74d1ea] to-[#a3e6fa] text-transparent bg-clip-text">marketing campaigns</span> in minutes
             </h1>
             <p className="text-xl text-gray-300 mb-8 mx-auto">
               Generate personas, analyze tone, create content, and build full marketing campaigns in minutes instead of days with our intelligent AI platform.
