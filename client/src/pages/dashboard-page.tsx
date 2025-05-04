@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
+import { SubscriptionPlanType, subscriptionPlans } from "@shared/schema";
 import { 
   Loader2, 
   FileText, 
@@ -44,8 +45,13 @@ export default function DashboardPage() {
   const { data: contentList, isLoading: isLoadingContent } = useQuery<GeneratedContent[]>({
     queryKey: ["/api/content"],
   });
+  
+  // Fetch campaigns
+  const { data: campaigns, isLoading: isLoadingCampaigns } = useQuery({
+    queryKey: ["/api/campaigns"],
+  });
 
-  const isLoading = isLoadingTones || isLoadingPersonas || isLoadingContent;
+  const isLoading = isLoadingTones || isLoadingPersonas || isLoadingContent || isLoadingCampaigns;
   const selectedPersonas = personas?.filter(p => p.is_selected) || [];
 
   if (isLoading) {
@@ -128,30 +134,145 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Campaign Factory Banner */}
-          <div className="mb-6">
-            <div className="bg-gradient-to-r from-[#0c1a2c] to-[#0e1b33] border border-[#74d1ea]/20 rounded-xl p-5 shadow-[0_0_20px_rgba(116,209,234,0.1)]">
-              <div className="flex items-start md:items-center justify-between flex-col md:flex-row">
-                <div className="flex items-center mb-4 md:mb-0">
-                  <div className="h-14 w-14 bg-[#0e131f] border border-[#74d1ea]/30 rounded-xl flex items-center justify-center mr-5 shadow-[0_0_15px_rgba(116,209,234,0.2)]">
-                    <Factory className="h-7 w-7 text-[#74d1ea]" />
+          {/* Campaign Factory Overview */}
+          <div className="mb-8">
+            <div className="mb-4">
+              <h2 className="text-xl font-bold text-white">Campaign Factory</h2>
+              <p className="text-sm text-gray-400 mt-1">AI-powered campaign planning and generation</p>
+            </div>
+            
+            <div className="bg-gradient-to-r from-[#0c1a2c] to-[#0e1b33] border border-[#74d1ea]/20 rounded-xl overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#74d1ea]/10">
+                {/* Usage Stats */}
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(116,209,234,0.1)]">
+                      <Factory className="h-5 w-5 text-[#74d1ea]" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium">Usage Statistics</h3>
+                      <p className="text-xs text-gray-400">Plan generation and usage</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white mb-1">Campaign Factory</h2>
-                    <p className="text-gray-400">Build complete marketing campaigns in minutes using AI</p>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs text-gray-400">Campaigns Created</span>
+                        <span className="text-sm text-white">{user?.campaign_factory_used || 0} / {subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 0}</span>
+                      </div>
+                      <Progress value={(user?.campaign_factory_used || 0) / (subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 1) * 100} className="h-1" />
+                    </div>
+                    
+                    <div className="flex flex-col">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-gray-400">Current Plan</span>
+                        <span className="text-sm text-white">{subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.name}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-gray-400">Campaigns Remaining</span>
+                        <span className="text-sm text-white">{Math.max(0, (subscriptionPlans[user?.subscription_plan as SubscriptionPlanType]?.campaignFactory || 0) - (user?.campaign_factory_used || 0))}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-col md:flex-row items-start md:items-center">
-                  <div className="flex flex-col mr-6 mb-4 md:mb-0">
-                    <span className="text-gray-400 text-sm mb-1">Campaigns Created</span>
-                    <span className="text-2xl font-bold text-white">{user?.campaign_factory_used || 0}</span>
+                
+                {/* Recent Campaigns */}
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(116,209,234,0.1)]">
+                      <BarChart2 className="h-5 w-5 text-[#74d1ea]" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium">Recent Campaigns</h3>
+                      <p className="text-xs text-gray-400">Your most recent AI campaigns</p>
+                    </div>
                   </div>
-                  <Button 
-                    onClick={() => navigate('/campaign-factory')} 
-                    className="px-4 py-2 bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
-                  >
-                    Create Campaign <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
+                  
+                  <div className="space-y-3">
+                    {campaigns && campaigns.length > 0 ? (
+                      <>
+                        {campaigns.slice(0, 2).map((campaign: any) => (
+                          <div key={campaign.id} className="flex items-center rounded-md bg-black/30 p-3 cursor-pointer" 
+                               onClick={() => navigate(`/campaigns/${campaign.id}`)}>
+                            <div className="mr-3 bg-black/50 h-8 w-8 rounded-md flex items-center justify-center">
+                              <FileText className="h-4 w-4 text-[#74d1ea]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-white truncate">{campaign.name}</p>
+                              <p className="text-xs text-gray-400">
+                                {campaign.personas_count} persona{campaign.personas_count !== 1 ? 's' : ''}, {campaign.content_count} content item{campaign.content_count !== 1 ? 's' : ''}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                        
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full mt-2 bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
+                          onClick={() => navigate('/campaigns')}
+                        >
+                          View All Campaigns
+                        </Button>
+                      </>
+                    ) : (
+                      <div className="text-center py-3">
+                        <p className="text-gray-400 text-sm mb-3">No campaigns yet</p>
+                        <Button
+                          size="sm"
+                          className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                          onClick={() => navigate('/campaign-factory')}
+                        >
+                          <Factory className="h-3.5 w-3.5 mr-1.5" />
+                          Create Your First Campaign
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Quick Actions */}
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="h-10 w-10 bg-[#0e131f] border border-[#74d1ea]/30 rounded-lg flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(116,209,234,0.1)]">
+                      <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium">Quick Actions</h3>
+                      <p className="text-xs text-gray-400">Common campaign operations</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <Button 
+                      className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.4)]"
+                      onClick={() => navigate('/campaign-factory')}
+                    >
+                      <Factory className="h-4 w-4 mr-2" />
+                      Create New Campaign
+                    </Button>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button 
+                        variant="outline" 
+                        className="w-full bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
+                        onClick={() => navigate('/campaigns')}
+                      >
+                        <Archive className="h-4 w-4 mr-2" />
+                        Manage
+                      </Button>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="w-full bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
+                        onClick={() => navigate('/campaign-factory-info')}
+                      >
+                        <BookText className="h-4 w-4 mr-2" />
+                        Learn More
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
