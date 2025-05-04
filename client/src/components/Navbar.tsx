@@ -3,7 +3,21 @@ import { useAuth } from "@/hooks/use-auth";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import React, { useState, useRef } from "react";
-import { Menu, X, ChevronDown, Users, BookOpen, FileText, HelpCircle, CalendarClock, Factory } from "lucide-react";
+import { 
+  Menu, 
+  X, 
+  ChevronDown, 
+  Users, 
+  BookOpen, 
+  HelpCircle, 
+  CalendarClock, 
+  Factory, 
+  Sparkles, 
+  FileEdit, 
+  BarChart4, 
+  MessageSquareText,
+  FileText
+} from "lucide-react";
 import tovablyLogo from "@/assets/tovably-logo.png";
 
 interface NavbarProps {
@@ -74,7 +88,7 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                       >
                         <div className="py-1">
                           <Link href="/tone-analysis-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <BarChart4 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
                               <p className="font-medium">Tone Analysis</p>
                               <p className="text-xs text-gray-500">Analyze content tone and style</p>
@@ -88,14 +102,14 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
                             </div>
                           </Link>
                           <Link href="/content-generation-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <FileText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <MessageSquareText className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
                               <p className="font-medium">Content</p>
                               <p className="text-xs text-gray-500">Create tailored content</p>
                             </div>
                           </Link>
                           <Link href="/campaign-factory-info" className="group flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-gray-900 hover:text-white">
-                            <Factory className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
+                            <Sparkles className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" />
                             <div>
                               <p className="font-medium">Campaign Factory</p>
                               <p className="text-xs text-gray-500">Automate marketing campaigns</p>
@@ -237,40 +251,49 @@ export default function Navbar({ showDashboardLinks = false }: NavbarProps) {
               <>
                 <div className="px-3 py-2">
                   <div className="font-medium text-white text-base">Platform</div>
-                  <Link href="/tone-analysis-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                  <Link href="/tone-analysis-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                    <BarChart4 className="mr-3 h-5 w-5 text-gray-400" />
                     Tone Analysis
                   </Link>
-                  <Link href="/personas-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/personas-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    <Users className="mr-3 h-5 w-5 text-gray-400" />
                     Persona Factory
                   </Link>
-                  <Link href="/content-generation-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/content-generation-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    <MessageSquareText className="mr-3 h-5 w-5 text-gray-400" />
                     Content
                   </Link>
-                  <Link href="/campaign-factory-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/campaign-factory-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    <Sparkles className="mr-3 h-5 w-5 text-gray-400" />
                     Campaign Factory
                   </Link>
-                  <Link href="/campaigns-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/campaigns-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    <CalendarClock className="mr-3 h-5 w-5 text-gray-400" />
                     Campaigns
                   </Link>
                 </div>
                 
                 <div className="px-3 py-2">
                   <div className="font-medium text-white text-base">Resources</div>
-                  <Link href="/blog" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                  <Link href="/blog" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded mt-1">
+                    <FileText className="mr-3 h-5 w-5 text-gray-400" />
                     Blog
                   </Link>
-                  <Link href="/guides-info" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/guides-info" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    <BookOpen className="mr-3 h-5 w-5 text-gray-400" />
                     Guides
                   </Link>
-                  <Link href="/contact" className="block px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                  <Link href="/contact" className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-gray-900 hover:text-white rounded">
+                    <HelpCircle className="mr-3 h-5 w-5 text-gray-400" />
                     Contact Us
                   </Link>
                 </div>
                 
                 <Link
                   href="/pricing"
-                  className="text-gray-300 hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  className="text-gray-300 hover:bg-gray-900 hover:text-white flex items-center px-3 py-2 rounded-md text-base font-medium"
                 >
+                  <BarChart4 className="mr-3 h-5 w-5 text-gray-400" />
                   Pricing
                 </Link>
               </>
