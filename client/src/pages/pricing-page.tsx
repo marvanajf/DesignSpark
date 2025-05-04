@@ -223,7 +223,7 @@ export default function PricingPage() {
                         </div>
                         <span className="text-gray-300">{plan.campaigns} Campaigns</span>
                       </li>
-                      <li className="flex items-center">
+                      <li className={`flex items-center ${plan.campaignFactory > 0 ? 'bg-[#74d1ea]/10 p-1.5 rounded-md -mx-1.5 my-2' : ''}`}>
                         <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
                           {plan.campaignFactory > 0 ? (
                             <Check className="h-3 w-3 text-[#74d1ea]" />
@@ -231,11 +231,18 @@ export default function PricingPage() {
                             <X className="h-3 w-3 text-red-500" />
                           )}
                         </div>
-                        <span className="text-gray-300">
-                          {plan.campaignFactory > 0 
-                            ? `${plan.campaignFactory} Campaign Factory Credits` 
-                            : 'No Campaign Factory Access'}
-                        </span>
+                        {plan.campaignFactory > 0 ? (
+                          <span>
+                            <span className="text-[#74d1ea] font-medium">
+                              {plan.campaignFactory} Campaign Factory Credits
+                            </span>
+                            <span className="block text-xs text-gray-400 mt-0.5">Save 20+ hours per campaign!</span>
+                          </span>
+                        ) : (
+                          <span className="text-gray-300">
+                            No Campaign Factory Access
+                          </span>
+                        )}
                       </li>
                       <li className="flex items-center">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
@@ -396,7 +403,7 @@ export default function PricingPage() {
                   </div>
                   <h3 className="text-xl font-bold text-[#74d1ea] mb-3 group-hover:text-white transition-colors duration-300">Campaign Factory</h3>
                   <p className="text-gray-300 mb-6">
-                    Generate complete marketing campaigns with our premium Campaign Factory feature. Create targeted content across multiple channels with a few clicks.
+                    <span className="font-medium text-white">Our flagship feature!</span> Create complete marketing campaigns with a single click that would take days to do manually. Generate cohesive content across LinkedIn, email, blogs, and webinars — saving 20+ hours per campaign.
                   </p>
                   <div className="flex items-center text-[#74d1ea] group-hover:translate-x-1 transition-transform duration-300">
                     <span className="text-sm font-medium">Learn more</span>
@@ -507,7 +514,14 @@ export default function PricingPage() {
               
               <div>
                 <h3 className="text-lg font-medium mb-2 text-white">What happens if I exceed my plan limits?</h3>
-                <p className="text-gray-400">You'll need to upgrade to a higher tier or wait until your next billing cycle when your usage limits are reset.</p>
+                <p className="text-gray-400">You'll need to upgrade to a higher tier or wait until your next billing cycle when your usage limits are reset. For Campaign Factory credits, consider upgrading to Premium or Pro plans for more credits and higher campaign output.</p>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-white">What is Campaign Factory and why is it valuable?</h3>
+                <p className="text-gray-400">
+                  Campaign Factory is our premium feature that automatically creates complete marketing campaigns across multiple channels. It saves you 20+ hours of work per campaign by generating LinkedIn posts, email content, blog articles, and webinar content - all with consistent messaging and tone. Available in Standard, Premium, and Pro plans.
+                </p>
               </div>
               
               <div>
