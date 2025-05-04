@@ -115,7 +115,7 @@ export default function LandingPage() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img className="h-8" src="logo.webp" alt="Tovably Logo" />
+                <img className="h-8" src="/tovably-logo.png" alt="Tovably Logo" />
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-center space-x-6">
@@ -753,11 +753,8 @@ export default function LandingPage() {
                 </div>
                 <p className="text-gray-300 mb-6 text-lg">"{testimonial.quote}"</p>
                 <div className="flex items-center">
-                  <div className="h-12 w-12 rounded-full overflow-hidden mr-4">
-                    <img src={testimonial.avatar} alt={testimonial.author} className="h-full w-full object-cover" />
-                  </div>
                   <div>
-                    <div className="text-white font-medium">{testimonial.author}</div>
+                    <div className="text-white font-medium">- {testimonial.author}</div>
                   </div>
                 </div>
               </div>
@@ -1062,7 +1059,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-12 pt-8 border-t border-gray-800/60 flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0">
-              <img className="h-8" src="/logo.webp" alt="Tovably Logo" />
+              <img className="h-8" src="/tovably-logo.png" alt="Tovably Logo" />
             </div>
             <div className="text-gray-400 text-sm">
               © {new Date().getFullYear()} Tovably. All rights reserved.
