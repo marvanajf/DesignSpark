@@ -30,10 +30,10 @@ export default function CampaignFactoryInfoPage() {
               <span className="text-sm font-medium">Tovably Campaign Factory</span>
             </div>
             <h1 className="text-4xl tracking-tight font-semibold sm:text-5xl md:text-6xl text-white mb-6">
-              Create <span className="text-[#74d1ea]">automated campaigns</span> for effective marketing
+              Build <span className="text-[#74d1ea]">marketing campaigns</span> in minutes
             </h1>
             <p className="text-xl text-gray-400 max-w-2xl mb-8">
-              Design, schedule, and execute multi-channel marketing campaigns with AI-powered tools that save time and increase effectiveness.
+              Design and create marketing campaigns with AI-powered tools that save time and provide a structured approach to your marketing efforts.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button 
@@ -63,9 +63,9 @@ export default function CampaignFactoryInfoPage() {
               <div className="h-10 w-10 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4">
                 <Target className="h-5 w-5 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-medium text-white mb-3">Automated Creation</h3>
+              <h3 className="text-xl font-medium text-white mb-3">Rapid Campaign Creation</h3>
               <p className="text-gray-400">
-                Design and schedule complete campaigns with AI-generated content for each stage.
+                Quickly design comprehensive campaign structures with AI-generated content templates for each stage.
               </p>
             </div>
 
@@ -74,9 +74,9 @@ export default function CampaignFactoryInfoPage() {
               <div className="h-10 w-10 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4">
                 <Users className="h-5 w-5 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-medium text-white mb-3">Multi-Channel Delivery</h3>
+              <h3 className="text-xl font-medium text-white mb-3">Multi-Channel Planning</h3>
               <p className="text-gray-400">
-                Distribute campaign content across email, social media, and other platforms automatically.
+                Plan campaign content distribution across email, social media, and other platforms in one unified interface.
               </p>
             </div>
 
@@ -85,9 +85,9 @@ export default function CampaignFactoryInfoPage() {
               <div className="h-10 w-10 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4">
                 <Layers className="h-5 w-5 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-medium text-white mb-3">Performance Tracking</h3>
+              <h3 className="text-xl font-medium text-white mb-3">Campaign Organization</h3>
               <p className="text-gray-400">
-                Monitor campaign metrics in real-time to optimize for maximum engagement and conversions.
+                Structure your marketing initiatives into clear, goal-oriented campaigns with defined objectives and timelines.
               </p>
             </div>
 
@@ -96,9 +96,9 @@ export default function CampaignFactoryInfoPage() {
               <div className="h-10 w-10 bg-[#74d1ea]/10 rounded-full flex items-center justify-center mb-4">
                 <Zap className="h-5 w-5 text-[#74d1ea]" />
               </div>
-              <h3 className="text-xl font-medium text-white mb-3">Adaptive Optimization</h3>
+              <h3 className="text-xl font-medium text-white mb-3">Campaign Templates</h3>
               <p className="text-gray-400">
-                Leverage AI-driven insights to continuously improve campaign performance over time.
+                Utilize pre-built campaign templates designed for specific goals like lead generation, product launches, and awareness.
               </p>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function CampaignFactoryInfoPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-semibold text-white mb-4">How Campaign Factory Works</h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              A streamlined workflow for creating, executing, and optimizing your marketing campaigns
+              A streamlined workflow for building and planning your marketing campaigns
             </p>
           </div>
           
@@ -140,9 +140,9 @@ export default function CampaignFactoryInfoPage() {
               <div className="bg-[#74d1ea]/20 rounded-full h-14 w-14 flex items-center justify-center mb-6 border border-[#74d1ea]/30">
                 <span className="text-[#74d1ea] font-medium text-lg">3</span>
               </div>
-              <h3 className="text-xl font-medium text-white mb-3">Deploy and Track</h3>
+              <h3 className="text-xl font-medium text-white mb-3">Prepare for Execution</h3>
               <p className="text-gray-400">
-                Launch your campaign and monitor performance in real-time, with detailed analytics on engagement and conversion metrics.
+                Finalize your campaign plan with all content ready to be executed through your preferred marketing channels.
               </p>
             </div>
           </div>
@@ -272,7 +272,7 @@ export default function CampaignFactoryInfoPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-semibold text-white mb-4">Why Use Campaign Factory?</h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Streamline your marketing execution with measurable results
+              Build better marketing campaigns in less time
             </p>
           </div>
           
@@ -286,29 +286,29 @@ export default function CampaignFactoryInfoPage() {
                 </li>
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
-                  <span>Automate content creation across multiple touchpoints</span>
+                  <span>Streamline content creation for multiple touchpoints</span>
                 </li>
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
-                  <span>Eliminate manual scheduling and publishing tasks</span>
+                  <span>Organize campaigns with clear structure and goals</span>
                 </li>
               </ul>
             </div>
             
             <div className="border border-gray-700/60 rounded-lg p-8 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-              <h3 className="text-xl font-medium text-white mb-4">Marketing Performance</h3>
+              <h3 className="text-xl font-medium text-white mb-4">Campaign Quality</h3>
               <ul className="space-y-3 text-gray-400">
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
-                  <span>25% higher engagement from AI-optimized messaging</span>
+                  <span>Create more cohesive and strategic marketing plans</span>
                 </li>
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
-                  <span>Improve conversion rates through personalized sequences</span>
+                  <span>Develop consistent messaging across campaign touchpoints</span>
                 </li>
                 <li className="flex items-start">
                   <ArrowRight className="h-5 w-5 text-[#74d1ea] mr-3 mt-0.5 flex-shrink-0" />
-                  <span>Gain detailed performance insights for continuous improvement</span>
+                  <span>Build campaign frameworks that are ready for execution</span>
                 </li>
               </ul>
             </div>
