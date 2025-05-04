@@ -224,7 +224,7 @@ export default function ToneAnalysisPage() {
                   <span className="mx-2">›</span>
                   <span>Tone Analysis</span>
                 </div>
-                <h1 className="text-2xl font-semibold text-white mt-1">Analyze Your Brand's Tone</h1>
+                <h1 className="text-2xl font-semibold text-white mt-1">Tone Analysis</h1>
               </div>
             </div>
           </div>
