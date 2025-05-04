@@ -670,7 +670,7 @@ REGISTER NOW: [Link]`,
 
   return (
     <Layout showSidebar={true}>
-      <div className="flex-1 overflow-y-auto bg-black">
+      <div className="flex-1 overflow-y-auto bg-black" style={{backgroundImage: 'none'}}>
         <div className="p-6">
           {/* Header Section */}
           <div className="mb-6">
