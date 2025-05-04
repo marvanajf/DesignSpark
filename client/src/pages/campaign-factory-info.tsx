@@ -132,7 +132,7 @@ export default function CampaignFactoryInfoPage() {
               </div>
               <h3 className="text-xl font-medium text-white mb-3">Build Content Sequence</h3>
               <p className="text-gray-400">
-                Create a series of messaging touchpoints that move your audience through awareness, consideration, and conversion.
+                Create a series of messaging touchpoints that move your audience through awareness, consideration, and conversion, built using AI-powered tone analysis to ensure consistent messaging.
               </p>
             </div>
             
