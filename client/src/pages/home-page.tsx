@@ -82,7 +82,7 @@ export default function HomePage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-zinc-900/50 rounded-lg p-6 border border-gray-800/60">
+              <div className="bg-black rounded-lg p-6 border border-gray-800/60">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-md bg-[#74d1ea]/10 mb-4 border border-[#74d1ea]/20">
                   <BarChart3 className="h-6 w-6 text-[#74d1ea]" />
                 </div>
@@ -256,7 +256,7 @@ export default function HomePage() {
                   </Button>
                 </div>
               </div>
-              <div className="bg-gray-900/50 p-8 flex items-center justify-center">
+              <div className="bg-black p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
                   <h4 className="text-lg font-medium text-white mb-3">Tone Analysis Results</h4>
                   <div className="space-y-4">
@@ -310,7 +310,7 @@ export default function HomePage() {
           {/* Personas Section */}
           <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-              <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
+              <div className="order-2 md:order-1 bg-black p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
                   <h4 className="text-lg font-medium text-white mb-4">OpenAI Personas</h4>
                   <div className="space-y-4">
@@ -431,7 +431,7 @@ export default function HomePage() {
                   </Button>
                 </div>
               </div>
-              <div className="bg-gray-900/50 p-8 flex items-center justify-center">
+              <div className="bg-black p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="text-lg font-medium text-white">Generated Content</h4>
@@ -480,7 +480,7 @@ export default function HomePage() {
           {/* Campaigns Section */}
           <div className="mb-8 border border-gray-700/60 rounded-lg overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-              <div className="order-2 md:order-1 bg-gray-900/50 p-8 flex items-center justify-center">
+              <div className="order-2 md:order-1 bg-black p-8 flex items-center justify-center">
                 <div className="rounded-lg border border-gray-700/70 bg-black/60 p-6 shadow-[0_0_15px_rgba(116,209,234,0.10)] w-full max-w-md">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="text-lg font-medium text-white">Campaign Dashboard</h4>
