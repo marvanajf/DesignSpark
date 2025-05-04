@@ -294,6 +294,76 @@ export default function PricingPage() {
             })}
           </div>
 
+          {/* Enterprise & Agency Plans Section - Moved directly below subscription plans */}
+          <div className="mb-16">
+            <div className="relative overflow-hidden bg-black border border-gray-700/60 rounded-lg shadow-xl transform transition-all duration-300 hover:shadow-[0_0_35px_rgba(116,209,234,0.15)]">
+              <div className="absolute inset-0 opacity-5 bg-gradient-to-r from-[#74d1ea] via-black to-[#74d1ea] blur-md"></div>
+              
+              {/* Top accent gradient */}
+              <div className="h-1 w-full bg-gradient-to-r from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]"></div>
+              
+              <div className="px-6 py-12 md:px-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between relative z-10">
+                <div className="md:max-w-2xl mb-8 md:mb-0">
+                  <h2 className="text-3xl font-bold text-white mb-4">Need a Custom Enterprise or Agency Solution?</h2>
+                  <p className="text-gray-300 text-lg mb-4">
+                    We offer tailored plans for agencies and enterprise clients with custom volumes, dedicated support, and specialized features.
+                  </p>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 text-left">
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Customizable usage limits</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Multi-user team access</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Advanced analytics dashboard</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Priority feature requests</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Dedicated account manager</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
+                        <Check className="h-3 w-3 text-[#74d1ea]" />
+                      </div>
+                      <span className="text-gray-300">Custom integrations</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex-shrink-0">
+                  <Button 
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)] px-8 py-6 text-lg rounded-lg"
+                    onClick={() => {
+                      window.location.href = "mailto:sales@tovably.com?subject=Enterprise/Agency%20Inquiry";
+                    }}
+                  >
+                    Contact Sales Team
+                  </Button>
+                  <p className="text-gray-400 text-sm mt-3">
+                    Or email us at <a href="mailto:sales@tovably.com" className="text-[#74d1ea] hover:underline">sales@tovably.com</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {selectedPlan && (
             <PricingModal 
               isOpen={isModalOpen} 
@@ -415,7 +485,7 @@ export default function PricingPage() {
           </div>
           
           {/* Guarantee section */}
-          <div className="mb-16">
+          <div className="mb-20">
             <div className="border border-gray-700/60 rounded-lg p-6 max-w-3xl mx-auto text-center">
               <h3 className="text-xl font-semibold mb-3 text-white">
                 14-Day Money-Back Guarantee
@@ -424,76 +494,6 @@ export default function PricingPage() {
                 Not satisfied with our service? Get a full refund within 14 days of your subscription.
                 No questions asked. We're confident you'll love Tovably.
               </p>
-            </div>
-          </div>
-
-          {/* Enterprise & Agency Plans Section */}
-          <div className="mb-20">
-            <div className="relative overflow-hidden bg-black border border-gray-700/60 rounded-lg shadow-xl transform transition-all duration-300 hover:shadow-[0_0_35px_rgba(116,209,234,0.15)]">
-              <div className="absolute inset-0 opacity-5 bg-gradient-to-r from-[#74d1ea] via-black to-[#74d1ea] blur-md"></div>
-              
-              {/* Top accent gradient */}
-              <div className="h-1 w-full bg-gradient-to-r from-[#74d1ea] via-[#53b0c9] to-[#74d1ea]"></div>
-              
-              <div className="px-6 py-12 md:px-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between relative z-10">
-                <div className="md:max-w-2xl mb-8 md:mb-0">
-                  <h2 className="text-3xl font-bold text-white mb-4">Need a Custom Enterprise or Agency Solution?</h2>
-                  <p className="text-gray-300 text-lg mb-4">
-                    We offer tailored plans for agencies and enterprise clients with custom volumes, dedicated support, and specialized features.
-                  </p>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 text-left">
-                    <li className="flex items-center">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                        <Check className="h-3 w-3 text-[#74d1ea]" />
-                      </div>
-                      <span className="text-gray-300">Customizable usage limits</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                        <Check className="h-3 w-3 text-[#74d1ea]" />
-                      </div>
-                      <span className="text-gray-300">Multi-user team access</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                        <Check className="h-3 w-3 text-[#74d1ea]" />
-                      </div>
-                      <span className="text-gray-300">Advanced analytics dashboard</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                        <Check className="h-3 w-3 text-[#74d1ea]" />
-                      </div>
-                      <span className="text-gray-300">Priority feature requests</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                        <Check className="h-3 w-3 text-[#74d1ea]" />
-                      </div>
-                      <span className="text-gray-300">Dedicated account manager</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full mr-2 flex items-center justify-center bg-[#74d1ea]/20">
-                        <Check className="h-3 w-3 text-[#74d1ea]" />
-                      </div>
-                      <span className="text-gray-300">Custom integrations</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex-shrink-0">
-                  <Button 
-                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium shadow-[0_0_15px_rgba(116,209,234,0.4)] hover:shadow-[0_0_20px_rgba(116,209,234,0.6)] px-8 py-6 text-lg rounded-lg"
-                    onClick={() => {
-                      window.location.href = "mailto:sales@tovably.com?subject=Enterprise/Agency%20Inquiry";
-                    }}
-                  >
-                    Contact Sales Team
-                  </Button>
-                  <p className="text-gray-400 text-sm mt-3">
-                    Or email us at <a href="mailto:sales@tovably.com" className="text-[#74d1ea] hover:underline">sales@tovably.com</a>
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
 
