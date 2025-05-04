@@ -221,7 +221,15 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-white mb-4">Campaign Management</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-white">Campaign Management</h2>
+        <Button 
+          onClick={onAddCampaign} 
+          className="gap-1 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+        >
+          Create New Campaign
+        </Button>
+      </div>
       
       {displayedCampaigns.map((campaign) => (
         <div key={campaign.id} className="bg-black border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors">
