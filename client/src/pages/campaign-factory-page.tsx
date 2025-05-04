@@ -753,20 +753,25 @@ REGISTER NOW: [Link]`,
               </TabsList>
 
               <TabsContent value="input" className="space-y-8">
-                <Card className="bg-black border-gray-700/60">
-                  <CardHeader>
-                    <CardTitle className="text-white">Campaign Brief</CardTitle>
+                <Card className="bg-black border-gray-700/60 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+                  <CardHeader className="border-b border-gray-800">
+                    <CardTitle className="text-white text-xl flex items-center">
+                      <FileText className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                      Campaign Brief
+                    </CardTitle>
                     <CardDescription>Provide information about the campaign you'd like to create</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-6">
+                  <CardContent className="space-y-8 pt-6">
                     {/* Step 1: Campaign Type */}
-                    <div>
-                      <h3 className="text-white font-medium mb-3 flex items-center">
-                        <Target className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                    <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
+                      <h3 className="text-white font-medium mb-4 flex items-center">
+                        <div className="bg-[#74d1ea]/10 p-2 rounded-md mr-3">
+                          <Target className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
                         Step 1: Campaign Type & Content 
                       </h3>
                       
-                      <div className="grid md:grid-cols-2 gap-6">
+                      <div className="grid md:grid-cols-2 gap-8">
                         <div>
                           <Label htmlFor="campaign-prompt" className="text-white mb-2 block">Campaign Description</Label>
                           <Textarea 
@@ -781,16 +786,16 @@ REGISTER NOW: [Link]`,
                           </p>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                           <div>
-                            <Label className="text-white mb-2 block">And Select a Use Case</Label>
+                            <Label className="text-white mb-2 block">Select a Use Case</Label>
                             <div className="grid grid-cols-2 gap-3">
                               {useCases.map((useCase) => (
                                 <div 
                                   key={useCase.id}
-                                  className={`border rounded-lg p-3 cursor-pointer transition-colors duration-200 ${
+                                  className={`border rounded-lg p-3 cursor-pointer transition-all duration-200 ${
                                     selectedUseCase === useCase.id 
-                                    ? "border-[#74d1ea] bg-[#74d1ea]/10 text-white" 
+                                    ? "border-[#74d1ea] bg-[#74d1ea]/10 text-white shadow-[0_0_10px_rgba(116,209,234,0.15)]" 
                                     : "border-gray-700 text-gray-300 hover:border-gray-500"
                                   }`}
                                   onClick={() => setSelectedUseCase(useCase.id)}
@@ -804,42 +809,41 @@ REGISTER NOW: [Link]`,
                           
                           <div>
                             <Label className="text-white mb-2 block">Content Types</Label>
-                            <div className="grid grid-cols-2 gap-2">
-                              <div className="flex items-center space-x-2">
+                            <div className="grid grid-cols-2 gap-3">
+                              <div className="flex items-center space-x-3 border border-gray-800 rounded-md p-2.5">
                                 <Switch 
                                   id="email-content"
                                   checked={selectedContentTypes.email}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, email: checked})}
                                 />
-                                <Label htmlFor="email-content" className="text-sm">Email</Label>
+                                <Label htmlFor="email-content" className="text-sm cursor-pointer">Email</Label>
                               </div>
-                              <div className="flex items-center space-x-2">
+                              <div className="flex items-center space-x-3 border border-gray-800 rounded-md p-2.5">
                                 <Switch 
                                   id="social-content" 
                                   checked={selectedContentTypes.social}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, social: checked})}
                                 />
-                                <Label htmlFor="social-content" className="text-sm">LinkedIn</Label>
+                                <Label htmlFor="social-content" className="text-sm cursor-pointer">LinkedIn</Label>
                               </div>
-                              <div className="flex items-center space-x-2">
+                              <div className="flex items-center space-x-3 border border-gray-800 rounded-md p-2.5">
                                 <Switch 
                                   id="blog-content" 
                                   checked={selectedContentTypes.blog}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, blog: checked})}
                                 />
-                                <Label htmlFor="blog-content" className="text-sm">Blog</Label>
+                                <Label htmlFor="blog-content" className="text-sm cursor-pointer">Blog</Label>
                               </div>
-                              <div className="flex items-center space-x-2">
+                              <div className="flex items-center space-x-3 border border-gray-800 rounded-md p-2.5">
                                 <Switch 
                                   id="webinar-content" 
                                   checked={selectedContentTypes.webinar}
                                   onCheckedChange={(checked) => setSelectedContentTypes({...selectedContentTypes, webinar: checked})}
                                 />
-                                <Label htmlFor="webinar-content" className="text-sm">Webinar</Label>
+                                <Label htmlFor="webinar-content" className="text-sm cursor-pointer">Webinar</Label>
                               </div>
-
                             </div>
-                            <p className="text-xs text-gray-400 mt-1.5">
+                            <p className="text-xs text-gray-400 mt-2">
                               Select the content types you want to include in your campaign (maximum 20 pieces per type)
                             </p>
                           </div>
@@ -848,14 +852,16 @@ REGISTER NOW: [Link]`,
                     </div>
                     
                     {/* Step 2: Target Personas */}
-                    <div>
-                      <h3 className="text-white font-medium mb-3 flex items-center">
-                        <Users className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                    <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
+                      <h3 className="text-white font-medium mb-4 flex items-center">
+                        <div className="bg-[#74d1ea]/10 p-2 rounded-md mr-3">
+                          <Users className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
                         Step 2: Target Personas
                       </h3>
                       
                       {/* Toggle between existing and AI-generated personas */}
-                      <div className="flex items-center justify-start mb-4">
+                      <div className="flex items-center justify-start mb-4 bg-black/30 p-3 rounded-md border border-gray-800">
                         <div className="mr-4 flex items-center">
                           <Switch 
                             id="use-generated-personas"
@@ -874,7 +880,7 @@ REGISTER NOW: [Link]`,
                             size="sm" 
                             onClick={handleGeneratePersonas}
                             disabled={isGeneratingPersonas}
-                            className="text-xs"
+                            className="text-xs border-[#74d1ea]/30 text-[#74d1ea] hover:bg-[#74d1ea]/10"
                           >
                             {isGeneratingPersonas ? (
                               <>
@@ -896,9 +902,9 @@ REGISTER NOW: [Link]`,
                         {(useGeneratedPersonas ? generatedPersonas : personas).map((persona) => (
                           <div 
                             key={persona.id}
-                            className={`border rounded-lg p-4 cursor-pointer transition-colors duration-200 relative ${
+                            className={`border rounded-lg p-4 cursor-pointer transition-all duration-200 relative ${
                               selectedPersonas.includes(persona.id) 
-                              ? "border-[#74d1ea] bg-[#74d1ea]/10" 
+                              ? "border-[#74d1ea] bg-[#74d1ea]/10 shadow-[0_0_15px_rgba(116,209,234,0.15)]" 
                               : "border-gray-700 hover:border-gray-500"
                             }`}
                             onClick={() => handleSelectPersona(persona.id)}
@@ -958,16 +964,18 @@ REGISTER NOW: [Link]`,
                     </div>
                     
                     {/* Step 3: Additional Settings */}
-                    <div>
-                      <h3 className="text-white font-medium mb-3 flex items-center">
-                        <SlidersHorizontal className="h-5 w-5 mr-2 text-[#74d1ea]" />
+                    <div className="bg-gray-900/30 rounded-lg p-5 border border-gray-800">
+                      <h3 className="text-white font-medium mb-4 flex items-center">
+                        <div className="bg-[#74d1ea]/10 p-2 rounded-md mr-3">
+                          <SlidersHorizontal className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
                         Step 3: Additional Settings
                       </h3>
                       
                       <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <Label className="text-white mb-2 block">Campaign Timeline</Label>
-                          <div className="space-y-3">
+                        <div className="bg-black/30 rounded-md p-4 border border-gray-800">
+                          <Label className="text-white mb-3 block font-medium">Campaign Timeline</Label>
+                          <div className="space-y-4">
                             <div>
                               <div className="flex justify-between items-center mb-1">
                                 <Label htmlFor="start-date" className="text-sm text-gray-300">
@@ -1001,10 +1009,10 @@ REGISTER NOW: [Link]`,
                         </div>
                         
                         <div className="space-y-4">
-                          <div className="border border-gray-700 rounded-lg p-4">
+                          <div className="border border-gray-800 rounded-lg p-4 bg-black/30">
                             <div className="flex items-center justify-between">
                               <div>
-                                <span className="text-white text-sm">Include tone analysis</span>
+                                <span className="text-white text-sm font-medium">Include tone analysis</span>
                                 <p className="text-xs text-gray-400">Apply your brand's tone from previous analyses</p>
                               </div>
                               <Switch defaultChecked />
@@ -1038,9 +1046,9 @@ REGISTER NOW: [Link]`,
                               )}
                             </div>
                           </div>
-                          <div className="flex items-center justify-between border border-gray-700 rounded-lg p-3">
+                          <div className="flex items-center justify-between border border-gray-800 rounded-lg p-4 bg-black/30">
                             <div>
-                              <span className="text-white text-sm">Generate all deliverables</span>
+                              <span className="text-white text-sm font-medium">Generate all deliverables</span>
                               <p className="text-xs text-gray-400">Create full content for all campaign pieces</p>
                             </div>
                             <Switch defaultChecked />
