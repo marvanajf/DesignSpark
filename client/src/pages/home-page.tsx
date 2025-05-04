@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown, BarChart3, MessageSquare, LineChart, Lightbulb, Sparkles, CalendarClock } from "lucide-react";
+import { ArrowRight, FileText, Users, PenTool, CheckCircle, ChevronDown, BarChart3, MessageSquare, LineChart, Lightbulb, Sparkles, CalendarClock, Clock, Timer, Pencil, LayoutGrid } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthModal } from "@/hooks/use-auth-modal";
 import {
@@ -47,7 +47,7 @@ export default function HomePage() {
               <span className="block text-[#74d1ea] text-glow">AI-powered workflows</span>
             </h1>
             <p className="mt-6 text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto leading-relaxed">
-              From tone analysis to complete campaign creation, our AI engine delivers
+              From tone analysis to complete campaign creation, our OpenAI-powered platform delivers
               targeted communications that engage, convert, and elevate your brand.
             </p>
             <div className="mt-8 sm:mt-10 flex flex-col items-center">
@@ -130,7 +130,7 @@ export default function HomePage() {
                     </div>
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Campaign Factory</h2>
                     <p className="text-gray-300 text-lg mb-6 max-w-2xl">
-                      Create complete marketing campaigns in minutes, not weeks. Our AI-powered Campaign Factory automatically generates all the content you need across multiple channels.
+                      Create complete marketing campaigns in minutes, not weeks. Our OpenAI-powered Campaign Factory automatically generates all the content you need across multiple channels.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                       <div className="flex items-start">
@@ -219,7 +219,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-white mb-4">Advanced Tone Analysis</h3>
                 <p className="text-gray-400 mb-5">
-                  Decode your brand's unique voice with our AI-powered tone analysis. Understand exactly how professional, conversational, technical, or formal your content appears to your audience.
+                  Decode your brand's unique voice with our OpenAI-powered tone analysis. Understand exactly how professional, conversational, technical, or formal your content appears to your audience.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
@@ -582,6 +582,96 @@ export default function HomePage() {
                   </Button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Benefits & Time Savings Section */}
+      <div className="py-14 bg-black relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-[#74d1ea]/3 rounded-full blur-[100px] opacity-40" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center mb-4 px-4 py-1.5 bg-[#74d1ea]/10 border border-[#74d1ea]/30 rounded-full">
+              <Clock className="h-4 w-4 text-[#74d1ea] mr-2" />
+              <span className="text-[#74d1ea] text-sm font-medium">Time-Saving Benefits</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Save hours every week with AI</h2>
+            <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+              Our OpenAI-powered platform dramatically reduces the time spent on content creation, analysis, and campaign management.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div className="bg-black/50 border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.10)]">
+              <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-4">
+                <Timer className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">10+ hours saved</h3>
+              <p className="text-gray-400 mb-4">
+                Automated tone analysis completes in seconds, not hours, with machine learning identifying patterns human editors might miss.
+              </p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <div className="w-full bg-gray-700/30 rounded-full h-2 w-48">
+                    <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "90%" }}></div>
+                  </div>
+                </div>
+                <span className="text-[#74d1ea] text-sm">90% faster</span>
+              </div>
+            </div>
+            
+            <div className="bg-black/50 border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.10)]">
+              <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-4">
+                <Pencil className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">5+ hours saved</h3>
+              <p className="text-gray-400 mb-4">
+                Content creation workflows that used to take days now happen in minutes, with persona-specific content generated instantly.
+              </p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <div className="w-full bg-gray-700/30 rounded-full h-2 w-48">
+                    <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "85%" }}></div>
+                  </div>
+                </div>
+                <span className="text-[#74d1ea] text-sm">85% faster</span>
+              </div>
+            </div>
+            
+            <div className="bg-black/50 border border-gray-700/60 rounded-lg p-6 shadow-[0_0_20px_rgba(116,209,234,0.10)]">
+              <div className="h-14 w-14 rounded-full bg-[#74d1ea]/10 border border-[#74d1ea]/30 flex items-center justify-center mb-4">
+                <LayoutGrid className="h-7 w-7 text-[#74d1ea]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">20+ hours saved</h3>
+              <p className="text-gray-400 mb-4">
+                Campaign Factory builds entire multi-channel campaigns in minutes, eliminating weeks of planning, writing, and coordination.
+              </p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <div className="w-full bg-gray-700/30 rounded-full h-2 w-48">
+                    <div className="bg-[#74d1ea] h-2 rounded-full" style={{ width: "95%" }}></div>
+                  </div>
+                </div>
+                <span className="text-[#74d1ea] text-sm">95% faster</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border border-gray-700/60 rounded-lg p-6 bg-black/60 text-center backdrop-blur-sm">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-xl md:text-2xl font-semibold text-white mb-4">What would you do with 35+ extra hours per month?</h3>
+              <p className="text-gray-300 mb-6">
+                Our users are focusing on strategy, client relationships, and business growth instead of getting stuck in content creation cycles.
+              </p>
+              <Button
+                onClick={() => window.location.href = "/pricing"}
+                className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-8 py-3 rounded-md shadow-[0_0_12px_rgba(116,209,234,0.3)]"
+              >
+                Start saving time today
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
