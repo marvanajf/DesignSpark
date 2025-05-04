@@ -35,11 +35,8 @@ export default function CampaignsPage() {
           <div className="mb-8">
             <CampaignOverview onAddCampaign={() => setIsCreateModalOpen(true)} />
           </div>
-
-          {/* Campaign List */}
-          <div className="mt-6">
-            <CampaignList />
-          </div>
+          
+          {/* Hiding the Campaign List to avoid duplicate "No campaigns yet" message */}
 
           {/* Campaign Modal for creating new campaigns */}
           {isCreateModalOpen && (
