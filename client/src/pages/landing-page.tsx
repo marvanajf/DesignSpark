@@ -115,7 +115,7 @@ export default function LandingPage() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img className="h-8" src="/logo.webp" alt="Tovably Logo" />
+                <img className="h-8" src="logo.webp" alt="Tovably Logo" />
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-center space-x-6">
@@ -240,81 +240,148 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {features.map((feature) => (
-              <div 
-                key={feature.id}
-                className={`rounded-xl p-6 cursor-pointer transition-all duration-300 ${
-                  activeTab === feature.id 
-                    ? 'bg-[#0e131f] border border-[#74d1ea]/30 shadow-[0_0_25px_rgba(116,209,234,0.15)]' 
-                    : 'bg-black/40 border border-gray-800/60 hover:border-gray-700/80'
-                }`}
-                onClick={() => setActiveTab(feature.id)}
-              >
-                <div className="flex items-center mb-4">
-                  <div className={`p-3 rounded-lg ${
-                    activeTab === feature.id 
-                      ? 'bg-[#74d1ea]/20' 
-                      : 'bg-gray-800/50'
-                  }`}>
-                    {feature.icon}
+          {/* Features with Side-by-Side Columns, matching dashboard design */}
+          {features.map((feature, index) => (
+            <div 
+              key={feature.id} 
+              className={`mb-16 rounded-xl overflow-hidden relative border border-gray-800/60 ${index % 2 === 1 ? 'bg-[#050a15]' : 'bg-[#0a0d14]'}`}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* Text side - will be on the left for even indexes, right for odd */}
+                <div className={`p-8 lg:p-12 ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+                  <div className="flex items-center mb-6">
+                    <div className="p-3 rounded-lg bg-[#74d1ea]/20 mr-4">
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
                   </div>
-                  <h3 className="ml-4 text-lg font-semibold text-white">{feature.title}</h3>
+                  
+                  <p className="text-gray-300 mb-8">
+                    {feature.description}
+                  </p>
+                  
+                  <ul className="space-y-4 mb-8">
+                    {feature.benefits.map((benefit, i) => (
+                      <li key={i} className="flex items-start">
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full mr-3 flex items-center justify-center bg-[#74d1ea]/20">
+                          <Check className="h-3 w-3 text-[#74d1ea]" />
+                        </div>
+                        <span className="text-gray-300">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Button 
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_15px_rgba(116,209,234,0.2)]"
+                    onClick={() => {
+                      if (feature.id === 'personas') navigate('/personas-info');
+                      else if (feature.id === 'tone') navigate('/tone-analysis-info');
+                      else if (feature.id === 'campaigns') navigate('/campaign-factory-info');
+                      else if (feature.id === 'content') navigate('/content-generation-info');
+                    }}
+                  >
+                    Explore {feature.title}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </div>
-                <p className="text-gray-400 mb-4">{feature.description}</p>
-                <Button 
-                  variant="ghost" 
-                  className={`px-0 ${
-                    activeTab === feature.id 
-                      ? 'text-[#74d1ea]' 
-                      : 'text-gray-400'
-                  }`}
-                >
-                  Learn more
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-
-          {/* Feature Details */}
-          <div className="bg-[#0a0d14] border border-gray-800/60 rounded-2xl overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="p-8 lg:p-12">
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  {features.find(f => f.id === activeTab)?.title}
-                </h3>
-                <p className="text-gray-300 mb-6">
-                  {features.find(f => f.id === activeTab)?.description}
-                </p>
-                <ul className="space-y-4">
-                  {features.find(f => f.id === activeTab)?.benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="flex-shrink-0 p-1 bg-[#74d1ea]/20 rounded-full mr-3 mt-1">
-                        <Check className="h-4 w-4 text-[#74d1ea]" />
+                
+                {/* Visual side - will be on the right for even indexes, left for odd */}
+                <div className={`bg-[#0e131f] p-8 flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
+                  {feature.id === 'personas' ? (
+                    <div className="w-full border border-gray-800 rounded-xl overflow-hidden bg-[#050a15]">
+                      <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="p-6 border-r border-gray-800/60">
+                          <div className="space-y-6">
+                            <div className="border-l-2 border-[#74d1ea] pl-4">
+                              <h4 className="text-white font-semibold">Tech-Savvy Marketing Director</h4>
+                              <p className="text-sm text-gray-400 mt-1">Seeks innovative solutions to scale content production while maintaining brand consistency.</p>
+                              <div className="flex gap-2 mt-2">
+                                <span className="text-xs bg-[#090e17] text-[#74d1ea] px-2 py-0.5 rounded-full border border-[#74d1ea]/30">marketing automation</span>
+                                <span className="text-xs bg-[#090e17] text-[#74d1ea] px-2 py-0.5 rounded-full border border-[#74d1ea]/30">roi measurement</span>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="text-white font-semibold">Startup Founder</h4>
+                              <p className="text-sm text-gray-400 mt-1">Needs to establish credibility and generate leads with limited resources.</p>
+                              <div className="flex gap-2 mt-2">
+                                <span className="text-xs bg-[#090e17] text-gray-400 px-2 py-0.5 rounded-full border border-gray-700/50">venture capital</span>
+                                <span className="text-xs bg-[#090e17] text-gray-400 px-2 py-0.5 rounded-full border border-gray-700/50">growth hacking</span>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="text-white font-semibold">Sales Executive</h4>
+                              <p className="text-sm text-gray-400 mt-1">Focused on building relationships and increasing conversions through personalized outreach.</p>
+                              <div className="flex gap-2 mt-2">
+                                <span className="text-xs bg-[#090e17] text-gray-400 px-2 py-0.5 rounded-full border border-gray-700/50">sales automation</span>
+                                <span className="text-xs bg-[#090e17] text-gray-400 px-2 py-0.5 rounded-full border border-gray-700/50">lead generation</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 text-right">
+                            <Button variant="link" className="text-[#74d1ea] text-sm p-0">
+                              Create Custom Persona <ArrowRight className="ml-1 h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6 flex flex-col">
+                          <div className="p-2 bg-[#0e131f] rounded-lg mb-4 w-8 h-8 flex items-center justify-center">
+                            <Users2 className="h-5 w-5 text-[#74d1ea]" />
+                          </div>
+                          
+                          <h3 className="text-xl text-white font-bold mb-3">OpenAI Personas</h3>
+                          
+                          <p className="text-gray-400 text-sm mb-6">
+                            Connect with your ideal audience using tailored personas. Our platform helps you create, manage, and target specific professional personas for more effective content.
+                          </p>
+                          
+                          <ul className="space-y-3 flex-1">
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Create OpenAI-generated or custom personas</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Define interests, pain points, and motivations</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Generate content specifically tailored to each persona</span>
+                            </li>
+                          </ul>
+                          
+                          <Button className="w-full mt-6 bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+                            Explore Personas <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                      <span className="text-gray-300">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button 
-                  className="mt-8 bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
-                >
-                  Try It Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-              <div className="bg-[#0e131f] p-4 flex items-center justify-center">
-                <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl w-full h-full max-h-[400px]">
-                  <img 
-                    src={features.find(f => f.id === activeTab)?.image || "/placeholder.webp"} 
-                    alt={features.find(f => f.id === activeTab)?.title}
-                    className="w-full h-full object-cover"
-                  />
+                    </div>
+                  ) : (
+                    <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl w-full max-h-[400px]">
+                      <img 
+                        src={feature.image || "placeholder.webp"} 
+                        alt={feature.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Fallback if image fails to load
+                          e.currentTarget.src = "placeholder.webp";
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
