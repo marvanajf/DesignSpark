@@ -728,14 +728,6 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                   <h3 className="text-xl font-bold flex items-center gap-2">
                     <FileText className="h-5 w-5 text-[#74d1ea]" /> Campaign Content
                   </h3>
-                  <Button
-                    onClick={() => setIsAddContentDialogOpen(true)}
-                    size="sm"
-                    className="gap-1"
-                    style={{ backgroundColor: "#74d1ea", color: "black" }}
-                  >
-                    <Plus className="h-4 w-4" /> Add Content
-                  </Button>
                 </div>
                 
                 {isLoadingContents ? (
