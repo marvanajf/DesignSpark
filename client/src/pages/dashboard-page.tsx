@@ -11,7 +11,8 @@ import {
   Copy,
   Edit,
   Lightbulb,
-  Sparkles
+  Sparkles,
+  BookText
 } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -343,6 +344,69 @@ export default function DashboardPage() {
                 </Button>
               </div>
             )}
+          </div>
+
+          {/* Knowledge Base Section */}
+          <div className="mb-10">
+            <div className="mb-6 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-white">Knowledge Base</h2>
+                <p className="text-sm text-gray-400 mt-1">Learn AI best practices and marketing strategies</p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
+                onClick={() => navigate('/knowledge-base')}
+              >
+                <BookText className="h-4 w-4 mr-2" />
+                View All Resources
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div 
+                onClick={() => navigate('/knowledge-base')}
+                className="bg-black border border-gray-800/60 rounded-xl p-6 hover:shadow-[0_0_15px_rgba(116,209,234,0.1)] transition-all duration-300 cursor-pointer"
+              >
+                <div className="bg-[#0e131f] h-10 w-10 rounded-lg flex items-center justify-center mb-4">
+                  <Lightbulb className="h-5 w-5 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-lg font-medium text-white mb-2">AI Content Tips</h3>
+                <p className="text-sm text-gray-400 mb-4">Advanced strategies for creating effective AI-generated content</p>
+                <Button variant="link" className="text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
+                  Learn more →
+                </Button>
+              </div>
+              
+              <div 
+                onClick={() => navigate('/knowledge-base')} 
+                className="bg-black border border-gray-800/60 rounded-xl p-6 hover:shadow-[0_0_15px_rgba(116,209,234,0.1)] transition-all duration-300 cursor-pointer"
+              >
+                <div className="bg-[#0e131f] h-10 w-10 rounded-lg flex items-center justify-center mb-4">
+                  <Users className="h-5 w-5 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-lg font-medium text-white mb-2">Persona Development</h3>
+                <p className="text-sm text-gray-400 mb-4">Building detailed buyer personas for targeted marketing campaigns</p>
+                <Button variant="link" className="text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
+                  Explore guides →
+                </Button>
+              </div>
+              
+              <div 
+                onClick={() => navigate('/knowledge-base')} 
+                className="bg-black border border-gray-800/60 rounded-xl p-6 hover:shadow-[0_0_15px_rgba(116,209,234,0.1)] transition-all duration-300 cursor-pointer"
+              >
+                <div className="bg-[#0e131f] h-10 w-10 rounded-lg flex items-center justify-center mb-4">
+                  <FileText className="h-5 w-5 text-[#74d1ea]" />
+                </div>
+                <h3 className="text-lg font-medium text-white mb-2">Campaign Templates</h3>
+                <p className="text-sm text-gray-400 mb-4">Ready-to-use templates for common marketing campaign types</p>
+                <Button variant="link" className="text-[#74d1ea] hover:text-[#5db8d0] p-0 h-auto">
+                  View templates →
+                </Button>
+              </div>
+            </div>
           </div>
 
         </div>

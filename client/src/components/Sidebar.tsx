@@ -75,8 +75,7 @@ export default function Sidebar() {
     { href: "/campaign-factory", icon: <Rocket className="h-5 w-5" />, label: "Campaign Factory" },
     { href: "/tone-analysis", icon: <BarChart3 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
-    { href: "/content-generator", icon: <MessageSquarePlus className="h-5 w-5" />, label: "Content Generator" },
-    { href: "/knowledge-base", icon: <BookText className="h-5 w-5" />, label: "Knowledge Base" }
+    { href: "/content-generator", icon: <MessageSquarePlus className="h-5 w-5" />, label: "Content Generator" }
   ];
   
   // Determine if the current user is an admin
@@ -98,6 +97,7 @@ export default function Sidebar() {
       badge: subscriptionPlan === 'free' ? 'Upgrade' : null
     },
     { href: "/support", icon: <HelpCircle className="h-5 w-5" />, label: "Support" },
+    { href: "/knowledge-base", icon: <BookText className="h-5 w-5" />, label: "Knowledge Base" },
     ...(isAdmin ? [{ href: "/admin", icon: <ShieldAlert className="h-5 w-5" />, label: "Admin" }] : [])
   ];
 
