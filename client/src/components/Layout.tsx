@@ -69,7 +69,6 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                     (location.startsWith('/tone-analysis') && !location.startsWith('/tone-analysis-info')) || 
                     (location.startsWith('/personas') && !location.startsWith('/personas-info')) || 
                     (location.startsWith('/content-generator') && !location.startsWith('/content-generation-info')) || 
-                    location.startsWith('/saved-content') || 
                     location.startsWith('/account') || 
                     location.startsWith('/support') ||
                     (location.startsWith('/knowledge-base') && !location.startsWith('/knowledge-base-info')) ||

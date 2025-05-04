@@ -76,7 +76,6 @@ export default function Sidebar() {
     { href: "/tone-analysis", icon: <BarChart3 className="h-5 w-5" />, label: "Tone Analysis" },
     { href: "/personas", icon: <Users className="h-5 w-5" />, label: "Personas" },
     { href: "/content-generator", icon: <MessageSquarePlus className="h-5 w-5" />, label: "Content Generator" },
-    { href: "/saved-content", icon: <Archive className="h-5 w-5" />, label: "Saved Content" },
     { href: "/knowledge-base", icon: <BookText className="h-5 w-5" />, label: "Knowledge Base" }
   ];
   

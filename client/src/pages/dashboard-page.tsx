@@ -253,6 +253,97 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Saved Content Section */}
+          <div className="mb-10">
+            <div className="mb-6 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-white">Saved Content</h2>
+                <p className="text-sm text-gray-400 mt-1">Quick access to your recent content</p>
+              </div>
+              {contentList && contentList.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="bg-transparent border-gray-700 hover:bg-gray-800 text-gray-300"
+                  onClick={() => window.open('/saved-content', '_blank')}
+                >
+                  <Archive className="h-4 w-4 mr-2" />
+                  View All
+                </Button>
+              )}
+            </div>
+            
+            {contentList && contentList.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {contentList.slice(0, 3).map((content) => (
+                  <Card key={content.id} className="bg-black border border-gray-800/60 hover:shadow-[0_0_15px_rgba(116,209,234,0.1)] transition-all duration-300">
+                    <CardHeader className="pb-2">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          {content.type === 'linkedin_post' ? (
+                            <div className="bg-[#0e131f] h-8 w-8 rounded-lg flex items-center justify-center mr-3">
+                              <SiLinkedin className="h-4 w-4 text-[#0A66C2]" />
+                            </div>
+                          ) : (
+                            <div className="bg-[#0e131f] h-8 w-8 rounded-lg flex items-center justify-center mr-3">
+                              <Mail className="h-4 w-4 text-[#74d1ea]" />
+                            </div>
+                          )}
+                          <CardTitle className="text-sm font-medium text-white">
+                            {content.type === 'linkedin_post' ? 'LinkedIn Post' : 'Email'}
+                          </CardTitle>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {content.created_at && formatDistanceToNow(new Date(content.created_at), { addSuffix: true })}
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pb-2">
+                      <p className="text-sm text-gray-300 line-clamp-2">
+                        {content.content_text.slice(0, 120)}...
+                      </p>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-2 pt-0">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 px-2 text-gray-400 hover:text-white hover:bg-gray-800"
+                        onClick={() => {
+                          navigator.clipboard.writeText(content.content_text);
+                        }}
+                      >
+                        <Copy className="h-3.5 w-3.5 mr-1" />
+                        <span className="text-xs">Copy</span>
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 px-2 text-gray-400 hover:text-white hover:bg-gray-800"
+                        onClick={() => window.open('/saved-content', '_blank')}
+                      >
+                        <Edit className="h-3.5 w-3.5 mr-1" />
+                        <span className="text-xs">View</span>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-10 px-6 border border-dashed border-gray-700 rounded-xl">
+                <Archive className="h-10 w-10 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">No saved content yet</h3>
+                <p className="text-sm text-gray-400 mb-4">
+                  Use our Content Generator to create and save your marketing content
+                </p>
+                <Button 
+                  onClick={() => navigate('/content-generator')}
+                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                >
+                  Create Content
+                </Button>
+              </div>
+            )}
+          </div>
 
         </div>
       </div>
