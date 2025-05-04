@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { subscriptionPlans } from "@shared/schema";
+import tovablyLogo from "../assets/tovably-logo.png";
 import { 
   ArrowRight, 
   Zap, 
@@ -115,7 +116,7 @@ export default function LandingPage() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img className="h-8" src="/tovably-logo.png" alt="Tovably Logo" />
+                <img className="h-8" src="/client/public/tovably-logo.png" alt="Tovably Logo" />
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-center space-x-6">
@@ -1059,7 +1060,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-12 pt-8 border-t border-gray-800/60 flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0">
-              <img className="h-8" src="/tovably-logo.png" alt="Tovably Logo" />
+              <img className="h-8" src="/client/public/tovably-logo.png" alt="Tovably Logo" />
             </div>
             <div className="text-gray-400 text-sm">
               © {new Date().getFullYear()} Tovably. All rights reserved.
