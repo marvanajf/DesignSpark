@@ -836,54 +836,420 @@ export function CampaignModal({ campaignId, isOpen, onClose, mode = 'create' }: 
                 </div>
               )}
               
-              {/* Campaign Factory Details */}
+              {/* Campaign Comprehensive Details */}
               <div className="border-t border-gray-800/30 pt-6">
                 <h3 className="text-xl font-bold mb-4">
-                  Campaign Content Overview
+                  Campaign Management Hub
                 </h3>
                 
-                <div className="space-y-6">
-                  {/* Content Preview */}
-                  <div className="border border-[#1a1e29] rounded-lg bg-black p-5">
-                    <h4 className="text-base font-medium mb-3">
-                      Content Overview
-                    </h4>
+                <Tabs defaultValue="overview" className="w-full" value={activeCampaignTab} onValueChange={setActiveCampaignTab}>
+                  <TabsList className="mb-4 flex bg-[#0e1015] border border-gray-800/60 rounded-md p-1">
+                    <TabsTrigger value="overview" className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black">
+                      <BarChart2 className="mr-2 h-4 w-4" />
+                      Overview
+                    </TabsTrigger>
+                    <TabsTrigger value="content" className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black">
+                      <FileText className="mr-2 h-4 w-4" />
+                      Content
+                    </TabsTrigger>
+                    <TabsTrigger value="personas" className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black">
+                      <User className="mr-2 h-4 w-4" />
+                      Personas
+                    </TabsTrigger>
+                    <TabsTrigger value="tone" className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black">
+                      <PenTool className="mr-2 h-4 w-4" />
+                      Tone
+                    </TabsTrigger>
+                    <TabsTrigger value="schedule" className="flex-1 data-[state=active]:bg-[#74d1ea] data-[state=active]:text-black">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Schedule
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  {/* Overview Tab */}
+                  <TabsContent value="overview" className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {/* Campaign Status */}
+                      <div className="border border-[#1a1e29] rounded-lg bg-black p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="text-sm font-medium">Campaign Status</h4>
+                          <Badge variant={campaign?.status === 'active' ? 'default' : 'outline'} 
+                                 className={campaign?.status === 'active' ? 'bg-green-600' : 
+                                            campaign?.status === 'draft' ? 'bg-gray-600' : 'bg-blue-600'}>
+                            {campaign?.status_display || 'Draft'}
+                          </Badge>
+                        </div>
+                        <Select 
+                          value={campaignStatus || campaign?.status || 'draft'}
+                          onValueChange={(value) => setCampaignStatus(value)}
+                        >
+                          <SelectTrigger className="w-full bg-black border-gray-800">
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-black border-gray-800">
+                            <SelectItem value="draft">Draft</SelectItem>
+                            <SelectItem value="planning">Planning</SelectItem>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="running">Running</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="archived">Archived</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      {/* Campaign Timeline */}
+                      <div className="border border-[#1a1e29] rounded-lg bg-black p-4">
+                        <h4 className="text-sm font-medium mb-3">Campaign Timeline</h4>
+                        <div className="space-y-2">
+                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                            <Clock className="h-4 w-4 text-gray-400" />
+                            <div className="text-sm">
+                              {campaign?.start_date ? (
+                                <span>Starts: {new Date(campaign.start_date).toLocaleDateString()}</span>
+                              ) : (
+                                <span className="text-gray-400">No start date set</span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                            <Calendar className="h-4 w-4 text-gray-400" />
+                            <div className="text-sm">
+                              {campaign?.end_date ? (
+                                <span>Ends: {new Date(campaign.end_date).toLocaleDateString()}</span>
+                              ) : (
+                                <span className="text-gray-400">No end date set</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Campaign Stats */}
+                      <div className="border border-[#1a1e29] rounded-lg bg-black p-4">
+                        <h4 className="text-sm font-medium mb-3">Campaign Assets</h4>
+                        <div className="space-y-2">
+                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                            <FileText className="h-4 w-4 text-gray-400" />
+                            <div className="text-sm">
+                              <span>Content: </span>
+                              <span className="font-medium">{campaign?.content_count || 0}</span>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                            <User className="h-4 w-4 text-gray-400" />
+                            <div className="text-sm">
+                              <span>Personas: </span>
+                              <span className="font-medium">{campaign?.personas_count || 0}</span>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                            <Share2 className="h-4 w-4 text-gray-400" />
+                            <div className="text-sm">
+                              <span>Channels: </span>
+                              <span className="font-medium">{campaign?.channels_count || 0}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     
-                    <div>
+                    {/* Campaign Actions */}
+                    <div className="border border-[#1a1e29] rounded-lg bg-black p-4">
+                      <h4 className="text-sm font-medium mb-3">Quick Actions</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => setIsAddContentDialogOpen(true)}
+                          className="border-gray-800 hover:bg-[#1a1e29]"
+                        >
+                          <Plus className="mr-2 h-4 w-4" /> Add Content
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => setActiveCampaignTab('schedule')}
+                          className="border-gray-800 hover:bg-[#1a1e29]"
+                        >
+                          <Calendar className="mr-2 h-4 w-4" /> Set Timeline
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => setActiveCampaignTab('personas')}
+                          className="border-gray-800 hover:bg-[#1a1e29]"
+                        >
+                          <User className="mr-2 h-4 w-4" /> Manage Personas
+                        </Button>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Content Tab */}
+                  <TabsContent value="content" className="space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-base font-medium">Campaign Content</h4>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setIsAddContentDialogOpen(true)}
+                        className="border-gray-800 hover:bg-[#1a1e29]"
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Add Content
+                      </Button>
+                    </div>
+                    
+                    <div className="border border-[#1a1e29] rounded-lg bg-black p-5">
                       {(isLoadingContents || !campaignContents) ? (
                         <div className="flex justify-center items-center py-8">
                           <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
                         </div>
                       ) : campaignContents.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-6 space-y-2">
-                          <p className="text-sm text-muted-foreground text-center">
+                        <div className="flex flex-col items-center justify-center py-10 space-y-4">
+                          <FileText className="h-12 w-12 text-gray-500" />
+                          <p className="text-gray-400 text-center max-w-md">
                             No content has been added to this campaign yet.
+                            Click "Add Content" to start building your campaign with your existing content.
                           </p>
+                          <Button 
+                            onClick={() => setIsAddContentDialogOpen(true)} 
+                            style={{ backgroundColor: "#74d1ea", color: "black" }}
+                          >
+                            <Plus className="mr-2 h-4 w-4" /> Add Content
+                          </Button>
                         </div>
                       ) : (
-                        <div className="border border-gray-800/60 rounded-lg bg-black/20 p-4">
-                          <ScrollArea className="h-[200px]">
-                            <div className="space-y-3">
-                              {campaignContents.map((content: any) => (
-                                <div key={content.id} className="p-3 border border-gray-800/60 rounded-md bg-black/30">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                      <span className="font-medium text-sm capitalize">{content.type.replace('_', ' ')}</span>
-                                    </div>
+                        <ScrollArea className="h-[350px]">
+                          <div className="space-y-3">
+                            {campaignContents.map((content: any) => (
+                              <div key={content.id} className="p-3 border border-gray-800/60 rounded-md bg-black/30 hover:bg-black/50 group">
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    {content.type === 'linkedin_post' && <SiLinkedin className="text-[#0A66C2] h-4 w-4" />}
+                                    {content.type === 'email' && <Mail className="text-[#74d1ea] h-4 w-4" />}
+                                    {content.type === 'webinar' && <MessageSquare className="text-[#74d1ea] h-4 w-4" />}
+                                    {content.type === 'workshop' && <Target className="text-[#74d1ea] h-4 w-4" />}
+                                    <span className="font-medium text-sm capitalize">{content.type.replace('_', ' ')}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
                                     <div className="text-xs text-gray-500">
                                       {new Date(content.created_at).toLocaleDateString()}
                                     </div>
+                                    <button 
+                                      onClick={() => handleRemoveContent(content.id)}
+                                      className="text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </button>
                                   </div>
-                                  <p className="text-sm text-gray-300 line-clamp-2">{content.content_text.substring(0, 120)}...</p>
                                 </div>
-                              ))}
-                            </div>
-                          </ScrollArea>
+                                <p className="text-sm text-gray-300">{content.content_text}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      )}
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Personas Tab */}
+                  <TabsContent value="personas" className="space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-base font-medium">Target Personas</h4>
+                    </div>
+                    
+                    <div className="border border-[#1a1e29] rounded-lg bg-black p-5">
+                      {isLoadingPersonas ? (
+                        <div className="flex justify-center items-center py-8">
+                          <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+                        </div>
+                      ) : !personas || personas.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 space-y-4">
+                          <User className="h-12 w-12 text-gray-500" />
+                          <p className="text-gray-400 text-center max-w-md">
+                            You haven't created any personas yet.
+                            Create personas to better target your campaign content.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <p className="text-sm text-gray-300 mb-4">
+                            Select a persona to associate with this campaign. This helps target your content to a specific audience.
+                          </p>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {personas.map((persona) => (
+                              <div 
+                                key={persona.id}
+                                onClick={() => handleUpdateCampaign(campaignId!, persona.id)}
+                                className={`p-4 border ${campaign?.persona_id === persona.id ? 'border-[#74d1ea]' : 'border-gray-800/60'} rounded-md bg-black/30 cursor-pointer hover:bg-black/50`}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-8 h-8 rounded-full bg-[#1a1e29] flex items-center justify-center">
+                                      <User className="h-4 w-4 text-[#74d1ea]" />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h5 className="font-medium text-base mb-1">{persona.name}</h5>
+                                    <p className="text-xs text-gray-400">{persona.description}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
-                  </div>
-                </div>
+                  </TabsContent>
+                  
+                  {/* Tone Analysis Tab */}
+                  <TabsContent value="tone" className="space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-base font-medium">Tone Analysis</h4>
+                    </div>
+                    
+                    <div className="border border-[#1a1e29] rounded-lg bg-black p-5">
+                      {isLoadingToneAnalyses ? (
+                        <div className="flex justify-center items-center py-8">
+                          <Loader2 className="h-8 w-8 animate-spin text-[#74d1ea]" />
+                        </div>
+                      ) : !toneAnalyses || toneAnalyses.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 space-y-4">
+                          <PenTool className="h-12 w-12 text-gray-500" />
+                          <p className="text-gray-400 text-center max-w-md">
+                            You haven't created any tone analyses yet.
+                            Create tone analyses to define the voice and style of your campaign.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <p className="text-sm text-gray-300 mb-4">
+                            Select a tone analysis to associate with this campaign. This defines the voice and style of your content.
+                          </p>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {toneAnalyses.map((tone) => (
+                              <div 
+                                key={tone.id}
+                                onClick={() => handleUpdateCampaign(campaignId!, undefined, tone.id)}
+                                className={`p-4 border ${campaign?.tone_analysis_id === tone.id ? 'border-[#74d1ea]' : 'border-gray-800/60'} rounded-md bg-black/30 cursor-pointer hover:bg-black/50`}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-8 h-8 rounded-full bg-[#1a1e29] flex items-center justify-center">
+                                      <PenTool className="h-4 w-4 text-[#74d1ea]" />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h5 className="font-medium text-base mb-1">{tone.name || 'Unnamed Analysis'}</h5>
+                                    <p className="text-xs text-gray-400 truncate">
+                                      {tone.website_url || tone.sample_text?.substring(0, 50) || 'No sample text'}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Schedule Tab */}
+                  <TabsContent value="schedule" className="space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-base font-medium">Campaign Timeline</h4>
+                    </div>
+                    
+                    <div className="border border-[#1a1e29] rounded-lg bg-black p-5">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Start Date Picker */}
+                        <div className="space-y-4">
+                          <h5 className="text-sm font-medium">Campaign Start Date</h5>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={`w-full justify-start text-left font-normal border-gray-800 ${!startDate && "text-muted-foreground"}`}
+                              >
+                                <Calendar className="mr-2 h-4 w-4" />
+                                {startDate ? format(startDate, "PPP") : <span>Pick a start date</span>}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0 bg-black border-gray-800">
+                              <CalendarComponent
+                                mode="single"
+                                selected={startDate}
+                                onSelect={setStartDate}
+                                className="bg-black"
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                        
+                        {/* End Date Picker */}
+                        <div className="space-y-4">
+                          <h5 className="text-sm font-medium">Campaign End Date</h5>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={`w-full justify-start text-left font-normal border-gray-800 ${!endDate && "text-muted-foreground"}`}
+                              >
+                                <Calendar className="mr-2 h-4 w-4" />
+                                {endDate ? format(endDate, "PPP") : <span>Pick an end date</span>}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0 bg-black border-gray-800">
+                              <CalendarComponent
+                                mode="single"
+                                selected={endDate}
+                                onSelect={setEndDate}
+                                className="bg-black"
+                                disabled={(date) => 
+                                  startDate ? date < startDate : false
+                                }
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-6">
+                        <Button 
+                          onClick={() => {
+                            // Update campaign with new dates
+                            const updateData: any = {};
+                            if (startDate) updateData.start_date = startDate;
+                            if (endDate) updateData.end_date = endDate;
+                            if (campaignStatus !== campaign?.status) updateData.status = campaignStatus;
+                            
+                            fetch(`/api/campaigns/${campaignId}`, {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify(updateData),
+                              credentials: "include"
+                            }).then(res => {
+                              if (res.ok) {
+                                queryClient.invalidateQueries({ queryKey: [`/api/campaigns/${campaignId}`] });
+                                toast({
+                                  title: "Campaign updated",
+                                  description: "Timeline and status have been updated successfully",
+                                });
+                                setActiveCampaignTab('overview');
+                              }
+                            });
+                          }}
+                          style={{ backgroundColor: "#74d1ea", color: "black" }}
+                          className="w-full"
+                        >
+                          Save Timeline & Status
+                        </Button>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
           </div>
