@@ -365,6 +365,270 @@ export default function LandingPage() {
                         </div>
                       </div>
                     </div>
+                  ) : feature.id === 'tone' ? (
+                    <div className="w-full border border-gray-800 rounded-xl overflow-hidden bg-[#050a15]">
+                      <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="p-6 border-r border-gray-800/60">
+                          <div className="space-y-6">
+                            <div className="border-l-2 border-[#74d1ea] pl-4">
+                              <h4 className="text-white font-semibold">Brand Voice Analysis</h4>
+                              <p className="text-sm text-gray-400 mt-1">Marketing copy from website product page</p>
+                              <div className="mt-3 bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                                <p className="text-sm text-gray-300">Our cutting-edge solution empowers teams to deliver unprecedented results with maximum efficiency.</p>
+                              </div>
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                <div className="flex items-center bg-[#090e17] text-[#74d1ea] px-2 py-1 rounded-md border border-[#74d1ea]/30">
+                                  <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                  <span className="text-xs">Professional 87%</span>
+                                </div>
+                                <div className="flex items-center bg-[#090e17] text-[#74d1ea] px-2 py-1 rounded-md border border-[#74d1ea]/30">
+                                  <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                  <span className="text-xs">Confident 82%</span>
+                                </div>
+                                <div className="flex items-center bg-[#090e17] text-gray-400 px-2 py-1 rounded-md border border-gray-700/50">
+                                  <div className="w-1.5 h-1.5 bg-gray-500 rounded-full mr-1.5"></div>
+                                  <span className="text-xs">Technical 54%</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="text-white font-semibold">Social Media Post</h4>
+                              <p className="text-sm text-gray-400 mt-1">Tweet promoting new product feature</p>
+                              <div className="mt-3 bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                                <p className="text-sm text-gray-300">Excited to launch our game-changing feature today! Can't wait to hear what you think! 🚀 #Innovation</p>
+                              </div>
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                <div className="flex items-center bg-[#090e17] text-gray-400 px-2 py-1 rounded-md border border-gray-700/50">
+                                  <div className="w-1.5 h-1.5 bg-gray-500 rounded-full mr-1.5"></div>
+                                  <span className="text-xs">Enthusiastic 91%</span>
+                                </div>
+                                <div className="flex items-center bg-[#090e17] text-gray-400 px-2 py-1 rounded-md border border-gray-700/50">
+                                  <div className="w-1.5 h-1.5 bg-gray-500 rounded-full mr-1.5"></div>
+                                  <span className="text-xs">Informal 76%</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 text-right">
+                            <Button variant="link" className="text-[#74d1ea] text-sm p-0">
+                              Analyze New Content <ArrowRight className="ml-1 h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6 flex flex-col">
+                          <div className="p-2 bg-[#0e131f] rounded-lg mb-4 w-8 h-8 flex items-center justify-center">
+                            <MessageSquareText className="h-5 w-5 text-[#74d1ea]" />
+                          </div>
+                          
+                          <h3 className="text-xl text-white font-bold mb-3">Tone Analysis</h3>
+                          
+                          <p className="text-gray-400 text-sm mb-6">
+                            Analyze and perfect your brand voice across all content to maintain consistency and resonate with your target audience.
+                          </p>
+                          
+                          <ul className="space-y-3 flex-1">
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Ensure brand voice consistency across channels</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Adapt tone to different audience segments</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Fine-tune emotional impact of your messaging</span>
+                            </li>
+                          </ul>
+                          
+                          <Button className="w-full mt-6 bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+                            Explore Tone Analysis <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : feature.id === 'campaigns' ? (
+                    <div className="w-full border border-gray-800 rounded-xl overflow-hidden bg-[#050a15]">
+                      <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="p-6 border-r border-gray-800/60">
+                          <div className="space-y-4">
+                            <h4 className="text-white font-semibold">Product Launch Campaign</h4>
+                            <div className="space-y-3">
+                              <div className="bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                                <div className="flex items-center mb-2">
+                                  <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                  <span className="text-xs text-[#74d1ea] font-medium">Email Sequence</span>
+                                </div>
+                                <p className="text-sm text-gray-300 mb-1">• Initial Announcement (Day 1)</p>
+                                <p className="text-sm text-gray-300 mb-1">• Preview Benefits (Day 3)</p>
+                                <p className="text-sm text-gray-300">• Launch Day Offer (Day 7)</p>
+                              </div>
+                              
+                              <div className="bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                                <div className="flex items-center mb-2">
+                                  <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                  <span className="text-xs text-[#74d1ea] font-medium">Social Media Content</span>
+                                </div>
+                                <p className="text-sm text-gray-300 mb-1">• Teaser Video Posts (2 weeks)</p>
+                                <p className="text-sm text-gray-300 mb-1">• Customer Testimonials (1 week)</p>
+                                <p className="text-sm text-gray-300">• Live Demo Announcement (Day 5)</p>
+                              </div>
+                              
+                              <div className="bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                                <div className="flex items-center mb-2">
+                                  <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                  <span className="text-xs text-[#74d1ea] font-medium">Landing Page</span>
+                                </div>
+                                <p className="text-sm text-gray-300 mb-1">• Key Benefits Section</p>
+                                <p className="text-sm text-gray-300 mb-1">• Feature Showcase</p>
+                                <p className="text-sm text-gray-300">• Early-Bird Pricing CTA</p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 text-right">
+                            <Button variant="link" className="text-[#74d1ea] text-sm p-0">
+                              Build New Campaign <ArrowRight className="ml-1 h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6 flex flex-col">
+                          <div className="p-2 bg-[#0e131f] rounded-lg mb-4 w-8 h-8 flex items-center justify-center">
+                            <CalendarClock className="h-5 w-5 text-[#74d1ea]" />
+                          </div>
+                          
+                          <h3 className="text-xl text-white font-bold mb-3">Campaign Factory</h3>
+                          
+                          <p className="text-gray-400 text-sm mb-6">
+                            Build complete marketing campaigns in minutes instead of days or weeks. Our Campaign Factory streamlines your entire marketing workflow.
+                          </p>
+                          
+                          <ul className="space-y-3 flex-1">
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Create multi-channel campaigns with 70% less effort</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Generate coordinated content across platforms</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Save 35+ hours monthly on campaign planning</span>
+                            </li>
+                          </ul>
+                          
+                          <Button className="w-full mt-6 bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+                            Explore Campaign Factory <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : feature.id === 'content' ? (
+                    <div className="w-full border border-gray-800 rounded-xl overflow-hidden bg-[#050a15]">
+                      <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="p-6 border-r border-gray-800/60">
+                          <div className="space-y-4">
+                            <h4 className="text-white font-semibold">Generated Content Examples</h4>
+                            
+                            <div className="bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                              <div className="flex items-center mb-2">
+                                <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                <span className="text-xs text-[#74d1ea] font-medium">Blog Post Headline</span>
+                              </div>
+                              <p className="text-sm text-gray-300 font-medium">10 Ways AI Is Transforming Digital Marketing in 2025</p>
+                              <div className="flex gap-2 mt-2">
+                                <span className="text-xs bg-[#0d121c] text-gray-400 px-1.5 py-0.5 rounded border border-gray-700/50">SEO-Optimized</span>
+                                <span className="text-xs bg-[#0d121c] text-gray-400 px-1.5 py-0.5 rounded border border-gray-700/50">High CTR</span>
+                              </div>
+                            </div>
+                            
+                            <div className="bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                              <div className="flex items-center mb-2">
+                                <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                <span className="text-xs text-[#74d1ea] font-medium">Ad Copy</span>
+                              </div>
+                              <p className="text-sm text-gray-300">Transform your marketing strategy today. Our AI-powered platform saves you 35+ hours every month while increasing campaign output by 70%.</p>
+                              <div className="flex gap-2 mt-2">
+                                <span className="text-xs bg-[#0d121c] text-gray-400 px-1.5 py-0.5 rounded border border-gray-700/50">Facebook</span>
+                                <span className="text-xs bg-[#0d121c] text-gray-400 px-1.5 py-0.5 rounded border border-gray-700/50">LinkedIn</span>
+                              </div>
+                            </div>
+                            
+                            <div className="bg-[#090e17] p-3 rounded-md border border-gray-800/60">
+                              <div className="flex items-center mb-2">
+                                <div className="w-1.5 h-1.5 bg-[#74d1ea] rounded-full mr-1.5"></div>
+                                <span className="text-xs text-[#74d1ea] font-medium">Email Subject Line</span>
+                              </div>
+                              <p className="text-sm text-gray-300 font-medium">[EXCLUSIVE] Unlock Your Marketing Potential with These AI Tools</p>
+                              <div className="flex gap-2 mt-2">
+                                <span className="text-xs bg-[#0d121c] text-gray-400 px-1.5 py-0.5 rounded border border-gray-700/50">58% Open Rate</span>
+                                <span className="text-xs bg-[#0d121c] text-gray-400 px-1.5 py-0.5 rounded border border-gray-700/50">Personalized</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 text-right">
+                            <Button variant="link" className="text-[#74d1ea] text-sm p-0">
+                              Generate New Content <ArrowRight className="ml-1 h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6 flex flex-col">
+                          <div className="p-2 bg-[#0e131f] rounded-lg mb-4 w-8 h-8 flex items-center justify-center">
+                            <BrainCircuit className="h-5 w-5 text-[#74d1ea]" />
+                          </div>
+                          
+                          <h3 className="text-xl text-white font-bold mb-3">AI Content Generation</h3>
+                          
+                          <p className="text-gray-400 text-sm mb-6">
+                            Create high-converting, SEO-optimized content for any channel in seconds with our advanced AI content generation tools.
+                          </p>
+                          
+                          <ul className="space-y-3 flex-1">
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Generate SEO-optimized blog posts and articles</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Create engaging social media content in seconds</span>
+                            </li>
+                            <li className="flex items-center">
+                              <div className="flex-shrink-0 mr-2 text-[#74d1ea]">
+                                <Check className="h-4 w-4" /> 
+                              </div>
+                              <span className="text-gray-300 text-sm">Produce ad copy that drives clicks and conversions</span>
+                            </li>
+                          </ul>
+                          
+                          <Button className="w-full mt-6 bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+                            Explore Content Generation <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   ) : (
                     <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl w-full max-h-[400px]">
                       <img 
