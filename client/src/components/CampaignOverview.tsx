@@ -101,12 +101,45 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
     },
   });
 
+  // Delete campaign
+  const deleteCampaignMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/campaigns/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      toast({
+        title: "Campaign deleted",
+        description: "Campaign has been permanently deleted",
+      });
+      setCampaignToDelete(null);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to delete campaign",
+        description: error.message || "An error occurred",
+        variant: "destructive",
+      });
+      setCampaignToDelete(null);
+    },
+  });
+
   const handleStatusChange = (campaign: Campaign, newStatus: string, statusDisplay: string) => {
     updateCampaignStatusMutation.mutateAsync({
       id: campaign.id,
       status: newStatus,
       statusDisplay
     });
+  };
+  
+  const handleDelete = (campaign: Campaign) => {
+    setCampaignToDelete(campaign);
+  };
+  
+  const confirmDelete = () => {
+    if (campaignToDelete) {
+      deleteCampaignMutation.mutate(campaignToDelete.id);
+    }
   };
 
   // Format date range
@@ -244,42 +277,54 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
           </div>
           
           <div className="mt-4 flex justify-between items-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="text-sm">
-                  <Pencil className="h-3.5 w-3.5 mr-1" />
-                  Change Status
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Set Status</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'draft', 'Draft')}>
-                  <div className="h-2 w-2 rounded-full bg-slate-500 mr-2"></div>
-                  Draft
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'planning', 'Planning')}>
-                  <div className="h-2 w-2 rounded-full bg-[#2196F3] mr-2"></div>
-                  Planning
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'active', 'Active')}>
-                  <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
-                  Active
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'running', 'Running')}>
-                  <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
-                  Running
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'completed', 'Completed')}>
-                  <div className="h-2 w-2 rounded-full bg-[#9C27B0] mr-2"></div>
-                  Completed
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'archived', 'Archived')}>
-                  <div className="h-2 w-2 rounded-full bg-[#795548] mr-2"></div>
-                  Archived
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex space-x-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="text-sm">
+                    <Pencil className="h-3.5 w-3.5 mr-1" />
+                    Change Status
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Set Status</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'draft', 'Draft')}>
+                    <div className="h-2 w-2 rounded-full bg-slate-500 mr-2"></div>
+                    Draft
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'planning', 'Planning')}>
+                    <div className="h-2 w-2 rounded-full bg-[#2196F3] mr-2"></div>
+                    Planning
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'active', 'Active')}>
+                    <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
+                    Active
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'running', 'Running')}>
+                    <div className="h-2 w-2 rounded-full bg-[#4CAF50] mr-2"></div>
+                    Running
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'completed', 'Completed')}>
+                    <div className="h-2 w-2 rounded-full bg-[#9C27B0] mr-2"></div>
+                    Completed
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleStatusChange(campaign, 'archived', 'Archived')}>
+                    <div className="h-2 w-2 rounded-full bg-[#795548] mr-2"></div>
+                    Archived
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-sm text-red-500 hover:text-red-600 hover:bg-red-100/10"
+                onClick={() => handleDelete(campaign)}
+              >
+                <Trash2 className="h-3.5 w-3.5 mr-1" />
+                Delete
+              </Button>
+            </div>
             
             <Button
               variant="ghost"
@@ -317,6 +362,41 @@ export function CampaignOverview({ onAddCampaign }: CampaignOverviewProps) {
           </Button>
         </div>
       )}
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!campaignToDelete} onOpenChange={(open) => !open && setCampaignToDelete(null)}>
+        <AlertDialogContent className="bg-[#0a0c10] border border-gray-800 text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete Campaign</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Are you sure you want to delete the campaign "{campaignToDelete?.name}"? This action cannot be undone 
+              and will remove all campaign data and associations.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex space-x-2 pt-5">
+            <AlertDialogCancel 
+              className="text-gray-300 hover:text-white bg-[#1a1e29] hover:bg-[#272e3f] border-gray-700"
+              onClick={() => setCampaignToDelete(null)}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              className="bg-red-600 hover:bg-red-700 text-white border-none"
+              onClick={confirmDelete}
+              disabled={deleteCampaignMutation.isPending}
+            >
+              {deleteCampaignMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>Delete Campaign</>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
