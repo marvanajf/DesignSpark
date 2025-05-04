@@ -919,9 +919,9 @@ export default function LandingPage() {
                           : 'bg-transparent border border-[#74d1ea]/30 hover:border-[#74d1ea] text-[#74d1ea] hover:text-white hover:shadow-[0_0_15px_rgba(116,209,234,0.3)]'
                       }`}
                       onClick={() => {
-                        // For free plan, navigate to signup. For paid plans, go directly to Stripe checkout
+                        // For free plan, open auth modal. For paid plans, go directly to Stripe checkout
                         if (isFreePlan) {
-                          navigate('/auth');
+                          openAuthModal();
                         } else {
                           // Use the direct Stripe redirect endpoint
                           window.location.href = `/api/direct-stripe-redirect?plan=${planId}`;
