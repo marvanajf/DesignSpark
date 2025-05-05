@@ -114,19 +114,29 @@ export default function PaymentSuccessPage() {
                 ) : (
                   <p className="text-sm text-gray-300 mb-3">You'll need to enter your email in the next step.</p>
                 )}
-                <p className="text-xs text-gray-400">
-                  {accountSetup 
-                    ? "Your account has been set up. You can now log in with your email and password."
-                    : "Set up your account by creating a password using the form. This will allow you to log in immediately."}
-                </p>
-                {!accountSetup && (
-                  <Button 
-                    onClick={() => setShowSetupModal(true)} 
-                    variant="outline" 
-                    className="mt-3 w-full border-zinc-700 text-[#74d1ea] hover:text-[#74d1ea] hover:bg-zinc-900"
-                  >
-                    Set Up Account
-                  </Button>
+                
+                {autoLoginInProgress ? (
+                  <div className="mt-3 flex items-center justify-center">
+                    <Loader2 className="h-5 w-5 animate-spin text-[#74d1ea] mr-2" />
+                    <p className="text-sm text-gray-300">Logging you in automatically...</p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-xs text-gray-400">
+                      {accountSetup 
+                        ? "Your account has been set up. You will be redirected to the dashboard automatically."
+                        : "Set up your account by creating a password using the form. This will allow you to log in immediately."}
+                    </p>
+                    {!accountSetup && (
+                      <Button 
+                        onClick={() => setShowSetupModal(true)} 
+                        variant="outline" 
+                        className="mt-3 w-full border-zinc-700 text-[#74d1ea] hover:text-[#74d1ea] hover:bg-zinc-900"
+                      >
+                        Set Up Account
+                      </Button>
+                    )}
+                  </>
                 )}
               </div>
               
@@ -136,16 +146,46 @@ export default function PaymentSuccessPage() {
                 </p>
               )}
               
-              <div className="flex gap-4">
-                {!user && (
+              <div className="flex gap-4 relative">
+                {/* If user is not logged in and account is not set up, show setup button */}
+                {!user && !autoLoginInProgress && !accountSetup && (
+                  <Button 
+                    onClick={() => setShowSetupModal(true)}
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                  >
+                    Set Up Account
+                  </Button>
+                )}
+                
+                {/* If user completed account setup but is not logged in, show login button */}
+                {!user && !autoLoginInProgress && accountSetup && (
                   <Button asChild className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
                     <Link href="/auth">Log In</Link>
                   </Button>
                 )}
-                <Button asChild>
-                  <Link href="/">Go to Dashboard</Link>
-                </Button>
+                
+                {/* Main dashboard button - changes based on auto-login state */}
+                {autoLoginInProgress ? (
+                  <Button disabled className="opacity-70 bg-gray-800">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Redirecting...
+                  </Button>
+                ) : (
+                  <Button 
+                    asChild
+                    className={user ? "bg-[#74d1ea] hover:bg-[#5db8d0] text-black" : ""}
+                  >
+                    <Link href="/dashboard">Go to Dashboard</Link>
+                  </Button>
+                )}
               </div>
+              
+              {/* If user is already logged in, show a message */}
+              {user && (
+                <div className="mt-6 bg-green-900/30 text-green-400 px-3 py-2 rounded-md text-sm font-medium border border-green-800/50 text-center">
+                  Logged in as <span className="font-semibold">{user.email || user.username}</span>
+                </div>
+              )}
             </div>
           )}
         </div>
