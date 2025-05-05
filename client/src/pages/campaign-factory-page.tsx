@@ -572,25 +572,25 @@ The average cost of a small business data breach now exceeds $2.98 million when 
   return (
     <Layout showSidebar={true}>
       <div className="flex-1 overflow-y-auto min-h-screen bg-black">
-        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="px-4 py-8 sm:px-6">
           {/* Header with improved visual hierarchy */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <div className="flex items-center text-sm text-gray-400 mb-2">
+                <div className="flex items-center text-sm text-gray-400 mb-1">
                   <span>Tovably</span>
                   <ChevronRight className="h-3 w-3 mx-1" />
                   <span>Premium Features</span>
                   <ChevronRight className="h-3 w-3 mx-1" />
                   <span className="text-[#5eead4]">Campaign Factory</span>
                 </div>
-                <h1 className="text-3xl font-bold text-white flex flex-wrap items-center gap-3">
+                <h1 className="text-2xl font-semibold text-white flex flex-wrap items-center gap-2">
                   Campaign Factory
                   <Badge variant="outline" className="bg-[#5eead4]/10 text-[#5eead4] border-[#5eead4]/30 text-xs">
                     Premium Feature
                   </Badge>
                 </h1>
-                <p className="text-gray-400 mt-2">
+                <p className="text-gray-400 text-sm mt-1">
                   Create complete, multi-channel marketing campaigns in minutes with our AI-powered Campaign Factory.
                 </p>
               </div>
