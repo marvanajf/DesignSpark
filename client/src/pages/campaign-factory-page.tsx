@@ -1050,7 +1050,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           {useGeneratedPersonas && !isGeneratingPersonas && generatedPersonas.length === 0 && (
                             <div className="mt-4 flex justify-center">
                               <Button 
-                                className="bg-[#74d1ea]/10 hover:bg-[#74d1ea]/20 text-[#74d1ea] border border-[#74d1ea]/20"
+                                className="bg-[#5eead4]/10 hover:bg-[#5eead4]/20 text-[#5eead4] border border-[#5eead4]/20"
                                 onClick={handleGeneratePersonas}
                               >
                                 <Sparkles className="h-4 w-4 mr-2" />
@@ -1085,9 +1085,9 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 <div className="max-w-md w-full text-center">
                   <div className="mb-6">
                     <div className="relative h-32 w-32 mx-auto">
-                      <div className="absolute inset-0 rounded-full bg-[#74d1ea]/10 animate-ping"></div>
-                      <div className="relative h-32 w-32 rounded-full flex items-center justify-center bg-black border-2 border-[#74d1ea]">
-                        <Sparkles className="h-10 w-10 text-[#74d1ea]" />
+                      <div className="absolute inset-0 rounded-full bg-[#5eead4]/10 animate-ping"></div>
+                      <div className="relative h-32 w-32 rounded-full flex items-center justify-center bg-black border-2 border-[#5eead4]">
+                        <Sparkles className="h-10 w-10 text-[#5eead4]" />
                       </div>
                     </div>
                   </div>
@@ -1191,8 +1191,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     <div className="flex justify-between flex-wrap gap-4">
                       <div>
                         <CardTitle className="text-xl text-white flex items-center">
-                          <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
-                            <Zap className="h-5 w-5 text-[#74d1ea]" />
+                          <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#5eead4]/10 border border-[#5eead4]/30">
+                            <Zap className="h-5 w-5 text-[#5eead4]" />
                           </div>
                           {campaign.name}
                         </CardTitle>
@@ -1201,7 +1201,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       
                       <div className="flex space-x-2">
                         <Button 
-                          className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                          className="bg-[#5eead4] hover:bg-[#5eead4]/90 text-black"
                           onClick={handleSaveCampaign}
                         >
                           Save Campaign
