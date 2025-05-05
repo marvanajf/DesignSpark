@@ -27,13 +27,14 @@ export default function PaymentSuccessPage() {
   const plan = params.get('plan');
   
   // Helper function to perform a direct login with credentials
-  const performDirectLogin = async (username: string, password: string): Promise<boolean> => {
+  const performDirectLogin = async (email: string, password: string): Promise<boolean> => {
     try {
       // Log the login attempt for debugging
-      console.log("Attempting direct login for:", username);
+      console.log("Attempting direct login for:", email);
       
       // First, make the login API call
-      const loginResponse = await apiRequest("POST", "/api/login", { username, password });
+      // IMPORTANT: The auth controller expects 'email' NOT 'username' parameter
+      const loginResponse = await apiRequest("POST", "/api/login", { email, password });
       
       if (!loginResponse.ok) {
         console.error("Login API call failed:", await loginResponse.text());
@@ -49,7 +50,7 @@ export default function PaymentSuccessPage() {
       const userResponse = await apiRequest("GET", "/api/user");
       const userData = await userResponse.json();
       
-      console.log("User data fetched:", userData ? "Success" : "Failed");
+      console.log("User data fetched:", userData ? "Success" : "Failed", userData);
       return !!userData;
     } catch (error) {
       console.error("Login attempt failed:", error);
