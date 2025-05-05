@@ -26,17 +26,16 @@ export default function PaymentSuccessPage() {
   useEffect(() => {
     // Function to handle the test/development mode scenario
     const handleTestMode = () => {
-      // Check if customer email is provided in the URL (from actual checkout)
-      // This way Stripe customer email takes precedence over test email
-      const customerEmail = params.get('customer_email'); 
-      const testEmail = customerEmail || params.get('email') || 'test@example.com';
+      // Remove this fallback to test@example.com - we want users to always enter their own email
+      // or see the email from Stripe checkout
+      const customerEmail = params.get('customer_email') || params.get('email') || '';
       
-      console.log("Using test mode with email:", customerEmail || testEmail);
+      console.log("Payment success with email:", customerEmail);
       
       setMessage(
         "Your payment was successful! We've created an account for you."
       );
-      setEmail(customerEmail || testEmail);
+      setEmail(customerEmail);
       setShowSetupModal(true);
       setIsLoading(false);
     };
@@ -57,15 +56,13 @@ export default function PaymentSuccessPage() {
                 "Your payment was successful! We've created an account for you."
               );
               
-              // If we have a customer_email in the URL params, use that (most reliable)
-              // Otherwise fall back to the email from the session data
-              const customerEmail = params.get('customer_email');
-              setEmail(customerEmail || data.email);
+              // Get customer email from URL params or session data, but don't require it
+              // The important thing is to make the modal always show and let the user enter their email
+              const customerEmail = params.get('customer_email') || data.email || '';
+              setEmail(customerEmail);
               
-              // Show the account setup modal for new accounts
-              if (customerEmail || data.email) {
-                setShowSetupModal(true);
-              }
+              // Always show the account setup modal for new accounts
+              setShowSetupModal(true);
             } else {
               setMessage("Your payment was successful and your subscription has been updated.");
             }
@@ -107,26 +104,28 @@ export default function PaymentSuccessPage() {
               <h1 className="text-2xl font-bold text-white mb-4 text-center">Payment Successful!</h1>
               <p className="text-gray-300 text-center mb-6">{message}</p>
               
-              {email && (
-                <div className="w-full bg-zinc-900 rounded-md p-4 mb-6 border border-zinc-800">
-                  <h3 className="font-medium text-white mb-2">Your Account Details:</h3>
+              <div className="w-full bg-zinc-900 rounded-md p-4 mb-6 border border-zinc-800">
+                <h3 className="font-medium text-white mb-2">Your Account Details:</h3>
+                {email ? (
                   <p className="text-sm text-gray-300 mb-3">Email: <span className="text-[#74d1ea]">{email}</span></p>
-                  <p className="text-xs text-gray-400">
-                    {accountSetup 
-                      ? "Your account has been set up. You can now log in with your email and password."
-                      : "Set up your account by creating a password using the form. This will allow you to log in immediately."}
-                  </p>
-                  {!accountSetup && (
-                    <Button 
-                      onClick={() => setShowSetupModal(true)} 
-                      variant="outline" 
-                      className="mt-3 w-full border-zinc-700 text-[#74d1ea] hover:text-[#74d1ea] hover:bg-zinc-900"
-                    >
-                      Set Up Account
-                    </Button>
-                  )}
-                </div>
-              )}
+                ) : (
+                  <p className="text-sm text-gray-300 mb-3">You'll need to enter your email in the next step.</p>
+                )}
+                <p className="text-xs text-gray-400">
+                  {accountSetup 
+                    ? "Your account has been set up. You can now log in with your email and password."
+                    : "Set up your account by creating a password using the form. This will allow you to log in immediately."}
+                </p>
+                {!accountSetup && (
+                  <Button 
+                    onClick={() => setShowSetupModal(true)} 
+                    variant="outline" 
+                    className="mt-3 w-full border-zinc-700 text-[#74d1ea] hover:text-[#74d1ea] hover:bg-zinc-900"
+                  >
+                    Set Up Account
+                  </Button>
+                )}
+              </div>
               
               {plan && (
                 <p className="text-sm text-gray-400 mb-6 text-center">

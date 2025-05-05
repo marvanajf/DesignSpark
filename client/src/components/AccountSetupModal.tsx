@@ -42,11 +42,11 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
   const { toast } = useToast();
 
   // Update editedEmail when email prop changes
+  // Reset edited email when modal open state or provided email changes
   useEffect(() => {
-    if (email) {
-      setEditedEmail(email);
-    }
-  }, [email]);
+    // Use the provided email or set to empty string to enable input
+    setEditedEmail(email || '');
+  }, [email, open]);
 
   const form = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
@@ -59,6 +59,12 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
   const handleSubmit = async (data: PasswordFormData) => {
     if (!editedEmail || editedEmail.trim() === '') {
       setError("Please enter a valid email address.");
+      return;
+    }
+    
+    // Basic email validation
+    if (!/^\S+@\S+\.\S+$/.test(editedEmail.trim())) {
+      setError("Please enter a valid email address in the format: example@domain.com");
       return;
     }
 
@@ -131,14 +137,17 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">Email</Label>
+                <Label htmlFor="email" className="text-gray-300">Email Address <span className="text-[#74d1ea]">*</span></Label>
                 <Input
                   id="email"
                   value={editedEmail}
                   onChange={(e) => setEditedEmail(e.target.value)}
+                  placeholder="Enter your email address"
                   className="bg-zinc-900 border-zinc-800 text-white"
+                  required
+                  autoFocus
                 />
-                <p className="text-xs text-gray-500">You can edit your email address if needed.</p>
+                <p className="text-xs text-gray-500">Please enter a valid email address where you can receive account notifications.</p>
               </div>
 
               <FormField
