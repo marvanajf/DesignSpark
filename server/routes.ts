@@ -35,7 +35,29 @@ console.log("Stripe Configuration:");
 console.log("- API Key Mode:", process.env.STRIPE_SECRET_KEY.startsWith('sk_test_') ? 'TEST MODE' : 'LIVE MODE');
 console.log("- Public Key Mode:", process.env.VITE_STRIPE_PUBLIC_KEY?.startsWith('pk_test_') ? 'TEST MODE' : 'LIVE MODE');
 
+import path from "path";
+import fs from "fs";
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve sitemap.xml directly from the filesystem
+  app.get("/sitemap.xml", (req, res) => {
+    const sitemapPath = path.resolve(process.cwd(), "public", "sitemap.xml");
+    
+    fs.readFile(sitemapPath, (err, data) => {
+      if (err) {
+        console.error("Error serving sitemap.xml:", err);
+        return res.status(500).send("Error serving sitemap");
+      }
+      
+      res.header("Content-Type", "text/xml; charset=UTF-8");
+      res.send(data);
+    });
+  });
+  
+  // For Google Search Console and other search engines that might look for sitemap at root
+  app.get("/sitemap", (req, res) => {
+    res.redirect("/sitemap.xml");
+  });
   // Advanced database health check with diagnostics and recovery options
   app.get("/api/db-health", async (req: Request, res: Response) => {
     try {
