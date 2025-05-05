@@ -1817,38 +1817,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const { email, password } = schema.parse(req.body);
       const testMode = process.env.NODE_ENV === 'development' || req.query.testMode === 'true';
+      const plan = req.query.plan?.toString() || 'standard';
       
       // Find user by email
       let user = await storage.getUserByEmail(email);
       
-      // In test mode, if no user is found, we'll create one automatically
-      if (!user && testMode) {
-        console.log(`Test mode: Creating temporary user for ${email}`);
+      // If no user is found, we'll create one automatically regardless of mode
+      // This ensures that users coming from Stripe checkout can always create an account
+      if (!user) {
+        console.log(`Creating new user account for ${email}`);
         try {
-          // Generate a random secure initial password
+          // Generate a random secure initial password (will be updated later in this flow)
           const tempPassword = Math.random().toString(36).slice(-10);
           
-          // Create a test user
+          // Create the user with the selected plan
           user = await storage.createUser({
             username: email.split('@')[0], // Use part of email as username
             email: email,
             password: tempPassword, // This will be hashed by the createUser method
-            full_name: "Test User",
-            company: "Test Company",
+            full_name: email.split('@')[0],
+            company: "",
             role: 'user',
-            subscription_plan: 'standard',
+            subscription_plan: plan as SubscriptionPlanType,
             personas_used: 0,
             tone_analyses_used: 0,
             content_generated: 0,
             campaigns_used: 0,
-            stripe_customer_id: `test_${Date.now()}`,
+            campaign_factory_used: 0,
+            stripe_customer_id: testMode ? `test_${Date.now()}` : null,
             stripe_subscription_id: null,
             subscription_status: 'active',
             subscription_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           });
-          console.log("Created test user for account setup:", user.id);
+          console.log("Created new user account:", user.id);
         } catch (createError) {
-          console.error("Failed to create test user:", createError);
+          console.error("Failed to create user account:", createError);
+          return res.status(500).json({ error: "Failed to create user account. Please try again or contact support." });
         }
       }
       
