@@ -184,18 +184,31 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                   password: form.getValues().password
                 } : undefined;
                 
+                // Show a loading state on the button to indicate progress
+                setIsLoading(true);
+                
                 // First close the dialog directly by triggering an immediate close
                 // This ensures the modal disappears without waiting for further processes
-                // We use a zero timeout to ensure the close is correctly registered in the event queue
                 setTimeout(() => onClose(), 0);
                 
-                // Then pass credentials to parent
-                // IMPORTANT: The order matters here - close first, then trigger the success callback
-                setTimeout(() => onSuccess(credentials), 10);
+                // Then pass credentials to parent for auto-login
+                // We use a small delay to ensure closing happens first
+                setTimeout(() => {
+                  setIsLoading(false);
+                  onSuccess(credentials);
+                }, 10);
               }}
+              disabled={isLoading}
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
             >
-              Continue to Dashboard
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Continue to Dashboard"
+              )}
             </Button>
           </div>
         ) : (

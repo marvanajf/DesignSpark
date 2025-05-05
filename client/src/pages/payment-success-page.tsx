@@ -25,6 +25,37 @@ export default function PaymentSuccessPage() {
   const params = new URLSearchParams(location.split('?')[1]);
   const sessionId = params.get('session_id');
   const plan = params.get('plan');
+  
+  // Helper function to perform a direct login with credentials
+  const performDirectLogin = async (username: string, password: string): Promise<boolean> => {
+    try {
+      // Log the login attempt for debugging
+      console.log("Attempting direct login for:", username);
+      
+      // First, make the login API call
+      const loginResponse = await apiRequest("POST", "/api/login", { username, password });
+      
+      if (!loginResponse.ok) {
+        console.error("Login API call failed:", await loginResponse.text());
+        return false;
+      }
+      
+      console.log("Login API call successful");
+      
+      // Refresh TanStack Query cache
+      await queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      // Force a direct fetch to confirm login state
+      const userResponse = await apiRequest("GET", "/api/user");
+      const userData = await userResponse.json();
+      
+      console.log("User data fetched:", userData ? "Success" : "Failed");
+      return !!userData;
+    } catch (error) {
+      console.error("Login attempt failed:", error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     // Function to handle the test/development mode scenario
@@ -214,7 +245,7 @@ export default function PaymentSuccessPage() {
             // Make sure we properly reset the modal state when closing
             setShowSetupModal(false);
           }}
-          onSuccess={(credentials) => {
+          onSuccess={async (credentials) => {
             // Mark account as set up FIRST - this prevents reshowing the modal
             setAccountSetup(true);
             
@@ -225,16 +256,14 @@ export default function PaymentSuccessPage() {
             if (credentials) {
               setAutoLoginInProgress(true);
               
-              // Attempt to log in with the provided credentials
-              apiRequest("POST", "/api/login", { 
-                username: credentials.email, 
-                password: credentials.password 
-              })
-              .then(response => {
-                if (response.ok) {
-                  // On successful login, refresh user data and redirect to dashboard
-                  queryClient.invalidateQueries({ queryKey: ["/api/user"] });
-                  
+              try {
+                // Use our direct login helper function
+                const loginSuccess = await performDirectLogin(
+                  credentials.email, 
+                  credentials.password
+                );
+                
+                if (loginSuccess) {
                   // Show a successful login message in the UI
                   toast({
                     title: "Logged in successfully!",
@@ -242,29 +271,28 @@ export default function PaymentSuccessPage() {
                     variant: "default"
                   });
                   
-                  // Navigate to the dashboard after a short delay
+                  // Navigate to the dashboard after a short delay to ensure data is loaded
                   setTimeout(() => {
+                    console.log("Redirecting to dashboard...");
                     window.location.href = '/dashboard';
-                  }, 1000);
+                  }, 1500);
                 } else {
                   setAutoLoginInProgress(false);
-                  console.error("Failed to auto-login after account setup");
                   toast({
                     title: "Auto-login failed",
                     description: "Please use the login button to access your account.",
                     variant: "destructive"
                   });
                 }
-              })
-              .catch(err => {
+              } catch (error) {
                 setAutoLoginInProgress(false);
-                console.error("Error during auto-login:", err);
+                console.error("Auto-login error:", error);
                 toast({
                   title: "Login error",
                   description: "There was a problem logging you in. Please try logging in manually.",
                   variant: "destructive"
                 });
-              });
+              }
             }
           }}
         />
