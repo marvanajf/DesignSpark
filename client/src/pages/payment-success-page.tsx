@@ -17,6 +17,7 @@ export default function PaymentSuccessPage() {
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [showSetupModal, setShowSetupModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [accountSetup, setAccountSetup] = useState(false);
   const [autoLoginInProgress, setAutoLoginInProgress] = useState(false);
   const { user } = useAuth();
@@ -156,19 +157,36 @@ export default function PaymentSuccessPage() {
         .then((data) => {
           if (data.status === "complete") {
             if (data.accountCreated) {
-              setMessage(
-                "Your payment was successful! We've created an account for you."
-              );
-              
-              // Get customer email from URL params or session data, but don't require it
-              // The important thing is to make the modal always show and let the user enter their email
-              const customerEmail = params.get('customer_email') || data.email || '';
-              setEmail(customerEmail);
-              
-              // Always show the account setup modal for new accounts
-              setShowSetupModal(true);
+              // If we already have a logged in user, this is an upgrade
+              if (user) {
+                setMessage(
+                  "Your payment was successful! Your subscription has been upgraded."
+                );
+                // Show the upgrade modal for existing users
+                setShowUpgradeModal(true);
+              } else {
+                // This is a new user
+                setMessage(
+                  "Your payment was successful! We've created an account for you."
+                );
+                
+                // Get customer email from URL params or session data, but don't require it
+                // The important thing is to make the modal always show and let the user enter their email
+                const customerEmail = params.get('customer_email') || data.email || '';
+                setEmail(customerEmail);
+                
+                // Always show the account setup modal for new accounts
+                setShowSetupModal(true);
+              }
             } else {
-              setMessage("Your payment was successful and your subscription has been updated.");
+              // This is an existing user upgrading their plan
+              if (user) {
+                setMessage("Your payment was successful and your subscription has been upgraded.");
+                // Show the upgrade modal for existing users
+                setShowUpgradeModal(true);
+              } else {
+                setMessage("Your payment was successful and your subscription has been updated.");
+              }
             }
             
             // Refresh user data if the user is logged in
@@ -409,6 +427,18 @@ export default function PaymentSuccessPage() {
                 });
               }
             }
+          }}
+        />
+      )}
+
+      {/* Plan Upgrade Success Modal - Only show for existing users who upgraded their plan */}
+      {showUpgradeModal && user && (
+        <PlanUpgradeSuccessModal
+          plan={plan || 'standard'}
+          open={true}
+          onClose={() => {
+            // Make sure we properly reset the modal state when closing
+            setShowUpgradeModal(false);
           }}
         />
       )}
