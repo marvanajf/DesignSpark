@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
+import { subscriptionPlans, type SubscriptionPlanType } from "@shared/schema";
 
 // A sample persona type for demonstration purposes
 type Persona = {
@@ -166,15 +167,31 @@ export default function CampaignFactoryPage() {
       return;
     }
 
-    // Check subscription plan
-    if (user?.subscription_plan === 'free' || user?.subscription_plan === 'standard') {
+    // Check subscription plan and usage limits
+    if (user?.subscription_plan === 'free') {
       toast({
         title: "Premium Feature",
-        description: "Campaign Factory is only available on Premium and Pro plans. Please upgrade to access this feature.",
+        description: "Campaign Factory is only available on Standard, Premium and Pro plans. Please upgrade to access this feature.",
         variant: "destructive"
       });
       setLocation("/pricing");
       return;
+    }
+    
+    // Check if the user has reached their campaign factory usage limit
+    if (user?.subscription_plan) {
+      const campaignFactoryLimit = subscriptionPlans[user.subscription_plan as SubscriptionPlanType]?.campaignFactory || 0;
+      const campaignFactoryUsed = user.campaign_factory_used || 0;
+      
+      if (campaignFactoryUsed >= campaignFactoryLimit) {
+        toast({
+          title: "Usage Limit Reached",
+          description: `You have used all ${campaignFactoryLimit} of your Campaign Factory credits for this billing period. Please upgrade your plan for more credits.`,
+          variant: "destructive"
+        });
+        setLocation("/pricing");
+        return;
+      }
     }
 
     setIsGenerating(true);
