@@ -693,7 +693,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                         <Textarea 
                           id="campaign-prompt"
                           placeholder="E.g., A campaign to promote our new cloud security product to IT managers at mid-size companies. We want to emphasize easy deployment, cost savings, and regulatory compliance..."
-                          className="h-32 bg-zinc-900 border-zinc-700 focus-visible:ring-[#74d1ea]"
+                          className="h-32 bg-zinc-900 border-zinc-700 focus-visible:ring-[#5eead4]"
                           value={campaignPrompt}
                           onChange={(e) => setCampaignPrompt(e.target.value)}
                         />
@@ -747,7 +747,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                             value={selectedToneAnalysisId} 
                             onValueChange={setSelectedToneAnalysisId}
                           >
-                            <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
+                            <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
                               <SelectValue placeholder="Select a tone analysis" />
                             </SelectTrigger>
                             <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -848,13 +848,13 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                         <h3 className="text-white font-medium mb-4">Content Types</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                           {/* Email Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.email ? "border-[#74d1ea] bg-[#74d1ea]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
+                          <div className={`p-5 rounded-lg border ${selectedContentTypes.email ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
                             <div className="flex justify-between items-center mb-3">
                               <h4 className="font-medium text-white">Email</h4>
                               <Switch 
                                 checked={selectedContentTypes.email} 
                                 onCheckedChange={() => toggleContentType('email')}
-                                className="data-[state=checked]:bg-[#74d1ea]"
+                                className="data-[state=checked]:bg-[#5eead4]"
                               />
                             </div>
                             {selectedContentTypes.email && (
