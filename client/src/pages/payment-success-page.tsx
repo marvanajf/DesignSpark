@@ -151,6 +151,7 @@ export default function PaymentSuccessPage() {
       {/* Account Setup Modal */}
       <AccountSetupModal 
         email={email}
+        plan={plan || 'standard'}
         open={showSetupModal}
         onClose={() => setShowSetupModal(false)}
         onSuccess={() => {

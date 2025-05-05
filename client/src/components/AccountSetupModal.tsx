@@ -32,9 +32,10 @@ interface AccountSetupModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  plan?: string;
 }
 
-export default function AccountSetupModal({ email, open, onClose, onSuccess }: AccountSetupModalProps) {
+export default function AccountSetupModal({ email, open, onClose, onSuccess, plan = 'standard' }: AccountSetupModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -74,9 +75,20 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
     try {
       // Check if we're in development/test mode
       const testMode = process.env.NODE_ENV === 'development';
-      const queryParams = testMode ? '?testMode=true' : '';
+      const queryParams = new URLSearchParams();
       
-      const response = await apiRequest("POST", `/api/setup-account${queryParams}`, {
+      if (testMode) {
+        queryParams.append('testMode', 'true');
+      }
+      
+      // Add the subscription plan to the query parameters
+      if (plan) {
+        queryParams.append('plan', plan);
+      }
+      
+      const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+      
+      const response = await apiRequest("POST", `/api/setup-account${queryString}`, {
         email: editedEmail.trim(),
         password: data.password
       });
