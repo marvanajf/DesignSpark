@@ -228,7 +228,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-white mb-4">Advanced Tone Analysis</h3>
                 <p className="text-gray-400 mb-5">
-                  Decode your brand's unique voice with our OpenAI-powered tone analysis. Understand exactly how professional, conversational, technical, or formal your content appears to your audience.
+                  The nuances of your brand's tone of voice are analyzed to give you keywords, detailed analysis, and shape the content that resonates with your audience, ensuring consistency across all your marketing channels.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
