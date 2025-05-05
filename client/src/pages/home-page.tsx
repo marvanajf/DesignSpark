@@ -76,7 +76,7 @@ export default function HomePage() {
               </div>
               <h2 className="text-3xl sm:text-4xl font-semibold text-white">AI-Native Platform</h2>
               <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
-                Built from the ground up with AI at its core, Tovably leverages cutting-edge machine learning to transform how you communicate.
+                Built from the ground up with AI at its core.
               </p>
             </div>
             
