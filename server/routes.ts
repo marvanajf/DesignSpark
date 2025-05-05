@@ -1373,8 +1373,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (testMode || process.env.NODE_ENV === 'development') {
         console.log("Using test mode for checkout session");
         
-        // Use email from query string if provided, otherwise use a test email
-        const email = req.query.email?.toString() || 'test@example.com';
+        // Use email from URL query param if provided, otherwise use an empty string
+        // to allow the user to enter their own email in the UI
+        const email = req.query.email?.toString() || '';
+        
+        // Use the plan from the query string or default to standard
         const plan = req.query.plan?.toString() || 'standard';
         
         // Return a simulated successful response for testing
@@ -1419,7 +1422,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Error retrieving checkout session, falling back to test mode:", error);
       
       // Fallback to test mode for better developer experience
-      const email = req.query.email?.toString() || 'test@example.com';
+      // But importantly - don't provide a default email, let the user enter it
+      const email = req.query.email?.toString() || '';
       const plan = req.query.plan?.toString() || 'standard';
       
       res.json({
