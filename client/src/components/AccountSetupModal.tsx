@@ -215,17 +215,27 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
         }
       }}
     >
-      <DialogContent className="max-w-md bg-black border border-border/50">
-        <DialogTitle className="text-xl font-semibold text-white">Set Up Your Account</DialogTitle>
-        <DialogDescription className="text-gray-400">
-          Create a password to complete your account setup.
-        </DialogDescription>
+      <DialogContent className="max-w-md bg-black border-2 border-[#74d1ea]/30 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <DialogTitle className="text-xl font-semibold text-white bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] bg-clip-text text-transparent">Set Up Your Account</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Create a password to complete your account setup.
+            </DialogDescription>
+          </div>
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#74d1ea] to-[#5db8d0] flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"></path><circle cx="16.5" cy="7.5" r=".5"></circle></svg>
+          </div>
+        </div>
 
         {success ? (
           <div className="flex flex-col items-center py-6 text-center">
-            <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
-            <p className="text-white text-lg font-medium mb-2">Account Setup Complete!</p>
-            <p className="text-gray-400 mb-4">You can now log in with your email and password.</p>
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#74d1ea]/20 to-[#5db8d0]/10 flex items-center justify-center mb-4 border-2 border-[#74d1ea]/30">
+              <CheckCircle className="h-10 w-10 text-[#74d1ea]" />
+            </div>
+            <p className="text-white text-xl font-medium mb-2 bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] bg-clip-text text-transparent">Account Setup Complete!</p>
+            <p className="text-gray-400 mb-6">You're all set! You'll be logged in automatically.</p>
+            <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-[#74d1ea]/20 to-transparent mb-6"></div>
             <Button 
               onClick={() => {
                 // Get the user credentials
@@ -266,7 +276,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                 }, 100);  // Increased delay to ensure modal is fully closed
               }}
               disabled={isLoading}
-              className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+              className="bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] hover:bg-gradient-to-r hover:from-[#5db8d0] hover:to-[#4ca5bd] text-black font-medium shadow-lg shadow-[#74d1ea]/20 border border-[#74d1ea]/10 px-8"
             >
               {isLoading ? (
                 <>
@@ -288,7 +298,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                   value={editedEmail}
                   onChange={(e) => setEditedEmail(e.target.value)}
                   placeholder="Enter your email address"
-                  className="bg-zinc-900 border-zinc-800 text-white"
+                  className="bg-zinc-900/70 border-[#74d1ea]/20 text-white focus:border-[#74d1ea]/70 focus:ring-1 focus:ring-[#74d1ea]/50 transition-all"
                   required
                   autoFocus
                 />
@@ -306,7 +316,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                         {...field}
                         type="password"
                         placeholder="Create a strong password"
-                        className="bg-zinc-900 border-zinc-800 text-white"
+                        className="bg-zinc-900/70 border-[#74d1ea]/20 text-white focus:border-[#74d1ea]/70 focus:ring-1 focus:ring-[#74d1ea]/50 transition-all"
                       />
                     </FormControl>
                     <FormMessage />
@@ -325,7 +335,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                         {...field}
                         type="password"
                         placeholder="Confirm your password"
-                        className="bg-zinc-900 border-zinc-800 text-white"
+                        className="bg-zinc-900/70 border-[#74d1ea]/20 text-white focus:border-[#74d1ea]/70 focus:ring-1 focus:ring-[#74d1ea]/50 transition-all"
                       />
                     </FormControl>
                     <FormMessage />
@@ -340,13 +350,33 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                 </div>
               )}
 
-              <div className="p-3 rounded bg-zinc-900 border border-zinc-800">
-                <p className="text-sm text-gray-400 mb-2 font-medium">Password requirements:</p>
-                <ul className="text-xs text-gray-500 space-y-1">
-                  <li>• At least 8 characters long</li>
-                  <li>• At least one uppercase letter</li>
-                  <li>• At least one lowercase letter</li>
-                  <li>• At least one number</li>
+              <div className="p-4 rounded-lg bg-gradient-to-b from-zinc-900 to-black border border-[#74d1ea]/20 shadow-inner">
+                <p className="text-sm text-[#74d1ea] mb-3 font-medium">Password requirements:</p>
+                <ul className="text-xs text-gray-400 space-y-2">
+                  <li className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full bg-[#74d1ea]/20 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-[#74d1ea]"></div>
+                    </div>
+                    <span>At least 8 characters long</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full bg-[#74d1ea]/20 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-[#74d1ea]"></div>
+                    </div>
+                    <span>At least one uppercase letter</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full bg-[#74d1ea]/20 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-[#74d1ea]"></div>
+                    </div>
+                    <span>At least one lowercase letter</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full bg-[#74d1ea]/20 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-[#74d1ea]"></div>
+                    </div>
+                    <span>At least one number</span>
+                  </li>
                 </ul>
               </div>
 
@@ -363,7 +393,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                 <Button 
                   type="submit" 
                   disabled={isLoading}
-                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                  className="bg-gradient-to-r from-[#74d1ea] to-[#5db8d0] hover:bg-gradient-to-r hover:from-[#5db8d0] hover:to-[#4ca5bd] text-black font-medium shadow-lg shadow-[#74d1ea]/20 border border-[#74d1ea]/10"
                 >
                   {isLoading ? (
                     <>
