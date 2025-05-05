@@ -39,24 +39,40 @@ import path from "path";
 import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Serve sitemap.xml directly from the filesystem
-  app.get("/sitemap.xml", (req, res) => {
-    const sitemapPath = path.resolve(process.cwd(), "public", "sitemap.xml");
+  // Handle sitemap.xml and /sitemap for Google Search Console
+  app.get(["/sitemap.xml", "/sitemap"], (req, res) => {
+    // Check if it's Google Search Console or any search engine bot
+    const userAgent = req.headers['user-agent'] || '';
+    const isSearchBot = userAgent.includes('Googlebot') || 
+                        userAgent.includes('bingbot') || 
+                        userAgent.includes('Slurp') || 
+                        userAgent.includes('DuckDuckBot') || 
+                        userAgent.includes('Baiduspider') || 
+                        userAgent.includes('YandexBot') || 
+                        userAgent.includes('facebot') || 
+                        userAgent.includes('ia_archiver');
     
-    fs.readFile(sitemapPath, (err, data) => {
-      if (err) {
-        console.error("Error serving sitemap.xml:", err);
-        return res.status(500).send("Error serving sitemap");
-      }
+    // If it's a search engine or explicitly requesting the XML, serve the XML
+    if (isSearchBot || req.path === "/sitemap.xml") {
+      const sitemapPath = path.resolve(process.cwd(), "public", "google-sitemap");
       
-      res.header("Content-Type", "text/xml; charset=UTF-8");
-      res.send(data);
-    });
-  });
-  
-  // For Google Search Console and other search engines that might look for sitemap at root
-  app.get("/sitemap", (req, res) => {
-    res.redirect("/sitemap.xml");
+      console.log(`Serving XML sitemap to ${isSearchBot ? 'search bot' : 'user'} from ${req.path}`);
+      
+      res.header("Content-Type", "application/xml; charset=UTF-8");
+      return fs.readFile(sitemapPath, (err, data) => {
+        if (err) {
+          console.error("Error serving sitemap XML:", err);
+          return res.status(500).send("Error serving sitemap");
+        }
+        
+        return res.send(data);
+      });
+    }
+    
+    // If it's a regular user requesting /sitemap, let React handle it
+    if (req.path === "/sitemap") {
+      return next();
+    }
   });
   // Advanced database health check with diagnostics and recovery options
   app.get("/api/db-health", async (req: Request, res: Response) => {
