@@ -1369,7 +1369,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#5eead4]/10 border border-[#5eead4]/30">
                         <FileText className="h-5 w-5 text-[#5eead4]" />
                       </div>
-                      Campaign Content
+                      {campaign.name} Content
                     </CardTitle>
                     <CardDescription>
                       Review and customize your generated content pieces
