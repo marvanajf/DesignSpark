@@ -39,8 +39,25 @@ import path from "path";
 import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Handle sitemap.xml and /sitemap for Google Search Console
-  app.get(["/sitemap.xml", "/sitemap"], (req, res) => {
+  // Handle sitemap.xml with special priority route
+  app.get("/sitemap.xml", (req, res) => {
+    const sitemapPath = path.resolve(process.cwd(), "public", "google-sitemap");
+    
+    // Explicitly set XML content type header
+    res.header("Content-Type", "application/xml; charset=UTF-8");
+    
+    fs.readFile(sitemapPath, (err, data) => {
+      if (err) {
+        console.error("Error serving sitemap XML:", err);
+        return res.status(500).send("Error serving sitemap");
+      }
+      
+      return res.send(data);
+    });
+  });
+  
+  // Handle /sitemap route for both bots and users
+  app.get("/sitemap", (req, res, next) => {
     // Check if it's Google Search Console or any search engine bot
     const userAgent = req.headers['user-agent'] || '';
     const isSearchBot = userAgent.includes('Googlebot') || 
@@ -52,27 +69,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
                         userAgent.includes('facebot') || 
                         userAgent.includes('ia_archiver');
     
-    // If it's a search engine or explicitly requesting the XML, serve the XML
-    if (isSearchBot || req.path === "/sitemap.xml") {
-      const sitemapPath = path.resolve(process.cwd(), "public", "google-sitemap");
-      
-      console.log(`Serving XML sitemap to ${isSearchBot ? 'search bot' : 'user'} from ${req.path}`);
-      
-      res.header("Content-Type", "application/xml; charset=UTF-8");
-      return fs.readFile(sitemapPath, (err, data) => {
-        if (err) {
-          console.error("Error serving sitemap XML:", err);
-          return res.status(500).send("Error serving sitemap");
-        }
-        
-        return res.send(data);
-      });
+    // If it's a search engine bot, redirect to the XML sitemap
+    if (isSearchBot) {
+      console.log(`Redirecting search bot to sitemap.xml from ${req.path}`);
+      return res.redirect("/sitemap.xml");
     }
     
-    // If it's a regular user requesting /sitemap, let React handle it
-    if (req.path === "/sitemap") {
-      return next();
-    }
+    // For regular users, let React handle it with the HTML sitemap
+    next();
   });
   // Advanced database health check with diagnostics and recovery options
   app.get("/api/db-health", async (req: Request, res: Response) => {
