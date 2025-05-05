@@ -59,7 +59,7 @@ export default function HomePage() {
                 </Button>
               </div>
               <p className="mt-3 text-sm text-gray-400">
-                No credit card required. Start generating in minutes.
+                No credit card required. Start creating in seconds.
               </p>
             </div>
           </div>
