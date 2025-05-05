@@ -663,19 +663,20 @@ The average cost of a small business data breach now exceeds $2.98 million when 
           <div className="mt-8">
             {activeTab === "input" && (
               <div className="grid gap-8">
-                {/* Campaign Brief - Clean, modern card with mint blue glow */}
-                <Card className="bg-black border border-zinc-800 shadow-[0_0_30px_rgba(116,209,234,0.15)] relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#74d1ea]/10 via-transparent to-transparent opacity-60 pointer-events-none"></div>
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
-                    <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
-                        <FileText className="h-5 w-5 text-[#74d1ea]" />
+                {/* Campaign Brief - Clean, modern card matching tone analysis style */}
+                <Card className="bg-[#111] border border-[#222] rounded-xl shadow-xl overflow-hidden">
+                  <CardHeader className="px-6 py-5">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center justify-center w-8 h-8">
+                        <FileText className="h-5 w-5 text-[#5eead4]" />
                       </div>
-                      Campaign Brief
-                    </CardTitle>
-                    <CardDescription>
-                      Provide information about your marketing campaign
-                    </CardDescription>
+                      <div>
+                        <CardTitle className="text-xl text-white font-medium">Campaign Brief</CardTitle>
+                        <CardDescription>
+                          Provide information about your marketing campaign
+                        </CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
                   
                   <CardContent className="p-6 space-y-8">
@@ -684,7 +685,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <div>
                         <Label htmlFor="campaign-prompt" className="text-white font-medium flex items-center">
                           Campaign Description 
-                          <span className="text-[#74d1ea] ml-2 text-sm font-normal">(Required)</span>
+                          <span className="text-[#5eead4] ml-2 text-sm font-normal">(Required)</span>
                         </Label>
                         <p className="text-gray-400 text-sm mb-2">
                           What is your campaign about? Include goals, target audience, key messages, and any specific requirements.
@@ -702,7 +703,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <div>
                         <Label htmlFor="campaign-type" className="text-white font-medium flex items-center">
                           Campaign Type
-                          <span className="text-[#74d1ea] ml-2 text-sm font-normal">(Required)</span>
+                          <span className="text-[#5eead4] ml-2 text-sm font-normal">(Required)</span>
                         </Label>
                         <p className="text-gray-400 text-sm mb-3">
                           Select the primary purpose of your campaign
@@ -736,7 +737,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <div>
                         <Label htmlFor="brand-voice" className="text-white font-medium flex items-center">
                           Brand Voice
-                          <span className="text-[#74d1ea] ml-2 text-sm font-normal">(Required)</span>
+                          <span className="text-[#5eead4] ml-2 text-sm font-normal">(Required)</span>
                         </Label>
                         <p className="text-gray-400 text-sm mb-3">
                           Select a tone analysis to apply your brand voice to the campaign content
@@ -766,7 +767,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                     <p className="text-gray-400 mb-2">No tone analyses found</p>
                                     <Button 
                                       variant="link" 
-                                      className="text-[#74d1ea] p-0" 
+                                      className="text-[#5eead4] p-0" 
                                       onClick={() => setLocation('/tone-analysis')}
                                     >
                                       Create a tone analysis
@@ -780,7 +781,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                             <div className="mt-2 flex items-center">
                               <Button 
                                 variant="link" 
-                                className="text-[#74d1ea] p-0 h-auto" 
+                                className="text-[#5eead4] p-0 h-auto" 
                                 onClick={() => setLocation('/tone-analysis')}
                               >
                                 Create a new tone analysis
@@ -825,17 +826,19 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 </Card>
                 
                 {/* Content Configuration */}
-                <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
-                    <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
-                        <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
+                <Card className="bg-[#111] border border-[#222] rounded-xl shadow-xl overflow-hidden">
+                  <CardHeader className="px-6 py-5">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center justify-center w-8 h-8">
+                        <MessageSquare className="h-5 w-5 text-[#5eead4]" />
                       </div>
-                      Content Configuration
-                    </CardTitle>
-                    <CardDescription>
-                      Select the types of content you want in your campaign
-                    </CardDescription>
+                      <div>
+                        <CardTitle className="text-xl text-white font-medium">Content Configuration</CardTitle>
+                        <CardDescription>
+                          Select the types of content you want in your campaign
+                        </CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
                   
                   <CardContent className="p-6">
@@ -1062,9 +1065,9 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     </div>
                   </CardContent>
                   
-                  <CardFooter className="border-t border-zinc-800/60 bg-[#0e1b33]/30 px-6 py-4">
+                  <CardFooter className="border-t border-[#222] px-6 py-4">
                     <Button 
-                      className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium w-full md:w-auto"
+                      className="bg-[#5eead4] hover:bg-[#5eead4]/90 text-black font-medium w-full md:w-auto"
                       onClick={handleGenerateCampaign}
                       disabled={!campaignPrompt.trim() || !selectedUseCase || !selectedToneAnalysisId}
                     >
