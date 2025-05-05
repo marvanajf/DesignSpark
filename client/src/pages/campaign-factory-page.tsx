@@ -607,53 +607,53 @@ The average cost of a small business data breach now exceeds $2.98 million when 
             </div>
           </div>
           
-          {/* Process timeline */}
-          <div className="relative mb-8">
-            <div className="hidden sm:block absolute left-0 right-0 h-1 top-[30px] bg-zinc-800 -z-0"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {/* Process timeline - more subtle, smaller and cleaner */}
+          <div className="relative mb-6">
+            <div className="hidden sm:block absolute left-0 right-0 h-[1px] top-[18px] bg-zinc-800/40 -z-0"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div 
                 className={`relative ${activeTab === "input" ? "text-[#74d1ea]" : activeTab === "generating" || activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-14 w-14 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#74d1ea]/20 border-2 border-[#74d1ea]" : activeTab === "generating" || activeTab === "results" ? "bg-green-900/20 border-2 border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
-                    <Target className="h-6 w-6" />
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : activeTab === "generating" || activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
+                    <Target className="h-3.5 w-3.5" />
                   </div>
-                  <div className="ml-3 sm:mt-0 hidden sm:block">
-                    <p className="font-medium">Step 1</p>
-                    <p className={`text-sm ${activeTab === "input" ? "text-gray-300" : "text-gray-500"}`}>Campaign Input</p>
+                  <div className="ml-2 sm:mt-0 hidden sm:block">
+                    <p className="text-xs font-medium">Step 1</p>
+                    <p className={`text-xs ${activeTab === "input" ? "text-gray-300" : "text-gray-500"}`}>Campaign Input</p>
                   </div>
                 </div>
-                <p className="text-center mt-2 font-medium sm:hidden">Step 1: Campaign Input</p>
+                <p className="text-center mt-1 text-xs font-medium sm:hidden">Step 1</p>
               </div>
               
               <div 
                 className={`relative ${activeTab === "generating" ? "text-[#74d1ea]" : activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-14 w-14 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#74d1ea]/20 border-2 border-[#74d1ea]" : activeTab === "results" ? "bg-green-900/20 border-2 border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
-                    <Sparkles className="h-6 w-6" />
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
+                    <Sparkles className="h-3.5 w-3.5" />
                   </div>
-                  <div className="ml-3 sm:mt-0 hidden sm:block">
-                    <p className="font-medium">Step 2</p>
-                    <p className={`text-sm ${activeTab === "generating" ? "text-gray-300" : "text-gray-500"}`}>AI Processing</p>
+                  <div className="ml-2 sm:mt-0 hidden sm:block">
+                    <p className="text-xs font-medium">Step 2</p>
+                    <p className={`text-xs ${activeTab === "generating" ? "text-gray-300" : "text-gray-500"}`}>AI Processing</p>
                   </div>
                 </div>
-                <p className="text-center mt-2 font-medium sm:hidden">Step 2: AI Processing</p>
+                <p className="text-center mt-1 text-xs font-medium sm:hidden">Step 2</p>
               </div>
               
               <div 
                 className={`relative ${activeTab === "results" ? "text-[#74d1ea]" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-14 w-14 rounded-full flex items-center justify-center z-10 ${activeTab === "results" ? "bg-[#74d1ea]/20 border-2 border-[#74d1ea]" : "bg-zinc-800 border border-zinc-700"}`}>
-                    <FileText className="h-6 w-6" />
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "results" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : "bg-zinc-900 border border-zinc-800"}`}>
+                    <FileText className="h-3.5 w-3.5" />
                   </div>
-                  <div className="ml-3 sm:mt-0 hidden sm:block">
-                    <p className="font-medium">Step 3</p>
-                    <p className={`text-sm ${activeTab === "results" ? "text-gray-300" : "text-gray-500"}`}>Campaign Results</p>
+                  <div className="ml-2 sm:mt-0 hidden sm:block">
+                    <p className="text-xs font-medium">Step 3</p>
+                    <p className={`text-xs ${activeTab === "results" ? "text-gray-300" : "text-gray-500"}`}>Campaign Results</p>
                   </div>
                 </div>
-                <p className="text-center mt-2 font-medium sm:hidden">Step 3: Campaign Results</p>
+                <p className="text-center mt-1 text-xs font-medium sm:hidden">Step 3</p>
               </div>
             </div>
           </div>
