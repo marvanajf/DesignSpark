@@ -1,0 +1,38 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /tone-analysis
+Disallow: /tone-results
+Disallow: /personas
+Disallow: /content-generator
+Disallow: /saved-content
+Disallow: /campaigns
+Disallow: /campaign
+Disallow: /knowledge-base
+Disallow: /campaign-factory
+Disallow: /account
+Disallow: /usage
+Disallow: /support
+Disallow: /admin
+Disallow: /modal-preview
+Disallow: /coming-soon
+Disallow: /payment-success
+
+# Allow all marketing and public pages
+Allow: /
+Allow: /landing
+Allow: /about
+Allow: /features
+Allow: /pricing
+Allow: /contact
+Allow: /blog
+Allow: /privacy-policy
+Allow: /sitemap
+Allow: /tone-analysis-info
+Allow: /personas-info
+Allow: /content-generation-info
+Allow: /campaigns-info
+Allow: /campaign-factory-info
+Allow: /knowledge-base-info
+
+# Sitemap location
+Sitemap: https://tovably.com/sitemap.xml

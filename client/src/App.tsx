@@ -40,6 +40,7 @@ import CampaignsPage from "@/pages/campaigns-page";
 import CampaignsInfoPage from "@/pages/campaigns-info";
 import AdminPage from "@/pages/admin-page";
 import ModalPreviewPage from "@/pages/modal-preview-page";
+import SitemapPage from "@/pages/sitemap-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "@/lib/protected-route";
 import AuthModal from "@/components/AuthModal";
@@ -78,6 +79,7 @@ function Router() {
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/features" component={FeaturesPage} />
+      <Route path="/sitemap" component={SitemapPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:id" component={BlogPostPage} />
       <ProtectedRoute path="/tone-analysis" component={ToneAnalysisPage} />
