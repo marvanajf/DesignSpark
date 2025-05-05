@@ -180,7 +180,7 @@ export default function HomePage() {
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Tone-matched LinkedIn posts & thread starters</span>
+                          <span className="text-sm text-white">Tone-matched LinkedIn posts & content series</span>
                         </div>
                       </div>
                       <div className="bg-black rounded-md p-3 border border-gray-700/50">
@@ -196,7 +196,7 @@ export default function HomePage() {
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
                             <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Lead-nurturing email sequences & newsletters</span>
+                          <span className="text-sm text-white">Lead-nurturing email sequences for conversion</span>
                         </div>
                       </div>
                       <div className="bg-black rounded-md p-3 border border-gray-700/50">
