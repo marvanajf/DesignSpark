@@ -582,11 +582,11 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                   <ChevronRight className="h-3 w-3 mx-1" />
                   <span>Premium Features</span>
                   <ChevronRight className="h-3 w-3 mx-1" />
-                  <span className="text-[#74d1ea]">Campaign Factory</span>
+                  <span className="text-[#5eead4]">Campaign Factory</span>
                 </div>
                 <h1 className="text-3xl font-bold text-white flex flex-wrap items-center gap-3">
                   Campaign Factory
-                  <Badge variant="outline" className="bg-[#74d1ea]/10 text-[#74d1ea] border-[#74d1ea]/30 text-xs">
+                  <Badge variant="outline" className="bg-[#5eead4]/10 text-[#5eead4] border-[#5eead4]/30 text-xs">
                     Premium Feature
                   </Badge>
                 </h1>
@@ -598,7 +598,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
               <div className="flex items-center space-x-3">
                 {activeTab === "results" && campaign && (
                   <Button 
-                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                    className="bg-[#5eead4] hover:bg-[#4fd8c0] text-black"
                     onClick={handleSaveCampaign}
                   >
                     Save Campaign
@@ -613,7 +613,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
             <div className="hidden sm:block absolute left-0 right-0 h-[1px] top-[18px] bg-zinc-800/40 -z-0"></div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div 
-                className={`relative ${activeTab === "input" ? "text-[#74d1ea]" : activeTab === "generating" || activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
+                className={`relative ${activeTab === "input" ? "text-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
                   <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : activeTab === "generating" || activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
@@ -628,7 +628,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
               </div>
               
               <div 
-                className={`relative ${activeTab === "generating" ? "text-[#74d1ea]" : activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
+                className={`relative ${activeTab === "generating" ? "text-[#5eead4]" : activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
                   <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
@@ -1460,8 +1460,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
                             <div className="bg-zinc-900 p-4 flex justify-between items-center">
                               <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
-                                  <FileText className="h-5 w-5 text-[#74d1ea]" />
+                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                                  <FileText className="h-5 w-5 text-[#5eead4]" />
                                 </div>
                                 <div>
                                   <h3 className="text-white font-medium">{content.title}</h3>
@@ -1512,8 +1512,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
                             <div className="bg-zinc-900 p-4 flex justify-between items-center">
                               <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
-                                  <FileText className="h-5 w-5 text-[#74d1ea]" />
+                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                                  <FileText className="h-5 w-5 text-[#5eead4]" />
                                 </div>
                                 <div>
                                   <h3 className="text-white font-medium">{content.title}</h3>
@@ -1564,8 +1564,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
                             <div className="bg-zinc-900 p-4 flex justify-between items-center">
                               <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
-                                  <FileText className="h-5 w-5 text-[#74d1ea]" />
+                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                                  <FileText className="h-5 w-5 text-[#5eead4]" />
                                 </div>
                                 <div>
                                   <h3 className="text-white font-medium">{content.title}</h3>
@@ -1624,7 +1624,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     </Button>
                     
                     <Button 
-                      className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                      className="bg-[#5eead4] hover:bg-[#4fd8c0] text-black"
                       onClick={handleSaveCampaign}
                     >
                       Save Campaign
