@@ -574,7 +574,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
       <div className="flex-1 overflow-y-auto min-h-screen bg-black">
         <div className="px-4 py-8 sm:px-6">
           {/* Header with improved visual hierarchy */}
-          <div className="mb-8">
+          <div className="mb-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <div className="flex items-center text-sm text-gray-400 mb-1">
@@ -604,6 +604,39 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     Save Campaign
                   </Button>
                 )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Campaign Factory Promo Banner */}
+          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(94,234,212,0.05)]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b23]/60 via-transparent to-transparent pointer-events-none"></div>
+            
+            <div className="relative z-10 flex items-start">
+              <div className="mr-6 bg-[#0e1b23] border border-[#5eead4]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(94,234,212,0.15)]">
+                <Factory className="h-6 w-6 text-[#5eead4]" />
+              </div>
+              
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-white mb-3">AI Campaign Creation</h2>
+                <p className="text-gray-300 mb-6 max-w-3xl">
+                  Build comprehensive marketing campaigns in minutes, not days. Our AI-powered Campaign Factory generates coordinated content across multiple channels, all aligned with your brand voice and campaign objectives.
+                </p>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <div className="text-[#5eead4] mr-3">✓</div>
+                    <span className="text-gray-300">Create complete, multi-channel marketing campaigns in a single workflow</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#5eead4] mr-3">✓</div>
+                    <span className="text-gray-300">Generate emails, LinkedIn posts, blog content, and more with consistent messaging</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-[#5eead4] mr-3">✓</div>
+                    <span className="text-gray-300">Ensure all content maintains your brand voice using your tone analysis profiles</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
