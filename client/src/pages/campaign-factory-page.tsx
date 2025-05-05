@@ -664,7 +664,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
             {activeTab === "input" && (
               <div className="grid gap-8">
                 {/* Campaign Brief - Clean, modern card matching tone analysis style */}
-                <Card className="bg-[#111] border border-[#222] rounded-xl shadow-xl overflow-hidden">
+                <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden">
                   <CardHeader className="px-6 py-5">
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center justify-center w-8 h-8">
@@ -826,7 +826,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 </Card>
                 
                 {/* Content Configuration */}
-                <Card className="bg-[#111] border border-[#222] rounded-xl shadow-xl overflow-hidden">
+                <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden">
                   <CardHeader className="px-6 py-5">
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center justify-center w-8 h-8">
