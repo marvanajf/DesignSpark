@@ -127,8 +127,34 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
     }
   };
 
+  // Reset form when opening the modal
+  useEffect(() => {
+    if (open) {
+      // Reset the form state when the modal is opened
+      form.reset({
+        password: "",
+        confirmPassword: "",
+      });
+      setError(null);
+      setSuccess(false);
+    }
+  }, [open, form]);
+
+  // Safe close handler
+  const handleClose = () => {
+    if (isLoading) return; // Don't close while processing
+    
+    // Reset all form state
+    form.reset();
+    setError(null);
+    setSuccess(false);
+    
+    // Trigger close
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && !isLoading && onClose()}>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent className="max-w-md bg-black border border-border/50">
         <DialogTitle className="text-xl font-semibold text-white">Set Up Your Account</DialogTitle>
         <DialogDescription className="text-gray-400">
@@ -142,15 +168,18 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
             <p className="text-gray-400 mb-4">You can now log in with your email and password.</p>
             <Button 
               onClick={() => {
-                // Ensure modal properly closes
-                setSuccess(false);
-                
-                // Recreate credentials if they're accessing via the success UI
+                // Get the user credentials
                 const credentials = form.getValues() ? {
                   email: editedEmail.trim(),
                   password: form.getValues().password
                 } : undefined;
                 
+                // Reset all state first
+                form.reset();
+                setError(null);
+                setSuccess(false);
+                
+                // Then close the modal and trigger success callback
                 onSuccess(credentials);
               }} 
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
@@ -234,7 +263,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                 <Button 
                   type="button" 
                   variant="outline" 
-                  onClick={onClose}
+                  onClick={handleClose}
                   disabled={isLoading}
                   className="border-zinc-700 text-gray-300 hover:bg-zinc-900"
                 >

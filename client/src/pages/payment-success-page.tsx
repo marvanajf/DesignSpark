@@ -159,8 +159,16 @@ export default function PaymentSuccessPage() {
                 
                 {/* If user completed account setup but is not logged in, show login button */}
                 {!user && !autoLoginInProgress && accountSetup && (
-                  <Button asChild className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
-                    <Link href="/auth">Log In</Link>
+                  <Button 
+                    onClick={() => {
+                      // Make sure the modal is closed before navigation
+                      setShowSetupModal(false);
+                      // Use direct navigation instead of Link
+                      window.location.href = '/auth';
+                    }}
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                  >
+                    Log In
                   </Button>
                 )}
                 
@@ -172,10 +180,15 @@ export default function PaymentSuccessPage() {
                   </Button>
                 ) : (
                   <Button 
-                    asChild
+                    onClick={() => {
+                      // Make sure the modal is closed before navigation
+                      setShowSetupModal(false);
+                      // Use direct navigation instead of Link to ensure state is cleaned up
+                      window.location.href = '/dashboard';
+                    }}
                     className={user ? "bg-[#74d1ea] hover:bg-[#5db8d0] text-black" : ""}
                   >
-                    <Link href="/dashboard">Go to Dashboard</Link>
+                    Go to Dashboard
                   </Button>
                 )}
               </div>
@@ -196,7 +209,10 @@ export default function PaymentSuccessPage() {
         email={email}
         plan={plan || 'standard'}
         open={showSetupModal}
-        onClose={() => setShowSetupModal(false)}
+        onClose={() => {
+          // Make sure we properly reset the modal state when closing
+          setShowSetupModal(false);
+        }}
         onSuccess={(credentials) => {
           setShowSetupModal(false);
           setAccountSetup(true);
