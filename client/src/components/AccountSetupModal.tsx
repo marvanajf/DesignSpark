@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,7 +38,15 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [editedEmail, setEditedEmail] = useState<string>(email || "");
   const { toast } = useToast();
+
+  // Update editedEmail when email prop changes
+  useEffect(() => {
+    if (email) {
+      setEditedEmail(email);
+    }
+  }, [email]);
 
   const form = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
@@ -49,8 +57,8 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
   });
 
   const handleSubmit = async (data: PasswordFormData) => {
-    if (!email) {
-      setError("Email is missing. Please try again.");
+    if (!editedEmail || editedEmail.trim() === '') {
+      setError("Please enter a valid email address.");
       return;
     }
 
@@ -63,7 +71,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
       const queryParams = testMode ? '?testMode=true' : '';
       
       const response = await apiRequest("POST", `/api/setup-account${queryParams}`, {
-        email,
+        email: editedEmail.trim(),
         password: data.password
       });
 
@@ -126,11 +134,11 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess }: A
                 <Label htmlFor="email" className="text-gray-300">Email</Label>
                 <Input
                   id="email"
-                  value={email || ""}
-                  disabled
+                  value={editedEmail}
+                  onChange={(e) => setEditedEmail(e.target.value)}
                   className="bg-zinc-900 border-zinc-800 text-white"
                 />
-                <p className="text-xs text-gray-500">This is the email address from your payment details.</p>
+                <p className="text-xs text-gray-500">You can edit your email address if needed.</p>
               </div>
 
               <FormField
