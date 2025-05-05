@@ -879,13 +879,13 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           </div>
                           
                           {/* LinkedIn Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.social ? "border-[#74d1ea] bg-[#74d1ea]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
+                          <div className={`p-5 rounded-lg border ${selectedContentTypes.social ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
                             <div className="flex justify-between items-center mb-3">
                               <h4 className="font-medium text-white">LinkedIn</h4>
                               <Switch 
                                 checked={selectedContentTypes.social} 
                                 onCheckedChange={() => toggleContentType('social')}
-                                className="data-[state=checked]:bg-[#74d1ea]"
+                                className="data-[state=checked]:bg-[#5eead4]"
                               />
                             </div>
                             {selectedContentTypes.social && (
@@ -910,13 +910,13 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           </div>
                           
                           {/* Blog Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.blog ? "border-[#74d1ea] bg-[#74d1ea]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
+                          <div className={`p-5 rounded-lg border ${selectedContentTypes.blog ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
                             <div className="flex justify-between items-center mb-3">
                               <h4 className="font-medium text-white">Blog</h4>
                               <Switch 
                                 checked={selectedContentTypes.blog} 
                                 onCheckedChange={() => toggleContentType('blog')}
-                                className="data-[state=checked]:bg-[#74d1ea]"
+                                className="data-[state=checked]:bg-[#5eead4]"
                               />
                             </div>
                             {selectedContentTypes.blog && (
@@ -940,13 +940,13 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           </div>
                           
                           {/* Webinar Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.webinar ? "border-[#74d1ea] bg-[#74d1ea]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
+                          <div className={`p-5 rounded-lg border ${selectedContentTypes.webinar ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
                             <div className="flex justify-between items-center mb-3">
                               <h4 className="font-medium text-white">Webinar</h4>
                               <Switch 
                                 checked={selectedContentTypes.webinar} 
                                 onCheckedChange={() => toggleContentType('webinar')}
-                                className="data-[state=checked]:bg-[#74d1ea]"
+                                className="data-[state=checked]:bg-[#5eead4]"
                               />
                             </div>
                             {selectedContentTypes.webinar && (
@@ -986,7 +986,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                             <Switch 
                               checked={useGeneratedPersonas} 
                               onCheckedChange={setUseGeneratedPersonas}
-                              className="data-[state=checked]:bg-[#74d1ea]"
+                              className="data-[state=checked]:bg-[#5eead4]"
                             />
                           </div>
                           
