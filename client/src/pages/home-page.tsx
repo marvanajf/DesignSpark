@@ -172,39 +172,39 @@ export default function HomePage() {
 
                   <div className="md:col-span-3 bg-black rounded-lg p-4 border border-gray-800/60 shadow-[0_0_15px_rgba(116,209,234,0.10)]">
                     <div className="text-center mb-4">
-                      <h3 className="text-white font-medium">Boost Your Marketing Power</h3>
+                      <h3 className="text-white font-medium">What's Included In Your Campaign</h3>
                     </div>
                     <div className="space-y-3">
                       <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
-                            <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                            <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Generate multiple LinkedIn posts instantly</span>
+                          <span className="text-sm text-white">Tone-matched LinkedIn posts & thread starters</span>
                         </div>
                       </div>
                       <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
-                            <FileText className="h-4 w-4 text-[#74d1ea]" />
+                            <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Create entire blog articles in seconds</span>
+                          <span className="text-sm text-white">SEO-optimized blog articles with AI citations</span>
                         </div>
                       </div>
                       <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
-                            <MessageSquare className="h-4 w-4 text-[#74d1ea]" />
+                            <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Build full email sequences automatically</span>
+                          <span className="text-sm text-white">Lead-nurturing email sequences & newsletters</span>
                         </div>
                       </div>
                       <div className="bg-black rounded-md p-3 border border-gray-700/50">
                         <div className="flex items-center">
                           <div className="bg-[#74d1ea]/10 p-1.5 rounded mr-3">
-                            <Users className="h-4 w-4 text-[#74d1ea]" />
+                            <CheckCircle className="h-4 w-4 text-[#74d1ea]" />
                           </div>
-                          <span className="text-sm text-white">Develop webinar content with zero effort</span>
+                          <span className="text-sm text-white">Webinar scripts, slides & promotional material</span>
                         </div>
                       </div>
                     </div>
