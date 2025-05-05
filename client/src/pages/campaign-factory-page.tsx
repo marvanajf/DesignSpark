@@ -570,8 +570,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
 
   return (
     <Layout showSidebar={true}>
-      <div className="flex-1 overflow-y-auto min-h-screen bg-gradient-to-b from-black to-zinc-900">
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <div className="flex-1 overflow-y-auto min-h-screen bg-black">
+        <div className="px-4 py-8 sm:px-6 lg:px-8">
           {/* Header with improved visual hierarchy */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -589,7 +589,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     Premium Feature
                   </Badge>
                 </h1>
-                <p className="text-gray-400 mt-2 max-w-3xl">
+                <p className="text-gray-400 mt-2">
                   Create complete, multi-channel marketing campaigns in minutes with our AI-powered Campaign Factory.
                 </p>
               </div>
@@ -664,9 +664,9 @@ The average cost of a small business data breach now exceeds $2.98 million when 
               <div className="grid gap-8">
                 {/* Campaign Brief - Clean, modern card */}
                 <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-zinc-900 to-black px-6">
+                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
                     <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
                         <FileText className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       Campaign Brief
@@ -762,9 +762,9 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 
                 {/* Content Configuration */}
                 <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-zinc-900 to-black px-6">
+                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
                     <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
                         <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       Content Configuration
@@ -1028,7 +1028,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     </div>
                   </CardContent>
                   
-                  <CardFooter className="border-t border-zinc-800/60 bg-zinc-900/30 px-6 py-4">
+                  <CardFooter className="border-t border-zinc-800/60 bg-[#0e1b33]/30 px-6 py-4">
                     <Button 
                       className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium w-full md:w-auto"
                       onClick={handleGenerateCampaign}
@@ -1150,11 +1150,11 @@ The average cost of a small business data breach now exceeds $2.98 million when 
               <div className="space-y-8">
                 {/* Campaign Overview */}
                 <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-zinc-900 to-black px-6">
+                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
                     <div className="flex justify-between flex-wrap gap-4">
                       <div>
                         <CardTitle className="text-xl text-white flex items-center">
-                          <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                          <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
                             <Zap className="h-5 w-5 text-[#74d1ea]" />
                           </div>
                           {campaign.name}
@@ -1284,9 +1284,9 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 
                 {/* Campaign Content */}
                 <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-zinc-900 to-black px-6">
+                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
                     <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10">
+                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
                         <FileText className="h-5 w-5 text-[#74d1ea]" />
                       </div>
                       Campaign Content
