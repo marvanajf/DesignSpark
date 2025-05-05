@@ -31,7 +31,7 @@ interface AccountSetupModalProps {
   email: string | null;
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (credentials?: { email: string; password: string }) => void;
   plan?: string;
 }
 
@@ -105,9 +105,15 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
         variant: "default",
       });
       
+      // Save the credentials to pass back to the parent component
+      const credentials = {
+        email: editedEmail.trim(),
+        password: data.password
+      };
+      
       // Wait a moment before closing the modal to show success state
       setTimeout(() => {
-        onSuccess();
+        onSuccess(credentials);
       }, 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
@@ -138,11 +144,18 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
               onClick={() => {
                 // Ensure modal properly closes
                 setSuccess(false);
-                onSuccess();
+                
+                // Recreate credentials if they're accessing via the success UI
+                const credentials = form.getValues() ? {
+                  email: editedEmail.trim(),
+                  password: form.getValues().password
+                } : undefined;
+                
+                onSuccess(credentials);
               }} 
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
             >
-              Continue
+              Continue to Dashboard
             </Button>
           </div>
         ) : (

@@ -6,6 +6,7 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 import AccountSetupModal from "@/components/AccountSetupModal";
 
 export default function PaymentSuccessPage() {
@@ -16,7 +17,9 @@ export default function PaymentSuccessPage() {
   const [password, setPassword] = useState<string | null>(null);
   const [showSetupModal, setShowSetupModal] = useState(false);
   const [accountSetup, setAccountSetup] = useState(false);
+  const [autoLoginInProgress, setAutoLoginInProgress] = useState(false);
   const { user } = useAuth();
+  const { toast } = useToast();
 
   // Extract session ID and plan from URL parameters
   const params = new URLSearchParams(location.split('?')[1]);
@@ -154,9 +157,55 @@ export default function PaymentSuccessPage() {
         plan={plan || 'standard'}
         open={showSetupModal}
         onClose={() => setShowSetupModal(false)}
-        onSuccess={() => {
+        onSuccess={(credentials) => {
           setShowSetupModal(false);
           setAccountSetup(true);
+          
+          // If we received credentials, log the user in automatically
+          if (credentials) {
+            setAutoLoginInProgress(true);
+            
+            // Attempt to log in with the provided credentials
+            apiRequest("POST", "/api/login", { 
+              username: credentials.email, 
+              password: credentials.password 
+            })
+            .then(response => {
+              if (response.ok) {
+                // On successful login, refresh user data and redirect to dashboard
+                queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+                
+                // Show a successful login message in the UI
+                toast({
+                  title: "Logged in successfully!",
+                  description: "Redirecting you to the dashboard...",
+                  variant: "default"
+                });
+                
+                // Navigate to the dashboard after a short delay
+                setTimeout(() => {
+                  window.location.href = '/dashboard';
+                }, 1000);
+              } else {
+                setAutoLoginInProgress(false);
+                console.error("Failed to auto-login after account setup");
+                toast({
+                  title: "Auto-login failed",
+                  description: "Please use the login button to access your account.",
+                  variant: "destructive"
+                });
+              }
+            })
+            .catch(err => {
+              setAutoLoginInProgress(false);
+              console.error("Error during auto-login:", err);
+              toast({
+                title: "Login error",
+                description: "There was a problem logging you in. Please try logging in manually.",
+                variant: "destructive"
+              });
+            });
+          }
         }}
       />
     </Layout>
