@@ -1023,7 +1023,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                     key={persona.id}
                                     className={`p-4 rounded-lg border cursor-pointer transition-all ${
                                       selectedPersonas.includes(persona.id) 
-                                        ? "border-[#74d1ea] bg-[#74d1ea]/10" 
+                                        ? "border-[#5eead4] bg-[#5eead4]/10" 
                                         : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600"
                                     }`}
                                     onClick={() => togglePersonaSelection(persona.id)}
@@ -1041,7 +1041,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           {useGeneratedPersonas && isGeneratingPersonas && (
                             <div className="mt-4 flex items-center justify-center p-6">
                               <div className="flex flex-col items-center">
-                                <Loader2 className="h-8 w-8 text-[#74d1ea] animate-spin mb-3" />
+                                <Loader2 className="h-8 w-8 text-[#5eead4] animate-spin mb-3" />
                                 <p className="text-gray-300">Generating personas based on your campaign...</p>
                               </div>
                             </div>
@@ -1097,11 +1097,11 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     Our AI is crafting your campaign content based on your inputs. This may take a few moments.
                   </p>
                   
-                  <Progress value={generationProgress} className="h-2 mb-8" />
+                  <Progress value={generationProgress} className="h-2 mb-8 bg-zinc-800 [&>div]:bg-[#5eead4]" />
                   
                   <div className="space-y-4">
-                    <div className={`flex items-center ${generationProgress >= 10 ? "text-green-400" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 10 ? "bg-green-400/10 border border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
+                    <div className={`flex items-center ${generationProgress >= 10 ? "text-[#5eead4]" : "text-gray-500"}`}>
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 10 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
                         {generationProgress >= 10 ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1113,8 +1113,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <span>Analyzing campaign brief</span>
                     </div>
                     
-                    <div className={`flex items-center ${generationProgress >= 30 ? "text-green-400" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 30 ? "bg-green-400/10 border border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
+                    <div className={`flex items-center ${generationProgress >= 30 ? "text-[#5eead4]" : "text-gray-500"}`}>
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 30 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
                         {generationProgress >= 30 ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1126,8 +1126,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <span>Creating target personas</span>
                     </div>
                     
-                    <div className={`flex items-center ${generationProgress >= 50 ? "text-green-400" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 50 ? "bg-green-400/10 border border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
+                    <div className={`flex items-center ${generationProgress >= 50 ? "text-[#5eead4]" : "text-gray-500"}`}>
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 50 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
                         {generationProgress >= 50 ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1139,8 +1139,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <span>Building campaign structure</span>
                     </div>
                     
-                    <div className={`flex items-center ${generationProgress >= 70 ? "text-green-400" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 70 ? "bg-green-400/10 border border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
+                    <div className={`flex items-center ${generationProgress >= 70 ? "text-[#5eead4]" : "text-gray-500"}`}>
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 70 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
                         {generationProgress >= 70 ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1152,8 +1152,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <span>Creating content for each channel</span>
                     </div>
                     
-                    <div className={`flex items-center ${generationProgress >= 90 ? "text-green-400" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 90 ? "bg-green-400/10 border border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
+                    <div className={`flex items-center ${generationProgress >= 90 ? "text-[#5eead4]" : "text-gray-500"}`}>
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 90 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
                         {generationProgress >= 90 ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1165,8 +1165,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <span>Finalizing campaign</span>
                     </div>
                     
-                    <div className={`flex items-center ${generationProgress >= 100 ? "text-green-400" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 100 ? "bg-green-400/10 border border-green-400" : "bg-zinc-800 border border-zinc-700"}`}>
+                    <div className={`flex items-center ${generationProgress >= 100 ? "text-[#5eead4]" : "text-gray-500"}`}>
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 100 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
                         {generationProgress >= 100 ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
