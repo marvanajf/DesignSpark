@@ -1215,7 +1215,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       {/* Campaign Info */}
                       <div className="p-6">
                         <h3 className="text-white font-medium mb-4 flex items-center">
-                          <Target className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                          <Target className="h-4 w-4 mr-2 text-[#5eead4]" />
                           Campaign Details
                         </h3>
                         
@@ -1241,14 +1241,14 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       {/* Timeline */}
                       <div className="p-6">
                         <h3 className="text-white font-medium mb-4 flex items-center">
-                          <Calendar className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                          <Calendar className="h-4 w-4 mr-2 text-[#5eead4]" />
                           Timeline
                         </h3>
                         
                         <div className="space-y-4">
                           <div className="flex items-center">
-                            <div className="h-10 w-10 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
-                              <Clock className="h-5 w-5 text-[#74d1ea]" />
+                            <div className="h-10 w-10 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                              <Clock className="h-5 w-5 text-[#5eead4]" />
                             </div>
                             <div>
                               <p className="text-gray-400 text-sm">Duration</p>
@@ -1279,29 +1279,29 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       {/* Content Summary */}
                       <div className="p-6">
                         <h3 className="text-white font-medium mb-4 flex items-center">
-                          <FileText className="h-4 w-4 mr-2 text-[#74d1ea]" />
+                          <FileText className="h-4 w-4 mr-2 text-[#5eead4]" />
                           Content Summary
                         </h3>
                         
                         <div className="space-y-4">
                           <div className="grid grid-cols-2 gap-3">
                             <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#74d1ea] text-lg font-bold">{campaign.contents.filter(c => c.type === 'email').length}</p>
+                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'email').length}</p>
                               <p className="text-gray-400 text-sm">Emails</p>
                             </div>
                             
                             <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#74d1ea] text-lg font-bold">{campaign.contents.filter(c => c.type === 'social').length}</p>
+                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'social').length}</p>
                               <p className="text-gray-400 text-sm">LinkedIn Posts</p>
                             </div>
                             
                             <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#74d1ea] text-lg font-bold">{campaign.contents.filter(c => c.type === 'blog').length}</p>
+                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'blog').length}</p>
                               <p className="text-gray-400 text-sm">Blog Articles</p>
                             </div>
                             
                             <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#74d1ea] text-lg font-bold">{campaign.contents.filter(c => c.type === 'webinar').length}</p>
+                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'webinar').length}</p>
                               <p className="text-gray-400 text-sm">Webinars</p>
                             </div>
                           </div>
@@ -1323,8 +1323,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
                   <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
                     <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#74d1ea]/10 border border-[#74d1ea]/30">
-                        <FileText className="h-5 w-5 text-[#74d1ea]" />
+                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#5eead4]/10 border border-[#5eead4]/30">
+                        <FileText className="h-5 w-5 text-[#5eead4]" />
                       </div>
                       Campaign Content
                     </CardTitle>
@@ -1338,19 +1338,19 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                       <div className="border-b border-zinc-800/60">
                         <div className="px-6">
                           <TabsList className="bg-black h-14">
-                            <TabsTrigger value="all" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                            <TabsTrigger value="all" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
                               All Content
                             </TabsTrigger>
-                            <TabsTrigger value="email" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                            <TabsTrigger value="email" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
                               Email
                             </TabsTrigger>
-                            <TabsTrigger value="social" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                            <TabsTrigger value="social" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
                               LinkedIn
                             </TabsTrigger>
-                            <TabsTrigger value="blog" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                            <TabsTrigger value="blog" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
                               Blog
                             </TabsTrigger>
-                            <TabsTrigger value="webinar" className="data-[state=active]:bg-[#74d1ea]/10 data-[state=active]:text-[#74d1ea]">
+                            <TabsTrigger value="webinar" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
                               Webinar
                             </TabsTrigger>
                           </TabsList>
