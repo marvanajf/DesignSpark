@@ -1025,7 +1025,17 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           
                           {!useGeneratedPersonas && (
                             <div className="mt-4">
-                              <Label className="text-gray-300 text-sm block mb-3">Select Target Personas</Label>
+                              <div className="flex justify-between items-center mb-3">
+                                <Label className="text-gray-300 text-sm">Select Target Personas</Label>
+                                <Button 
+                                  variant="link" 
+                                  className="text-[#5eead4] p-0 h-auto" 
+                                  onClick={() => setLocation('/personas')}
+                                >
+                                  Create new persona
+                                  <ArrowRight className="h-3 w-3 ml-1" />
+                                </Button>
+                              </div>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 {personas.map(persona => (
                                   <div 
