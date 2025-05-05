@@ -230,29 +230,44 @@ export default function CampaignFactoryPage() {
         // Complete
         setGenerationProgress(100);
         
-        // Generate mock campaign data - preserved from original
+        // Generate mock campaign data that's based on the input from Step 1
+        // Get the selected use case name
+        const selectedUseCaseObj = useCases.find(useCase => useCase.id === selectedUseCase);
+        const useCaseName = selectedUseCaseObj ? selectedUseCaseObj.name : "Campaign";
+        
+        // Get the tone analysis if selected
+        const selectedToneAnalysisObj = toneAnalyses?.find(tone => tone.id.toString() === selectedToneAnalysisId);
+        const toneAnalysisName = selectedToneAnalysisObj ? selectedToneAnalysisObj.name : "Professional";
+        
+        // Generate a descriptive campaign name based on user inputs
+        const campaignName = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
+        
+        // Generate content based on the user's campaign prompt and selected use case
+        const emailSubject1 = `${campaignPrompt.split(' ').slice(0, 6).join(' ')}...`;
+        const emailSubject2 = `Follow-up: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
+        
         const allContentPieces = [
           {
             id: 1,
             type: "email" as const,
-            title: "Security Enhancements Email for IT Decision Makers",
-            persona: "IT Decision Maker",
-            content: `Subject: Strengthen Your Security Posture with Microsoft 365 Business Premium
+            title: `${useCaseName} Email for ${personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience"}`,
+            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            content: `Subject: ${emailSubject1}
 
-Dear [IT Decision Maker],
+Dear [Recipient],
 
-As cyber threats continue to evolve, we've noticed your organization has been making great use of Microsoft 365's standard security features. However, with the increasing sophistication of ransomware and phishing attacks targeting businesses of your size, it may be time to consider enhancing your security posture.
+${campaignPrompt}
 
-Microsoft 365 Business Premium provides advanced security capabilities:
+Based on our discussion about your needs, I believe our solution can help you achieve your goals by:
 
-• Defender for Office 365: Advanced threat protection against sophisticated phishing and zero-day threats
-• Conditional Access: Ensures only secure devices can access company data
-• Intune Mobile Device Management: Secure company data across all devices
-• Azure Information Protection: Advanced data loss prevention
+• Improving efficiency in your processes
+• Reducing operational costs
+• Enhancing your team's productivity
+• Staying ahead of industry trends
 
-I'd like to offer a personalized security assessment to identify how Business Premium could close potential security gaps in your current setup.
+I'd like to offer a personalized consultation to discuss how our solutions align with your specific requirements.
 
-Would you have 20 minutes next Tuesday to discuss how these advanced security features could strengthen your defense against today's evolving threats?
+Would you have 20 minutes next week to discuss how we can help you achieve your objectives?
 
 Best regards,
 [Your Name]`,
@@ -263,17 +278,17 @@ Best regards,
           {
             id: 2,
             type: "email" as const,
-            title: "Follow-up Email for IT Decision Makers",
-            persona: "IT Decision Maker",
-            content: `Subject: Following Up: Microsoft 365 Security Assessment
+            title: `Follow-up Email for ${useCaseName}`,
+            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            content: `Subject: ${emailSubject2}
 
-Dear [IT Decision Maker],
+Dear [Recipient],
 
-I wanted to follow up on my previous email about Microsoft 365 Business Premium's enhanced security features.
+I wanted to follow up on my previous email about ${campaignPrompt}.
 
-In light of recent high-profile ransomware attacks targeting organizations in your industry, I thought you might be interested in our latest security assessment tool that can identify potential vulnerabilities in your current setup.
+In light of recent developments in your industry, I thought you might be interested in our latest solutions that can address the challenges you're facing.
 
-Would you be available for a brief 15-minute demo this Thursday or Friday? I'd be happy to show you how other companies similar to yours have strengthened their security posture with minimal disruption to operations.
+Would you be available for a brief 15-minute demo this Thursday or Friday? I'd be happy to show you how other companies similar to yours have achieved success with our approach.
 
 Looking forward to your response,
 [Your Name]`,
@@ -284,21 +299,21 @@ Looking forward to your response,
           {
             id: 3,
             type: "social" as const,
-            title: "LinkedIn Post for Small Business Owners",
-            persona: "Small Business Owner",
-            content: `"I was spending 5+ hours weekly on IT issues instead of growing my business. After upgrading to Microsoft 365 Business Premium, our team's productivity increased by 26% and I reclaimed those hours for strategic planning."
+            title: `LinkedIn Post for ${useCaseName}`,
+            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            content: `"${campaignPrompt}" - This is what our clients tell us about their experience.
 
-Small business owners: Are manual processes and basic tools limiting your growth?
+Are you facing similar challenges in your business?
 
-Microsoft 365 Business Premium delivers:
-• Automated workflows with Power Automate
-• Advanced Teams collaboration features
-• PC and mobile device management from one dashboard
-• Enterprise-grade security without the enterprise price tag
+Our solution delivers:
+• Streamlined workflows 
+• Advanced collaboration features
+• Comprehensive management from one dashboard
+• Enterprise-grade features at an affordable price
 
-Calculate your potential ROI with our Business Premium Value Calculator: [Link]
+Learn more about our approach: [Link]
 
-#SmallBusinessTech #ProductivityTools #MicrosoftPartner #LinkedIn`,
+#BusinessGrowth #Productivity #Solutions #LinkedIn`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -306,34 +321,34 @@ Calculate your potential ROI with our Business Premium Value Calculator: [Link]
           {
             id: 4,
             type: "webinar" as const,
-            title: "Advanced Security Webinar for IT Professionals",
-            persona: "IT Decision Maker",
-            content: `Title: "Modern Threat Defense: Building Resilient Security with Microsoft 365 Business Premium"
+            title: `${useCaseName} Webinar for Industry Professionals`,
+            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            content: `Title: "${campaignPrompt} - A Strategic Approach"
 
 Duration: 45 minutes + 15-minute Q&A
 
-Target Audience: IT Decision Makers and Security Professionals
+Target Audience: ${personas.find(p => selectedPersonas.includes(p.id))?.role || "Industry Professionals"}
 
 Description:
-Join our Microsoft security specialists for an in-depth webinar on enhancing your organization's security posture through Microsoft 365 Business Premium. In this session, we'll demonstrate how Business Premium's advanced security features create a comprehensive defense system against modern threats.
+Join our specialists for an in-depth webinar on ${campaignPrompt}. In this session, we'll demonstrate how our approach creates comprehensive solutions for modern challenges.
 
 Agenda:
-- The evolving threat landscape for small and mid-sized businesses in 2025
-- Live demonstration of Microsoft Defender for Office 365's threat detection capabilities
-- Device management best practices with Intune for hybrid/remote workforces
-- Implementing zero-trust security principles with Conditional Access
-- Case study: How Company X reduced security incidents by 73% in 90 days
+- Current trends and challenges in the industry
+- Live demonstration of our solution's capabilities
+- Best practices for implementation in various scenarios
+- Integration with existing systems and processes
+- Case study: How Company X improved performance by 70% in 90 days
 
 Key Takeaways:
-- Understanding of specific threat vectors targeting businesses like yours
-- Actionable configuration steps for maximizing security with Business Premium
-- Custom assessment methodology to identify your most critical security gaps
-- Implementation roadmap template for security enhancement
+- Understanding of specific challenges facing businesses like yours
+- Actionable steps for implementing effective solutions
+- Custom assessment methodology to identify your most critical needs
+- Implementation roadmap template for success
 
 Presenter:
-[Security Specialist Name], Microsoft Security Solutions Architect with 15+ years of experience in cybersecurity implementation for SMBs.
+[Specialist Name], Solutions Architect with 10+ years of experience helping organizations achieve their goals.
 
-Registration includes a complimentary security assessment consultation and access to our Business Premium implementation guide.`,
+Registration includes a complimentary consultation and access to our implementation guide.`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
             channel: "Webinar",
             icon: <FileText className="h-5 w-5" />
@@ -341,27 +356,27 @@ Registration includes a complimentary security assessment consultation and acces
           {
             id: 5,
             type: "social" as const,
-            title: "LinkedIn Article on Security ROI",
-            persona: "Operations Manager",
-            content: `# The True ROI of Advanced Security: Beyond Preventing Breaches
+            title: `LinkedIn Article on ${useCaseName} Benefits`,
+            persona: (personas.find(p => selectedPersonas[1]) ? personas.find(p => p.id === selectedPersonas[1])?.name : personas.find(p => selectedPersonas.includes(p.id))?.name) || "Target Audience",
+            content: `# The True ROI of ${campaignPrompt}: Beyond the Basics
 
-When calculating the return on investment for security solutions, most businesses focus only on breach prevention. But advanced security delivers value far beyond avoiding attackers.
+When calculating the return on investment for solutions like ours, many businesses focus only on immediate benefits. But our approach delivers value far beyond the basics.
 
-Here are 5 unexpected ways Microsoft 365 Business Premium's security features drive operational efficiency:
+Here are 5 unexpected ways our solution drives operational efficiency:
 
-1. **Reduced IT firefighting**: Automated threat response means your IT team spends 62% less time on security incidents and more time on strategic initiatives.
+1. **Reduced firefighting**: Automated processes mean your team spends less time on repetitive tasks and more time on strategic initiatives.
 
-2. **Simplified compliance**: Built-in compliance tools reduce audit preparation time by 78% on average.
+2. **Simplified operations**: Built-in tools reduce preparation time by up to 75% on average.
 
-3. **Accelerated employee onboarding**: Streamlined device management cuts provisioning time in half while maintaining security standards.
+3. **Accelerated team productivity**: Streamlined management cuts implementation time in half while maintaining quality standards.
 
-4. **Enhanced productivity**: Employees experience 27% fewer disruptions from security-related issues.
+4. **Enhanced collaboration**: Teams experience fewer disruptions from process-related issues.
 
-5. **Reduced shadow IT**: When security tools are intuitive, employees are 84% less likely to seek unauthorized workarounds.
+5. **Reduced workarounds**: When tools are intuitive, employees are much less likely to seek unauthorized alternatives.
 
-What's your perspective? Has your organization quantified the operational benefits of your security investments? 
+What's your perspective? Has your organization quantified the operational benefits of your investments in this area? 
 
-#CyberSecurity #BusinessProductivity #OperationalEfficiency #Microsoft365 #LinkedIn`,
+#BusinessEfficiency #Productivity #OperationalExcellence #LinkedIn`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -369,59 +384,65 @@ What's your perspective? Has your organization quantified the operational benefi
           {
             id: 6,
             type: "blog" as const,
-            title: "Blog Post: 5 Critical Security Gaps Most Small Businesses Miss",
-            persona: "Small Business Owner",
-            content: `# 5 Critical Security Gaps Most Small Businesses Miss (And How to Fix Them)
+            title: `Blog Post: 5 Critical Challenges in ${campaignPrompt}`,
+            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            content: `# 5 Critical Challenges in ${campaignPrompt} (And How to Address Them)
 
-In today's digital landscape, small businesses face the same sophisticated cyber threats as enterprises, but often without the security resources. According to recent research, 43% of cyber attacks specifically target small businesses, yet only 14% are adequately prepared to defend themselves.
+In today's landscape, businesses face sophisticated challenges that require thoughtful solutions. According to recent research, many organizations struggle with these issues, yet only a small percentage are adequately prepared to address them.
 
-After working with hundreds of small business owners, we've identified the most common security gaps that leave companies vulnerable—and how Microsoft 365 Business Premium helps close them efficiently and affordably.
+After working with hundreds of clients, we've identified the most common challenges that companies face—and how our approach helps solve them efficiently and affordably.
 
-## 1. Inadequate Email Protection
+## 1. Inefficient Processes
 
-**The Risk**: 94% of malware is delivered via email, making it your most vulnerable channel.
+**The Challenge**: Most teams waste valuable time on manual, repetitive tasks.
 
-**The Fix**: Microsoft Defender for Office 365 (included in Business Premium) provides advanced threat protection that scans all attachments and links in real-time, even detecting zero-day threats that traditional antivirus misses.
+**The Solution**: Our automation tools streamline workflows and eliminate bottlenecks, allowing your team to focus on high-value activities.
 
-*"Since implementing Defender, we've seen phishing attempts drop to nearly zero. Our team can confidently open emails knowing they're protected." — Sarah J., Marketing Agency Owner*
+*"Since implementing the solution, we've seen productivity increase by 30%. Our team can confidently tackle strategic projects knowing the routine work is handled efficiently." — Client testimonial*
 
-## 2. Weak Identity Management
+## 2. Lack of Integration
 
-**The Risk**: Stolen credentials are involved in 61% of breaches, with password reuse as the primary vulnerability.
+**The Challenge**: Disparate systems lead to data silos and communication gaps.
 
-**The Fix**: Multi-factor authentication (enforced via Business Premium policies) prevents 99.9% of account compromise attacks, while self-service password reset reduces IT tickets by 75%.
+**The Solution**: Our unified platform brings all your essential tools together, ensuring seamless information flow across your organization.
 
-## 3. Unprotected Mobile Devices
+## 3. Scalability Constraints
 
-**The Risk**: The average employee uses 2.5 devices for work, creating multiple entry points for attackers.
+**The Challenge**: Many businesses struggle to scale their operations efficiently.
 
-**The Fix**: Intune device management lets you enforce security policies across all devices—including personal devices—without seeing personal data. Lost devices can be remotely wiped of company information.
+**The Solution**: Our flexible architecture grows with your business, allowing you to expand without the typical growing pains.
 
-## 4. Inconsistent Data Protection
+## 4. Visibility and Insights
 
-**The Risk**: 58% of employees admit to accidentally sharing sensitive information.
+**The Challenge**: Without proper analytics, making informed decisions becomes difficult.
 
-**The Fix**: Data loss prevention policies automatically detect and protect sensitive information across email, documents, and chat, while sensitivity labels ensure proper handling of confidential data.
+**The Solution**: Our comprehensive reporting and analysis tools give you real-time insights into your operations, enabling data-driven decision making.
 
-## 5. Inadequate Security Skills
+## 5. Implementation Challenges
 
-**The Risk**: Small businesses typically lack dedicated security staff and up-to-date training.
+**The Challenge**: Organizations often lack the expertise to fully implement new solutions.
 
-**The Fix**: Business Premium's security dashboard provides actionable recommendations with guided implementations, effectively serving as a "virtual security consultant" for your business.
+**The Solution**: Our guided implementation process and ongoing support ensure you maximize the value of your investment from day one.
 
 ## The Bottom Line
 
-The average cost of a small business data breach now exceeds $2.98 million when including recovery costs, downtime, and reputational damage. By comparison, Microsoft 365 Business Premium provides enterprise-grade security at a small business price point, typically paying for itself in prevented incidents within the first year.
+The cost of inefficiency and missed opportunities can be substantial when including lost productivity, missed opportunities, and competitive disadvantage. By comparison, our solution provides enterprise-grade capabilities at an accessible price point, typically paying for itself within the first year.
 
-*Ready to close your security gaps? [Contact us] for a complimentary security assessment.*`,
+*Ready to transform your approach to ${campaignPrompt}? [Contact us] for a complimentary assessment.*`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5)).toISOString().split('T')[0],
             channel: "Blog",
             icon: <FileText className="h-5 w-5" />
           }
         ];
         
+        // Ensure all pieces have valid personas (fixing any potential undefined values)
+        const sanitizedContentPieces = allContentPieces.map(content => ({
+          ...content,
+          persona: content.persona || "Target Audience" // Fallback to ensure we never have undefined
+        }));
+        
         // Filter content based on selected types
-        const filteredContent = allContentPieces.filter((content) => {
+        const filteredContent = sanitizedContentPieces.filter((content) => {
           switch (content.type) {
             case "email":
               return selectedContentTypes.email;
@@ -452,10 +473,15 @@ The average cost of a small business data breach now exceeds $2.98 million when 
         
         setCampaign({
           id: 1,
-          name: "Microsoft 365 Business Premium Security Campaign",
-          objective: campaignPrompt || "Promote Microsoft 365 Business Premium security features to drive upgrades",
-          targetAudience: ["IT Decision Makers", "Small Business Owners", "Operations Managers"],
-          channels: ["Email", "LinkedIn", "Blog", "Webinar"],
+          name: campaignName,
+          objective: campaignPrompt || "Increase brand awareness and drive conversions",
+          targetAudience: selectedPersonas.map(id => {
+            const persona = personas.find(p => p.id === id);
+            return persona ? persona.name : "Target Audience";
+          }),
+          channels: Object.entries(selectedContentTypes)
+            .filter(([_, isSelected]) => isSelected)
+            .map(([type, _]) => type === 'social' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)),
           timeline: {
             start: campaignStartDate,
             end: campaignEndDate
