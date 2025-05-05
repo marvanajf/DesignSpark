@@ -184,10 +184,15 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                   password: form.getValues().password
                 } : undefined;
                 
-                // Pass credentials to parent without resetting success state
-                // The parent will handle closing the modal after login attempt
-                onSuccess(credentials);
-              }} 
+                // First close the dialog directly by triggering an immediate close
+                // This ensures the modal disappears without waiting for further processes
+                // We use a zero timeout to ensure the close is correctly registered in the event queue
+                setTimeout(() => onClose(), 0);
+                
+                // Then pass credentials to parent
+                // IMPORTANT: The order matters here - close first, then trigger the success callback
+                setTimeout(() => onSuccess(credentials), 10);
+              }}
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
             >
               Continue to Dashboard

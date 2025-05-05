@@ -204,8 +204,8 @@ export default function PaymentSuccessPage() {
         </div>
       </div>
       
-      {/* Account Setup Modal */}
-      {showSetupModal && (
+      {/* Account Setup Modal - Only show if explicitly requested and not already set up */}
+      {showSetupModal && !accountSetup && (
         <AccountSetupModal 
           email={email}
           plan={plan || 'standard'}
@@ -215,8 +215,11 @@ export default function PaymentSuccessPage() {
             setShowSetupModal(false);
           }}
           onSuccess={(credentials) => {
-            // Mark account as set up
+            // Mark account as set up FIRST - this prevents reshowing the modal
             setAccountSetup(true);
+            
+            // IMPORTANT: Close the modal immediately to prevent it from reopening
+            setShowSetupModal(false);
             
             // If we received credentials, log the user in automatically
             if (credentials) {
@@ -239,9 +242,6 @@ export default function PaymentSuccessPage() {
                     variant: "default"
                   });
                   
-                  // Close the modal AFTER we've verified login success
-                  setShowSetupModal(false);
-                  
                   // Navigate to the dashboard after a short delay
                   setTimeout(() => {
                     window.location.href = '/dashboard';
@@ -254,9 +254,6 @@ export default function PaymentSuccessPage() {
                     description: "Please use the login button to access your account.",
                     variant: "destructive"
                   });
-                  
-                  // Close the modal even if login failed - account is still set up
-                  setShowSetupModal(false);
                 }
               })
               .catch(err => {
@@ -267,13 +264,7 @@ export default function PaymentSuccessPage() {
                   description: "There was a problem logging you in. Please try logging in manually.",
                   variant: "destructive"
                 });
-                
-                // Close the modal even if login failed - account is still set up
-                setShowSetupModal(false);
               });
-            } else {
-              // No credentials provided (rare case), just close the modal
-              setShowSetupModal(false);
             }
           }}
         />
