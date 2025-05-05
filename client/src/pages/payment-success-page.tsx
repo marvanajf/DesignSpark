@@ -205,65 +205,79 @@ export default function PaymentSuccessPage() {
       </div>
       
       {/* Account Setup Modal */}
-      <AccountSetupModal 
-        email={email}
-        plan={plan || 'standard'}
-        open={showSetupModal}
-        onClose={() => {
-          // Make sure we properly reset the modal state when closing
-          setShowSetupModal(false);
-        }}
-        onSuccess={(credentials) => {
-          setShowSetupModal(false);
-          setAccountSetup(true);
-          
-          // If we received credentials, log the user in automatically
-          if (credentials) {
-            setAutoLoginInProgress(true);
+      {showSetupModal && (
+        <AccountSetupModal 
+          email={email}
+          plan={plan || 'standard'}
+          open={true} 
+          onClose={() => {
+            // Make sure we properly reset the modal state when closing
+            setShowSetupModal(false);
+          }}
+          onSuccess={(credentials) => {
+            // Mark account as set up
+            setAccountSetup(true);
             
-            // Attempt to log in with the provided credentials
-            apiRequest("POST", "/api/login", { 
-              username: credentials.email, 
-              password: credentials.password 
-            })
-            .then(response => {
-              if (response.ok) {
-                // On successful login, refresh user data and redirect to dashboard
-                queryClient.invalidateQueries({ queryKey: ["/api/user"] });
-                
-                // Show a successful login message in the UI
-                toast({
-                  title: "Logged in successfully!",
-                  description: "Redirecting you to the dashboard...",
-                  variant: "default"
-                });
-                
-                // Navigate to the dashboard after a short delay
-                setTimeout(() => {
-                  window.location.href = '/dashboard';
-                }, 1000);
-              } else {
+            // If we received credentials, log the user in automatically
+            if (credentials) {
+              setAutoLoginInProgress(true);
+              
+              // Attempt to log in with the provided credentials
+              apiRequest("POST", "/api/login", { 
+                username: credentials.email, 
+                password: credentials.password 
+              })
+              .then(response => {
+                if (response.ok) {
+                  // On successful login, refresh user data and redirect to dashboard
+                  queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+                  
+                  // Show a successful login message in the UI
+                  toast({
+                    title: "Logged in successfully!",
+                    description: "Redirecting you to the dashboard...",
+                    variant: "default"
+                  });
+                  
+                  // Close the modal AFTER we've verified login success
+                  setShowSetupModal(false);
+                  
+                  // Navigate to the dashboard after a short delay
+                  setTimeout(() => {
+                    window.location.href = '/dashboard';
+                  }, 1000);
+                } else {
+                  setAutoLoginInProgress(false);
+                  console.error("Failed to auto-login after account setup");
+                  toast({
+                    title: "Auto-login failed",
+                    description: "Please use the login button to access your account.",
+                    variant: "destructive"
+                  });
+                  
+                  // Close the modal even if login failed - account is still set up
+                  setShowSetupModal(false);
+                }
+              })
+              .catch(err => {
                 setAutoLoginInProgress(false);
-                console.error("Failed to auto-login after account setup");
+                console.error("Error during auto-login:", err);
                 toast({
-                  title: "Auto-login failed",
-                  description: "Please use the login button to access your account.",
+                  title: "Login error",
+                  description: "There was a problem logging you in. Please try logging in manually.",
                   variant: "destructive"
                 });
-              }
-            })
-            .catch(err => {
-              setAutoLoginInProgress(false);
-              console.error("Error during auto-login:", err);
-              toast({
-                title: "Login error",
-                description: "There was a problem logging you in. Please try logging in manually.",
-                variant: "destructive"
+                
+                // Close the modal even if login failed - account is still set up
+                setShowSetupModal(false);
               });
-            });
-          }
-        }}
-      />
+            } else {
+              // No credentials provided (rare case), just close the modal
+              setShowSetupModal(false);
+            }
+          }}
+        />
+      )}
     </Layout>
   );
 }

@@ -136,7 +136,9 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
         confirmPassword: "",
       });
       setError(null);
-      setSuccess(false);
+      
+      // Don't reset success state here - we need to maintain it
+      // if the user just completed their account setup
     }
   }, [open, form]);
 
@@ -147,14 +149,22 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
     // Reset all form state
     form.reset();
     setError(null);
-    setSuccess(false);
+    
+    // Don't reset success state here to avoid flashing issues
     
     // Trigger close
     onClose();
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+    <Dialog 
+      open={open} 
+      onOpenChange={(isOpen) => {
+        if (!isOpen && !isLoading) {
+          handleClose();
+        }
+      }}
+    >
       <DialogContent className="max-w-md bg-black border border-border/50">
         <DialogTitle className="text-xl font-semibold text-white">Set Up Your Account</DialogTitle>
         <DialogDescription className="text-gray-400">
@@ -174,12 +184,8 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                   password: form.getValues().password
                 } : undefined;
                 
-                // Reset all state first
-                form.reset();
-                setError(null);
-                setSuccess(false);
-                
-                // Then close the modal and trigger success callback
+                // Pass credentials to parent without resetting success state
+                // The parent will handle closing the modal after login attempt
                 onSuccess(credentials);
               }} 
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
