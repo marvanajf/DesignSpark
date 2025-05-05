@@ -54,10 +54,19 @@ export async function apiRequest(
   options?: {
     timeout?: number;
     retries?: number;
+    debugMode?: boolean;
   }
 ): Promise<Response> {
   const timeout = options?.timeout || 15000; // 15 second default timeout
   const maxRetries = options?.retries || 0;
+  const debugMode = options?.debugMode || false;
+  
+  // Debug log for authentication requests
+  if (debugMode || url.includes('/api/login') || url.includes('/api/user')) {
+    console.log(`API Request: ${method} ${url}`, data ? {
+      params: typeof data === 'object' ? data : 'non-object data'
+    } : 'No data provided');
+  }
   
   // Create abort controller for timeout
   const controller = new AbortController();

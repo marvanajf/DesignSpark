@@ -29,31 +29,54 @@ export default function PaymentSuccessPage() {
   // Helper function to perform a direct login with credentials
   const performDirectLogin = async (email: string, password: string): Promise<boolean> => {
     try {
-      // Log the login attempt for debugging
-      console.log("Attempting direct login for:", email);
+      // Enhanced debug logging
+      console.log("📤 Starting direct login process for:", email);
+      console.log("📤 Request payload:", { email, password: "********" });
       
-      // First, make the login API call
-      // IMPORTANT: The auth controller expects 'email' NOT 'username' parameter
-      const loginResponse = await apiRequest("POST", "/api/login", { email, password });
+      // First, make the login API call with debug mode enabled
+      const loginResponse = await apiRequest("POST", "/api/login", 
+        { email, password }, 
+        { debugMode: true, retries: 2 }  // Enable retries and debugging
+      );
       
+      // Check for login success
       if (!loginResponse.ok) {
-        console.error("Login API call failed:", await loginResponse.text());
+        const errorText = await loginResponse.text();
+        console.error("❌ Login API call failed:", loginResponse.status, errorText);
         return false;
       }
       
-      console.log("Login API call successful");
+      // Get the user data from the login response
+      const loginData = await loginResponse.json();
+      console.log("✅ Login API call successful", loginData ? "with user data" : "but no user data returned");
       
-      // Refresh TanStack Query cache
+      // Clear any stale user data in the cache
+      queryClient.removeQueries({ queryKey: ["/api/user"] });
+      
+      // Refresh TanStack Query cache 
       await queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       
-      // Force a direct fetch to confirm login state
-      const userResponse = await apiRequest("GET", "/api/user");
-      const userData = await userResponse.json();
+      // Force a direct fetch to confirm login state with debug mode
+      const userResponse = await apiRequest("GET", "/api/user", undefined, { debugMode: true });
       
-      console.log("User data fetched:", userData ? "Success" : "Failed", userData);
-      return !!userData;
+      if (!userResponse.ok) {
+        console.error("❌ User verification failed after login:", userResponse.status);
+        return false;
+      }
+      
+      const userData = await userResponse.json();
+      console.log("👤 User data fetched:", userData ? "Success" : "Failed", userData);
+      
+      // Extra validation to ensure user is actually logged in
+      if (!userData || !userData.id) {
+        console.error("❌ Invalid or missing user data after login");
+        return false;
+      }
+      
+      console.log("🎉 Login process completed successfully for user ID:", userData.id);
+      return true;
     } catch (error) {
-      console.error("Login attempt failed:", error);
+      console.error("❌ Login attempt failed with error:", error);
       return false;
     }
   };
