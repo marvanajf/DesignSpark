@@ -76,13 +76,26 @@ export function setupAuth(app: Express) {
   // Create default user for testing
   createDefaultUserIfNotExists();
   
+  // Generate a random session secret if one is not provided
+  if (!process.env.SESSION_SECRET) {
+    console.warn("⚠️ No SESSION_SECRET provided, generating random one for this instance");
+    process.env.SESSION_SECRET = Math.random().toString(36).substring(2, 15) + 
+                               Math.random().toString(36).substring(2, 15);
+  }
+  
+  // Configure session middleware with enhanced security
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "keyboard-cat-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
+    name: 'tovably.sid', // Custom cookie name for better security
     cookie: {
-      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/'
     }
   };
 

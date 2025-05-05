@@ -94,8 +94,10 @@ export default function PaymentSuccessPage() {
       await queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       
       // Force a direct fetch to confirm login state with debug mode
-      const userResponse = await apiRequest("GET", "/api/user", undefined, { 
-        debugMode: true,
+      // Use native fetch with cache control headers since apiRequest doesn't support custom headers
+      const userResponse = await fetch("/api/user", { 
+        method: "GET",
+        credentials: "include",
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
@@ -344,7 +346,12 @@ export default function PaymentSuccessPage() {
                   try {
                     console.log("🔍 Verifying login state with a final user check");
                     const finalCheck = await fetch("/api/user", { 
-                      credentials: "include" 
+                      method: "GET",
+                      credentials: "include",
+                      headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                      }
                     });
                     
                     if (finalCheck.ok) {
