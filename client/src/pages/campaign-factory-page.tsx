@@ -1259,8 +1259,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           </div>
                           
                           <div className="flex items-center">
-                            <div className="h-10 w-10 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
-                              <Users className="h-5 w-5 text-[#74d1ea]" />
+                            <div className="h-10 w-10 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                              <Users className="h-5 w-5 text-[#5eead4]" />
                             </div>
                             <div>
                               <p className="text-gray-400 text-sm">Channels</p>
@@ -1362,7 +1362,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
                             <div className="bg-zinc-900 p-4 flex justify-between items-center">
                               <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
+                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
                                   {content.icon}
                                 </div>
                                 <div>
@@ -1408,8 +1408,8 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
                             <div className="bg-zinc-900 p-4 flex justify-between items-center">
                               <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#74d1ea]/10 mr-3">
-                                  <MessageSquare className="h-5 w-5 text-[#74d1ea]" />
+                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                                  <MessageSquare className="h-5 w-5 text-[#5eead4]" />
                                 </div>
                                 <div>
                                   <h3 className="text-white font-medium">{content.title}</h3>
