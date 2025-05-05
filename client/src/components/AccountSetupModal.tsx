@@ -63,7 +63,7 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
       return;
     }
     
-    // Basic email validation
+    // Enhanced email validation
     if (!/^\S+@\S+\.\S+$/.test(editedEmail.trim())) {
       setError("Please enter a valid email address in the format: example@domain.com");
       return;
@@ -73,29 +73,65 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
     setError(null);
 
     try {
+      console.log("🔐 Starting account setup for email:", editedEmail.trim());
+      
       // Check if we're in development/test mode
       const testMode = process.env.NODE_ENV === 'development';
       const queryParams = new URLSearchParams();
       
       if (testMode) {
         queryParams.append('testMode', 'true');
+        console.log("🧪 Running in test mode");
       }
       
       // Add the subscription plan to the query parameters
       if (plan) {
         queryParams.append('plan', plan);
+        console.log("💰 Setting up account with plan:", plan);
       }
       
       const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
       
-      const response = await apiRequest("POST", `/api/setup-account${queryString}`, {
-        email: editedEmail.trim(),
-        password: data.password
+      console.log(`📤 Sending account setup request to /api/setup-account${queryString}`);
+      console.log("📤 Request payload:", { 
+        email: editedEmail.trim(), 
+        password: "********" 
       });
+      
+      const response = await apiRequest("POST", `/api/setup-account${queryString}`, 
+        {
+          email: editedEmail.trim(),
+          password: data.password
+        },
+        { debugMode: true, retries: 2 } // Enable debugging and retries
+      );
 
+      // Check the response status
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to setup account");
+        const responseText = await response.text();
+        console.error("❌ Account setup API failed with status:", response.status);
+        console.error("❌ Response body:", responseText);
+        
+        let errorMessage;
+        try {
+          // Try to parse as JSON
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.error || errorData.message || "Failed to setup account";
+        } catch (parseError) {
+          // If not JSON, use the raw text
+          errorMessage = responseText || "Failed to setup account";
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      // Parse the response
+      let responseData;
+      try {
+        responseData = await response.json();
+        console.log("✅ Account setup successful, response data:", responseData);
+      } catch (jsonError) {
+        console.warn("⚠️ Could not parse JSON response, but request was successful");
       }
 
       setSuccess(true);
@@ -111,11 +147,15 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
         password: data.password
       };
       
+      console.log("🔑 Preparing login credentials for auto-login");
+      
       // Wait a moment before closing the modal to show success state
       setTimeout(() => {
+        console.log("⏱️ Timeout complete, triggering onSuccess callback with credentials");
         onSuccess(credentials);
       }, 1500);
     } catch (err) {
+      console.error("❌ Account setup error:", err);
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
       toast({
         title: "Account setup failed",
@@ -184,19 +224,36 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
                   password: form.getValues().password
                 } : undefined;
                 
+                // Enhanced debugging
+                console.log("🔄 Success button clicked, preparing for auto-login");
+                if (credentials) {
+                  console.log("✅ Credentials available for auto-login:", {
+                    email: credentials.email,
+                    password: credentials.password ? "********" : "missing"
+                  });
+                } else {
+                  console.warn("⚠️ No credentials available for auto-login, form values missing");
+                }
+                
                 // Show a loading state on the button to indicate progress
                 setIsLoading(true);
                 
                 // First close the dialog directly by triggering an immediate close
                 // This ensures the modal disappears without waiting for further processes
-                setTimeout(() => onClose(), 0);
+                console.log("🚪 Closing modal first");
+                setTimeout(() => {
+                  onClose();
+                  console.log("🚪 Modal close triggered");
+                }, 0);
                 
                 // Then pass credentials to parent for auto-login
                 // We use a small delay to ensure closing happens first
+                console.log("⏱️ Scheduling auto-login callback");
                 setTimeout(() => {
+                  console.log("🔐 Executing auto-login callback");
                   setIsLoading(false);
                   onSuccess(credentials);
-                }, 10);
+                }, 100);  // Increased delay to ensure modal is fully closed
               }}
               disabled={isLoading}
               className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"

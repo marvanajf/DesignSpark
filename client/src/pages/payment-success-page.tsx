@@ -295,13 +295,34 @@ export default function PaymentSuccessPage() {
                     variant: "default"
                   });
                   
+                  console.log("🎉 Login successful! Preparing to redirect to dashboard");
+                  
+                  // Issue an additional API call to verify the user object is in the session
+                  try {
+                    console.log("🔍 Verifying login state with a final user check");
+                    const finalCheck = await fetch("/api/user", { 
+                      credentials: "include" 
+                    });
+                    
+                    if (finalCheck.ok) {
+                      const userData = await finalCheck.json();
+                      console.log("✅ Final verification successful, user data:", userData);
+                    } else {
+                      console.warn("⚠️ Final verification returned non-OK status:", finalCheck.status);
+                    }
+                  } catch (verifyErr) {
+                    console.error("⚠️ Error during final verification:", verifyErr);
+                    // Continue with redirect even if verification fails
+                  }
+                  
                   // Navigate to the dashboard after a short delay to ensure data is loaded
+                  console.log("🔄 Redirecting to dashboard in 1.5 seconds...");
                   setTimeout(() => {
-                    console.log("Redirecting to dashboard...");
                     window.location.href = '/dashboard';
                   }, 1500);
                 } else {
                   setAutoLoginInProgress(false);
+                  console.error("❌ Auto-login failed - login attempt returned false");
                   toast({
                     title: "Auto-login failed",
                     description: "Please use the login button to access your account.",
@@ -310,10 +331,29 @@ export default function PaymentSuccessPage() {
                 }
               } catch (error) {
                 setAutoLoginInProgress(false);
-                console.error("Auto-login error:", error);
+                console.error("❌ Auto-login error:", error);
+                
+                // Detailed error analysis
+                let errorMessage = "There was a problem logging you in.";
+                if (error instanceof Error) {
+                  console.error("❌ Error message:", error.message);
+                  console.error("❌ Error stack:", error.stack);
+                  
+                  // Customize message based on error type
+                  if (error.message.includes("NetworkError") || 
+                      error.message.includes("Failed to fetch") || 
+                      error.message.includes("Network request failed")) {
+                    errorMessage = "Network error during login. Please check your connection.";
+                  } else if (error.message.includes("401") || 
+                             error.message.includes("Unauthorized") || 
+                             error.message.includes("Invalid credentials")) {
+                    errorMessage = "Invalid login credentials. Please try logging in manually.";
+                  }
+                }
+                
                 toast({
                   title: "Login error",
-                  description: "There was a problem logging you in. Please try logging in manually.",
+                  description: errorMessage + " Please try logging in manually.",
                   variant: "destructive"
                 });
               }
