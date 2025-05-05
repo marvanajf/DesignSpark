@@ -8,6 +8,7 @@ import { queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import AccountSetupModal from "@/components/AccountSetupModal";
+import PlanUpgradeSuccessModal from "@/components/PlanUpgradeSuccessModal";
 
 export default function PaymentSuccessPage() {
   const [location] = useLocation();
