@@ -47,8 +47,7 @@ export default function HomePage() {
               <span className="block text-[#74d1ea] text-glow">AI-powered workflows</span>
             </h1>
             <p className="mt-6 text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl max-w-3xl mx-auto leading-relaxed">
-              From tone analysis to complete campaign creation, our OpenAI-powered platform delivers
-              targeted communications that engage, convert, and elevate your brand.
+              Our OpenAI-powered platform delivers on-brand campaigns & comms that engage and convert in minutes, not weeks.
             </p>
             <div className="mt-8 sm:mt-10 flex flex-col items-center">
               <div className="rounded-md">
