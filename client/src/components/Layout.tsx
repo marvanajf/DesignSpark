@@ -53,6 +53,11 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                   Privacy Policy
                 </a>
               </div>
+              <div className="px-5 py-2">
+                <a href="/sitemap" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                  Sitemap
+                </a>
+              </div>
             </nav>
 
             <p className="mt-8 text-center text-base text-gray-400">
@@ -120,6 +125,11 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
                   <div className="px-5 py-2">
                     <a href="/privacy-policy" className="text-base text-gray-400 hover:text-[#74d1ea]">
                       Privacy Policy
+                    </a>
+                  </div>
+                  <div className="px-5 py-2">
+                    <a href="/sitemap" className="text-base text-gray-400 hover:text-[#74d1ea]">
+                      Sitemap
                     </a>
                   </div>
                 </nav>
