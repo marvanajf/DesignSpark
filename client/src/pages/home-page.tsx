@@ -129,7 +129,7 @@ export default function HomePage() {
                     </div>
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Campaign Factory</h2>
                     <p className="text-gray-300 text-lg mb-6 max-w-2xl">
-                      Create complete marketing campaigns in minutes, not weeks. Our OpenAI-powered Campaign Factory automatically generates all the content you need across multiple channels.
+                      Create complete marketing campaigns in minutes, not weeks. Informed by tone analysis, our Campaign Factory delivers targeted content for customer acquisition, upselling, and retention across multiple channels.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                       <div className="flex items-start">
