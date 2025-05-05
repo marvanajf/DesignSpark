@@ -715,14 +715,14 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                               key={useCase.id}
                               className={`p-4 rounded-lg border cursor-pointer transition-all ${
                                 selectedUseCase === useCase.id 
-                                  ? "border-[#74d1ea] bg-[#74d1ea]/10" 
+                                  ? "border-[#5eead4] bg-[#5eead4]/10" 
                                   : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600"
                               }`}
                               onClick={() => setSelectedUseCase(useCase.id)}
                             >
                               <div className="flex flex-col h-full">
                                 <h3 className={`font-medium mb-2 ${
-                                  selectedUseCase === useCase.id ? "text-[#74d1ea]" : "text-white"
+                                  selectedUseCase === useCase.id ? "text-[#5eead4]" : "text-white"
                                 }`}>
                                   {useCase.name}
                                 </h3>
@@ -864,7 +864,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                   value={contentCount.email.toString()} 
                                   onValueChange={(value) => handleContentCountChange('email', parseInt(value))}
                                 >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
+                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
                                     <SelectValue placeholder="Select" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -895,7 +895,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                   value={contentCount.social.toString()} 
                                   onValueChange={(value) => handleContentCountChange('social', parseInt(value))}
                                 >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
+                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
                                     <SelectValue placeholder="Select" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -926,7 +926,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                   value={contentCount.blog.toString()} 
                                   onValueChange={(value) => handleContentCountChange('blog', parseInt(value))}
                                 >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
+                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
                                     <SelectValue placeholder="Select" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -956,7 +956,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                   value={contentCount.webinar.toString()} 
                                   onValueChange={(value) => handleContentCountChange('webinar', parseInt(value))}
                                 >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
+                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
                                     <SelectValue placeholder="Select" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -999,7 +999,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                     key={persona.id}
                                     className={`p-4 rounded-lg border cursor-pointer transition-all ${
                                       selectedPersonas.includes(persona.id) 
-                                        ? "border-[#74d1ea] bg-[#74d1ea]/10" 
+                                        ? "border-[#5eead4] bg-[#5eead4]/10" 
                                         : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600"
                                     }`}
                                     onClick={() => togglePersonaSelection(persona.id)}
