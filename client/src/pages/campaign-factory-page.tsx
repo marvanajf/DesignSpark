@@ -107,6 +107,7 @@ export default function CampaignFactoryPage() {
   );
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+
   const [selectedToneAnalysisId, setSelectedToneAnalysisId] = useState<string>("");
   
   // Fetch tone analyses for the user
@@ -730,6 +731,68 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                         </div>
                       </div>
                       
+                      {/* Brand Voice (Required) */}
+                      <div>
+                        <Label htmlFor="brand-voice" className="text-white font-medium flex items-center">
+                          Brand Voice
+                          <span className="text-[#74d1ea] ml-2 text-sm font-normal">(Required)</span>
+                        </Label>
+                        <p className="text-gray-400 text-sm mb-3">
+                          Select a tone analysis to apply your brand voice to the campaign content
+                        </p>
+                        <div className="max-w-full">
+                          <Select 
+                            value={selectedToneAnalysisId} 
+                            onValueChange={setSelectedToneAnalysisId}
+                          >
+                            <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
+                              <SelectValue placeholder="Select a tone analysis" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-zinc-900 border-zinc-700">
+                              {isLoadingToneAnalyses ? (
+                                <div className="flex items-center justify-center p-4">
+                                  <Loader2 className="h-4 w-4 text-[#74d1ea] animate-spin" />
+                                </div>
+                              ) : (
+                                toneAnalyses && toneAnalyses.length > 0 ? (
+                                  toneAnalyses?.map(tone => (
+                                    <SelectItem key={tone.id} value={tone.id.toString()}>
+                                      {tone.name}
+                                    </SelectItem>
+                                  ))
+                                ) : (
+                                  <div className="p-2 text-center">
+                                    <p className="text-gray-400 mb-2">No tone analyses found</p>
+                                    <Button 
+                                      variant="link" 
+                                      className="text-[#74d1ea] p-0" 
+                                      onClick={() => setLocation('/tone-analysis')}
+                                    >
+                                      Create a tone analysis
+                                    </Button>
+                                  </div>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                          {!selectedToneAnalysisId && !isLoadingToneAnalyses && (
+                            <div className="mt-2 flex items-center">
+                              <Button 
+                                variant="link" 
+                                className="text-[#74d1ea] p-0 h-auto" 
+                                onClick={() => setLocation('/tone-analysis')}
+                              >
+                                Create a new tone analysis
+                                <ArrowRight className="h-3 w-3 ml-1" />
+                              </Button>
+                            </div>
+                          )}
+                          <p className="text-gray-400 text-xs mt-2">
+                            A tone analysis helps maintain consistent brand voice across all content
+                          </p>
+                        </div>
+                      </div>
+                      
                       {/* Campaign Timeline */}
                       <div>
                         <h3 className="text-white font-medium mb-3">Campaign Timeline</h3>
@@ -993,37 +1056,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                           )}
                         </div>
                         
-                        {/* Tone Analysis Selection */}
-                        <div>
-                          <Label className="text-gray-300 text-sm block mb-3">Brand Voice (Optional)</Label>
-                          <div className="max-w-md">
-                            <Select 
-                              value={selectedToneAnalysisId} 
-                              onValueChange={setSelectedToneAnalysisId}
-                            >
-                              <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#74d1ea] focus-visible:ring-[#74d1ea]">
-                                <SelectValue placeholder="Select a tone analysis" />
-                              </SelectTrigger>
-                              <SelectContent className="bg-zinc-900 border-zinc-700">
-                                <SelectItem value="default">Default Tone</SelectItem>
-                                {isLoadingToneAnalyses ? (
-                                  <div className="flex items-center justify-center p-4">
-                                    <Loader2 className="h-4 w-4 text-[#74d1ea] animate-spin" />
-                                  </div>
-                                ) : (
-                                  toneAnalyses?.map(tone => (
-                                    <SelectItem key={tone.id} value={tone.id.toString()}>
-                                      {tone.name}
-                                    </SelectItem>
-                                  ))
-                                )}
-                              </SelectContent>
-                            </Select>
-                            <p className="text-gray-400 text-xs mt-2">
-                              Apply a saved tone analysis to maintain your brand voice across all content
-                            </p>
-                          </div>
-                        </div>
+                        {/* This is now moved to the Campaign Brief section */}
                       </div>
                     </div>
                   </CardContent>
@@ -1032,7 +1065,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                     <Button 
                       className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium w-full md:w-auto"
                       onClick={handleGenerateCampaign}
-                      disabled={!campaignPrompt.trim() || !selectedUseCase}
+                      disabled={!campaignPrompt.trim() || !selectedUseCase || !selectedToneAnalysisId}
                     >
                       <Sparkles className="h-4 w-4 mr-2" />
                       Generate Campaign
