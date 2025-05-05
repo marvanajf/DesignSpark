@@ -39,26 +39,9 @@ import path from "path";
 import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Handle sitemap.xml with special priority route
-  app.get("/sitemap.xml", (req, res) => {
-    const sitemapPath = path.resolve(process.cwd(), "public", "google-sitemap");
-    
-    // Explicitly set XML content type header
-    res.header("Content-Type", "application/xml; charset=UTF-8");
-    
-    fs.readFile(sitemapPath, (err, data) => {
-      if (err) {
-        console.error("Error serving sitemap XML:", err);
-        return res.status(500).send("Error serving sitemap");
-      }
-      
-      return res.send(data);
-    });
-  });
-  
-  // Handle /sitemap route for both bots and users
-  app.get("/sitemap", (req, res, next) => {
-    // Check if it's Google Search Console or any search engine bot
+  // Comprehensive sitemap route handler - covers all possible paths
+  app.get(["/sitemap.xml", "/sitemap.html", "/sitemap", "/sitemap/"], (req, res, next) => {
+    // Always check for search bots first
     const userAgent = req.headers['user-agent'] || '';
     const isSearchBot = userAgent.includes('Googlebot') || 
                         userAgent.includes('bingbot') || 
@@ -67,15 +50,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
                         userAgent.includes('Baiduspider') || 
                         userAgent.includes('YandexBot') || 
                         userAgent.includes('facebot') || 
-                        userAgent.includes('ia_archiver');
+                        userAgent.includes('ia_archiver') ||
+                        userAgent.includes('Googlebot') ||
+                        userAgent.includes('Google-Site-Verification');
     
-    // If it's a search engine bot, redirect to the XML sitemap
-    if (isSearchBot) {
-      console.log(`Redirecting search bot to sitemap.xml from ${req.path}`);
-      return res.redirect("/sitemap.xml");
+    // For XML sitemap requests or any bots, serve the XML sitemap directly
+    if (req.path.endsWith('.xml') || isSearchBot) {
+      const sitemapPath = path.resolve(process.cwd(), "public", "google-sitemap");
+      
+      console.log(`Serving XML sitemap to ${isSearchBot ? 'search bot' : 'user'} from ${req.path}`);
+      
+      // Important: Set the correct content type for XML
+      res.header("Content-Type", "application/xml; charset=UTF-8");
+      
+      return fs.readFile(sitemapPath, (err, data) => {
+        if (err) {
+          console.error("Error serving sitemap XML:", err);
+          return res.status(500).send("Error serving sitemap");
+        }
+        
+        return res.send(data);
+      });
     }
     
-    // For regular users, let React handle it with the HTML sitemap
+    // For .html or requests, serve the XML sitemap within HTML tags
+    if (req.path.endsWith('.html')) {
+      const sitemapPath = path.resolve(process.cwd(), "public", "sitemap.html");
+      
+      console.log(`Serving HTML-wrapped XML sitemap from ${req.path}`);
+      
+      // Important: Set the correct content type for XML
+      res.header("Content-Type", "application/xml; charset=UTF-8");
+      
+      return fs.readFile(sitemapPath, (err, data) => {
+        if (err) {
+          console.error("Error serving sitemap HTML-XML:", err);
+          return res.status(500).send("Error serving sitemap");
+        }
+        
+        return res.send(data);
+      });
+    }
+    
+    // For regular users visiting /sitemap, render the React sitemap page
     next();
   });
   // Advanced database health check with diagnostics and recovery options
