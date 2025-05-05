@@ -572,7 +572,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
   return (
     <Layout showSidebar={true}>
       <div className="flex-1 overflow-y-auto min-h-screen bg-black">
-        <div className="px-4 py-8 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header with improved visual hierarchy */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -613,10 +613,10 @@ The average cost of a small business data breach now exceeds $2.98 million when 
             <div className="hidden sm:block absolute left-0 right-0 h-[1px] top-[18px] bg-zinc-800/40 -z-0"></div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div 
-                className={`relative ${activeTab === "input" ? "text-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
+                className={`relative ${activeTab === "input" ? "text-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "text-[#5eead4]" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#5eead4]/10 border border-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#5eead4]/10 border border-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-900 border border-zinc-800"}`}>
                     <Target className="h-3.5 w-3.5" />
                   </div>
                   <div className="ml-2 sm:mt-0 hidden sm:block">
@@ -628,10 +628,10 @@ The average cost of a small business data breach now exceeds $2.98 million when 
               </div>
               
               <div 
-                className={`relative ${activeTab === "generating" ? "text-[#5eead4]" : activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
+                className={`relative ${activeTab === "generating" ? "text-[#5eead4]" : activeTab === "results" ? "text-[#5eead4]" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#5eead4]/10 border border-[#5eead4]" : activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#5eead4]/10 border border-[#5eead4]" : activeTab === "results" ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-900 border border-zinc-800"}`}>
                     <Sparkles className="h-3.5 w-3.5" />
                   </div>
                   <div className="ml-2 sm:mt-0 hidden sm:block">
