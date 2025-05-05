@@ -92,13 +92,23 @@ export default function AccountSetupModal({ email, open, onClose, onSuccess, pla
       
       const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
       
-      console.log(`📤 Sending account setup request to /api/setup-account${queryString}`);
+      // Add autoLogin=true parameter to enable server-side login
+      if (queryParams.toString()) {
+        queryParams.append('autoLogin', 'true');
+      } else {
+        queryParams.set('autoLogin', 'true');
+      }
+      
+      // Get the updated query string
+      const updatedQueryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+      
+      console.log(`📤 Sending account setup request to /api/setup-account${updatedQueryString}`);
       console.log("📤 Request payload:", { 
         email: editedEmail.trim(), 
         password: "********" 
       });
       
-      const response = await apiRequest("POST", `/api/setup-account${queryString}`, 
+      const response = await apiRequest("POST", `/api/setup-account${updatedQueryString}`, 
         {
           email: editedEmail.trim(),
           password: data.password

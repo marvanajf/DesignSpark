@@ -1869,12 +1869,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Update the user's password
       await storage.updateUserPassword(user.id, hashedPassword);
       
-      // Return success
+      // Get the updated user object with the new password
+      const updatedUser = await storage.getUser(user.id);
+      
+      if (!updatedUser) {
+        console.error("Failed to retrieve updated user after password change");
+        return res.status(500).json({ error: "Error finalizing account setup" });
+      }
+      
+      // Log the user in automatically if this is requested
+      if (req.query.autoLogin === 'true') {
+        try {
+          console.log("Auto-login requested, logging in user:", updatedUser.email);
+          
+          // Using req.login manually to set up the session
+          await new Promise<void>((resolve, reject) => {
+            req.login(updatedUser, (loginErr) => {
+              if (loginErr) {
+                console.error("Error during auto-login:", loginErr);
+                reject(loginErr);
+                return;
+              }
+              
+              console.log("Auto-login successful for user ID:", updatedUser.id);
+              resolve();
+            });
+          });
+          
+          // Return success with auto-login flag
+          return res.status(200).json({ 
+            success: true,
+            message: "Account setup successful with automatic login",
+            email: updatedUser.email,
+            userId: updatedUser.id,
+            autoLogin: true,
+            testMode: testMode
+          });
+        } catch (loginError) {
+          console.error("Auto-login failed:", loginError);
+          // Continue to return success, but indicate login failed
+          return res.status(200).json({ 
+            success: true,
+            message: "Account setup successful, but auto-login failed",
+            email: updatedUser.email,
+            userId: updatedUser.id,
+            autoLogin: false,
+            loginError: loginError instanceof Error ? loginError.message : "Unknown login error",
+            testMode: testMode
+          });
+        }
+      }
+      
+      // Standard return without auto-login
       return res.status(200).json({ 
         success: true,
         message: "Account setup successful",
-        email: user.email,
-        userId: user.id,
+        email: updatedUser.email,
+        userId: updatedUser.id,
         testMode: testMode
       });
     } catch (error) {

@@ -31,9 +31,46 @@ export default function PaymentSuccessPage() {
     try {
       // Enhanced debug logging
       console.log("📤 Starting direct login process for:", email);
-      console.log("📤 Request payload:", { email, password: "********" });
       
-      // First, make the login API call with debug mode enabled
+      // First check if we're already logged in (successful server-side auto-login)
+      try {
+        console.log("🔍 Checking if already logged in from server-side auto-login");
+        const checkResponse = await fetch("/api/user", { 
+          credentials: "include",
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+        
+        if (checkResponse.ok) {
+          const userData = await checkResponse.json();
+          
+          // If the logged-in user matches our email, we're already logged in!
+          if (userData && userData.email === email) {
+            console.log("✅ Already logged in from server-side auto-login as:", userData.email);
+            
+            // Update query cache with user data
+            queryClient.setQueryData(["/api/user"], userData);
+            
+            // Refresh other data
+            await queryClient.invalidateQueries();
+            
+            return true;
+          } else if (userData) {
+            console.log("⚠️ Already logged in, but as a different user:", userData.email);
+            // Continue with explicit login to switch users
+          }
+        }
+      } catch (checkError) {
+        console.warn("⚠️ Error checking current login state:", checkError);
+        // Continue with explicit login attempt
+      }
+      
+      // If we're not already logged in correctly, proceed with explicit login
+      console.log("📤 Proceeding with explicit login. Request payload:", { email, password: "********" });
+      
+      // Make the login API call with debug mode enabled
       const loginResponse = await apiRequest("POST", "/api/login", 
         { email, password }, 
         { debugMode: true, retries: 2 }  // Enable retries and debugging
@@ -57,7 +94,13 @@ export default function PaymentSuccessPage() {
       await queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       
       // Force a direct fetch to confirm login state with debug mode
-      const userResponse = await apiRequest("GET", "/api/user", undefined, { debugMode: true });
+      const userResponse = await apiRequest("GET", "/api/user", undefined, { 
+        debugMode: true,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       
       if (!userResponse.ok) {
         console.error("❌ User verification failed after login:", userResponse.status);
