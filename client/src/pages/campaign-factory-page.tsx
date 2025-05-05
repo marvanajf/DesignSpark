@@ -1005,7 +1005,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                                 <SelectValue placeholder="Select a tone analysis" />
                               </SelectTrigger>
                               <SelectContent className="bg-zinc-900 border-zinc-700">
-                                <SelectItem value="">Default Tone</SelectItem>
+                                <SelectItem value="default">Default Tone</SelectItem>
                                 {isLoadingToneAnalyses ? (
                                   <div className="flex items-center justify-center p-4">
                                     <Loader2 className="h-4 w-4 text-[#74d1ea] animate-spin" />
