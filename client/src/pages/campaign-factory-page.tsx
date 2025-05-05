@@ -616,7 +616,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 className={`relative ${activeTab === "input" ? "text-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : activeTab === "generating" || activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "input" ? "bg-[#5eead4]/10 border border-[#5eead4]" : activeTab === "generating" || activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
                     <Target className="h-3.5 w-3.5" />
                   </div>
                   <div className="ml-2 sm:mt-0 hidden sm:block">
@@ -631,7 +631,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                 className={`relative ${activeTab === "generating" ? "text-[#5eead4]" : activeTab === "results" ? "text-green-400" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "generating" ? "bg-[#5eead4]/10 border border-[#5eead4]" : activeTab === "results" ? "bg-green-900/10 border border-green-400" : "bg-zinc-900 border border-zinc-800"}`}>
                     <Sparkles className="h-3.5 w-3.5" />
                   </div>
                   <div className="ml-2 sm:mt-0 hidden sm:block">
@@ -643,10 +643,10 @@ The average cost of a small business data breach now exceeds $2.98 million when 
               </div>
               
               <div 
-                className={`relative ${activeTab === "results" ? "text-[#74d1ea]" : "text-gray-500"}`}
+                className={`relative ${activeTab === "results" ? "text-[#5eead4]" : "text-gray-500"}`}
               >
                 <div className="flex items-center justify-center sm:justify-start">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "results" ? "bg-[#74d1ea]/10 border border-[#74d1ea]" : "bg-zinc-900 border border-zinc-800"}`}>
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center z-10 ${activeTab === "results" ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-900 border border-zinc-800"}`}>
                     <FileText className="h-3.5 w-3.5" />
                   </div>
                   <div className="ml-2 sm:mt-0 hidden sm:block">
@@ -753,7 +753,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                             <SelectContent className="bg-zinc-900 border-zinc-700">
                               {isLoadingToneAnalyses ? (
                                 <div className="flex items-center justify-center p-4">
-                                  <Loader2 className="h-4 w-4 text-[#74d1ea] animate-spin" />
+                                  <Loader2 className="h-4 w-4 text-[#5eead4] animate-spin" />
                                 </div>
                               ) : (
                                 toneAnalyses && toneAnalyses.length > 0 ? (
@@ -804,7 +804,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                             <Input 
                               id="start-date"
                               type="date"
-                              className="bg-zinc-900 border-zinc-700 focus-visible:ring-[#74d1ea]"
+                              className="bg-zinc-900 border-zinc-700 focus-visible:ring-[#5eead4]"
                               value={campaignStartDate}
                               onChange={(e) => setCampaignStartDate(e.target.value)}
                             />
@@ -814,7 +814,7 @@ The average cost of a small business data breach now exceeds $2.98 million when 
                             <Input 
                               id="end-date"
                               type="date"
-                              className="bg-zinc-900 border-zinc-700 focus-visible:ring-[#74d1ea]"
+                              className="bg-zinc-900 border-zinc-700 focus-visible:ring-[#5eead4]"
                               value={campaignEndDate}
                               onChange={(e) => setCampaignEndDate(e.target.value)}
                             />
