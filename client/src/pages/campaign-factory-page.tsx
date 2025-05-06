@@ -229,10 +229,10 @@ const EditableContent = ({
   return (
     <div className="relative group w-full">
       <textarea
-        className="bg-transparent text-white w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded p-2 font-sans whitespace-pre-wrap h-auto resize-none campaign-content"
+        className="bg-transparent text-white w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded p-2 font-sans campaign-content campaign-content-editor"
         value={content || ''}
         rows={rows}
-        style={{ minHeight }}
+        style={{ minHeight, width: "100%" }}
         onChange={(e) => onContentChange(e.target.value)}
       />
       <Pencil className="h-4 w-4 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-2 right-2 transition-opacity" />
@@ -1954,15 +1954,15 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
             )}
             
             {activeTab === "results" && campaign && (
-              <div className="space-y-8">
-                <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden">
+              <div className="space-y-8 w-full max-w-full">
+                <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden w-full">
                   <CardHeader className="px-6 py-5">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-between mb-2 w-full">
+                      <div className="flex items-center gap-4 w-full">
                         <div className="flex items-center justify-center w-8 h-8">
                           <FileText className="h-5 w-5 text-[#5eead4]" />
                         </div>
-                        <div>
+                        <div className="w-full">
                           {/* Editable Campaign Title */}
                           <div className="relative group">
                             <input 
@@ -2154,7 +2154,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                     </div>
                     
                     {/* Campaign Content Section */}
-                    <div>
+                    <div className="w-full">
                       <h3 className="text-lg font-medium text-white mb-6">Campaign Content</h3>
                       
                         <Tabs defaultValue="all" className="w-full">
@@ -2199,13 +2199,13 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                           )}
                         </TabsList>
                         
-                        <TabsContent value="all" className="space-y-6 mt-0">
+                        <TabsContent value="all" className="space-y-6 mt-0 w-full">
                           {campaign.contents.map((content, i) => (
-                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
-                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
+                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden w-full">
+                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between w-full">
+                                <div className="flex items-center gap-3 flex-1">
                                   {content.icon}
-                                  <div>
+                                  <div className="w-full">
                                     <EditableTitle 
                                       title={content.title} 
                                       onTitleChange={(newTitle) => {
