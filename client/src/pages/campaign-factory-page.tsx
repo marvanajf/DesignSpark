@@ -236,7 +236,12 @@ export default function CampaignFactoryPage() {
 
     try {
       // STEP 1: Analyze prompt and gather context
-      setGenerationProgress(10);
+      // Show gradual progression from 0% to 10%
+      const progressStep1 = [2, 4, 6, 8, 10];
+      for (const progress of progressStep1) {
+        setGenerationProgress(progress);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
       
       // Get use case information
       const useCaseObj = useCases.find(useCase => useCase.id === selectedUseCase);
@@ -259,7 +264,12 @@ export default function CampaignFactoryPage() {
       const benefitExtracted = extractBenefit(campaignPrompt);
       
       // STEP 2: Process audience information
-      setGenerationProgress(30);
+      // Show gradual progression from 10% to 30%
+      const progressStep2 = [15, 20, 25, 30];
+      for (const progress of progressStep2) {
+        setGenerationProgress(progress);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
       
       // Auto-generate personas if that option is selected but none exist yet
       if (useGeneratedPersonas && generatedPersonas.length === 0) {
@@ -282,7 +292,12 @@ export default function CampaignFactoryPage() {
       const audienceGoalsVal = targetPersona?.goals || ["Improved outcomes", "Cost reduction"];
       
       // STEP 3: Prepare OpenAI inputs and generate content
-      setGenerationProgress(50);
+      // Show gradual progression from 30% to 50%
+      const progressStep3 = [35, 40, 45, 50];
+      for (const progress of progressStep3) {
+        setGenerationProgress(progress);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
       
       // Generate campaign title based on use case and brief
       const campaignTitleVal = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
