@@ -601,7 +601,7 @@ export function CampaignFactoryOverview() {
                               }
                             }}>
                               <p className="text-sm text-gray-300 line-clamp-2">
-                                {content.content?.substring(0, 100)}...
+                                {cleanContent(content.content)?.substring(0, 100)}...
                               </p>
                               <p className="text-[#74d1ea] text-xs mt-1">Click to view full content</p>
                             </div>
