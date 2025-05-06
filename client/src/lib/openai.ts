@@ -250,6 +250,8 @@ export async function generateCampaignContent(
     ${audienceGoals.map(goal => `- ${goal}`).join('\n')}
     `;
     
+    console.log("Generating content for type:", contentType);
+    
     // Send the comprehensive context to the API
     const response = await fetch('/api/openai/generate', {
       method: 'POST',
@@ -280,6 +282,27 @@ export async function generateCampaignContent(
     }
 
     const data = await response.json();
+    console.log("Raw API response:", data.content.substring(0, 100) + "...");
+    
+    // Detect if the content is already in JSON format from the server
+    let structuredContent;
+    if (data.content.trim().startsWith('{') && data.content.trim().endsWith('}')) {
+      try {
+        const parsedContent = JSON.parse(data.content);
+        
+        // If the content has a recognized type, add it to the response
+        if (['email', 'social', 'blog', 'webinar'].includes(contentType) && !parsedContent.type) {
+          parsedContent.type = contentType;
+        }
+        
+        structuredContent = JSON.stringify(parsedContent);
+        return structuredContent;
+      } catch (e) {
+        console.warn("Error parsing JSON response:", e);
+        // If parsing fails, continue with markdown cleaning
+      }
+    }
+    
     // Clean the content from excessive markdown formatting
     return cleanMarkdownFormatting(data.content);
   } catch (error) {

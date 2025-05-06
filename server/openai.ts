@@ -119,10 +119,15 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
           role: "system",
           content: `Format your response as a structured JSON object with the following properties:
           {
+            "type": "email",
             "subject": "The subject line of the email",
             "preview": "The preview text/first line that appears in email clients",
-            "body": "The full body text of the email"
-          }`
+            "body": "The full body text of the email without any markdown formatting like **bold** or headers"
+          }
+          
+          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response. 
+          DO NOT add prefixes like "Subject Line:" to your content.
+          Always include the "type":"email" field.`
         });
         responseFormat = { type: "json_object" };
       } 
@@ -132,9 +137,13 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
           role: "system",
           content: `Format your response as a structured JSON object with the following properties:
           {
-            "content": "The main body of the LinkedIn post",
+            "type": "social",
+            "content": "The main body of the LinkedIn post without any markdown formatting",
             "hashtags": ["array", "of", "hashtags"]
-          }`
+          }
+          
+          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response.
+          Always include the "type":"social" field.`
         });
         responseFormat = { type: "json_object" };
       }
@@ -144,19 +153,23 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
           role: "system",
           content: `Format your response as a structured JSON object with the following properties:
           {
+            "type": "blog",
             "title": "The blog title",
-            "intro": "The introductory paragraph",
+            "intro": "The introductory paragraph without markdown formatting",
             "sections": [
               {
                 "heading": "First section heading",
-                "content": "First section content"
+                "content": "First section content without markdown formatting"
               },
               {
                 "heading": "Second section heading",
-                "content": "Second section content"
+                "content": "Second section content without markdown formatting"
               }
             ]
-          }`
+          }
+          
+          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response.
+          Always include the "type":"blog" field.`
         });
         responseFormat = { type: "json_object" };
       }
@@ -166,11 +179,15 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
           role: "system",
           content: `Format your response as a structured JSON object with the following properties:
           {
+            "type": "webinar",
             "title": "The webinar title",
             "duration": "Duration (e.g., '45 minutes')",
             "audience": "Target audience description",
-            "details": "Full webinar description including key takeaways"
-          }`
+            "details": "Full webinar description including key takeaways without markdown formatting"
+          }
+          
+          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response.
+          Always include the "type":"webinar" field.`
         });
         responseFormat = { type: "json_object" };
       }

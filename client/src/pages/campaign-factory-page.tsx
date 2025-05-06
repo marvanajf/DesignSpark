@@ -187,6 +187,9 @@ const PlainTextContentDisplay = ({ content }: { content: string }) => {
 
 // Main content display component that decides which specialized component to use
 const CampaignContentDisplay = ({ content }: { content: string }) => {
+  // Add debug logging
+  console.log("Content to display:", content.substring(0, 100) + (content.length > 100 ? "..." : ""));
+  
   // First, check if content is a JSON string (starts and ends with curly braces)
   const isJsonString = content.trim().startsWith('{') && content.trim().endsWith('}');
   
@@ -194,6 +197,7 @@ const CampaignContentDisplay = ({ content }: { content: string }) => {
     try {
       // Try to parse the content as JSON
       const parsedContent = JSON.parse(content);
+      console.log("Successfully parsed JSON:", parsedContent.type);
       
       // Determine which specialized component to use based on content type
       switch (parsedContent.type) {
@@ -207,9 +211,17 @@ const CampaignContentDisplay = ({ content }: { content: string }) => {
           return <WebinarContentDisplay content={parsedContent as WebinarContent} />;
         default:
           // If JSON but unknown type, clean and display the content directly
-          return <PlainTextContentDisplay content={JSON.stringify(parsedContent, null, 2)} />;
+          return (
+            <div className="space-y-4">
+              <div className="bg-amber-900 bg-opacity-30 p-4 rounded-md">
+                <p className="text-amber-300">Debug: Received JSON but with unknown content type: {parsedContent.type || 'none'}</p>
+              </div>
+              <PlainTextContentDisplay content={JSON.stringify(parsedContent, null, 2)} />
+            </div>
+          );
       }
     } catch (e) {
+      console.error("JSON parsing error:", e);
       // JSON parsing failed - clean up any visible markdown and display
       const cleanedContent = content
         .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
@@ -217,17 +229,33 @@ const CampaignContentDisplay = ({ content }: { content: string }) => {
         .replace(/^##+\s+(.+)$/gm, '$1')   // Headers
         .replace(/^-\s+(.+)$/gm, '• $1');  // List items
         
-      return <PlainTextContentDisplay content={cleanedContent} />;
+      return (
+        <div className="space-y-4">
+          <div className="bg-red-900 bg-opacity-30 p-4 rounded-md">
+            <p className="text-red-300">Debug: Failed to parse JSON: {String(e)}</p>
+            <pre className="text-xs text-gray-400 mt-2 overflow-auto max-h-32">{content.substring(0, 200)}</pre>
+          </div>
+          <PlainTextContentDisplay content={cleanedContent} />
+        </div>
+      );
     }
   } else {
     // Not JSON format at all - clean up any visible markdown and display
+    console.log("Content is not JSON, applying markdown cleanup");
     const cleanedContent = content
       .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
       .replace(/\*([^*]+)\*/g, '$1')     // Italic
       .replace(/^##+\s+(.+)$/gm, '$1')   // Headers
       .replace(/^-\s+(.+)$/gm, '• $1');  // List items
       
-    return <PlainTextContentDisplay content={cleanedContent} />;
+    return (
+      <div className="space-y-4">
+        <div className="bg-blue-900 bg-opacity-30 p-4 rounded-md">
+          <p className="text-blue-300">Debug: Content is not in JSON format</p>
+        </div>
+        <PlainTextContentDisplay content={cleanedContent} />
+      </div>
+    );
   }
 };
 
