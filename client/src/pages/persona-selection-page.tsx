@@ -750,10 +750,10 @@ export default function PersonaSelectionPage() {
                   .map((persona: any) => {
                     const isSelected = selectedPersonaIds.includes(persona.id);
                     return (
-                    <Card 
+                    <div 
                       key={persona.id} 
-                      className={`group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] ${
-                        isSelected ? 'ring-2 ring-[#74d1ea] shadow-[0_0_25px_rgba(116,209,234,0.2)]' : ''
+                      className={`group relative bg-black/40 backdrop-blur-sm border border-gray-800/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)] ${
+                        isSelected ? 'ring-2 ring-[#74d1ea] shadow-[0_0_15px_rgba(116,209,234,0.2)]' : ''
                       }`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
@@ -767,7 +767,7 @@ export default function PersonaSelectionPage() {
                           Example
                         </Badge>
                       </div>
-                      <CardContent className="p-5">
+                      <div className="p-5">
                         <div className="flex items-center mb-4">
                           <Avatar className="h-12 w-12 bg-[#74d1ea]/20 border-0">
                             <AvatarFallback className="text-[#74d1ea]">
@@ -803,8 +803,8 @@ export default function PersonaSelectionPage() {
                             </div>
                           </div>
                         )}
-                      </CardContent>
-                      <CardFooter className="bg-black/20 py-3 px-5 border-t border-gray-800">
+                      </div>
+                      <div className="bg-black/20 py-3 px-5 border-t border-gray-800">
                         <Button
                           variant={isSelected ? "default" : "outline"}
                           className={`w-full ${
@@ -826,8 +826,8 @@ export default function PersonaSelectionPage() {
                             </>
                           )}
                         </Button>
-                      </CardFooter>
-                    </Card>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
