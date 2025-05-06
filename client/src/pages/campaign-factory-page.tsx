@@ -2205,7 +2205,24 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 <div className="flex items-center gap-3">
                                   {content.icon}
                                   <div>
-                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <EditableTitle 
+                                      title={content.title} 
+                                      onTitleChange={(newTitle) => {
+                                        const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                        if (contentIndex !== -1) {
+                                          const updatedContents = [...campaign.contents];
+                                          updatedContents[contentIndex] = {
+                                            ...updatedContents[contentIndex],
+                                            title: newTitle
+                                          };
+                                          
+                                          setCampaign({
+                                            ...campaign,
+                                            contents: updatedContents
+                                          });
+                                        }
+                                      }}
+                                    />
                                     <div className="flex items-center gap-2 mt-1">
                                       <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
                                         {content.channel || content.type}
@@ -2223,9 +2240,26 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
-                                  {content.content}
-                                </pre>
+                                <EditableContent
+                                  content={content.content}
+                                  onContentChange={(newContent) => {
+                                    const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                    if (contentIndex !== -1) {
+                                      const updatedContents = [...campaign.contents];
+                                      updatedContents[contentIndex] = {
+                                        ...updatedContents[contentIndex],
+                                        content: newContent
+                                      };
+                                      
+                                      setCampaign({
+                                        ...campaign,
+                                        contents: updatedContents
+                                      });
+                                    }
+                                  }}
+                                  rows={10}
+                                  minHeight="200px"
+                                />
                               </div>
                             </div>
                           ))}
@@ -2238,7 +2272,24 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 <div className="flex items-center gap-3">
                                   <MessageSquare className="h-5 w-5 text-[#5eead4]" />
                                   <div>
-                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <EditableTitle 
+                                      title={content.title} 
+                                      onTitleChange={(newTitle) => {
+                                        const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                        if (contentIndex !== -1) {
+                                          const updatedContents = [...campaign.contents];
+                                          updatedContents[contentIndex] = {
+                                            ...updatedContents[contentIndex],
+                                            title: newTitle
+                                          };
+                                          
+                                          setCampaign({
+                                            ...campaign,
+                                            contents: updatedContents
+                                          });
+                                        }
+                                      }}
+                                    />
                                     <div className="flex items-center gap-2 mt-1">
                                       <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
                                         {content.channel || content.type}
@@ -2256,9 +2307,26 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
-                                  {content.content}
-                                </pre>
+                                <EditableContent
+                                  content={content.content}
+                                  onContentChange={(newContent) => {
+                                    const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                    if (contentIndex !== -1) {
+                                      const updatedContents = [...campaign.contents];
+                                      updatedContents[contentIndex] = {
+                                        ...updatedContents[contentIndex],
+                                        content: newContent
+                                      };
+                                      
+                                      setCampaign({
+                                        ...campaign,
+                                        contents: updatedContents
+                                      });
+                                    }
+                                  }}
+                                  rows={10}
+                                  minHeight="200px"
+                                />
                               </div>
                             </div>
                           ))}
@@ -2271,7 +2339,24 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-[#5eead4]" />
                                   <div>
-                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <EditableTitle 
+                                      title={content.title} 
+                                      onTitleChange={(newTitle) => {
+                                        const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                        if (contentIndex !== -1) {
+                                          const updatedContents = [...campaign.contents];
+                                          updatedContents[contentIndex] = {
+                                            ...updatedContents[contentIndex],
+                                            title: newTitle
+                                          };
+                                          
+                                          setCampaign({
+                                            ...campaign,
+                                            contents: updatedContents
+                                          });
+                                        }
+                                      }}
+                                    />
                                     <div className="flex items-center gap-2 mt-1">
                                       <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
                                         {content.channel || content.type}
@@ -2289,9 +2374,26 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
-                                  {content.content}
-                                </pre>
+                                <EditableContent
+                                  content={content.content}
+                                  onContentChange={(newContent) => {
+                                    const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                    if (contentIndex !== -1) {
+                                      const updatedContents = [...campaign.contents];
+                                      updatedContents[contentIndex] = {
+                                        ...updatedContents[contentIndex],
+                                        content: newContent
+                                      };
+                                      
+                                      setCampaign({
+                                        ...campaign,
+                                        contents: updatedContents
+                                      });
+                                    }
+                                  }}
+                                  rows={10}
+                                  minHeight="200px"
+                                />
                               </div>
                             </div>
                           ))}
@@ -2304,7 +2406,24 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-[#5eead4]" />
                                   <div>
-                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <EditableTitle 
+                                      title={content.title} 
+                                      onTitleChange={(newTitle) => {
+                                        const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                        if (contentIndex !== -1) {
+                                          const updatedContents = [...campaign.contents];
+                                          updatedContents[contentIndex] = {
+                                            ...updatedContents[contentIndex],
+                                            title: newTitle
+                                          };
+                                          
+                                          setCampaign({
+                                            ...campaign,
+                                            contents: updatedContents
+                                          });
+                                        }
+                                      }}
+                                    />
                                     <div className="flex items-center gap-2 mt-1">
                                       <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
                                         {content.channel || content.type}
@@ -2322,9 +2441,26 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
-                                  {content.content}
-                                </pre>
+                                <EditableContent
+                                  content={content.content}
+                                  onContentChange={(newContent) => {
+                                    const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                    if (contentIndex !== -1) {
+                                      const updatedContents = [...campaign.contents];
+                                      updatedContents[contentIndex] = {
+                                        ...updatedContents[contentIndex],
+                                        content: newContent
+                                      };
+                                      
+                                      setCampaign({
+                                        ...campaign,
+                                        contents: updatedContents
+                                      });
+                                    }
+                                  }}
+                                  rows={10}
+                                  minHeight="200px"
+                                />
                               </div>
                             </div>
                           ))}
@@ -2337,7 +2473,24 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 <div className="flex items-center gap-3">
                                   <Zap className="h-5 w-5 text-[#5eead4]" />
                                   <div>
-                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <EditableTitle 
+                                      title={content.title} 
+                                      onTitleChange={(newTitle) => {
+                                        const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                        if (contentIndex !== -1) {
+                                          const updatedContents = [...campaign.contents];
+                                          updatedContents[contentIndex] = {
+                                            ...updatedContents[contentIndex],
+                                            title: newTitle
+                                          };
+                                          
+                                          setCampaign({
+                                            ...campaign,
+                                            contents: updatedContents
+                                          });
+                                        }
+                                      }}
+                                    />
                                     <div className="flex items-center gap-2 mt-1">
                                       <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
                                         {content.channel || content.type}
@@ -2355,9 +2508,26 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
-                                  {content.content}
-                                </pre>
+                                <EditableContent
+                                  content={content.content}
+                                  onContentChange={(newContent) => {
+                                    const contentIndex = campaign.contents.findIndex(c => c.id === content.id);
+                                    if (contentIndex !== -1) {
+                                      const updatedContents = [...campaign.contents];
+                                      updatedContents[contentIndex] = {
+                                        ...updatedContents[contentIndex],
+                                        content: newContent
+                                      };
+                                      
+                                      setCampaign({
+                                        ...campaign,
+                                        contents: updatedContents
+                                      });
+                                    }
+                                  }}
+                                  rows={10}
+                                  minHeight="200px"
+                                />
                               </div>
                             </div>
                           ))}
