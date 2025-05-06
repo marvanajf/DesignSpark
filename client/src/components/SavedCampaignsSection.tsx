@@ -125,7 +125,14 @@ export default function SavedCampaignsSection() {
   // Parse selected campaign contents
   const getSelectedCampaignContents = (): CampaignContent[] => {
     if (!selectedCampaign) return [];
-    return parseContent(selectedCampaign.contents);
+    console.log('Campaign contents:', selectedCampaign.contents);
+    // Attempt to parse the contents - check if it's already a string or needs to be parsed
+    if (typeof selectedCampaign.contents === 'string') {
+      return parseContent(selectedCampaign.contents);
+    } else if (Array.isArray(selectedCampaign.contents)) {
+      return selectedCampaign.contents;
+    }
+    return [];
   };
 
   // Filter content by selected type
@@ -138,8 +145,16 @@ export default function SavedCampaignsSection() {
   // Helper to parse tone profile
   const getToneProfile = () => {
     if (!selectedCampaign) return {};
+    console.log('Tone profile:', selectedCampaign.tone_profile);
+    
     try {
-      return JSON.parse(selectedCampaign.tone_profile);
+      // Check if it's already an object or needs to be parsed
+      if (typeof selectedCampaign.tone_profile === 'string') {
+        return JSON.parse(selectedCampaign.tone_profile);
+      } else if (typeof selectedCampaign.tone_profile === 'object') {
+        return selectedCampaign.tone_profile;
+      }
+      return {};
     } catch (e) {
       console.error('Error parsing tone profile:', e);
       return {};
