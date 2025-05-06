@@ -11,7 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory, Link } from "lucide-react";
+import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory, Link, FolderOpen } from "lucide-react";
+import SavedCampaignsSection from "@/components/SavedCampaignsSection";
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -1159,6 +1160,25 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                 </div>
               </div>
             </div>
+          </div>
+          
+          {/* Saved Campaigns Section */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-white">Your Saved Campaigns</h2>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="text-[#5eead4] border-[#5eead4]/30 hover:bg-[#5eead4]/10"
+                onClick={() => setLocation('/campaign-factory/saved')}
+              >
+                <FolderOpen className="h-4 w-4 mr-2" />
+                View All Campaigns
+              </Button>
+            </div>
+            
+            {/* Fetch and display saved campaigns */}
+            <SavedCampaignsSection />
           </div>
           
           {/* Process timeline - more subtle, smaller and cleaner */}
