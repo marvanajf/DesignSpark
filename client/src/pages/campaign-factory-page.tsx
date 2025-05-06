@@ -1906,125 +1906,126 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                       </Button>
                     </div>
                   </CardHeader>
-                  <CardContent className="px-6 pb-5">
-                    <div className="flex flex-col lg:flex-row gap-6">
-                      {/* Campaign Overview - Left sidebar - capped at max height with overflow scroll */}
-                      <div className="lg:w-1/4 flex-shrink-0">
-                        <div className="space-y-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-200px)] lg:overflow-y-auto pr-1 campaign-timeline-container">
-                          <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
-                            <h3 className="text-gray-400 text-sm font-medium mb-3">Campaign Details</h3>
-                            <div className="space-y-4">
-                              <div>
-                                <h4 className="text-white text-xs uppercase tracking-wider mb-2">Timeline</h4>
-                                <div className="text-sm text-white mb-3">
-                                  <div className="flex items-center justify-between mb-1">
-                                    <span className="text-gray-500">Start:</span> 
-                                    <span>{campaign.timeline.start}</span>
-                                  </div>
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-gray-500">End:</span> 
-                                    <span>{campaign.timeline.end}</span>
-                                  </div>
-                                </div>
+                  <CardContent className="px-6 pb-5 space-y-6">
+                    {/* Campaign Overview Section */}
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-4">
+                        <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800 flex-1">
+                          <h3 className="text-gray-400 text-sm font-medium mb-1">Target Audience</h3>
+                          <div>
+                            {campaign.targetAudience.length > 0 ? (
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {campaign.targetAudience.map((audience, i) => (
+                                  <Badge 
+                                    key={i}
+                                    variant="outline"
+                                    className="bg-[#5eead4]/10 text-[#5eead4] border-[#5eead4]/30"
+                                  >
+                                    {audience}
+                                  </Badge>
+                                ))}
                               </div>
-                              
-                              <div>
-                                <h4 className="text-white text-xs uppercase tracking-wider mb-2">Target Audience</h4>
-                                {campaign.targetAudience.length > 0 ? (
-                                  <div className="flex flex-wrap gap-2">
-                                    {campaign.targetAudience.map((audience, i) => (
-                                      <Badge 
-                                        key={i}
-                                        variant="outline"
-                                        className="bg-[#5eead4]/10 text-[#5eead4] border-[#5eead4]/30"
-                                      >
-                                        {audience}
-                                      </Badge>
-                                    ))}
-                                  </div>
-                                ) : (
-                                  <p className="text-gray-500 text-sm">No specific audience selected</p>
-                                )}
-                              </div>
-                              
-                              <div>
-                                <h4 className="text-white text-xs uppercase tracking-wider mb-2">Channels</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {campaign.channels.map((channel, i) => (
-                                    <Badge 
-                                      key={i}
-                                      variant="outline"
-                                      className="bg-zinc-800 text-white border-zinc-700"
-                                    >
-                                      {channel}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
+                            ) : (
+                              <p className="text-gray-500 text-sm mt-2">No specific audience selected</p>
+                            )}
                           </div>
-                          
-                          <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
-                            <h3 className="text-gray-400 text-sm font-medium mb-3">Campaign Timeline</h3>
-                            <div className="mt-2">
-                              <div className="grid gap-3">
-                                {campaign.contents.map((content, i) => {
-                                  // Get icon based on content type
-                                  let icon;
-                                  switch(content.type) {
-                                    case 'email':
-                                      icon = <MessageSquare className="h-4 w-4 text-[#5eead4]" />;
-                                      break;
-                                    case 'social':
-                                      icon = <Link className="h-4 w-4 text-[#5eead4]" />;
-                                      break;
-                                    case 'blog':
-                                      icon = <FileText className="h-4 w-4 text-[#5eead4]" />;
-                                      break;
-                                    case 'webinar':
-                                      icon = <Zap className="h-4 w-4 text-[#5eead4]" />;
-                                      break;
-                                    default:
-                                      icon = <FileText className="h-4 w-4 text-[#5eead4]" />;
-                                  }
-                                  
-                                  return (
-                                    <div 
-                                      key={i}
-                                      className="flex items-center gap-2 p-2 bg-zinc-800 border border-zinc-700 rounded-lg group hover:bg-zinc-800/80 transition-colors"
-                                    >
-                                      <div className="h-7 w-7 rounded-full bg-[#0e131f] border border-[#5eead4]/30 flex items-center justify-center flex-shrink-0">
-                                        {icon}
-                                      </div>
-                                      <div className="flex-1 min-w-0">
-                                        <h4 className="font-medium text-white text-xs truncate">
-                                          {content.title || (content.type === 'email' ? 'Email Campaign' : 
-                                            content.type === 'social' ? 'LinkedIn Post' : 
-                                            content.type === 'blog' ? 'Blog Article' : 'Webinar')}
-                                        </h4>
-                                        <div className="flex items-center gap-1 mt-1 flex-wrap">
-                                          <Badge variant="outline" className="bg-zinc-900 text-[#5eead4] border-[#5eead4]/30 text-xs px-1 py-0 h-4">
-                                            {content.type}
-                                          </Badge>
-                                          {content.deliveryDate && (
-                                            <span className="text-xs text-gray-400 truncate">
-                                              {content.deliveryDate}
-                                            </span>
-                                          )}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
+                        </div>
+                        
+                        <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800 flex-1">
+                          <h3 className="text-gray-400 text-sm font-medium mb-1">Channels</h3>
+                          <div>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {campaign.channels.map((channel, i) => (
+                                <Badge 
+                                  key={i}
+                                  variant="outline"
+                                  className="bg-zinc-800 text-white border-zinc-700"
+                                >
+                                  {channel}
+                                </Badge>
+                              ))}
                             </div>
                           </div>
                         </div>
                       </div>
                       
-                      {/* Main Content - Right side */}
-                      <div className="lg:w-3/4 flex-1">
-                        <h3 className="text-lg font-medium text-white mb-6">Campaign Content</h3>
+                      {/* Campaign Timeline Section */}
+                      <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-gray-400 text-sm font-medium">Campaign Timeline</h3>
+                          <div className="flex items-center gap-4 text-sm text-white">
+                            <div>
+                              <span className="text-gray-500">Start:</span> {campaign.timeline.start}
+                            </div>
+                            <div>
+                              <span className="text-gray-500">End:</span> {campaign.timeline.end}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Campaign Timeline List */}
+                    <div className="space-y-3">
+                      {campaign.contents.map((content, i) => {
+                        // Get icon based on content type
+                        let icon;
+                        switch(content.type) {
+                          case 'email':
+                            icon = <MessageSquare className="h-5 w-5 text-[#5eead4]" />;
+                            break;
+                          case 'social':
+                            icon = <Link className="h-5 w-5 text-[#5eead4]" />;
+                            break;
+                          case 'blog':
+                            icon = <FileText className="h-5 w-5 text-[#5eead4]" />;
+                            break;
+                          case 'webinar':
+                            icon = <Zap className="h-5 w-5 text-[#5eead4]" />;
+                            break;
+                          default:
+                            icon = <FileText className="h-5 w-5 text-[#5eead4]" />;
+                        }
+                        
+                        return (
+                          <div 
+                            key={i}
+                            className="flex items-center gap-3 p-3 bg-zinc-800 border border-zinc-700 rounded-lg group hover:bg-zinc-800/80 transition-colors"
+                          >
+                            <div className="h-10 w-10 rounded-full bg-[#0e131f] border border-[#5eead4]/30 flex items-center justify-center flex-shrink-0">
+                              {icon}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-medium text-white text-sm truncate">
+                                {content.title || (content.type === 'email' ? 'Email Campaign' : 
+                                  content.type === 'social' ? 'LinkedIn Post' : 
+                                  content.type === 'blog' ? 'Blog Article' : 'Webinar')}
+                              </h4>
+                              <div className="flex items-center flex-wrap gap-2 mt-1">
+                                <Badge variant="outline" className="bg-zinc-900 text-[#5eead4] border-[#5eead4]/30 text-xs">
+                                  {content.type}
+                                </Badge>
+                                {content.persona && (
+                                  <span className="text-xs text-gray-400">
+                                    {content.persona}
+                                  </span>
+                                )}
+                                {content.deliveryDate && (
+                                  <span className="text-xs text-gray-400 flex items-center">
+                                    <Clock className="h-3 w-3 mr-1" />
+                                    {content.deliveryDate}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Campaign Content Section */}
+                    <div>
+                      <h3 className="text-lg font-medium text-white mb-6">Campaign Content</h3>
                       
                         <Tabs defaultValue="all" className="w-full">
                         <TabsList className="bg-zinc-900 border-b border-zinc-800 p-0 h-12 rounded-lg mb-6">
@@ -2233,7 +2234,6 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                           ))}
                         </TabsContent>
                       </Tabs>
-                      </div>
                     </div>
                   </CardContent>
                   <CardFooter className="px-6 py-4 bg-zinc-950 border-t border-zinc-900 flex justify-between">
