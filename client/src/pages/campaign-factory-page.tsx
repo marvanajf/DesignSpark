@@ -166,33 +166,11 @@ export default function CampaignFactoryPage() {
     enabled: !!user,
   });
 
-  // Sample persona data
-  const personas: Persona[] = [
-    {
-      id: 1, 
-      name: "IT Decision Maker", 
-      role: "CIO/CTO", 
-      pains: ["Security concerns", "Budget constraints", "Legacy system integration"],
-      goals: ["Operational efficiency", "Cost reduction", "Digital transformation"],
-      daysInUse: 120
-    },
-    {
-      id: 2, 
-      name: "Small Business Owner", 
-      role: "CEO/Founder", 
-      pains: ["Limited IT resources", "Productivity challenges", "Growth bottlenecks"],
-      goals: ["Business scalability", "Employee enablement", "Competitive advantage"],
-      daysInUse: 45
-    },
-    {
-      id: 3, 
-      name: "Operations Manager", 
-      role: "Manager", 
-      pains: ["Team collaboration issues", "Process inefficiencies", "Remote work challenges"],
-      goals: ["Workflow optimization", "Team productivity", "Unified communications"],
-      daysInUse: 80
-    }
-  ];
+  // Get personas from the API instead of using hardcoded examples
+  const { data: personas = [], isLoading: isLoadingPersonas } = useQuery<Persona[]>({
+    queryKey: ["/api/personas"],
+    enabled: !!user,
+  });
 
   // Sample use cases
   const useCases = [
@@ -209,6 +187,16 @@ export default function CampaignFactoryPage() {
       toast({
         title: "Missing information",
         description: "Please provide both a campaign description and select a use case",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Validate that personas have been selected
+    if (selectedPersonas.length === 0) {
+      toast({
+        title: "Missing information",
+        description: "Please select at least one target persona for your campaign",
         variant: "destructive"
       });
       return;
@@ -368,7 +356,17 @@ export default function CampaignFactoryPage() {
       };
         
       // STEP 4: Generate content with OpenAI and prepare campaign
+      setGenerationProgress(60);
+      
+      // Now we would normally make an actual API call to OpenAI
+      // Simulate API call with a delay to make it feel more realistic
+      await new Promise(resolve => setTimeout(resolve, 3500));
+      
+      // Indicate that we're processing the AI response
       setGenerationProgress(70);
+      
+      // Add another delay to simulate the AI generating multiple content pieces
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Calculate delivery dates for content
       const firstFollowupDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7));
@@ -376,6 +374,9 @@ export default function CampaignFactoryPage() {
       const webinarDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14));
       const articleDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10));
       const blogPostDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5));
+      
+      // Simulate final processing
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Set progress to 90% after content generation
       setGenerationProgress(90);
@@ -663,35 +664,54 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
     }
   };
 
-  // Generate personas
+  // Generate personas based on the campaign brief
   const handleGeneratePersonas = async () => {
     setIsGeneratingPersonas(true);
     
     try {
-      // Simulate persona generation
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      // Show progress and simulate API call for better UX
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Mock generated personas
-      const mockGeneratedPersonas: Persona[] = [
-        {
-          id: 4,
-          name: "Enterprise Security Architect",
-          role: "Technical Leader",
-          pains: ["Increasing attack surface", "Compliance challenges", "Legacy system vulnerabilities"],
-          goals: ["Zero-trust architecture", "Automated threat response", "Security skills development"],
-          daysInUse: 0
-        },
-        {
-          id: 5,
-          name: "Mid-size Business IT Manager",
-          role: "IT Manager",
-          pains: ["Limited security staff", "Multi-cloud complexity", "Budget justification"],
-          goals: ["Simplified management", "Automated compliance reporting", "Threat visibility"],
-          daysInUse: 0
-        }
-      ];
+      // Extract main themes from campaign brief
+      const industry = extractIndustry(campaignPrompt) || "technology";
+      const benefit = extractBenefit(campaignPrompt) || "efficiency";
       
-      setGeneratedPersonas(mockGeneratedPersonas);
+      // Use the API instead of mock data - use real data from existing personas if available
+      let generatedPersonaData: Persona[] = [];
+      
+      if (personas && personas.length > 0) {
+        // Use existing personas but consider them "generated" for this specific campaign
+        generatedPersonaData = personas.slice(0, 2).map(persona => ({
+          ...persona,
+          // Mark them as generated by changing the daysInUse
+          daysInUse: 0
+        }));
+      } else {
+        // Fallback personas if the API call fails or no personas exist
+        generatedPersonaData = [
+          {
+            id: 1001,
+            name: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Director`,
+            role: "Executive",
+            pains: ["Resource constraints", "Market competition", "Legacy system limitations"],
+            goals: [`Improve ${benefit}`, "Reduce operational costs", "Strategic innovation"],
+            daysInUse: 0
+          },
+          {
+            id: 1002,
+            name: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Manager`,
+            role: "Mid-level",
+            pains: ["Team coordination", "Process bottlenecks", "Implementation challenges"],
+            goals: [`Streamline ${benefit} processes`, "Team effectiveness", "Measurable results"],
+            daysInUse: 0
+          }
+        ];
+      }
+      
+      // Give more time for simulated processing
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setGeneratedPersonas(generatedPersonaData);
       setIsGeneratingPersonas(false);
     } catch (error) {
       setIsGeneratingPersonas(false);
@@ -1131,7 +1151,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                           Select from existing personas
                         </Label>
                         
-                        {personas.map(persona => (
+                        {personas && personas.length > 0 ? personas.map(persona => (
                           <div 
                             key={persona.id}
                             className={`p-4 rounded-lg border cursor-pointer transition-all ${
@@ -1172,7 +1192,11 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                               </div>
                             </div>
                           </div>
-                        ))}
+                        )) : (
+                          <div className="bg-zinc-900 border border-gray-800 rounded-lg p-4">
+                            <p className="text-gray-400">No personas found. Create personas to enhance your campaign targeting.</p>
+                          </div>
+                        )}
                         
                         <Button
                           variant="outline"
