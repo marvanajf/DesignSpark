@@ -35,6 +35,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Progress } from "@/components/ui/progress";
 import { CampaignOverviewDashboard } from "@/components/CampaignOverviewDashboard";
 import { PersonasOverview } from "@/components/PersonasOverview";
+import { CampaignTimelineDashboard } from "@/components/CampaignTimelineDashboard";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -259,6 +260,11 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Campaign Timeline Section */}
+          <div className="mb-10">
+            <CampaignTimelineDashboard />
           </div>
 
           {/* Campaign and Personas Overview Section */}

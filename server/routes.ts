@@ -2920,6 +2920,42 @@ Registration includes materials, follow-up support, and implementation guide.`;
   });
 
   // Register OpenAI routes
+  // Campaign Factory API Routes
+  app.get('/api/campaign-factory-campaigns', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Not authenticated");
+    }
+    
+    try {
+      // This is a placeholder endpoint. In a real implementation, you would fetch
+      // campaign data from storage, but currently this data is only maintained client-side
+      const campaigns = [];
+      
+      // Return the empty array for now (client will handle this)
+      return res.json(campaigns);
+    } catch (error) {
+      console.error("Error fetching campaign factory campaigns:", error);
+      return res.status(500).send("Server error");
+    }
+  });
+  
+  app.get('/api/campaign-factory/:id', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Not authenticated");
+    }
+    
+    try {
+      // This is a placeholder endpoint. In a real implementation, you would fetch
+      // campaign data from storage, but currently this data is only maintained client-side
+      
+      // Return a 404 since we don't have server-side storage for these campaigns yet
+      return res.status(404).json({ error: "Campaign not found" });
+    } catch (error) {
+      console.error("Error fetching campaign factory by ID:", error);
+      return res.status(500).send("Server error");
+    }
+  });
+
   registerOpenAIRoutes(app);
   
   const httpServer = createServer(app);

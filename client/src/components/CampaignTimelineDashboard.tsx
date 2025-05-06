@@ -68,14 +68,23 @@ export function CampaignTimelineDashboard() {
     queryKey: ['/api/campaigns'],
   });
 
-  // Fetch campaign factory campaigns
-  const { 
-    data: factoryCampaigns = [],
-    isLoading: factoryCampaignsLoading,
-    error: factoryCampaignsError
-  } = useQuery<CampaignDetail[]>({
-    queryKey: ['/api/campaign-factory-campaigns'],
-  });
+  // Since campaign factory data isn't yet stored server-side, we use localStorage
+  const [factoryCampaigns, setFactoryCampaigns] = useState<CampaignDetail[]>([]);
+  const [factoryCampaignsLoading, setFactoryCampaignsLoading] = useState(true);
+  
+  // Load factory campaigns from localStorage
+  useEffect(() => {
+    try {
+      const savedCampaigns = localStorage.getItem('campaignFactoryData');
+      if (savedCampaigns) {
+        setFactoryCampaigns(JSON.parse(savedCampaigns));
+      }
+    } catch (error) {
+      console.error("Error loading campaigns from localStorage:", error);
+    } finally {
+      setFactoryCampaignsLoading(false);
+    }
+  }, []);
 
   // Combine all campaign options
   const allCampaignOptions = [
@@ -91,12 +100,17 @@ export function CampaignTimelineDashboard() {
       setIsLoading(true);
       try {
         if (selectedCampaignId.startsWith('factory-')) {
-          const id = selectedCampaignId.replace('factory-', '');
-          const response = await apiRequest('GET', `/api/campaign-factory/${id}`);
-          const data = await response.json();
-          setCampaignData(data);
+          const id = Number(selectedCampaignId.replace('factory-', ''));
+          // Look for the campaign in our local factory campaigns
+          const campaignData = factoryCampaigns.find(c => c.id === id);
+          if (campaignData) {
+            setCampaignData(campaignData);
+          } else {
+            console.error("Campaign not found in localStorage");
+            setCampaignData(null);
+          }
         } else {
-          // For standard campaigns - might need different API route
+          // For standard campaigns - API route
           const id = selectedCampaignId.replace('standard-', '');
           const response = await apiRequest('GET', `/api/campaigns/${id}`);
           const data = await response.json();
@@ -104,13 +118,14 @@ export function CampaignTimelineDashboard() {
         }
       } catch (error) {
         console.error("Error fetching campaign data:", error);
+        setCampaignData(null);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchCampaignData();
-  }, [selectedCampaignId]);
+  }, [selectedCampaignId, factoryCampaigns]);
 
   // Helper function to get icon based on content type
   const getIconForContentType = (type: string) => {
