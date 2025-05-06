@@ -1529,7 +1529,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                           </div>
                           
                           <Button 
-                            className="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800"
+                            className="w-full bg-[#5eead4] hover:bg-[#4fd8c0] text-black"
                             onClick={handleSaveCampaign}
                           >
                             <PlusCircle className="h-4 w-4 mr-2" />
