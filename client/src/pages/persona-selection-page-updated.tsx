@@ -468,41 +468,127 @@ export default function PersonaSelectionPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search personas..."
-                    className="pl-10 bg-[#111] border-gray-800 text-gray-300 w-[220px] focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
+                    className="pl-10 bg-[#111] border-gray-800 text-gray-300 w-[220px]"
                   />
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Persona Promo Banner */}
-          <div className="mb-8 bg-[#0a0c10] border border-gray-800/60 rounded-xl p-8 relative overflow-hidden shadow-[0_0_25px_rgba(116,209,234,0.05)]">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b33]/60 via-transparent to-transparent pointer-events-none"></div>
-            
-            <div className="relative z-10 flex items-start">
-              <div className="mr-6 bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-3 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
-                <Users className="h-6 w-6 text-[#74d1ea]" />
-              </div>
-              
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold text-white mb-3">AI-Generated Target Personas</h2>
-                <p className="text-gray-300 mb-6 max-w-3xl">
-                  Create, customize and utilize audience personas that perfectly match your brand's voice. Our AI helps you craft detailed target personas for more effective and focused content creation.
-                </p>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
-                    <span className="text-gray-300">AI-powered persona generation for your target audience</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
-                    <span className="text-gray-300">Customizable interests, roles, and demographic profiles</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="text-[#74d1ea] mr-3">✓</div>
-                    <span className="text-gray-300">Targeted content creation based on specific audience needs</span>
-                  </div>
+                <div>
+                  <Dialog open={isGenerateDialogOpen} onOpenChange={setIsGenerateDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Generate Persona with AI
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-black border border-gray-800 text-white">
+                      <DialogHeader>
+                        <DialogTitle className="font-semibold text-lg">Generate Persona with AI</DialogTitle>
+                        <DialogDescription className="text-gray-400">
+                          Create a detailed target persona based on your audience.
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      {/* Tab Buttons */}
+                      <div className="flex space-x-2 border-b border-gray-800 mb-4">
+                        <button
+                          className={`px-4 py-2 ${generateTab === 'description' ? 'text-[#74d1ea] border-b-2 border-[#74d1ea]' : 'text-gray-400'}`}
+                          onClick={() => setGenerateTab('description')}
+                        >
+                          By Description
+                        </button>
+                        <button
+                          className={`px-4 py-2 ${generateTab === 'industry' ? 'text-[#74d1ea] border-b-2 border-[#74d1ea]' : 'text-gray-400'}`}
+                          onClick={() => setGenerateTab('industry')}
+                        >
+                          By Industry
+                        </button>
+                      </div>
+                      
+                      {/* Description Tab */}
+                      {generateTab === 'description' && (
+                        <div>
+                          <div className="mb-4">
+                            <label htmlFor="persona-description" className="block text-sm font-medium text-gray-400 mb-1">
+                              Describe your target audience
+                            </label>
+                            <Textarea
+                              id="persona-description"
+                              value={personaDescription}
+                              onChange={(e) => setPersonaDescription(e.target.value)}
+                              placeholder="E.g. 35-45 year old marketing directors at mid-sized tech companies who are interested in improving their digital marketing strategies."
+                              className="bg-[#111] border-gray-800 text-gray-300 h-32 resize-none"
+                            />
+                          </div>
+                          
+                          <div className="bg-[#111] border border-gray-800 rounded-lg p-3 mb-4">
+                            <h3 className="text-sm font-medium text-gray-300 flex items-center mb-2">
+                              <Info className="h-4 w-4 mr-1.5 text-[#74d1ea]" />
+                              Tips for better results
+                            </h3>
+                            <ul className="text-xs text-gray-400 space-y-1 list-disc pl-4">
+                              <li>Include demographics: age, job title, industry</li>
+                              <li>Mention specific challenges they face</li>
+                              <li>Add their goals and motivations</li>
+                              <li>Describe their technical expertise level</li>
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Industry Tab */}
+                      {generateTab === 'industry' && (
+                        <div>
+                          <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-400 mb-2">
+                              Select an industry
+                            </label>
+                            <IndustrySelector 
+                              selectedIndustry={selectedIndustry}
+                              onSelectIndustry={handleIndustrySelect}
+                            />
+                          </div>
+                          
+                          {selectedIndustry && (
+                            <div className="bg-[#111] border border-gray-800 rounded-lg p-3 mb-4">
+                              <h3 className="text-sm font-medium text-gray-300 flex items-center mb-2">
+                                <Building2 className="h-4 w-4 mr-1.5 text-[#74d1ea]" />
+                                Selected Industry: {selectedIndustry.name}
+                              </h3>
+                              <p className="text-xs text-gray-400">
+                                AI will generate a persona for a typical decision-maker in the {selectedIndustry.name} industry.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      <DialogFooter>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setIsGenerateDialogOpen(false)}
+                          className="border-gray-700 text-gray-300"
+                        >
+                          Cancel
+                        </Button>
+                        <Button 
+                          onClick={handleGeneratePersona}
+                          className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                          disabled={generatePersonaMutation.isPending || generatePersonaByIndustryMutation.isPending}
+                        >
+                          {(generatePersonaMutation.isPending || generatePersonaByIndustryMutation.isPending) ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="mr-2 h-4 w-4" />
+                              Generate Persona
+                            </>
+                          )}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             </div>
@@ -530,107 +616,23 @@ export default function PersonaSelectionPage() {
                       <Sparkles className="h-5 w-5 text-[#74d1ea]" />
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-white">AI Generator</h3>
+                      <h3 className="text-lg font-semibold text-white">AI Persona Generator</h3>
                       <p className="text-sm text-gray-400">Create a persona using AI</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-300 mb-4">
-                    Let our AI create detailed professional personas based on your description of roles, 
-                    industries, or specific audience segments.
+                  
+                  <p className="text-sm text-gray-300 mb-6">
+                    Generate detailed personas based on your target audience descriptions or industry selection. 
+                    AI creates realistic audience profiles with demographics, goals, pain points, and interests.
                   </p>
+                  
                   <Dialog open={isGenerateDialogOpen} onOpenChange={setIsGenerateDialogOpen}>
                     <DialogTrigger asChild>
                       <Button className="w-full bg-[#74d1ea] hover:bg-[#5db8d0] text-black">
+                        <Sparkles className="h-4 w-4 mr-2" />
                         Generate with AI
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="bg-black border border-gray-800 text-white max-w-4xl max-h-[90vh] overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle className="text-xl font-semibold">Generate Persona with AI</DialogTitle>
-                        <DialogDescription className="text-gray-400">
-                          Create a detailed persona based on your specific requirements or select an industry
-                        </DialogDescription>
-                      </DialogHeader>
-
-                      <div className="py-4">
-                        <div className="mb-6 border-b border-gray-800">
-                          <div className="flex">
-                            <button
-                              onClick={() => setGenerateTab('description')}
-                              className={`px-4 py-2 font-medium text-sm flex items-center ${
-                                generateTab === 'description' 
-                                ? 'text-[#74d1ea] border-b-2 border-[#74d1ea]' 
-                                : 'text-gray-400 hover:text-gray-300'
-                              }`}
-                            >
-                              <Sparkles className="mr-2 h-4 w-4" />
-                              By Description
-                            </button>
-                            <button
-                              onClick={() => setGenerateTab('industry')}
-                              className={`px-4 py-2 font-medium text-sm flex items-center ${
-                                generateTab === 'industry' 
-                                ? 'text-[#74d1ea] border-b-2 border-[#74d1ea]' 
-                                : 'text-gray-400 hover:text-gray-300'
-                              }`}
-                            >
-                              <Building2 className="mr-2 h-4 w-4" />
-                              By Industry
-                            </button>
-                          </div>
-                        </div>
-
-                        {generateTab === 'description' ? (
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-1">Custom Description</label>
-                              <Textarea
-                                value={personaDescription}
-                                onChange={(e) => setPersonaDescription(e.target.value)}
-                                placeholder="E.g., Founder of a 50-person SaaS startup in the HR tech industry, focused on enterprise clients"
-                                className="h-36 bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
-                              />
-                              <p className="mt-2 text-xs text-gray-500">
-                                The more specific your description, the better the AI-generated persona will be.
-                              </p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <IndustrySelector 
-                              onSelect={handleIndustrySelect} 
-                              selectedIndustryId={selectedIndustry?.id || null} 
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      <DialogFooter className="flex items-center justify-between">
-                        <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            className="border-gray-700 text-gray-300 hover:text-white"
-                            onClick={() => setIsGenerateDialogOpen(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
-                            onClick={handleGeneratePersona}
-                            disabled={generatePersonaMutation.isPending || generatePersonaByIndustryMutation.isPending}
-                          >
-                            {generatePersonaMutation.isPending || generatePersonaByIndustryMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Generating...
-                              </>
-                            ) : (
-                              "Generate Persona"
-                            )}
-                          </Button>
-                        </div>
-                      </DialogFooter>
-                    </DialogContent>
                   </Dialog>
                 </div>
               </div>
@@ -648,76 +650,63 @@ export default function PersonaSelectionPage() {
                       <p className="text-sm text-gray-400">Create a persona manually</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-300 mb-4">
-                    Define your own target audience by directly specifying the role, interests, 
-                    and key characteristics of the persona you want to target.
+                  
+                  <p className="text-sm text-gray-300 mb-6">
+                    Define your own custom personas with specific details. Manually create audience 
+                    profiles that perfectly match your marketing needs and target demographics.
                   </p>
+                  
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button className="w-full border border-[#74d1ea] text-[#74d1ea] bg-transparent hover:bg-[#74d1ea]/10">
+                      <Button className="w-full border-gray-700 text-gray-300 hover:text-white" variant="outline">
+                        <Plus className="h-4 w-4 mr-2" />
                         Create Manually
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-black border border-gray-800 text-white">
                       <DialogHeader>
-                        <DialogTitle className="text-lg font-semibold">Create Custom Persona</DialogTitle>
+                        <DialogTitle className="font-semibold text-lg">Create Custom Persona</DialogTitle>
                         <DialogDescription className="text-gray-400">
-                          Define a custom target audience for your content.
+                          Manually define your target audience profile.
                         </DialogDescription>
                       </DialogHeader>
-                      <form onSubmit={(e) => {
-                        e.preventDefault();
-                        const formData = new FormData(e.currentTarget);
-                        const name = formData.get('name') as string;
-                        const description = formData.get('description') as string;
-                        
-                        if (!name) {
-                          toast({
-                            title: "Name required",
-                            description: "Please enter a name for the persona",
-                            variant: "destructive",
-                          });
-                          return;
-                        }
-                        
-                        createPersonaMutation.mutate({ name, description });
-                        (e.target as HTMLFormElement).reset();
-                        (document.activeElement as HTMLElement)?.blur();
-                      }}>
-                        <div className="space-y-4 py-4">
-                          <div className="space-y-2">
-                            <label htmlFor="name" className="text-sm font-medium text-gray-300">Persona Name/Role</label>
-                            <Input
-                              id="name"
-                              name="name"
-                              placeholder="E.g., Chief Marketing Officer"
-                              className="bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label htmlFor="description" className="text-sm font-medium text-gray-300">Description</label>
-                            <Textarea
-                              id="description"
-                              name="description"
-                              placeholder="Describe the persona's priorities, challenges, and goals"
-                              className="h-20 bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
-                            />
-                          </div>
+                      
+                      <form className="space-y-4">
+                        <div>
+                          <label htmlFor="persona-name" className="block text-sm font-medium text-gray-400 mb-1">
+                            Persona Name
+                          </label>
+                          <Input
+                            id="persona-name"
+                            placeholder="E.g. Marketing Director"
+                            className="bg-[#111] border-gray-800 text-gray-300"
+                          />
                         </div>
+                        
+                        <div>
+                          <label htmlFor="manual-description" className="block text-sm font-medium text-gray-400 mb-1">
+                            Description
+                          </label>
+                          <Textarea
+                            id="manual-description"
+                            placeholder="Describe your target audience with details about their role, goals, and challenges."
+                            className="bg-[#111] border-gray-800 text-gray-300 h-32 resize-none"
+                          />
+                        </div>
+                        
                         <DialogFooter>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="border-gray-700 text-gray-300 hover:text-white"
+                          >
+                            Cancel
+                          </Button>
                           <Button
                             type="submit"
                             className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
-                            disabled={createPersonaMutation.isPending}
                           >
-                            {createPersonaMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Creating...
-                              </>
-                            ) : (
-                              "Create Persona"
-                            )}
+                            Create Persona
                           </Button>
                         </DialogFooter>
                       </form>
@@ -739,12 +728,13 @@ export default function PersonaSelectionPage() {
                 <p className="text-sm text-gray-400 mt-0.5">Ready-to-use personas for common audience segments</p>
               </div>
             </div>
-
-            {filteredPersonas && filteredPersonas.length > 0 ? (
+            
+            {filteredPersonas && Array.isArray(filteredPersonas) && 
+              filteredPersonas.filter((persona: any) => ["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
+                 "HR Director", "Financial Advisor"].includes(persona.name)).length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredPersonas
-                  .filter((persona: any) => 
-                    ["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
+                  .filter((persona: any) => ["Chief Technology Officer", "Marketing Manager", "Small Business Owner", 
                      "HR Director", "Financial Advisor"].includes(persona.name))
                   .map((persona: any) => {
                     const isSelected = selectedPersonaIds.includes(persona.id);
@@ -831,7 +821,7 @@ export default function PersonaSelectionPage() {
                 })}
               </div>
             ) : (
-              <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+              <div className="group relative bg-black/40 backdrop-blur-sm border border-gray-800/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                 <div className="p-6 text-center">
                   <div className="py-10">
@@ -982,7 +972,7 @@ export default function PersonaSelectionPage() {
                 </div>
               ) : (
                 // No custom personas
-                <div className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)]">
+                <div className="group relative bg-black/40 backdrop-blur-sm border border-gray-800/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
                   <div className="p-6 text-center">
                     <div className="py-10">
