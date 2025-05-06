@@ -1951,7 +1951,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                       
                       {/* Campaign Timeline Section */}
                       <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mb-3">
                           <h3 className="text-gray-400 text-sm font-medium">Campaign Timeline</h3>
                           <div className="flex items-center gap-4 text-sm text-white">
                             <div>
@@ -1962,65 +1962,65 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    {/* Campaign Timeline List */}
-                    <div className="space-y-3">
-                      {campaign.contents.map((content, i) => {
-                        // Get icon based on content type
-                        let icon;
-                        switch(content.type) {
-                          case 'email':
-                            icon = <MessageSquare className="h-5 w-5 text-[#5eead4]" />;
-                            break;
-                          case 'social':
-                            icon = <Link className="h-5 w-5 text-[#5eead4]" />;
-                            break;
-                          case 'blog':
-                            icon = <FileText className="h-5 w-5 text-[#5eead4]" />;
-                            break;
-                          case 'webinar':
-                            icon = <Zap className="h-5 w-5 text-[#5eead4]" />;
-                            break;
-                          default:
-                            icon = <FileText className="h-5 w-5 text-[#5eead4]" />;
-                        }
                         
-                        return (
-                          <div 
-                            key={i}
-                            className="flex items-center gap-3 p-3 bg-zinc-800 border border-zinc-700 rounded-lg group hover:bg-zinc-800/80 transition-colors"
-                          >
-                            <div className="h-10 w-10 rounded-full bg-[#0e131f] border border-[#5eead4]/30 flex items-center justify-center flex-shrink-0">
-                              {icon}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <h4 className="font-medium text-white text-sm truncate">
-                                {content.title || (content.type === 'email' ? 'Email Campaign' : 
-                                  content.type === 'social' ? 'LinkedIn Post' : 
-                                  content.type === 'blog' ? 'Blog Article' : 'Webinar')}
-                              </h4>
-                              <div className="flex items-center flex-wrap gap-2 mt-1">
-                                <Badge variant="outline" className="bg-zinc-900 text-[#5eead4] border-[#5eead4]/30 text-xs">
-                                  {content.type}
-                                </Badge>
-                                {content.persona && (
-                                  <span className="text-xs text-gray-400">
-                                    {content.persona}
-                                  </span>
-                                )}
-                                {content.deliveryDate && (
-                                  <span className="text-xs text-gray-400 flex items-center">
-                                    <Clock className="h-3 w-3 mr-1" />
-                                    {content.deliveryDate}
-                                  </span>
-                                )}
+                        {/* Timeline Events */}
+                        <div className="space-y-3">
+                          {campaign.contents.map((content, i) => {
+                            // Get icon based on content type
+                            let icon;
+                            switch(content.type) {
+                              case 'email':
+                                icon = <MessageSquare className="h-5 w-5 text-[#5eead4]" />;
+                                break;
+                              case 'social':
+                                icon = <Link className="h-5 w-5 text-[#5eead4]" />;
+                                break;
+                              case 'blog':
+                                icon = <FileText className="h-5 w-5 text-[#5eead4]" />;
+                                break;
+                              case 'webinar':
+                                icon = <Zap className="h-5 w-5 text-[#5eead4]" />;
+                                break;
+                              default:
+                                icon = <FileText className="h-5 w-5 text-[#5eead4]" />;
+                            }
+                            
+                            return (
+                              <div 
+                                key={i}
+                                className="flex items-center gap-3 p-3 bg-zinc-800 border border-zinc-700 rounded-lg group hover:bg-zinc-800/80 transition-colors"
+                              >
+                                <div className="h-10 w-10 rounded-full bg-[#0e131f] border border-[#5eead4]/30 flex items-center justify-center flex-shrink-0">
+                                  {icon}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <h4 className="font-medium text-white text-sm truncate">
+                                    {content.title || (content.type === 'email' ? 'Email Campaign' : 
+                                      content.type === 'social' ? 'LinkedIn Post' : 
+                                      content.type === 'blog' ? 'Blog Article' : 'Webinar')}
+                                  </h4>
+                                  <div className="flex items-center flex-wrap gap-2 mt-1">
+                                    <Badge variant="outline" className="bg-zinc-900 text-[#5eead4] border-[#5eead4]/30 text-xs">
+                                      {content.type}
+                                    </Badge>
+                                    {content.persona && (
+                                      <span className="text-xs text-gray-400">
+                                        {content.persona}
+                                      </span>
+                                    )}
+                                    {content.deliveryDate && (
+                                      <span className="text-xs text-gray-400 flex items-center">
+                                        <Clock className="h-3 w-3 mr-1" />
+                                        {content.deliveryDate}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        );
-                      })}
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                     
                     {/* Campaign Content Section */}
