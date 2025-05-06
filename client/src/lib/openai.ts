@@ -33,68 +33,174 @@ interface CampaignInputs {
 }
 
 /**
- * Transform markdown formatting from OpenAI responses into properly formatted text
- * Cleans up the text while preserving essential structure
+ * Transform markdown formatting from OpenAI responses into properly formatted text and structure
+ * Removes markdown syntax but preserves structure for different content types
  */
 function cleanMarkdownFormatting(content: string): string {
   if (!content) return '';
   
+  // Common markdown cleaning function
+  const cleanBaseMarkdown = (text: string): string => {
+    return text
+      // Remove bold formatting
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      // Remove italic formatting
+      .replace(/\*([^*]+)\*/g, '$1')
+      // Remove header formatting
+      .replace(/^#{1,6}\s+(.+)$/gm, '$1')
+      // Replace markdown bullet points with simple bullets
+      .replace(/^\s*[-*+]\s+(.+)$/gm, '• $1')
+      // Clean up leading/trailing spaces
+      .trim();
+  };
+  
   // Process email content specially
   if (content.includes('Subject Line:') || content.includes('Subject:')) {
-    // Identify and format email parts
-    const cleanedContent = content
-      // Format subject line consistently
-      .replace(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i, 'Subject: $1\n')
-      // Clean up greeting line
-      .replace(/(?:\*\*)?Dear(?:\*\*)?\s+(.*?)(?:\*\*)?,/i, 'Dear $1,')
-      // Clean up markdown formatting
-      .replace(/\*\*([^*]+)\*\*/g, '$1')
-      .replace(/\*([^*]+)\*/g, '$1')
-      .replace(/(?:^|\n)#+\s+(.+)$/gm, '$1')
-      .trim();
+    // Extract subject line
+    const subjectMatch = content.match(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i);
+    const subject = subjectMatch ? subjectMatch[1].trim() : '';
+    
+    // Extract preview text (first paragraph after subject)
+    let previewText = '';
+    const contentWithoutSubject = content.replace(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i, '');
+    const firstParagraphMatch = contentWithoutSubject.trim().match(/^(.*?)(?:\n\s*\n|$)/);
+    if (firstParagraphMatch) {
+      previewText = cleanBaseMarkdown(firstParagraphMatch[1].trim());
+    }
+    
+    // Clean the full message body
+    const bodyText = cleanBaseMarkdown(contentWithoutSubject);
+    
+    // Return structured email object
+    return JSON.stringify({
+      type: 'email',
+      subject: subject,
+      preview: previewText,
+      body: bodyText
+    });
+  }
+  
+  // For social posts - very minimal formatting with special handling
+  if (content.length < 600 && (content.includes('#') || !content.includes('\n\n'))) {
+    // Extract hashtags if present
+    const hashtags: string[] = [];
+    const contentLines = content.split('\n');
+    let mainContent = content;
+    
+    // Check last lines for hashtags
+    for (let i = contentLines.length - 1; i >= 0; i--) {
+      const line = contentLines[i].trim();
+      if (line.startsWith('#') && !line.startsWith('##')) {
+        // Extract hashtags from the line
+        const tags = line.match(/#\w+/g);
+        if (tags) {
+          hashtags.push(...tags);
+          // Remove this line from the main content
+          contentLines.splice(i, 1);
+        }
+      }
+    }
+    
+    mainContent = contentLines.join('\n');
+    
+    // Return structured social post object
+    return JSON.stringify({
+      type: 'social',
+      content: cleanBaseMarkdown(mainContent),
+      hashtags: hashtags
+    });
+  }
+  
+  // For blog posts and longer content - preserve structure but remove markdown
+  if (content.includes('##') || content.length > 600) {
+    // Extract title/headline
+    const titleMatch = content.match(/^#\s+(.+)$|^(.+)\n[=]+$/m);
+    const title = titleMatch ? (titleMatch[1] || titleMatch[2]).trim() : '';
+    
+    // Extract sections by looking for ## headers
+    const sections = [];
+    // This is a simpler approach that doesn't use matchAll
+    const contentLines = content.split('\n');
+    let currentHeading = '';
+    let currentContent = '';
+    
+    for (let i = 0; i < contentLines.length; i++) {
+      const line = contentLines[i];
       
-    return cleanedContent;
+      // Check if this line is a heading
+      const headingMatch = line.match(/^##\s+(.+)$/);
+      
+      if (headingMatch) {
+        // If we already had a heading, save the previous section
+        if (currentHeading) {
+          sections.push({
+            heading: currentHeading,
+            content: cleanBaseMarkdown(currentContent.trim())
+          });
+        }
+        
+        // Start a new section
+        currentHeading = headingMatch[1].trim();
+        currentContent = '';
+      } else if (currentHeading) {
+        // Add to the current section
+        currentContent += line + '\n';
+      }
+    }
+    
+    // Add the last section if there was one
+    if (currentHeading) {
+      sections.push({
+        heading: currentHeading,
+        content: cleanBaseMarkdown(currentContent.trim())
+      });
+    }
+    
+    // Extract main intro (content before first ## section)
+    let intro = '';
+    if (title) {
+      const introMatch = content.match(new RegExp(`(?:^#\\s+${title}\\s*$|^${title}\\n[=]+\\s*$)([\\s\\S]*?)(?=^##\\s+|\\n*$)`, 'm'));
+      intro = introMatch ? cleanBaseMarkdown(introMatch[1].trim()) : '';
+    } else {
+      // If no title, just take everything before the first ## section
+      const introMatch = content.match(/^([\s\S]*?)(?=^##\s+|\n*$)/m);
+      intro = introMatch ? cleanBaseMarkdown(introMatch[1].trim()) : '';
+    }
+    
+    // Return structured blog object
+    return JSON.stringify({
+      type: 'blog',
+      title: title,
+      intro: intro,
+      sections: sections
+    });
   }
   
-  // For social posts - very minimal formatting
-  if (content.length < 500 && !content.includes('#')) {
-    return content
-      .replace(/\*\*([^*]+)\*\*/g, '$1')
-      .replace(/\*([^*]+)\*/g, '$1')
-      .replace(/^- (.+)$/gm, '• $1')
-      .trim();
+  // For webinar content
+  if (content.includes('Duration:') || content.includes('Target Audience:')) {
+    // Extract title
+    const titleMatch = content.match(/^#\s+(.+)$|^(.+)\n[=]+$/m);
+    const title = titleMatch ? (titleMatch[1] || titleMatch[2]).trim() : '';
+    
+    // Extract details
+    const durationMatch = content.match(/Duration:(.+?)(?:\n|$)/i);
+    const duration = durationMatch ? durationMatch[1].trim() : '';
+    
+    const audienceMatch = content.match(/Target Audience:(.+?)(?:\n|$)/i);
+    const audience = audienceMatch ? audienceMatch[1].trim() : '';
+    
+    // Return structured webinar object
+    return JSON.stringify({
+      type: 'webinar',
+      title: title,
+      duration: duration,
+      audience: audience,
+      details: cleanBaseMarkdown(content)
+    });
   }
   
-  // For blog posts and longer content
-  let processedContent = content
-    // Headers - keep heading text but remove # symbols
-    .replace(/^# (.+)$/gm, '$1\n')
-    .replace(/^## (.+)$/gm, '$1\n')
-    .replace(/^### (.+)$/gm, '$1\n')
-    
-    // Emphasis (bold, italic) - keep text but remove markers
-    .replace(/\*\*\*([^*]+)\*\*\*/g, '$1')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1')
-    
-    // Lists - keep symbol for bullet points
-    .replace(/^\s*[-*+]\s+(.+)$/gm, '• $1')
-    
-    // Numbered lists - keep number formatting
-    .replace(/^(\d+)\.\s+(.+)$/gm, '$1. $2')
-    
-    // Links - convert to text-only format
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1')
-    
-    // Replace special placeholders with cleaner format
-    .replace(/\[Your Name\]/g, '[Your Name]')
-    .replace(/\[Your Position\]/g, '[Your Position]')
-    .replace(/\[Your Contact Information\]/g, '[Your Contact Information]')
-    .replace(/\[Company Name\]/g, '[Company Name]')
-    
-    .trim();
-  
-  return processedContent;
+  // Default fallback - just clean the markdown
+  return cleanBaseMarkdown(content);
 }
 
 export async function generateCampaignContent(
@@ -198,10 +304,10 @@ function fallbackContent(inputs: CampaignInputs): string {
   let content = '';
   
   switch (contentType) {
-    case 'email':
-      content = `Subject: Innovative Solutions for ${industry} in the ${region} Region
-
-Dear [${audienceRole}],
+    case 'email': {
+      const subject = `Innovative Solutions for ${industry} in the ${region} Region`;
+      const preview = `I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions.`;
+      const body = `Dear [${audienceRole}],
 
 I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions and how they can benefit organizations in the ${industry} sector.
 
@@ -209,35 +315,64 @@ Our approach has been designed specifically to address the challenges faced by b
 
 Best regards,
 [Your Name]`;
-      break;
       
-    case 'social':
-      content = `"We've helped ${industry} organizations in the ${region} region achieve remarkable results with our ${benefit} approach."
+      return JSON.stringify({
+        type: 'email',
+        subject: subject,
+        preview: preview,
+        body: body
+      });
+    }
+      
+    case 'social': {
+      const mainContent = `"We've helped ${industry} organizations in the ${region} region achieve remarkable results with our ${benefit} approach."
 
 Our ${product} solutions deliver measurable improvements for ${audienceRole}s facing today's complex challenges.
 
-Learn how our proven methodology can transform your operations: [Link]
-
-#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business`;
-      break;
+Learn how our proven methodology can transform your operations: [Link]`;
       
-    case 'blog':
-      content = `Strategic Innovation for ${industry}: ${benefit} Solutions
-
-In today's competitive landscape, ${industry} organizations in the ${region} region need innovative approaches to stay ahead. This article explores how our ${product} solutions help businesses achieve their strategic goals.
-
-Key Benefits for ${audienceRole}s
-
-1. Improved operational efficiency
+      const hashtags = [
+        `#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation`,
+        `#${benefit.charAt(0).toUpperCase() + benefit.slice(1)}`,
+        `#${region.charAt(0).toUpperCase() + region.slice(1)}Business`
+      ];
+      
+      return JSON.stringify({
+        type: 'social',
+        content: mainContent,
+        hashtags: hashtags
+      });
+    }
+      
+    case 'blog': {
+      const title = `Strategic Innovation for ${industry}: ${benefit} Solutions`;
+      const intro = `In today's competitive landscape, ${industry} organizations in the ${region} region need innovative approaches to stay ahead. This article explores how our ${product} solutions help businesses achieve their strategic goals.`;
+      
+      const sections = [
+        {
+          heading: `Key Benefits for ${audienceRole}s`,
+          content: `1. Improved operational efficiency
 2. Enhanced competitive positioning
 3. Better customer experiences
 4. Strategic advantage in the ${industry} marketplace
 
-Contact us to learn more about our proven approach for the ${region} region.`;
-      break;
+Contact us to learn more about our proven approach for the ${region} region.`
+        }
+      ];
       
-    case 'webinar':
-      content = `Strategic Innovation Framework for ${industry} Leaders
+      return JSON.stringify({
+        type: 'blog',
+        title: title,
+        intro: intro,
+        sections: sections
+      });
+    }
+      
+    case 'webinar': {
+      const title = `Strategic Innovation Framework for ${industry} Leaders`;
+      const duration = `45 minutes + 15-minute Q&A`;
+      const audience = `${audienceRole}s and Decision Makers in the ${region} region`;
+      const details = `Strategic Innovation Framework for ${industry} Leaders
 
 Duration: 45 minutes + 15-minute Q&A
 
@@ -254,11 +389,18 @@ Key Takeaways:
 
 Presenter:
 [Industry Expert Name], with extensive experience helping organizations in the ${region} region transform their approach to ${industry}-specific challenges.`;
-      break;
+      
+      return JSON.stringify({
+        type: 'webinar',
+        title: title,
+        duration: duration,
+        audience: audience,
+        details: details
+      });
+    }
       
     default:
       content = `Content about ${product} solutions for ${audienceRole}s in the ${industry} sector (${region} region).`;
+      return content;
   }
-  
-  return content;
 }

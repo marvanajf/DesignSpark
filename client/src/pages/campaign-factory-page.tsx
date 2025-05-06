@@ -32,14 +32,178 @@ type Persona = {
   icon?: React.ReactNode;
 };
 
-// Component for rendering campaign content with proper formatting
-const CampaignContentDisplay = ({ content }: { content: string }) => {
-  // Simple text-only renderer
+// Components for rendering different types of campaign content
+type EmailContent = {
+  type: 'email';
+  subject: string;
+  preview: string;
+  body: string;
+};
+
+type SocialContent = {
+  type: 'social';
+  content: string;
+  hashtags: string[];
+};
+
+type BlogSection = {
+  heading: string;
+  content: string;
+};
+
+type BlogContent = {
+  type: 'blog';
+  title: string;
+  intro: string;
+  sections: BlogSection[];
+};
+
+type WebinarContent = {
+  type: 'webinar';
+  title: string;
+  duration: string;
+  audience: string;
+  details: string;
+};
+
+// Email Content Display
+const EmailContentDisplay = ({ content }: { content: EmailContent }) => {
+  return (
+    <div className="space-y-4 text-white">
+      <div className="bg-slate-700 p-4 rounded-md">
+        <div className="font-medium text-lg text-blue-400">Subject: {content.subject}</div>
+        {content.preview && (
+          <div className="text-gray-400 text-sm mt-1">
+            Preview: {content.preview}
+          </div>
+        )}
+      </div>
+      <div className="space-y-4 campaign-content">
+        {content.body.split('\n\n').map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Social Content Display
+const SocialContentDisplay = ({ content }: { content: SocialContent }) => {
+  return (
+    <div className="space-y-4 text-white">
+      <div className="campaign-content">
+        {content.content.split('\n\n').map((paragraph, index) => (
+          <p key={index} className="mb-3">{paragraph}</p>
+        ))}
+      </div>
+      {content.hashtags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-4">
+          {content.hashtags.map((tag, index) => (
+            <span key={index} className="text-blue-400">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Blog Content Display
+const BlogContentDisplay = ({ content }: { content: BlogContent }) => {
+  return (
+    <div className="space-y-6 text-white">
+      {content.title && (
+        <h1 className="text-xl font-semibold text-white">{content.title}</h1>
+      )}
+      
+      {content.intro && (
+        <div className="campaign-content">
+          {content.intro.split('\n\n').map((paragraph, index) => (
+            <p key={index} className="mb-3">{paragraph}</p>
+          ))}
+        </div>
+      )}
+      
+      {content.sections.map((section, index) => (
+        <div key={index} className="mt-6">
+          <h2 className="text-lg font-medium text-gray-200 mb-2">{section.heading}</h2>
+          <div className="campaign-content">
+            {section.content.split('\n\n').map((paragraph, pIndex) => (
+              <p key={pIndex} className="mb-3">{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Webinar Content Display
+const WebinarContentDisplay = ({ content }: { content: WebinarContent }) => {
+  return (
+    <div className="space-y-4 text-white">
+      {content.title && (
+        <h1 className="text-xl font-semibold text-white">{content.title}</h1>
+      )}
+      
+      <div className="bg-slate-700 rounded-md p-4 grid grid-cols-2 gap-4">
+        {content.duration && (
+          <div>
+            <span className="text-gray-400">Duration:</span>
+            <div className="text-white">{content.duration}</div>
+          </div>
+        )}
+        
+        {content.audience && (
+          <div>
+            <span className="text-gray-400">Audience:</span>
+            <div className="text-white">{content.audience}</div>
+          </div>
+        )}
+      </div>
+      
+      <div className="campaign-content mt-4">
+        {content.details.split('\n\n').map((paragraph, index) => (
+          // Skip the first lines which contain title, duration, etc.
+          index > 3 && <p key={index} className="mb-3">{paragraph}</p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Generic fallback content display
+const PlainTextContentDisplay = ({ content }: { content: string }) => {
   return (
     <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
       {content}
     </pre>
   );
+};
+
+// Main content display component that decides which specialized component to use
+const CampaignContentDisplay = ({ content }: { content: string }) => {
+  try {
+    // Try to parse the content as JSON (our structured content)
+    const parsedContent = JSON.parse(content);
+    
+    // Determine which specialized component to use based on content type
+    switch (parsedContent.type) {
+      case 'email':
+        return <EmailContentDisplay content={parsedContent as EmailContent} />;
+      case 'social':
+        return <SocialContentDisplay content={parsedContent as SocialContent} />;
+      case 'blog':
+        return <BlogContentDisplay content={parsedContent as BlogContent} />;
+      case 'webinar':
+        return <WebinarContentDisplay content={parsedContent as WebinarContent} />;
+      default:
+        // Fallback to plain text display
+        return <PlainTextContentDisplay content={content} />;
+    }
+  } catch (e) {
+    // If content isn't JSON or has parsing errors, use the plain text display
+    return <PlainTextContentDisplay content={content} />;
+  }
 };
 
 type CampaignContent = {
