@@ -3076,10 +3076,16 @@ Registration includes materials, follow-up support, and implementation guide.`;
       }
 
       const schema = z.object({
-        description: z.string().min(1).max(500)
+        description: z.string().min(1).max(500).optional(),
+        industry: z.string().optional()
       });
 
-      const { description } = schema.parse(req.body);
+      const { description, industry } = schema.parse(req.body);
+
+      // Ensure either description or industry is provided
+      if (!description && !industry) {
+        return res.status(400).json({ error: "Either description or industry must be provided" });
+      }
 
       try {
         // Generate persona with OpenAI
@@ -3090,7 +3096,7 @@ Registration includes materials, follow-up support, and implementation guide.`;
             'Content-Type': 'application/json',
             'Cookie': req.headers.cookie // Forward authentication cookie
           },
-          body: JSON.stringify({ description })
+          body: JSON.stringify({ description, industry })
         });
         
         if (!response.ok) {
@@ -3103,8 +3109,8 @@ Registration includes materials, follow-up support, and implementation guide.`;
         const persona = await storage.createPersona({
           user_id: req.user!.id,
           name: generatedPersona.name,
-          description: generatedPersona.description,
-          interests: generatedPersona.interests,
+          description: generatedPersona.description || generatedPersona.role || '',
+          interests: generatedPersona.interests || [],
           is_selected: false,
         });
         

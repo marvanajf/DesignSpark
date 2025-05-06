@@ -109,7 +109,7 @@ export default function PersonaSelectionPage() {
   const generatePersonaMutation = useMutation({
     mutationFn: async (description: string) => {
       try {
-        const res = await apiRequest("POST", "/api/openai/generate-persona", { description });
+        const res = await apiRequest("POST", "/api/generate-persona", { description });
         
         // Check for subscription limit (402 Payment Required)
         if (res.status === 402) {
@@ -162,7 +162,7 @@ export default function PersonaSelectionPage() {
   const generatePersonaByIndustryMutation = useMutation({
     mutationFn: async (industry: string) => {
       try {
-        const res = await apiRequest("POST", "/api/openai/generate-persona", { industry });
+        const res = await apiRequest("POST", "/api/generate-persona", { industry });
         
         // Check for subscription limit (402 Payment Required)
         if (res.status === 402) {
