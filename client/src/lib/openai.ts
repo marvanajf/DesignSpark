@@ -28,6 +28,7 @@ interface CampaignInputs {
   
   // Content specifications
   contentType: string;
+  contentPurpose?: string; // Added this field for more specific content generation
   maxLength?: number;
 }
 
@@ -94,6 +95,7 @@ export async function generateCampaignContent(
         persona: `${audienceRole} (${audienceName})`,
         toneProfile,
         contentType,
+        contentPurpose: inputs.contentPurpose, // Add the content purpose
         maxLength,
         // Additional metadata to help the server-side processing
         industry,

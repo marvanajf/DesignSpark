@@ -45,6 +45,7 @@ export function registerOpenAIRoutes(app: Express) {
       persona, 
       toneProfile, 
       contentType, 
+      contentPurpose, // Added content purpose parameter
       maxLength = 1000,
       // Additional contextual parameters
       industry,
@@ -74,6 +75,7 @@ export function registerOpenAIRoutes(app: Express) {
         persona,
         toneProfile,
         contentType,
+        contentPurpose, // Add the content purpose to the context
         campaignType,
         // Additional context that might be available
         industry: industry || "technology",
@@ -94,7 +96,7 @@ export function registerOpenAIRoutes(app: Express) {
 ${prompt}
 
 ---WRITING TASK---
-Create exceptional ${contentType} content that addresses the specific needs and concerns of the audience described above.
+Create exceptional ${contentType} content${contentPurpose ? ` for ${contentPurpose}` : ''} that addresses the specific needs and concerns of the audience described above.
 Your content must be informed primarily by the campaign brief while being tailored to the specific format requirements.
 Extract key themes, specific pain points, and industry insights from the campaign brief to create highly relevant content.
 Focus on their pain points and aspirations without directly mentioning the campaign brief or using any meta-language.
@@ -273,6 +275,7 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
  */
 interface EnhancedContext {
   contentType: string;
+  contentPurpose?: string; // Add content purpose to the interface
   campaignType: string;
   persona: string;
   toneProfile: any;

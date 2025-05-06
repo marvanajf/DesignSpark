@@ -371,17 +371,57 @@ export default function CampaignFactoryPage() {
       };
         
       // STEP 4: Generate content with OpenAI and prepare campaign
-      setGenerationProgress(60);
+      // Show gradual progression from 50% to 60%
+      const progressStep4 = [52, 54, 56, 58, 60];
+      for (const progress of progressStep4) {
+        setGenerationProgress(progress);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
       
-      // Now we would normally make an actual API call to OpenAI
-      // Simulate API call with a delay to make it feel more realistic
-      await new Promise(resolve => setTimeout(resolve, 3500));
+      // Now we make the actual API call to OpenAI
+      // First for email content
+      openAIInputs.contentType = "email";
+      let emailContent1 = "";
+      try {
+        emailContent1 = await generateCampaignContent({
+          ...openAIInputs,
+          contentPurpose: "initial outreach",
+          campaignBrief: campaignPrompt // Ensure we're passing the actual campaign brief
+        });
+      } catch (error) {
+        console.error("Error generating email content:", error);
+        // We'll use fallback content if the API call fails
+      }
       
       // Indicate that we're processing the AI response
-      setGenerationProgress(70);
+      setGenerationProgress(65);
       
-      // Add another delay to simulate the AI generating multiple content pieces
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Second email - follow up
+      let emailContent2 = "";
+      try {
+        emailContent2 = await generateCampaignContent({
+          ...openAIInputs,
+          contentType: "email",
+          contentPurpose: "follow up",
+          campaignBrief: campaignPrompt // Ensure we're passing the actual campaign brief
+        });
+      } catch (error) {
+        console.error("Error generating follow-up email content:", error);
+      }
+      
+      // LinkedIn content
+      setGenerationProgress(70);
+      let socialContent = "";
+      try {
+        socialContent = await generateCampaignContent({
+          ...openAIInputs,
+          contentType: "social",
+          contentPurpose: "LinkedIn post",
+          campaignBrief: campaignPrompt // Ensure we're passing the actual campaign brief
+        });
+      } catch (error) {
+        console.error("Error generating social content:", error);
+      }
       
       // Calculate delivery dates for content
       const firstFollowupDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7));
@@ -403,7 +443,8 @@ export default function CampaignFactoryPage() {
           type: 'email',
           title: `${useCaseName} Initial Outreach for ${audienceNameVal}`,
           persona: audienceNameVal,
-          content: adaptContentToTone(`Subject: ${emailSubject1}
+          // Use the AI-generated content if available, otherwise fall back to a template
+          content: emailContent1 ? adaptContentToTone(emailContent1) : adaptContentToTone(`Subject: ${emailSubject1}
 
 Dear [${audienceRoleVal}],
 
@@ -428,7 +469,8 @@ Best regards,
           type: "email",
           title: `${useCaseName} Follow-up for ${audienceNameVal}`,
           persona: audienceNameVal,
-          content: adaptContentToTone(`Subject: ${emailSubject2}
+          // Use the AI-generated content if available, otherwise fall back to a template
+          content: emailContent2 ? adaptContentToTone(emailContent2) : adaptContentToTone(`Subject: ${emailSubject2}
 
 Dear [${audienceRoleVal}],
 
@@ -459,7 +501,8 @@ P.S. I'm also attaching our latest research on ${useCaseName.toLowerCase()} tren
           type: "social",
           title: `LinkedIn Thought Leadership for ${useCaseName}`,
           persona: audienceNameVal,
-          content: adaptContentToTone(`"How one ${audienceRoleVal} solved their ${audiencePainsVal[0] || 'biggest challenge'} and achieved ${audienceGoalsVal[0] || 'their primary goal'} in just 90 days with our specialized ${productExtracted || 'solution'} for the ${industryExtracted || 'industry'} sector."
+          // Use the AI-generated content if available, otherwise fall back to a template
+          content: socialContent ? adaptContentToTone(socialContent) : adaptContentToTone(`"How one ${audienceRoleVal} solved their ${audiencePainsVal[0] || 'biggest challenge'} and achieved ${audienceGoalsVal[0] || 'their primary goal'} in just 90 days with our specialized ${productExtracted || 'solution'} for the ${industryExtracted || 'industry'} sector."
 
 As ${regionExtracted || 'market'} leaders in ${useCaseName.toLowerCase()}, we've seen ${audienceRoleVal}s across the ${industryExtracted || 'industry'} sector transform their strategic approach with remarkable results.
 
