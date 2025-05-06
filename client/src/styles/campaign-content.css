@@ -31,11 +31,119 @@
   text-decoration: underline;
 }
 
-/* Format email subject lines */
-.campaign-content .email-subject {
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+/* Email Content Formatting */
+.email-subject {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
   color: #60a5fa;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.email-preview {
+  color: #9ca3af;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+.email-body {
+  padding: 0.5rem 0;
+}
+
+/* Social Post Formatting */
+.social-content {
+  background-color: rgba(22, 78, 99, 0.2);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.social-hashtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-hashtag {
+  color: #60a5fa;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.social-hashtag:hover {
+  color: #93c5fd;
+}
+
+/* Blog Post Formatting */
+.blog-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #f9fafb;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.blog-intro {
+  font-size: 1.1rem;
+  color: #e5e7eb;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.blog-section {
+  margin-bottom: 2rem;
+}
+
+.blog-section-heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+/* Webinar Formatting */
+.webinar-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #f9fafb;
+}
+
+.webinar-meta {
+  background-color: rgba(22, 78, 99, 0.2);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.webinar-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.webinar-meta-label {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-bottom: 0.25rem;
+}
+
+.webinar-meta-value {
+  font-weight: 500;
+}
+
+.webinar-details {
+  margin-top: 1.5rem;
 }
 
 /* Style bullet points */

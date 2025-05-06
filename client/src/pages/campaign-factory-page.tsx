@@ -69,16 +69,18 @@ type WebinarContent = {
 // Email Content Display
 const EmailContentDisplay = ({ content }: { content: EmailContent }) => {
   return (
-    <div className="space-y-4 text-white">
-      <div className="bg-slate-700 p-4 rounded-md">
-        <div className="font-medium text-lg text-blue-400">Subject: {content.subject}</div>
-        {content.preview && (
-          <div className="text-gray-400 text-sm mt-1">
-            Preview: {content.preview}
-          </div>
-        )}
+    <div className="text-white">
+      <div className="email-subject">
+        {content.subject}
       </div>
-      <div className="space-y-4 campaign-content">
+      
+      {content.preview && (
+        <div className="email-preview">
+          {content.preview}
+        </div>
+      )}
+      
+      <div className="email-body campaign-content">
         {content.body.split('\n\n').map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}
@@ -90,16 +92,17 @@ const EmailContentDisplay = ({ content }: { content: EmailContent }) => {
 // Social Content Display
 const SocialContentDisplay = ({ content }: { content: SocialContent }) => {
   return (
-    <div className="space-y-4 text-white">
-      <div className="campaign-content">
+    <div className="text-white">
+      <div className="social-content campaign-content">
         {content.content.split('\n\n').map((paragraph, index) => (
           <p key={index} className="mb-3">{paragraph}</p>
         ))}
       </div>
-      {content.hashtags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-4">
+      
+      {content.hashtags && content.hashtags.length > 0 && (
+        <div className="social-hashtags">
           {content.hashtags.map((tag, index) => (
-            <span key={index} className="text-blue-400">{tag}</span>
+            <span key={index} className="social-hashtag">{tag}</span>
           ))}
         </div>
       )}
@@ -110,25 +113,25 @@ const SocialContentDisplay = ({ content }: { content: SocialContent }) => {
 // Blog Content Display
 const BlogContentDisplay = ({ content }: { content: BlogContent }) => {
   return (
-    <div className="space-y-6 text-white">
+    <div className="text-white">
       {content.title && (
-        <h1 className="text-xl font-semibold text-white">{content.title}</h1>
+        <h1 className="blog-title">{content.title}</h1>
       )}
       
       {content.intro && (
-        <div className="campaign-content">
+        <div className="blog-intro campaign-content">
           {content.intro.split('\n\n').map((paragraph, index) => (
-            <p key={index} className="mb-3">{paragraph}</p>
+            <p key={index}>{paragraph}</p>
           ))}
         </div>
       )}
       
-      {content.sections.map((section, index) => (
-        <div key={index} className="mt-6">
-          <h2 className="text-lg font-medium text-gray-200 mb-2">{section.heading}</h2>
+      {content.sections && content.sections.map((section, index) => (
+        <div key={index} className="blog-section">
+          <h2 className="blog-section-heading">{section.heading}</h2>
           <div className="campaign-content">
             {section.content.split('\n\n').map((paragraph, pIndex) => (
-              <p key={pIndex} className="mb-3">{paragraph}</p>
+              <p key={pIndex}>{paragraph}</p>
             ))}
           </div>
         </div>
@@ -140,32 +143,34 @@ const BlogContentDisplay = ({ content }: { content: BlogContent }) => {
 // Webinar Content Display
 const WebinarContentDisplay = ({ content }: { content: WebinarContent }) => {
   return (
-    <div className="space-y-4 text-white">
+    <div className="text-white">
       {content.title && (
-        <h1 className="text-xl font-semibold text-white">{content.title}</h1>
+        <h1 className="webinar-title">{content.title}</h1>
       )}
       
-      <div className="bg-slate-700 rounded-md p-4 grid grid-cols-2 gap-4">
+      <div className="webinar-meta">
         {content.duration && (
-          <div>
-            <span className="text-gray-400">Duration:</span>
-            <div className="text-white">{content.duration}</div>
+          <div className="webinar-meta-item">
+            <span className="webinar-meta-label">Duration</span>
+            <div className="webinar-meta-value">{content.duration}</div>
           </div>
         )}
         
         {content.audience && (
-          <div>
-            <span className="text-gray-400">Audience:</span>
-            <div className="text-white">{content.audience}</div>
+          <div className="webinar-meta-item">
+            <span className="webinar-meta-label">Target Audience</span>
+            <div className="webinar-meta-value">{content.audience}</div>
           </div>
         )}
       </div>
       
-      <div className="campaign-content mt-4">
-        {content.details.split('\n\n').map((paragraph, index) => (
-          // Skip the first lines which contain title, duration, etc.
-          index > 3 && <p key={index} className="mb-3">{paragraph}</p>
-        ))}
+      <div className="webinar-details campaign-content">
+        {content.details.split('\n\n')
+          .filter((p, i) => !p.includes('Duration:') && !p.includes('Target Audience:')) // Filter out metadata
+          .map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))
+        }
       </div>
     </div>
   );
@@ -182,27 +187,47 @@ const PlainTextContentDisplay = ({ content }: { content: string }) => {
 
 // Main content display component that decides which specialized component to use
 const CampaignContentDisplay = ({ content }: { content: string }) => {
-  try {
-    // Try to parse the content as JSON (our structured content)
-    const parsedContent = JSON.parse(content);
-    
-    // Determine which specialized component to use based on content type
-    switch (parsedContent.type) {
-      case 'email':
-        return <EmailContentDisplay content={parsedContent as EmailContent} />;
-      case 'social':
-        return <SocialContentDisplay content={parsedContent as SocialContent} />;
-      case 'blog':
-        return <BlogContentDisplay content={parsedContent as BlogContent} />;
-      case 'webinar':
-        return <WebinarContentDisplay content={parsedContent as WebinarContent} />;
-      default:
-        // Fallback to plain text display
-        return <PlainTextContentDisplay content={content} />;
+  // First, check if content is a JSON string (starts and ends with curly braces)
+  const isJsonString = content.trim().startsWith('{') && content.trim().endsWith('}');
+  
+  if (isJsonString) {
+    try {
+      // Try to parse the content as JSON
+      const parsedContent = JSON.parse(content);
+      
+      // Determine which specialized component to use based on content type
+      switch (parsedContent.type) {
+        case 'email':
+          return <EmailContentDisplay content={parsedContent as EmailContent} />;
+        case 'social':
+          return <SocialContentDisplay content={parsedContent as SocialContent} />;
+        case 'blog':
+          return <BlogContentDisplay content={parsedContent as BlogContent} />;
+        case 'webinar':
+          return <WebinarContentDisplay content={parsedContent as WebinarContent} />;
+        default:
+          // If JSON but unknown type, clean and display the content directly
+          return <PlainTextContentDisplay content={JSON.stringify(parsedContent, null, 2)} />;
+      }
+    } catch (e) {
+      // JSON parsing failed - clean up any visible markdown and display
+      const cleanedContent = content
+        .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
+        .replace(/\*([^*]+)\*/g, '$1')     // Italic
+        .replace(/^##+\s+(.+)$/gm, '$1')   // Headers
+        .replace(/^-\s+(.+)$/gm, '• $1');  // List items
+        
+      return <PlainTextContentDisplay content={cleanedContent} />;
     }
-  } catch (e) {
-    // If content isn't JSON or has parsing errors, use the plain text display
-    return <PlainTextContentDisplay content={content} />;
+  } else {
+    // Not JSON format at all - clean up any visible markdown and display
+    const cleanedContent = content
+      .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
+      .replace(/\*([^*]+)\*/g, '$1')     // Italic
+      .replace(/^##+\s+(.+)$/gm, '$1')   // Headers
+      .replace(/^-\s+(.+)$/gm, '• $1');  // List items
+      
+    return <PlainTextContentDisplay content={cleanedContent} />;
   }
 };
 

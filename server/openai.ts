@@ -104,24 +104,119 @@ Be specific, engaging, compelling, and publication-ready with absolutely profess
 Ensure each piece of content has its own distinct purpose and maintains a cohesive connection to the overall campaign objective.
 `;
       
+      // Customize the request based on the content type
+      let messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ];
+      
+      // Add specific instructions based on content type
+      let responseFormat: { type: "json_object" } | undefined = undefined;
+      
+      // If email, use JSON format for better structure
+      if (contentType === 'email') {
+        messages.push({
+          role: "system",
+          content: `Format your response as a structured JSON object with the following properties:
+          {
+            "subject": "The subject line of the email",
+            "preview": "The preview text/first line that appears in email clients",
+            "body": "The full body text of the email"
+          }`
+        });
+        responseFormat = { type: "json_object" };
+      } 
+      // If social post, structure with content and hashtags
+      else if (contentType === 'social') {
+        messages.push({
+          role: "system",
+          content: `Format your response as a structured JSON object with the following properties:
+          {
+            "content": "The main body of the LinkedIn post",
+            "hashtags": ["array", "of", "hashtags"]
+          }`
+        });
+        responseFormat = { type: "json_object" };
+      }
+      // If blog post, structure with title, intro and sections
+      else if (contentType === 'blog') {
+        messages.push({
+          role: "system",
+          content: `Format your response as a structured JSON object with the following properties:
+          {
+            "title": "The blog title",
+            "intro": "The introductory paragraph",
+            "sections": [
+              {
+                "heading": "First section heading",
+                "content": "First section content"
+              },
+              {
+                "heading": "Second section heading",
+                "content": "Second section content"
+              }
+            ]
+          }`
+        });
+        responseFormat = { type: "json_object" };
+      }
+      // If webinar, structure with title, duration, audience and details
+      else if (contentType === 'webinar') {
+        messages.push({
+          role: "system",
+          content: `Format your response as a structured JSON object with the following properties:
+          {
+            "title": "The webinar title",
+            "duration": "Duration (e.g., '45 minutes')",
+            "audience": "Target audience description",
+            "details": "Full webinar description including key takeaways"
+          }`
+        });
+        responseFormat = { type: "json_object" };
+      }
+      
       // Generate content using OpenAI with enhanced context
       const completion = await openai.chat.completions.create({
         // The newest OpenAI model is "gpt-4o" which was released May 13, 2024
         // Do not change this unless explicitly requested by the user
         model: "gpt-4o",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
+        messages,
         max_tokens: Math.min(maxLength, 4000), // Ensure we don't exceed API limits
         temperature: 0.7, // Higher creativity for more intelligent content
+        ...(responseFormat ? { response_format: responseFormat } : {})
       });
       
       // Extract the generated content
       const generatedContent = completion.choices[0].message.content;
       
-      // Return the generated content
-      res.json({ content: generatedContent });
+      // For structured content types, validate JSON format
+      if (responseFormat && responseFormat.type === "json_object") {
+        try {
+          // Parse to validate proper JSON format
+          const jsonContent = JSON.parse(generatedContent || "{}");
+          
+          // Add content type to the response
+          if (contentType === 'email' && !jsonContent.type) {
+            jsonContent.type = 'email';
+          } else if (contentType === 'social' && !jsonContent.type) {
+            jsonContent.type = 'social';
+          } else if (contentType === 'blog' && !jsonContent.type) {
+            jsonContent.type = 'blog';
+          } else if (contentType === 'webinar' && !jsonContent.type) {
+            jsonContent.type = 'webinar';
+          }
+          
+          // Return the validated and enhanced JSON content
+          res.json({ content: JSON.stringify(jsonContent) });
+        } catch (e) {
+          // If JSON parsing fails, return the raw content
+          console.warn("Failed to parse structured content:", e);
+          res.json({ content: generatedContent });
+        }
+      } else {
+        // Return the generated content as is (plain text)
+        res.json({ content: generatedContent });
+      }
     } catch (error: any) {
       console.error("Error generating content with OpenAI:", error);
       
