@@ -16,6 +16,7 @@ import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRig
 
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
+import SavedCampaignsSection from "@/components/SavedCampaignsSection";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -1179,7 +1180,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
               </Button>
             </div>
             
-
+            <SavedCampaignsSection />
           </div>
           
           {/* Process timeline - more subtle, smaller and cleaner */}
