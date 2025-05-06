@@ -64,6 +64,7 @@ export default function SavedCampaignsSection() {
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignFactoryCampaign | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [activeContentType, setActiveContentType] = useState<string>('all');
+  const [expandedContentIndex, setExpandedContentIndex] = useState<number | null>(null);
   
   // Fetch campaign factory campaigns
   const { 
@@ -192,6 +193,19 @@ export default function SavedCampaignsSection() {
     } catch (e) {
       return 'some time ago';
     }
+  };
+  
+  // Toggle content expansion
+  const toggleContentExpansion = (index: number) => {
+    setExpandedContentIndex(expandedContentIndex === index ? null : index);
+    
+    // Find and scroll to the corresponding content item
+    setTimeout(() => {
+      const element = document.getElementById(`content-item-${index}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   // Calculate campaign duration
@@ -396,33 +410,50 @@ export default function SavedCampaignsSection() {
           
           {selectedCampaign && (
             <div className="space-y-6">
-              {/* Campaign Overview Section - Horizontal Layout */}
-              <div className="space-y-5">
-                <div className="p-4 border border-gray-800 rounded-lg bg-zinc-900/30">
-                  <div className="flex flex-col sm:flex-row gap-6">
-                    <div className="flex-1">
-                      <h3 className="text-sm text-gray-400 mb-2 font-medium">Objective</h3>
-                      <p className="text-white text-sm">{selectedCampaign.objective}</p>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm text-gray-400 mb-2 font-medium">Timeline</h3>
-                      <p className="text-white text-sm">
-                        {new Date(selectedCampaign.timeline_start).toLocaleDateString()} to {new Date(selectedCampaign.timeline_end).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm text-gray-400 mb-2 font-medium">Channels</h3>
-                      <div className="flex flex-wrap gap-1">
-                        {selectedCampaign.channels.map((channel, index) => (
-                          <Badge 
-                            key={index}
-                            variant="outline"
-                            className="bg-[#0e131f] text-[#5eead4] border-[#5eead4]/30 text-xs"
-                          >
-                            {channel}
-                          </Badge>
-                        ))}
+              {/* Campaign Overview Section */}
+              <div className="grid grid-cols-1 gap-4">
+                {/* Objective with nicer formatting */}
+                <div className="p-6 border border-gray-800 rounded-lg bg-zinc-900/30">
+                  <h3 className="text-md font-medium text-white mb-3 flex items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
+                    Campaign Objective
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">{selectedCampaign.objective}</p>
+                </div>
+                
+                {/* Timeline and channels in a single row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-6 border border-gray-800 rounded-lg bg-zinc-900/30">
+                    <h3 className="text-md font-medium text-white mb-3 flex items-center">
+                      <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
+                      Timeline
+                    </h3>
+                    <div className="flex items-center">
+                      <div className="bg-black/40 rounded-md px-3 py-2 border border-gray-800">
+                        {new Date(selectedCampaign.timeline_start).toLocaleDateString()}
                       </div>
+                      <div className="mx-3 text-gray-500">to</div>
+                      <div className="bg-black/40 rounded-md px-3 py-2 border border-gray-800">
+                        {new Date(selectedCampaign.timeline_end).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6 border border-gray-800 rounded-lg bg-zinc-900/30">
+                    <h3 className="text-md font-medium text-white mb-3 flex items-center">
+                      <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
+                      Channels
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCampaign.channels.map((channel, index) => (
+                        <Badge 
+                          key={index}
+                          variant="outline"
+                          className="bg-black/40 text-[#74d1ea] border-[#74d1ea]/30 text-xs px-3 py-1"
+                        >
+                          {channel}
+                        </Badge>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -450,112 +481,160 @@ export default function SavedCampaignsSection() {
                 </div>
               </div>
               
-              {/* Tone Profile */}
+              {/* Content Timeline Waterfall */}
               <div>
                 <h3 className="text-white font-medium mb-4 flex items-center">
                   <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
-                  Tone Profile
+                  Content Timeline
                 </h3>
-                <div className="p-5 border border-gray-800 rounded-lg bg-zinc-900/30">
+                <div className="relative mb-8">
+                  {/* Timeline Line */}
+                  <div className="absolute left-[40px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#74d1ea] to-transparent"></div>
+                  
+                  {/* Timeline Items */}
+                  {getSelectedCampaignContents()
+                    .sort((a, b) => 
+                      new Date(a.deliveryDate || '').getTime() - new Date(b.deliveryDate || '').getTime()
+                    )
+                    .map((content, index) => (
+                      <div key={index} className="flex mb-6 relative">
+                        {/* Timeline Node */}
+                        <div className="w-20 flex-shrink-0 text-center relative">
+                          <div className="absolute left-10 top-0 w-4 h-4 bg-black border-2 border-[#74d1ea] rounded-full z-10"></div>
+                          <div className="text-xs text-gray-400 absolute left-0 top-0">
+                            {content.deliveryDate ? new Date(content.deliveryDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Unscheduled'}
+                          </div>
+                        </div>
+                        
+                        {/* Content Card */}
+                        <div className="bg-black border border-gray-800 rounded-lg p-4 ml-4 w-full hover:border-[#74d1ea]/50 transition-colors">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <div className="flex items-center mb-2">
+                                <div className="h-5 w-5 rounded-md bg-[#0e131f] border border-gray-800 flex items-center justify-center mr-2">
+                                  {contentTypeIcons[content.type] || <MessageSquare className="h-3 w-3" />}
+                                </div>
+                                <h4 className="text-white text-sm font-medium">{content.title}</h4>
+                              </div>
+                              <p className="text-xs text-gray-400 mb-2">{content.persona}</p>
+                            </div>
+                            <Badge variant="outline" className="bg-[#0e131f] text-[#74d1ea] border-[#74d1ea]/30 text-xs">
+                              {content.type}
+                            </Badge>
+                          </div>
+                          <div className="mt-2 overflow-hidden">
+                            <div className="cursor-pointer" onClick={() => toggleContentExpansion(index)}>
+                              <p className="text-sm text-gray-300 line-clamp-2">
+                                {content.content?.substring(0, 100)}...
+                              </p>
+                              <p className="text-[#74d1ea] text-xs mt-1">Click to view full content</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+                
+                {/* Tone Profile */}
+                <div>
+                  <h3 className="text-white font-medium mb-4 flex items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
+                    Tone Profile
+                  </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                     {Object.entries(getToneProfile()).map(([key, value]) => (
-                      <div 
-                        key={key} 
-                        className="p-4 border border-gray-800 rounded-lg bg-black/40 hover:border-[#74d1ea]/30 hover:shadow-[0_0_10px_rgba(116,209,234,0.05)] transition-all duration-300"
-                      >
-                        <h4 className="text-xs text-gray-400 mb-2 capitalize flex items-center">
-                          <span className="w-1 h-1 rounded-full bg-[#74d1ea] mr-1.5"></span>
-                          {key}
-                        </h4>
-                        <p className="text-white text-base font-medium">{value as number}%</p>
-                        <div className="mt-2 w-full bg-gray-800 rounded-full h-1.5">
-                          <div 
-                            className="bg-gradient-to-r from-[#74d1ea]/70 to-[#74d1ea] h-1.5 rounded-full" 
-                            style={{ width: `${value as number}%` }}
-                          ></div>
+                      <div key={key} className="p-4 border border-gray-800 rounded-lg bg-zinc-900/30 relative overflow-hidden group hover:border-[#74d1ea]/30 transition-colors">
+                        <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-[#74d1ea] to-[#5eead4]" style={{ width: `${value as number}%` }}></div>
+                        <h4 className="text-xs text-gray-400 mb-1 capitalize">{key}</h4>
+                        <div className="flex items-end justify-between">
+                          <p className="text-white text-xl font-semibold">{value as number}<span className="text-xs text-gray-400 ml-0.5">%</span></p>
+                          <div className="text-xs text-[#74d1ea] opacity-0 group-hover:opacity-100 transition-opacity">
+                            {(value as number) >= 70 ? 'High' : (value as number) >= 40 ? 'Medium' : 'Low'}
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-              
-              {/* Content Overview */}
-              <div>
-                <h3 className="text-white font-medium mb-4 flex items-center">
-                  <span className="inline-block w-2 h-2 rounded-full bg-[#5eead4] mr-2"></span>
-                  Generated Content
-                </h3>
                 
-                <Tabs defaultValue="all" value={activeContentType} onValueChange={setActiveContentType}>
-                  <TabsList className="bg-zinc-900/50 mb-4 p-1 border border-gray-800">
-                    <TabsTrigger value="all" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">All</TabsTrigger>
-                    <TabsTrigger value="email" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Email</TabsTrigger>
-                    <TabsTrigger value="social" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Social</TabsTrigger>
-                    <TabsTrigger value="blog" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Blog</TabsTrigger>
-                    <TabsTrigger value="webinar" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Webinar</TabsTrigger>
-                  </TabsList>
+                {/* Regular Content View */}
+                <div className="mt-8 border-t border-gray-800 pt-6">
+                  <h3 className="text-white font-medium mb-4 flex items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#5eead4] mr-2"></span>
+                    All Content Items
+                  </h3>
                   
-                  <TabsContent value={activeContentType} className="mt-0">
-                    <ScrollArea className="h-[400px] pr-4">
-                      <div className="space-y-4">
-                        {getFilteredContents().length > 0 ? (
-                          getFilteredContents().map((content, index) => (
-                            <div 
-                              key={index}
-                              className="border border-gray-800 rounded-lg overflow-hidden bg-black shadow-lg"
-                            >
-                              {/* Content Header */}
-                              <div className="p-4 border-b border-gray-800 bg-zinc-900/50">
-                                <div className="flex justify-between items-start">
-                                  <div className="flex items-center">
-                                    <div className="h-8 w-8 rounded-md bg-[#0e131f] border border-[#5eead4]/20 flex items-center justify-center mr-3 shadow-[0_0_10px_rgba(94,234,212,0.05)]">
-                                      {contentTypeIcons[content.type] || <MessageSquare className="h-4 w-4 text-[#5eead4]" />}
-                                    </div>
-                                    <div>
-                                      <h4 className="text-white font-medium">
-                                        {content.title || `${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Content`}
-                                      </h4>
-                                      <div className="flex items-center gap-3 mt-1">
-                                        <span className="text-xs text-gray-400 flex items-center">
-                                          <Users className="h-3 w-3 mr-1 text-gray-500" />
-                                          {content.persona}
-                                        </span>
-                                        {content.deliveryDate && (
+                  <Tabs defaultValue="all" value={activeContentType} onValueChange={setActiveContentType}>
+                    <TabsList className="bg-zinc-900/50 mb-4 p-1 border border-gray-800">
+                      <TabsTrigger value="all" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">All</TabsTrigger>
+                      <TabsTrigger value="email" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Email</TabsTrigger>
+                      <TabsTrigger value="social" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Social</TabsTrigger>
+                      <TabsTrigger value="blog" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Blog</TabsTrigger>
+                      <TabsTrigger value="webinar" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Webinar</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value={activeContentType} className="mt-0">
+                      <ScrollArea className="h-[400px] pr-4">
+                        <div className="space-y-4">
+                          {getFilteredContents().length > 0 ? (
+                            getFilteredContents().map((content, index) => (
+                              <div 
+                                key={index}
+                                id={`content-item-${index}`}
+                                className="border border-gray-800 rounded-lg overflow-hidden bg-black shadow-lg"
+                              >
+                                {/* Content Header */}
+                                <div className="p-4 border-b border-gray-800 bg-zinc-900/50">
+                                  <div className="flex justify-between items-start">
+                                    <div className="flex items-center">
+                                      <div className="h-8 w-8 rounded-md bg-[#0e131f] border border-[#5eead4]/20 flex items-center justify-center mr-3 shadow-[0_0_10px_rgba(94,234,212,0.05)]">
+                                        {contentTypeIcons[content.type] || <MessageSquare className="h-4 w-4 text-[#5eead4]" />}
+                                      </div>
+                                      <div>
+                                        <h4 className="text-white font-medium">
+                                          {content.title || `${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Content`}
+                                        </h4>
+                                        <div className="flex items-center gap-3 mt-1">
                                           <span className="text-xs text-gray-400 flex items-center">
-                                            <Clock className="h-3 w-3 mr-1 text-gray-500" />
-                                            {new Date(content.deliveryDate).toLocaleDateString()}
+                                            <Users className="h-3 w-3 mr-1 text-gray-500" />
+                                            {content.persona}
                                           </span>
-                                        )}
-                                        {content.channel && (
-                                          <Badge variant="outline" className="bg-[#0e131f] text-[#5eead4] border-[#5eead4]/30 text-xs">
-                                            {content.channel}
-                                          </Badge>
-                                        )}
+                                          {content.deliveryDate && (
+                                            <span className="text-xs text-gray-400 flex items-center">
+                                              <Clock className="h-3 w-3 mr-1 text-gray-500" />
+                                              {new Date(content.deliveryDate).toLocaleDateString()}
+                                            </span>
+                                          )}
+                                          {content.channel && (
+                                            <Badge variant="outline" className="bg-[#0e131f] text-[#5eead4] border-[#5eead4]/30 text-xs">
+                                              {content.channel}
+                                            </Badge>
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
+                                
+                                {/* Content Body */}
+                                <div className="p-5 text-sm text-gray-200 whitespace-pre-wrap bg-gradient-to-b from-zinc-900/10 to-black">
+                                  {content.content}
+                                </div>
                               </div>
-                              
-                              {/* Content Body */}
-                              <div className="p-5 text-sm text-gray-200 whitespace-pre-wrap bg-gradient-to-b from-zinc-900/10 to-black">
-                                {content.content}
-                              </div>
+                            ))
+                          ) : (
+                            <div className="text-center py-8 border border-dashed border-gray-800 rounded-lg">
+                              <MessageSquare className="h-10 w-10 text-gray-600 mx-auto mb-2" />
+                              <p className="text-gray-400">
+                                No {activeContentType !== 'all' ? activeContentType : ''} content found in this campaign
+                              </p>
                             </div>
-                          ))
-                        ) : (
-                          <div className="text-center py-8 border border-dashed border-gray-800 rounded-lg">
-                            <MessageSquare className="h-10 w-10 text-gray-600 mx-auto mb-2" />
-                            <p className="text-gray-400">
-                              No {activeContentType !== 'all' ? activeContentType : ''} content found in this campaign
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-                </Tabs>
+                          )}
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </div>
             </div>
           )}
