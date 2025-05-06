@@ -497,7 +497,11 @@ Registration includes access to our implementation toolkit and a complimentary s
           id: 5,
           type: "social",
           title: `LinkedIn Article on ${useCaseName} ROI`,
-          persona: (personas.find(p => selectedPersonas[1]) ? personas.find(p => p.id === selectedPersonas[1])?.name : personas.find(p => selectedPersonas.includes(p.id))?.name) || "Target Audience",
+          persona: (personas && personas.length > 0 && selectedPersonas.length > 1 ? 
+            (personas.find(p => p.id === selectedPersonas[1])?.name || "Secondary Target") 
+            : (personas && personas.length > 0 && selectedPersonas.length > 0 ? 
+              (personas.find(p => selectedPersonas.includes(p.id))?.name || "Primary Target") 
+              : "Target Audience")),
           content: adaptContentToTone(`# Beyond Traditional Metrics: Measuring the True ROI of Strategic Initiatives
 
 Most organizations evaluate investments using standard financial metrics, but this approach misses critical value dimensions that drive long-term competitive advantage.
@@ -619,10 +623,12 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
         id: 1,
         name: campaignTitleVal,
         objective: campaignPrompt || "Increase brand awareness and drive conversions",
-        targetAudience: selectedPersonas.map(id => {
-          const persona = personas.find(p => p.id === id);
-          return persona ? persona.name : "Target Audience";
-        }),
+        targetAudience: personas && personas.length > 0 && selectedPersonas.length > 0
+          ? selectedPersonas.map(id => {
+              const persona = personas.find(p => p.id === id);
+              return persona ? persona.name : "Target Audience";
+            })
+          : ["Target Audience"],
         channels: Object.entries(selectedContentTypes)
           .filter(([_, isSelected]) => isSelected)
           .map(([type, _]) => type === 'social' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)),
