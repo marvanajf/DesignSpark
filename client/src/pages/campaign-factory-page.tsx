@@ -1891,14 +1891,87 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                       
                       <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
                         <div className="flex flex-col h-full">
-                          <h3 className="text-gray-400 text-sm font-medium mb-1">Timeline</h3>
+                          <h3 className="text-gray-400 text-sm font-medium mb-1">Campaign Timeline</h3>
                           <div className="flex-1">
-                            <div className="flex items-center justify-between text-sm text-white mt-2">
+                            <div className="flex items-center justify-between text-sm text-white mt-2 mb-4">
                               <div>
                                 <span className="text-gray-500">Start:</span> {campaign.timeline.start}
                               </div>
                               <div>
                                 <span className="text-gray-500">End:</span> {campaign.timeline.end}
+                              </div>
+                            </div>
+                            
+                            {/* Campaign Waterfall Chart */}
+                            <div className="campaign-waterfall mt-4 overflow-x-auto">
+                              <div className="relative min-h-[150px] pb-6">
+                                {/* Timeline base */}
+                                <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
+                                
+                                {/* Timeline nodes with content preview */}
+                                {campaign.contents.map((content, i) => {
+                                  // Calculate positions based on delivery date
+                                  // For demo, we'll spread them evenly
+                                  const positionPercent = (i / (campaign.contents.length - 1 || 1)) * 100;
+                                  const isEven = i % 2 === 0;
+                                  
+                                  // Get icon based on content type
+                                  let icon;
+                                  switch(content.type) {
+                                    case 'email':
+                                      icon = <MessageSquare className="h-4 w-4 text-[#5eead4]" />;
+                                      break;
+                                    case 'social':
+                                      icon = <Link className="h-4 w-4 text-[#5eead4]" />;
+                                      break;
+                                    case 'blog':
+                                      icon = <FileText className="h-4 w-4 text-[#5eead4]" />;
+                                      break;
+                                    case 'webinar':
+                                      icon = <Zap className="h-4 w-4 text-[#5eead4]" />;
+                                      break;
+                                    default:
+                                      icon = <FileText className="h-4 w-4 text-[#5eead4]" />;
+                                  }
+                                  
+                                  return (
+                                    <div 
+                                      key={i}
+                                      className="absolute transform -translate-x-1/2"
+                                      style={{ left: `${positionPercent}%`, top: isEven ? '5px' : 'auto', bottom: isEven ? 'auto' : '5px' }}
+                                    >
+                                      {/* Vertical line to node */}
+                                      <div 
+                                        className={`w-[2px] bg-[#5eead4]/50 absolute left-1/2 -translate-x-1/2 ${isEven ? 'top-0 h-[50px]' : 'bottom-0 h-[50px]'}`}
+                                      ></div>
+                                      
+                                      {/* Node */}
+                                      <div 
+                                        className="h-4 w-4 rounded-full bg-[#5eead4] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10"
+                                      ></div>
+                                      
+                                      {/* Content card */}
+                                      <div 
+                                        className={`w-[180px] bg-zinc-800 border border-zinc-700 rounded-md p-2 absolute left-1/2 -translate-x-1/2 ${
+                                          isEven ? 'top-[60px]' : 'bottom-[60px]'
+                                        }`}
+                                      >
+                                        <div className="flex items-center gap-1 mb-1">
+                                          {icon}
+                                          <span className="text-xs font-medium capitalize text-white">{content.type}</span>
+                                        </div>
+                                        <div className="text-xs text-gray-400 truncate">
+                                          {content.title || (content.type === 'email' ? 'Email Campaign' : 
+                                            content.type === 'social' ? 'LinkedIn Post' : 
+                                            content.type === 'blog' ? 'Blog Article' : 'Webinar')}
+                                        </div>
+                                        <div className="text-xs text-[#5eead4] mt-1">
+                                          {content.deliveryDate || 'Delivery TBD'}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             </div>
                           </div>
