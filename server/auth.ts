@@ -309,6 +309,39 @@ export function setupAuth(app: Express) {
         // Remove password from response
         const { password, ...userWithoutPassword } = user;
 
+        // Send welcome email to the user
+        try {
+          console.log("Sending welcome email to:", user.email);
+          
+          // Import the sendEmail function and welcome email templates
+          const { sendEmail } = await import('./email');
+          const { createWelcomeEmailHtml, createWelcomeEmailText } = await import('./gmail');
+          
+          // Determine if user has a paid plan
+          const isPaidPlan = user.subscription_plan !== 'free' && user.subscription_plan !== undefined;
+          
+          // Get user's name (use full_name or username or the part before @ in email)
+          const userName = user.full_name || user.username || user.email.split('@')[0];
+          
+          // Send the welcome email
+          const emailSent = await sendEmail({
+            to: user.email,
+            subject: isPaidPlan ? "Welcome to Tovably Premium!" : "Welcome to Tovably!",
+            html: createWelcomeEmailHtml(userName, isPaidPlan),
+            text: createWelcomeEmailText(userName, isPaidPlan)
+          });
+          
+          if (emailSent) {
+            console.log("Welcome email sent successfully to:", user.email);
+          } else {
+            console.warn("Failed to send welcome email to:", user.email);
+          }
+        } catch (emailError) {
+          // Non-fatal error - log but continue with user registration
+          console.error("Error sending welcome email:", 
+            emailError instanceof Error ? emailError.message : String(emailError));
+        }
+
         // Log the user in
         console.log("Logging in new user...");
         req.login(user, (err) => {
