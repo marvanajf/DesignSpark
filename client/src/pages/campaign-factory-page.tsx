@@ -16,7 +16,7 @@ import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { subscriptionPlans, type SubscriptionPlanType } from "@shared/schema";
 import { generateCampaignContent } from "@/lib/openai";
@@ -1039,15 +1039,54 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
   };
 
   // Save campaign to user account
-  const handleSaveCampaign = () => {
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const handleSaveCampaign = async () => {
     if (!campaign) return;
     
-    toast({
-      title: "Campaign saved",
-      description: "Your campaign has been saved to your account",
-    });
+    setIsSaving(true);
     
-    setLocation("/campaigns");
+    try {
+      // Prepare campaign data for API request
+      const campaignData = {
+        name: campaign.name,
+        objective: campaign.objective,
+        target_audience: campaign.targetAudience,
+        channels: campaign.channels,
+        timeline_start: campaign.timeline.start,
+        timeline_end: campaign.timeline.end,
+        contents: JSON.stringify(campaign.contents),
+        tone_profile: JSON.stringify(campaign.toneProfile)
+      };
+      
+      // Send data to API
+      const response = await apiRequest('POST', '/api/campaign-factory', campaignData);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save campaign');
+      }
+      
+      // Invalidate campaign factory query to refresh the data
+      queryClient.invalidateQueries({ queryKey: ['/api/campaign-factory'] });
+      
+      toast({
+        title: "Campaign saved",
+        description: "Your campaign has been saved to your account",
+      });
+      
+      // Navigate to dashboard
+      setLocation("/dashboard");
+    } catch (error) {
+      console.error('Error saving campaign:', error);
+      toast({
+        title: "Error saving campaign",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (

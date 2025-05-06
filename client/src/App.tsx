@@ -20,6 +20,7 @@ import SupportPage from "@/pages/support-page";
 import KnowledgeBasePage from "@/pages/knowledge-base-page";
 import UsagePage from "@/pages/usage-page";
 import CampaignFactoryPage from "@/pages/campaign-factory-page";
+import CampaignFactorySavedPage from "@/pages/campaign-factory-saved-page";
 import CampaignFactoryInfoPage from "@/pages/campaign-factory-info";
 import KnowledgeBaseMarketingPage from "@/pages/knowledge-base-marketing-page";
 import ToneAnalysisMarketingPage from "@/pages/tone-analysis-marketing-page";
@@ -91,6 +92,7 @@ function Router() {
       <ProtectedRoute path="/campaign/:id" component={CampaignPage} />
       <ProtectedRoute path="/knowledge-base" component={KnowledgeBasePage} />
       <ProtectedRoute path="/campaign-factory" component={CampaignFactoryPage} />
+      <ProtectedRoute path="/campaign-factory/saved" component={CampaignFactorySavedPage} />
       <ProtectedRoute path="/account" component={AccountPage} />
       <ProtectedRoute path="/usage" component={UsagePage} />
       <ProtectedRoute path="/support" component={SupportPage} />

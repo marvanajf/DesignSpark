@@ -36,6 +36,7 @@ import { Progress } from "@/components/ui/progress";
 import { CampaignOverviewDashboard } from "@/components/CampaignOverviewDashboard";
 import { PersonasOverview } from "@/components/PersonasOverview";
 import { CampaignTimelineDashboard } from "@/components/CampaignTimelineDashboard";
+import { CampaignFactoryOverview } from "@/components/CampaignFactoryOverview";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -265,6 +266,11 @@ export default function DashboardPage() {
           {/* Campaign Timeline Section */}
           <div className="mb-10">
             <CampaignTimelineDashboard />
+          </div>
+
+          {/* Campaign Factory Overview Section */}
+          <div className="mb-10">
+            <CampaignFactoryOverview />
           </div>
 
           {/* Campaign and Personas Overview Section */}
