@@ -415,6 +415,17 @@ QUALITY STANDARDS:
 - Always include concrete examples and specifics rather than vague claims
 - Content should demonstrate insider knowledge of ${ctx.industry} challenges
 
+AUTHENTICITY REQUIREMENTS:
+- NEVER use phrases like "in today's fast-paced world" or "in the dynamic landscape"
+- AVOID clichés like "in this digital age" or any variation that sounds generic
+- DO NOT use "now more than ever" or similar time-based urgency phrases
+- AVOID mentioning "changing consumer expectations" or similar generalizations
+- REMOVE any reference to "the current climate" or "the modern business environment"
+- WRITE as a human would write, not as AI tends to write
+- CUT all filler phrases that don't add specific value (e.g., "it's important to note that")
+- AVOID theoretical framing like "studies show" or "research indicates" without specifics
+- USE direct, concrete language focused on specific problems and solutions
+
 CRITICAL INSTRUCTIONS:
 1. The campaign brief is your PRIMARY source of information - extract key insights from it
 2. Focus ENTIRELY on the audience's perspective - what they care about, their goals, and their challenges
@@ -449,15 +460,25 @@ Include:
 
 EMAIL EFFECTIVENESS REQUIREMENTS:
 - The subject line must have immediate relevance to the recipient's role and challenges
-- The opening must hook the reader in the first 3 seconds of reading
+- The opening must hook the reader without using clichés like "in today's world" or "in the current landscape"
 - The email should create a sense of credibility and appropriate urgency without being pushy
 - Every word must be purposeful - ${ctx.persona}s receive dozens of emails daily
 - Create professional curiosity by hinting at valuable insights, but don't reveal everything
 - Ensure the email clearly conveys "what's in it for them" within the first paragraph
 - Focus more on their pains and goals than on product descriptions
+- AVOID starting sentences with "As a ${ctx.persona}" or similar role-based generalizations
+- DO NOT use the phrase "I hope this email finds you well" or similar generic openings
+- NEVER include phrases like "changing market dynamics" or "evolving industry landscape"
 
 The email should be 250-350 words total and formatted for easy mobile reading with short paragraphs.
-Make every sentence count - decision-makers in ${ctx.industry} have limited time and need to immediately see relevance.`;
+Make every sentence count - decision-makers in ${ctx.industry} have limited time and need to immediately see relevance.
+
+HUMAN WRITING PATTERN:
+- Write like a real person, not like marketing copy
+- Use varied sentence structures (not all starting with same pattern)
+- Incorporate casual transitions that feel natural
+- Add small details that make the writing feel personally written
+- Balance direct statements with thoughtful observations`;
       
     case 'social':
       return `${basePrompt}
@@ -480,6 +501,18 @@ LINKEDIN POST EFFECTIVENESS REQUIREMENTS:
 - Include one specific, memorable data point or insight that readers will remember and potentially share
 - Write in a way that encourages comments by posing thoughtful questions or inviting experiences
 - Avoid overly promotional language - focus on providing genuine value through education or insight
+- AVOID cliché openings like "Did you know..." or "I'm excited to share..."
+- DO NOT use phrases like "I'm thrilled to announce" or other overused LinkedIn expressions
+- NEVER begin with "As businesses navigate the challenges of..."
+- AVOID closing with generic phrases like "What are your thoughts?" or "What's your experience?"
+
+AUTHENTICITY REQUIREMENTS:
+- Sound like a real person, not a corporate entity or marketing department
+- Use natural language patterns that feel like they come from an actual professional
+- Include specific details that demonstrate genuine industry knowledge
+- Vary sentence structures and lengths to create natural rhythm
+- Incorporate subtle conversational elements (thoughtful pauses, brief asides)
+- Balance professionalism with personality to avoid generic corporate tone
 
 The post should be 150-270 words and formatted for easy scanning with short paragraphs, strategic line breaks, and a professional tone that balances authority with approachability.
 Make sure the content would fit naturally in a LinkedIn feed and would encourage shares among ${ctx.industry} professionals.`;
