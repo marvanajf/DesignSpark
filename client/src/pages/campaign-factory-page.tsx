@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { subscriptionPlans, type SubscriptionPlanType } from "@shared/schema";
 import { generateCampaignContent } from "@/lib/openai";
 
-// Type definitions (preserved from original)
+// Type definitions
 type Persona = {
   id: number;
   name: string;
@@ -135,7 +135,7 @@ export default function CampaignFactoryPage() {
   const twoMonthsLater = new Date(today);
   twoMonthsLater.setMonth(today.getMonth() + 2);
   
-  // State variables (preserved from original)
+  // State variables
   const [campaignPrompt, setCampaignPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedUseCase, setSelectedUseCase] = useState<string>("");
@@ -202,7 +202,7 @@ export default function CampaignFactoryPage() {
     { id: 'launch', name: 'Product Launch', description: 'Introduce a new product or feature to the market' }
   ];
   
-  // Function to handle campaign generation using OpenAI integration
+  // Function to handle campaign generation
   const handleGenerateCampaign = async () => {
     // Validate inputs
     if (!campaignPrompt.trim() || !selectedUseCase) {
@@ -296,14 +296,10 @@ export default function CampaignFactoryPage() {
       // STEP 3: Prepare OpenAI inputs and generate content
       setGenerationProgress(50);
       
-      // Generate campaign titles and email subjects
+      // Generate campaign title based on use case and brief
       const campaignTitleVal = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
       const emailSubject1 = `Strategic ${useCaseName.toLowerCase()} for your ${industryExtracted || 'industry'} organization`;
       const emailSubject2 = `Following up: Your ${useCaseName.toLowerCase()} opportunities`;
-      
-      // Prepare persona benefits and pain points for content
-      const personaBenefits = audienceGoalsVal.map(goal => `• ${goal}`);
-      const personaPains = audiencePainsVal.map(pain => `• Eliminates ${pain.toLowerCase()}`);
       
       // Helper function to adapt content based on the tone profile
       const adaptContentToTone = (content: string): string => {
@@ -371,7 +367,7 @@ export default function CampaignFactoryPage() {
         maxLength: 1000
       };
         
-          // STEP 4: Generate content with OpenAI and prepare campaign
+      // STEP 4: Generate content with OpenAI and prepare campaign
       setGenerationProgress(70);
       
       // Calculate delivery dates for content
@@ -384,14 +380,14 @@ export default function CampaignFactoryPage() {
       // Set progress to 90% after content generation
       setGenerationProgress(90);
       
-      // Create content pieces for the campaign
+      // Create content pieces
       const campaignContentPieces: CampaignContent[] = [
-            {
-              id: 1,
-              type: 'email',
-              title: `${useCaseName} Initial Outreach for ${audienceNameVal}`,
-              persona: audienceNameVal,
-              content: adaptContentToTone(`Subject: ${emailSubject1}
+        {
+          id: 1,
+          type: 'email',
+          title: `${useCaseName} Initial Outreach for ${audienceNameVal}`,
+          persona: audienceNameVal,
+          content: adaptContentToTone(`Subject: ${emailSubject1}
 
 Dear [${audienceRoleVal}],
 
@@ -399,7 +395,7 @@ I recently came across your organization's initiatives and was particularly impr
 
 Many of our clients in similar positions have been exploring new ways to implement ${benefitExtracted || 'effective'} ${productExtracted || 'solution'} solutions for the ${regionExtracted || 'global'} market. The results they've achieved include:
 
-${personaBenefits.join('\n')}
+${audienceGoalsVal.map(goal => `• ${goal}`).join('\n')}
 
 Based on your market position and the specific challenges facing companies in the ${industryExtracted || 'technology'} sector, I believe we could offer valuable insights related to your current priorities.
 
@@ -407,16 +403,16 @@ Would you have 20 minutes next week to discuss how our approach has proven succe
 
 Best regards,
 [Your Name]`),
-              deliveryDate: campaignStartDate,
-              channel: "Email",
-              icon: <MessageSquare className="h-5 w-5" />
-            },
-          {
-            id: 2,
-            type: "email" as const,
-            title: `${useCaseName} Follow-up for ${audienceNameVal}`,
-            persona: audienceNameVal,
-            content: adaptContentToTone(`Subject: ${emailSubject2}
+          deliveryDate: campaignStartDate,
+          channel: "Email",
+          icon: <MessageSquare className="h-5 w-5" />
+        },
+        {
+          id: 2,
+          type: "email",
+          title: `${useCaseName} Follow-up for ${audienceNameVal}`,
+          persona: audienceNameVal,
+          content: adaptContentToTone(`Subject: ${emailSubject2}
 
 Dear [${audienceRoleVal}],
 
@@ -426,22 +422,22 @@ Recent research highlights that organizations in your industry taking a proactiv
 
 Based on common challenges in your sector, our approach could help with:
 
-${personaPains.join('\n')}
+${audiencePainsVal.map(pain => `• Eliminates ${pain.toLowerCase()}`).join('\n')}
 
 Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies similar to yours.
 
 Looking forward to your response,
 [Your Name]`),
-            deliveryDate: firstFollowupDate.toISOString().split('T')[0],
-            channel: "Email",
-            icon: <MessageSquare className="h-5 w-5" />
-          },
-          {
-            id: 3,
-            type: "social" as const,
-            title: `LinkedIn Thought Leadership for ${useCaseName}`,
-            persona: audienceNameVal,
-            content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${regionExtracted || 'global'} market."
+          deliveryDate: firstFollowupDate.toISOString().split('T')[0],
+          channel: "Email",
+          icon: <MessageSquare className="h-5 w-5" />
+        },
+        {
+          id: 3,
+          type: "social",
+          title: `LinkedIn Thought Leadership for ${useCaseName}`,
+          persona: audienceNameVal,
+          content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${regionExtracted || 'global'} market."
 
 This is what our clients in the ${industryExtracted || 'technology'} sector are achieving with our ${benefitExtracted || 'effective'} ${productExtracted || 'solution'} solutions.
 
@@ -457,16 +453,16 @@ What strategies is your organization implementing to stay ahead of industry chan
 [Learn more about our proven approach - Link]
 
 #Innovation #Strategy #BusinessGrowth #LinkedIn`),
-            deliveryDate: socialPostDate.toISOString().split('T')[0],
-            channel: "LinkedIn",
-            icon: <FileText className="h-5 w-5" />
-          },
-          {
-            id: 4,
-            type: "webinar" as const,
-            title: `Strategic ${useCaseName} Webinar for ${audienceNameVal}`,
-            persona: audienceNameVal,
-            content: adaptContentToTone(`Title: "Strategic Innovation Framework for Industry Leaders"
+          deliveryDate: socialPostDate.toISOString().split('T')[0],
+          channel: "LinkedIn",
+          icon: <FileText className="h-5 w-5" />
+        },
+        {
+          id: 4,
+          type: "webinar",
+          title: `Strategic ${useCaseName} Webinar for ${audienceNameVal}`,
+          persona: audienceNameVal,
+          content: adaptContentToTone(`Title: "Strategic Innovation Framework for Industry Leaders"
 
 Duration: 45 minutes + 15-minute Q&A
 
@@ -492,16 +488,16 @@ Presenter:
 [Industry Expert Name], with extensive experience helping organizations transform their strategic approach to industry-specific challenges.
 
 Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`),
-            deliveryDate: webinarDate.toISOString().split('T')[0],
-            channel: "Webinar",
-            icon: <FileText className="h-5 w-5" />
-          },
-          {
-            id: 5,
-            type: "social" as const,
-            title: `LinkedIn Article on ${useCaseName} ROI`,
-            persona: (personas.find(p => selectedPersonas[1]) ? personas.find(p => p.id === selectedPersonas[1])?.name : personas.find(p => selectedPersonas.includes(p.id))?.name) || "Target Audience",
-            content: adaptContentToTone(`# Beyond Traditional Metrics: Measuring the True ROI of Strategic Initiatives
+          deliveryDate: webinarDate.toISOString().split('T')[0],
+          channel: "Webinar",
+          icon: <FileText className="h-5 w-5" />
+        },
+        {
+          id: 5,
+          type: "social",
+          title: `LinkedIn Article on ${useCaseName} ROI`,
+          persona: (personas.find(p => selectedPersonas[1]) ? personas.find(p => p.id === selectedPersonas[1])?.name : personas.find(p => selectedPersonas.includes(p.id))?.name) || "Target Audience",
+          content: adaptContentToTone(`# Beyond Traditional Metrics: Measuring the True ROI of Strategic Initiatives
 
 Most organizations evaluate investments using standard financial metrics, but this approach misses critical value dimensions that drive long-term competitive advantage.
 
@@ -522,16 +518,16 @@ The combined impact of these "hidden ROI factors" often exceeds the direct cost 
 What has been your experience measuring the full spectrum of returns on strategic initiatives?
 
 #BusinessStrategy #ROIAnalysis #StrategicLeadership #LinkedIn`),
-            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
-            channel: "LinkedIn",
-            icon: <FileText className="h-5 w-5" />
-          },
-          {
-            id: 6,
-            type: "blog" as const,
-            title: `Industry Trends in ${useCaseName} - Strategic Analysis`,
-            persona: audienceNameVal,
-            content: adaptContentToTone(`5 Critical Challenges in Strategic Execution (And How to Address Them)
+          deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
+          channel: "LinkedIn",
+          icon: <FileText className="h-5 w-5" />
+        },
+        {
+          id: 6,
+          type: "blog",
+          title: `Industry Trends in ${useCaseName} - Strategic Analysis`,
+          persona: audienceNameVal,
+          content: adaptContentToTone(`5 Critical Challenges in Strategic Execution (And How to Address Them)
 
 In today's landscape, businesses face sophisticated challenges that require thoughtful solutions. According to recent research, many organizations struggle with these issues, yet only a small percentage are adequately prepared to address them.
 
@@ -574,96 +570,20 @@ The Solution: Our guided implementation process and ongoing support ensure you m
 The cost of inefficiency and missed opportunities can be substantial when including lost productivity, missed opportunities, and competitive disadvantage. By comparison, our solution provides enterprise-grade capabilities at an accessible price point, typically paying for itself within the first year.
 
 Ready to transform your strategic approach? [Contact us] for a complimentary assessment.`),
-            deliveryDate: blogPostDate.toISOString().split('T')[0],
-            channel: "Blog",
-            icon: <FileText className="h-5 w-5" />
-          }
-        ];
-        
-        // Ensure all pieces have valid personas (fixing any potential undefined values)
-        const sanitizedContentPieces = allContentPieces.map(content => ({
-          ...content,
-          persona: content.persona || "Target Audience" // Fallback to ensure we never have undefined
-        }));
-        
-        // Filter content based on selected types
-        const filteredContent = sanitizedContentPieces.filter((content) => {
-          switch (content.type) {
-            case "email":
-              return selectedContentTypes.email;
-            case "social":
-              return selectedContentTypes.social;
-            case "blog":
-              return selectedContentTypes.blog;
-            case "webinar":
-              return selectedContentTypes.webinar;
-            default:
-              return false;
-          }
-        });
-        
-        // Ensure we only include the number of each content type as specified in contentCount
-        const selectedContents: CampaignContent[] = [];
-        
-        // Counter for each content type
-        const typeCount = { email: 0, social: 0, blog: 0, webinar: 0 };
-        
-        // Add contents respecting the contentCount limits
-        for (const content of filteredContent) {
-          if (typeCount[content.type] < contentCount[content.type]) {
-            selectedContents.push(content);
-            typeCount[content.type]++;
-          }
+          deliveryDate: blogPostDate.toISOString().split('T')[0],
+          channel: "Blog",
+          icon: <FileText className="h-5 w-5" />
         }
-        
-        setCampaign({
-          id: 1,
-          name: campaignName,
-          objective: campaignPrompt || "Increase brand awareness and drive conversions",
-          targetAudience: selectedPersonas.map(id => {
-            const persona = personas.find(p => p.id === id);
-            return persona ? persona.name : "Target Audience";
-          }),
-          channels: Object.entries(selectedContentTypes)
-            .filter(([_, isSelected]) => isSelected)
-            .map(([type, _]) => type === 'social' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)),
-          timeline: {
-            start: campaignStartDate,
-            end: campaignEndDate
-          },
-          contents: selectedContents,
-          toneProfile: selectedToneResults ? {
-            professional: selectedToneResults.professional || 85,
-            conversational: selectedToneResults.conversational || 65,
-            persuasive: selectedToneResults.persuasive || 75,
-            educational: selectedToneResults.educational || 80,
-            enthusiastic: selectedToneResults.enthusiastic || 60
-          } : {
-            professional: 85,
-            conversational: 65,
-            persuasive: 75,
-            educational: 80,
-            enthusiastic: 60
-          }
-        });
-        
-        // Simulate incrementing usage counter server-side
-        // In a real app, this would be a call to the backend API
-        console.log("Campaign generated - incrementing usage");
-        
-        // Change to results tab after completed
-        setTimeout(() => {
-          setIsGenerating(false);
-          setActiveTab("results");
-        }, 1000);
+      ];
+      
       // Process the campaign content pieces
-      const processedContentPieces = campaignContentPieces.map((content: any) => ({
+      const processedContentPieces = campaignContentPieces.map((content) => ({
         ...content,
         persona: content.persona || "Target Audience" // Fallback to ensure we never have undefined
       }));
       
       // Filter content based on selected types
-      const filteredContent = processedContentPieces.filter((content: any) => {
+      const filteredContent = processedContentPieces.filter((content) => {
         switch (content.type) {
           case "email":
             return selectedContentTypes.email;
@@ -743,7 +663,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
     }
   };
 
-  // Generate personas (preserved from original)
+  // Generate personas
   const handleGeneratePersonas = async () => {
     setIsGeneratingPersonas(true);
     
@@ -808,7 +728,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
     }
   };
 
-  // Save campaign to user account (preserved from original)
+  // Save campaign to user account
   const handleSaveCampaign = () => {
     if (!campaign) return;
     
@@ -955,576 +875,693 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                         <FileText className="h-5 w-5 text-[#5eead4]" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl text-white font-medium">Campaign Brief</CardTitle>
-                        <CardDescription>
-                          Provide information about your marketing campaign
+                        <CardTitle className="text-white text-lg">Campaign Brief</CardTitle>
+                        <CardDescription className="text-gray-400 text-sm">
+                          Describe the campaign's objective, target audience, and desired outcome
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-8">
-                    {/* Campaign Description */}
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="campaign-prompt" className="text-white font-medium flex items-center">
-                          Campaign Description 
-                          <span className="text-[#5eead4] ml-2 text-sm font-normal">(Required)</span>
-                        </Label>
-                        <p className="text-gray-400 text-sm mb-2">
-                          What is your campaign about? Include goals, target audience, key messages, and any specific requirements.
-                        </p>
-                        <Textarea 
-                          id="campaign-prompt"
-                          placeholder="E.g., A campaign to promote our new cloud security product to IT managers at mid-size companies. We want to emphasize easy deployment, cost savings, and regulatory compliance..."
-                          className="h-32 bg-zinc-900 border-zinc-700 focus-visible:ring-[#5eead4]"
-                          value={campaignPrompt}
-                          onChange={(e) => setCampaignPrompt(e.target.value)}
-                        />
-                      </div>
-                      
-                      {/* Campaign Type */}
-                      <div>
-                        <Label htmlFor="campaign-type" className="text-white font-medium flex items-center">
-                          Campaign Type
-                          <span className="text-[#5eead4] ml-2 text-sm font-normal">(Required)</span>
-                        </Label>
-                        <p className="text-gray-400 text-sm mb-3">
-                          Select the primary purpose of your campaign
-                        </p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <CardContent className="px-6 pb-5 space-y-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="campaignPrompt" className="text-gray-300">
+                        Campaign Description
+                      </Label>
+                      <Textarea 
+                        id="campaignPrompt"
+                        placeholder="Enter a description of your campaign's goals, target market, and product/service..."
+                        value={campaignPrompt}
+                        onChange={(e) => setCampaignPrompt(e.target.value)}
+                        className="h-32 text-white bg-zinc-900 border-gray-800"
+                      />
+                      <p className="text-xs text-gray-500">
+                        Be detailed to help our AI understand your goals and audience
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-1.5">
+                      <Label htmlFor="campaignType" className="text-gray-300">
+                        Campaign Type
+                      </Label>
+                      <Select 
+                        value={selectedUseCase} 
+                        onValueChange={setSelectedUseCase}
+                      >
+                        <SelectTrigger className="w-full bg-zinc-900 border-gray-800 text-white">
+                          <SelectValue placeholder="Select campaign type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-gray-800">
                           {useCases.map(useCase => (
-                            <div 
-                              key={useCase.id}
-                              className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                                selectedUseCase === useCase.id 
-                                  ? "border-[#5eead4] bg-[#5eead4]/10" 
-                                  : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600"
-                              }`}
-                              onClick={() => setSelectedUseCase(useCase.id)}
+                            <SelectItem 
+                              key={useCase.id} 
+                              value={useCase.id}
+                              className="text-white hover:bg-zinc-800 focus:bg-zinc-800"
                             >
-                              <div className="flex flex-col h-full">
-                                <h3 className={`font-medium mb-2 ${
-                                  selectedUseCase === useCase.id ? "text-[#5eead4]" : "text-white"
-                                }`}>
-                                  {useCase.name}
-                                </h3>
-                                <p className="text-gray-400 text-sm">{useCase.description}</p>
+                              <div className="flex flex-col">
+                                <span>{useCase.name}</span>
+                                <span className="text-xs text-gray-400 mt-1">{useCase.description}</span>
                               </div>
-                            </div>
+                            </SelectItem>
                           ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-gray-500">
+                        Select the primary objective of your campaign
+                      </p>
+                    </div>
+                    
+                    {/* Timeline */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="startDate" className="text-gray-300">
+                          Start Date
+                        </Label>
+                        <div className="relative">
+                          <Calendar className="h-4 w-4 text-gray-400 absolute left-3 top-3" />
+                          <Input 
+                            id="startDate"
+                            type="date"
+                            value={campaignStartDate}
+                            onChange={(e) => setCampaignStartDate(e.target.value)}
+                            className="pl-10 bg-zinc-900 border-gray-800 text-white"
+                          />
                         </div>
                       </div>
-                      
-                      {/* Brand Voice (Required) */}
-                      <div>
-                        <Label htmlFor="brand-voice" className="text-white font-medium flex items-center">
-                          Brand Voice
-                          <span className="text-[#5eead4] ml-2 text-sm font-normal">(Required)</span>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="endDate" className="text-gray-300">
+                          End Date
                         </Label>
-                        <p className="text-gray-400 text-sm mb-3">
-                          Select a tone analysis to apply your brand voice to the campaign content
-                        </p>
-                        <div className="max-w-full">
-                          <Select 
-                            value={selectedToneAnalysisId} 
-                            onValueChange={setSelectedToneAnalysisId}
-                          >
-                            <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
-                              <SelectValue placeholder="Select a tone analysis" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-zinc-900 border-zinc-700">
-                              {isLoadingToneAnalyses ? (
-                                <div className="flex items-center justify-center p-4">
-                                  <Loader2 className="h-4 w-4 text-[#5eead4] animate-spin" />
-                                </div>
-                              ) : (
-                                toneAnalyses && toneAnalyses.length > 0 ? (
-                                  toneAnalyses?.map(tone => (
-                                    <SelectItem key={tone.id} value={tone.id.toString()}>
+                        <div className="relative">
+                          <Calendar className="h-4 w-4 text-gray-400 absolute left-3 top-3" />
+                          <Input 
+                            id="endDate"
+                            type="date"
+                            value={campaignEndDate}
+                            onChange={(e) => setCampaignEndDate(e.target.value)}
+                            className="pl-10 bg-zinc-900 border-gray-800 text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Brand Voice */}
+                    <div className="space-y-1.5">
+                      <Label className="text-gray-300">
+                        <span className="flex items-center gap-1">
+                          Brand Voice
+                          <span className="ml-2 text-xs px-2 py-0.5 rounded bg-[#5eead4]/10 text-[#5eead4]">Required</span>
+                        </span>
+                      </Label>
+                      
+                      <div className="bg-zinc-900 border border-gray-800 rounded-md p-4">
+                        {isLoadingToneAnalyses ? (
+                          <div className="space-y-3 animate-pulse">
+                            <Skeleton className="h-4 w-3/4 bg-gray-800" />
+                            <Skeleton className="h-3 w-1/2 bg-gray-800" />
+                          </div>
+                        ) : toneAnalyses && toneAnalyses.length > 0 ? (
+                          <div className="space-y-4">
+                            <div className="flex flex-col space-y-2">
+                              <Label className="text-sm text-gray-400">
+                                Select a tone profile
+                              </Label>
+                              <Select
+                                value={selectedToneAnalysisId}
+                                onValueChange={setSelectedToneAnalysisId}
+                              >
+                                <SelectTrigger className="w-full bg-zinc-800 border-gray-700 text-white">
+                                  <SelectValue placeholder="Select tone profile" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-800 border-gray-700">
+                                  {toneAnalyses.map(tone => (
+                                    <SelectItem 
+                                      key={tone.id} 
+                                      value={tone.id.toString()}
+                                      className="text-white hover:bg-zinc-700 focus:bg-zinc-700"
+                                    >
                                       {tone.name}
                                     </SelectItem>
-                                  ))
-                                ) : (
-                                  <div className="p-2 text-center">
-                                    <p className="text-gray-400 mb-2">No tone analyses found</p>
-                                    <Button 
-                                      variant="link" 
-                                      className="text-[#5eead4] p-0" 
-                                      onClick={() => setLocation('/tone-analysis')}
-                                    >
-                                      Create a tone analysis
-                                    </Button>
-                                  </div>
-                                )
-                              )}
-                            </SelectContent>
-                          </Select>
-                          {!selectedToneAnalysisId && !isLoadingToneAnalyses && (
-                            <div className="mt-2 flex items-center">
-                              <Button 
-                                variant="link" 
-                                className="text-[#5eead4] p-0 h-auto" 
-                                onClick={() => setLocation('/tone-analysis')}
-                              >
-                                Create a new tone analysis
-                                <ArrowRight className="h-3 w-3 ml-1" />
-                              </Button>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                             </div>
-                          )}
-                          <p className="text-gray-400 text-xs mt-2">
-                            A tone analysis helps maintain consistent brand voice across all content
-                          </p>
-                        </div>
-                      </div>
-                      
-                      {/* Campaign Timeline */}
-                      <div>
-                        <h3 className="text-white font-medium mb-3">Campaign Timeline</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div>
-                            <Label htmlFor="start-date" className="text-gray-300 mb-2 block">Start Date</Label>
-                            <Input 
-                              id="start-date"
-                              type="date"
-                              className="bg-zinc-900 border-zinc-700 focus-visible:ring-[#5eead4]"
-                              value={campaignStartDate}
-                              onChange={(e) => setCampaignStartDate(e.target.value)}
-                            />
+                            
+                            {toneAnalyses.length > 0 && !selectedToneAnalysisId && (
+                              <p className="text-sm text-amber-400">
+                                Please select a tone profile to ensure your content matches your brand voice
+                              </p>
+                            )}
                           </div>
-                          <div>
-                            <Label htmlFor="end-date" className="text-gray-300 mb-2 block">End Date</Label>
-                            <Input 
-                              id="end-date"
-                              type="date"
-                              className="bg-zinc-900 border-zinc-700 focus-visible:ring-[#5eead4]"
-                              value={campaignEndDate}
-                              onChange={(e) => setCampaignEndDate(e.target.value)}
-                            />
+                        ) : (
+                          <div className="space-y-4">
+                            <p className="text-sm text-white">
+                              You don't have any tone profiles yet. Create a tone profile to ensure all your campaign content matches your brand voice.
+                            </p>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-[#5eead4] text-[#5eead4] hover:bg-[#5eead4]/10"
+                              onClick={() => setLocation("/tone-analysis")}
+                            >
+                              Create Tone Profile
+                            </Button>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </CardContent>
                 </Card>
                 
-                {/* Content Configuration */}
+                {/* Target Personas Section */}
                 <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden">
                   <CardHeader className="px-6 py-5">
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center justify-center w-8 h-8">
-                        <MessageSquare className="h-5 w-5 text-[#5eead4]" />
+                        <Users className="h-5 w-5 text-[#5eead4]" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl text-white font-medium">Content Configuration</CardTitle>
-                        <CardDescription>
-                          Select the types of content you want in your campaign
+                        <CardTitle className="text-white text-lg">Target Personas</CardTitle>
+                        <CardDescription className="text-gray-400 text-sm">
+                          Select the audiences that will be targeted in this campaign
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
-                  
-                  <CardContent className="p-6">
-                    <div className="space-y-6">
-                      {/* Content Selection */}
-                      <div>
-                        <h3 className="text-white font-medium mb-4">Content Types</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                          {/* Email Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.email ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
-                            <div className="flex justify-between items-center mb-3">
-                              <h4 className="font-medium text-white">Email</h4>
-                              <Switch 
-                                checked={selectedContentTypes.email} 
-                                onCheckedChange={() => toggleContentType('email')}
-                                className="data-[state=checked]:bg-[#5eead4]"
-                              />
-                            </div>
-                            {selectedContentTypes.email && (
-                              <div className="mt-4">
-                                <Label htmlFor="email-count" className="text-gray-300 text-sm block mb-2">Number of Emails</Label>
-                                <Select 
-                                  value={contentCount.email.toString()} 
-                                  onValueChange={(value) => handleContentCountChange('email', parseInt(value))}
-                                >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
-                                    <SelectValue placeholder="Select" />
-                                  </SelectTrigger>
-                                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                                    <SelectItem value="1">1 Email</SelectItem>
-                                    <SelectItem value="2">2 Emails</SelectItem>
-                                    <SelectItem value="3">3 Emails</SelectItem>
-                                    <SelectItem value="4">4 Emails</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* LinkedIn Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.social ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
-                            <div className="flex justify-between items-center mb-3">
-                              <h4 className="font-medium text-white">LinkedIn</h4>
-                              <Switch 
-                                checked={selectedContentTypes.social} 
-                                onCheckedChange={() => toggleContentType('social')}
-                                className="data-[state=checked]:bg-[#5eead4]"
-                              />
-                            </div>
-                            {selectedContentTypes.social && (
-                              <div className="mt-4">
-                                <Label htmlFor="social-count" className="text-gray-300 text-sm block mb-2">Number of Posts</Label>
-                                <Select 
-                                  value={contentCount.social.toString()} 
-                                  onValueChange={(value) => handleContentCountChange('social', parseInt(value))}
-                                >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
-                                    <SelectValue placeholder="Select" />
-                                  </SelectTrigger>
-                                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                                    <SelectItem value="1">1 Post</SelectItem>
-                                    <SelectItem value="2">2 Posts</SelectItem>
-                                    <SelectItem value="3">3 Posts</SelectItem>
-                                    <SelectItem value="4">4 Posts</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* Blog Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.blog ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
-                            <div className="flex justify-between items-center mb-3">
-                              <h4 className="font-medium text-white">Blog</h4>
-                              <Switch 
-                                checked={selectedContentTypes.blog} 
-                                onCheckedChange={() => toggleContentType('blog')}
-                                className="data-[state=checked]:bg-[#5eead4]"
-                              />
-                            </div>
-                            {selectedContentTypes.blog && (
-                              <div className="mt-4">
-                                <Label htmlFor="blog-count" className="text-gray-300 text-sm block mb-2">Number of Articles</Label>
-                                <Select 
-                                  value={contentCount.blog.toString()} 
-                                  onValueChange={(value) => handleContentCountChange('blog', parseInt(value))}
-                                >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
-                                    <SelectValue placeholder="Select" />
-                                  </SelectTrigger>
-                                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                                    <SelectItem value="1">1 Article</SelectItem>
-                                    <SelectItem value="2">2 Articles</SelectItem>
-                                    <SelectItem value="3">3 Articles</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* Webinar Content */}
-                          <div className={`p-5 rounded-lg border ${selectedContentTypes.webinar ? "border-[#5eead4] bg-[#5eead4]/10" : "border-zinc-800 bg-zinc-900/50"}`}>
-                            <div className="flex justify-between items-center mb-3">
-                              <h4 className="font-medium text-white">Webinar</h4>
-                              <Switch 
-                                checked={selectedContentTypes.webinar} 
-                                onCheckedChange={() => toggleContentType('webinar')}
-                                className="data-[state=checked]:bg-[#5eead4]"
-                              />
-                            </div>
-                            {selectedContentTypes.webinar && (
-                              <div className="mt-4">
-                                <Label htmlFor="webinar-count" className="text-gray-300 text-sm block mb-2">Number of Webinars</Label>
-                                <Select 
-                                  value={contentCount.webinar.toString()} 
-                                  onValueChange={(value) => handleContentCountChange('webinar', parseInt(value))}
-                                >
-                                  <SelectTrigger className="bg-zinc-900 border-zinc-700 focus:ring-[#5eead4] focus-visible:ring-[#5eead4]">
-                                    <SelectValue placeholder="Select" />
-                                  </SelectTrigger>
-                                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                                    <SelectItem value="1">1 Webinar</SelectItem>
-                                    <SelectItem value="2">2 Webinars</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </div>
+                  <CardContent className="px-6 pb-5 space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-gray-300">
+                          Auto-generate personas from campaign brief
+                        </Label>
+                        <div className="flex items-center">
+                          <Switch 
+                            id="useGeneratedPersonas"
+                            checked={useGeneratedPersonas}
+                            onCheckedChange={setUseGeneratedPersonas}
+                            className="data-[state=checked]:bg-[#5eead4]"
+                          />
                         </div>
                       </div>
                       
-                      {/* Advanced Settings (collapsible) */}
-                      <div className="mt-8 border-t border-zinc-800/60 pt-6">
-                        <h3 className="text-white font-medium mb-4">Advanced Settings (Optional)</h3>
-                        
-                        {/* Persona Selection */}
-                        <div className="mb-6">
-                          <div className="flex justify-between items-center mb-3">
-                            <div>
-                              <h4 className="text-white text-sm font-medium">Use AI-Generated Personas</h4>
-                              <p className="text-gray-400 text-xs mt-1">
-                                Let the AI create personas based on your campaign brief
-                              </p>
-                            </div>
-                            <Switch 
-                              checked={useGeneratedPersonas} 
-                              onCheckedChange={setUseGeneratedPersonas}
-                              className="data-[state=checked]:bg-[#5eead4]"
-                            />
-                          </div>
+                      {useGeneratedPersonas && (
+                        <div className="mt-3">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            disabled={isGeneratingPersonas}
+                            onClick={handleGeneratePersonas}
+                            className="border-[#5eead4] text-[#5eead4] hover:bg-[#5eead4]/10"
+                          >
+                            {isGeneratingPersonas && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {isGeneratingPersonas ? "Generating..." : "Generate Personas"}
+                          </Button>
                           
-                          {!useGeneratedPersonas && (
-                            <div className="mt-4">
-                              <div className="flex justify-between items-center mb-3">
-                                <Label className="text-gray-300 text-sm">Select Target Personas</Label>
-                                <Button 
-                                  variant="link" 
-                                  className="text-[#5eead4] p-0 h-auto" 
-                                  onClick={() => setLocation('/personas')}
+                          {generatedPersonas.length > 0 && (
+                            <div className="mt-4 space-y-3">
+                              {generatedPersonas.map(persona => (
+                                <div 
+                                  key={persona.id}
+                                  className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                                    selectedPersonas.includes(persona.id) 
+                                      ? "border-[#5eead4] bg-[#5eead4]/5" 
+                                      : "border-gray-800 bg-zinc-900 hover:border-[#5eead4]/50"
+                                  }`}
+                                  onClick={() => togglePersonaSelection(persona.id)}
                                 >
-                                  Create new persona
-                                  <ArrowRight className="h-3 w-3 ml-1" />
-                                </Button>
-                              </div>
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                {personas.map(persona => (
-                                  <div 
-                                    key={persona.id}
-                                    className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                                      selectedPersonas.includes(persona.id) 
-                                        ? "border-[#5eead4] bg-[#5eead4]/10" 
-                                        : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600"
-                                    }`}
-                                    onClick={() => togglePersonaSelection(persona.id)}
-                                  >
-                                    <div>
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex flex-col">
                                       <h3 className="font-medium text-white">{persona.name}</h3>
-                                      <p className="text-gray-400 text-xs mt-1">{persona.role}</p>
+                                      <p className="text-xs text-gray-400 mt-1">{persona.role}</p>
+                                    </div>
+                                    <div className={`h-4 w-4 rounded-full border ${
+                                      selectedPersonas.includes(persona.id) 
+                                        ? "border-[#5eead4] bg-[#5eead4]" 
+                                        : "border-gray-600"
+                                    }`} />
+                                  </div>
+                                  
+                                  <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
+                                    <div>
+                                      <p className="text-gray-500 mb-1">Pain Points:</p>
+                                      <ul className="list-disc list-inside space-y-1">
+                                        {persona.pains.map((pain, i) => (
+                                          <li key={i} className="text-gray-300">{pain}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                    <div>
+                                      <p className="text-gray-500 mb-1">Goals:</p>
+                                      <ul className="list-disc list-inside space-y-1">
+                                        {persona.goals.map((goal, i) => (
+                                          <li key={i} className="text-gray-300">{goal}</li>
+                                        ))}
+                                      </ul>
                                     </div>
                                   </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
-                          {useGeneratedPersonas && generatedPersonas.length > 0 && (
-                            <div className="mt-4">
-                              <Label className="text-gray-300 text-sm block mb-3">AI-Generated Personas</Label>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {generatedPersonas.map(persona => (
-                                  <div 
-                                    key={persona.id}
-                                    className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                                      selectedPersonas.includes(persona.id) 
-                                        ? "border-[#5eead4] bg-[#5eead4]/10" 
-                                        : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600"
-                                    }`}
-                                    onClick={() => togglePersonaSelection(persona.id)}
-                                  >
-                                    <div>
-                                      <h3 className="font-medium text-white">{persona.name}</h3>
-                                      <p className="text-gray-400 text-xs mt-1">{persona.role}</p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
-                          {useGeneratedPersonas && isGeneratingPersonas && (
-                            <div className="mt-4 flex items-center justify-center p-6">
-                              <div className="flex flex-col items-center">
-                                <Loader2 className="h-8 w-8 text-[#5eead4] animate-spin mb-3" />
-                                <p className="text-gray-300">Generating personas based on your campaign...</p>
-                              </div>
-                            </div>
-                          )}
-                          
-                          {useGeneratedPersonas && !isGeneratingPersonas && generatedPersonas.length === 0 && (
-                            <div className="mt-4 flex justify-center">
-                              <Button 
-                                className="bg-[#5eead4]/10 hover:bg-[#5eead4]/20 text-[#5eead4] border border-[#5eead4]/20"
-                                onClick={handleGeneratePersonas}
-                              >
-                                <Sparkles className="h-4 w-4 mr-2" />
-                                Generate Targeted Personas
-                              </Button>
+                                </div>
+                              ))}
                             </div>
                           )}
                         </div>
+                      )}
+                      
+                      {/* Existing personas */}
+                      <div className="grid grid-cols-1 gap-3 mt-4">
+                        <Label className="text-gray-300 mb-2">
+                          Select from existing personas
+                        </Label>
                         
-                        {/* This is now moved to the Campaign Brief section */}
+                        {personas.map(persona => (
+                          <div 
+                            key={persona.id}
+                            className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                              selectedPersonas.includes(persona.id) 
+                                ? "border-[#5eead4] bg-[#5eead4]/5" 
+                                : "border-gray-800 bg-zinc-900 hover:border-[#5eead4]/50"
+                            }`}
+                            onClick={() => togglePersonaSelection(persona.id)}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-col">
+                                <h3 className="font-medium text-white">{persona.name}</h3>
+                                <p className="text-xs text-gray-400 mt-1">{persona.role}</p>
+                              </div>
+                              <div className={`h-4 w-4 rounded-full border ${
+                                selectedPersonas.includes(persona.id) 
+                                  ? "border-[#5eead4] bg-[#5eead4]" 
+                                  : "border-gray-600"
+                              }`} />
+                            </div>
+                            
+                            <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
+                              <div>
+                                <p className="text-gray-500 mb-1">Pain Points:</p>
+                                <ul className="list-disc list-inside space-y-1">
+                                  {persona.pains.map((pain, i) => (
+                                    <li key={i} className="text-gray-300">{pain}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <div>
+                                <p className="text-gray-500 mb-1">Goals:</p>
+                                <ul className="list-disc list-inside space-y-1">
+                                  {persona.goals.map((goal, i) => (
+                                    <li key={i} className="text-gray-300">{goal}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          variant="outline"
+                          className="mt-3 border-dashed border-gray-700 bg-black hover:bg-zinc-900 hover:border-gray-600 text-gray-400"
+                          onClick={() => setLocation("/personas")}
+                        >
+                          <PlusCircle className="h-4 w-4 mr-2" />
+                          Create New Persona
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
-                  
-                  <CardFooter className="border-t border-[#222] px-6 py-4">
-                    <Button 
-                      className="bg-[#5eead4] hover:bg-[#5eead4]/90 text-black font-medium w-full md:w-auto"
-                      onClick={handleGenerateCampaign}
-                      disabled={!campaignPrompt.trim() || !selectedUseCase || !selectedToneAnalysisId}
-                    >
-                      <Sparkles className="h-4 w-4 mr-2" />
-                      Generate Campaign
-                    </Button>
-                  </CardFooter>
                 </Card>
+                
+                {/* Content Types Section */}
+                <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden">
+                  <CardHeader className="px-6 py-5">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center justify-center w-8 h-8">
+                        <FileText className="h-5 w-5 text-[#5eead4]" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-white text-lg">Content Types</CardTitle>
+                        <CardDescription className="text-gray-400 text-sm">
+                          Select the types of content to include in your campaign
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="px-6 pb-5 space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Email */}
+                      <div className={`p-4 rounded-lg border ${selectedContentTypes.email ? "border-[#5eead4] bg-[#5eead4]/5" : "border-gray-800 bg-zinc-900"}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <MessageSquare className="h-5 w-5 text-[#5eead4]" />
+                            <h3 className="font-medium text-white">Email Content</h3>
+                          </div>
+                          <Switch 
+                            checked={selectedContentTypes.email}
+                            onCheckedChange={() => toggleContentType('email')}
+                            className="data-[state=checked]:bg-[#5eead4]"
+                          />
+                        </div>
+                        
+                        {selectedContentTypes.email && (
+                          <div className="mt-4">
+                            <Label className="text-sm text-gray-400 mb-2 block">
+                              Number of emails
+                            </Label>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('email', Math.max(1, contentCount.email - 1))}
+                                disabled={contentCount.email <= 1}
+                              >
+                                <span>-</span>
+                              </Button>
+                              
+                              <span className="text-white min-w-[30px] text-center">
+                                {contentCount.email}
+                              </span>
+                              
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('email', Math.min(5, contentCount.email + 1))}
+                                disabled={contentCount.email >= 5}
+                              >
+                                <span>+</span>
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Social Content */}
+                      <div className={`p-4 rounded-lg border ${selectedContentTypes.social ? "border-[#5eead4] bg-[#5eead4]/5" : "border-gray-800 bg-zinc-900"}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <FileText className="h-5 w-5 text-[#5eead4]" />
+                            <h3 className="font-medium text-white">LinkedIn Content</h3>
+                          </div>
+                          <Switch 
+                            checked={selectedContentTypes.social}
+                            onCheckedChange={() => toggleContentType('social')}
+                            className="data-[state=checked]:bg-[#5eead4]"
+                          />
+                        </div>
+                        
+                        {selectedContentTypes.social && (
+                          <div className="mt-4">
+                            <Label className="text-sm text-gray-400 mb-2 block">
+                              Number of posts
+                            </Label>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('social', Math.max(1, contentCount.social - 1))}
+                                disabled={contentCount.social <= 1}
+                              >
+                                <span>-</span>
+                              </Button>
+                              
+                              <span className="text-white min-w-[30px] text-center">
+                                {contentCount.social}
+                              </span>
+                              
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('social', Math.min(5, contentCount.social + 1))}
+                                disabled={contentCount.social >= 5}
+                              >
+                                <span>+</span>
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Blog Content */}
+                      <div className={`p-4 rounded-lg border ${selectedContentTypes.blog ? "border-[#5eead4] bg-[#5eead4]/5" : "border-gray-800 bg-zinc-900"}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <FileText className="h-5 w-5 text-[#5eead4]" />
+                            <h3 className="font-medium text-white">Blog Content</h3>
+                          </div>
+                          <Switch 
+                            checked={selectedContentTypes.blog}
+                            onCheckedChange={() => toggleContentType('blog')}
+                            className="data-[state=checked]:bg-[#5eead4]"
+                          />
+                        </div>
+                        
+                        {selectedContentTypes.blog && (
+                          <div className="mt-4">
+                            <Label className="text-sm text-gray-400 mb-2 block">
+                              Number of articles
+                            </Label>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('blog', Math.max(1, contentCount.blog - 1))}
+                                disabled={contentCount.blog <= 1}
+                              >
+                                <span>-</span>
+                              </Button>
+                              
+                              <span className="text-white min-w-[30px] text-center">
+                                {contentCount.blog}
+                              </span>
+                              
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('blog', Math.min(3, contentCount.blog + 1))}
+                                disabled={contentCount.blog >= 3}
+                              >
+                                <span>+</span>
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Webinar Content */}
+                      <div className={`p-4 rounded-lg border ${selectedContentTypes.webinar ? "border-[#5eead4] bg-[#5eead4]/5" : "border-gray-800 bg-zinc-900"}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Zap className="h-5 w-5 text-[#5eead4]" />
+                            <h3 className="font-medium text-white">Webinar Content</h3>
+                          </div>
+                          <Switch 
+                            checked={selectedContentTypes.webinar}
+                            onCheckedChange={() => toggleContentType('webinar')}
+                            className="data-[state=checked]:bg-[#5eead4]"
+                          />
+                        </div>
+                        
+                        {selectedContentTypes.webinar && (
+                          <div className="mt-4">
+                            <Label className="text-sm text-gray-400 mb-2 block">
+                              Number of webinars
+                            </Label>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('webinar', Math.max(1, contentCount.webinar - 1))}
+                                disabled={contentCount.webinar <= 1}
+                              >
+                                <span>-</span>
+                              </Button>
+                              
+                              <span className="text-white min-w-[30px] text-center">
+                                {contentCount.webinar}
+                              </span>
+                              
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 w-7 rounded-md border-gray-700 bg-zinc-800"
+                                onClick={() => handleContentCountChange('webinar', Math.min(2, contentCount.webinar + 1))}
+                                disabled={contentCount.webinar >= 2}
+                              >
+                                <span>+</span>
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                {/* Generate Button */}
+                <Button 
+                  className="w-full h-14 bg-[#5eead4] hover:bg-[#4fd8c0] text-black font-medium"
+                  onClick={handleGenerateCampaign}
+                  disabled={
+                    isGenerating || 
+                    !campaignPrompt.trim() || 
+                    !selectedUseCase ||
+                    !Object.values(selectedContentTypes).some(Boolean) ||
+                    (toneAnalyses && toneAnalyses.length > 0 && !selectedToneAnalysisId)
+                  }
+                >
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Generate Campaign
+                </Button>
+                
+                {/* Validation errors */}
+                {campaignPrompt.trim() === "" && (
+                  <p className="text-amber-400 text-sm mt-2">
+                    Please enter a campaign description
+                  </p>
+                )}
+                {selectedUseCase === "" && (
+                  <p className="text-amber-400 text-sm mt-2">
+                    Please select a campaign type
+                  </p>
+                )}
+                {!Object.values(selectedContentTypes).some(Boolean) && (
+                  <p className="text-amber-400 text-sm mt-2">
+                    Please select at least one content type
+                  </p>
+                )}
+                {toneAnalyses && toneAnalyses.length > 0 && !selectedToneAnalysisId && (
+                  <p className="text-amber-400 text-sm mt-2">
+                    Please select a tone profile
+                  </p>
+                )}
               </div>
             )}
             
-            {/* AI Processing Tab with improved visual feedback */}
             {activeTab === "generating" && (
               <div className="flex flex-col items-center justify-center py-16 px-4">
-                <div className="max-w-md w-full text-center">
-                  <div className="mb-6">
-                    <div className="relative h-32 w-32 mx-auto">
-                      <div className="absolute inset-0 rounded-full bg-[#5eead4]/10 animate-ping"></div>
-                      <div className="relative h-32 w-32 rounded-full flex items-center justify-center bg-black border-2 border-[#5eead4]">
-                        <Sparkles className="h-10 w-10 text-[#5eead4]" />
-                      </div>
+                <div className="w-full max-w-md space-y-10">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="h-16 w-16 rounded-full bg-[#5eead4]/10 flex items-center justify-center">
+                      <Sparkles className="h-8 w-8 text-[#5eead4] animate-pulse" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-semibold text-white">
+                        Generating Your Campaign
+                      </h2>
+                      <p className="text-gray-400 mt-1 max-w-sm">
+                        Our AI is analyzing your inputs and crafting personalized content for your campaign
+                      </p>
                     </div>
                   </div>
                   
-                  <h2 className="text-2xl font-bold text-white mb-2">Generating Your Campaign</h2>
-                  <p className="text-gray-400 mb-8">
-                    Our AI is crafting your campaign content based on your inputs. This may take a few moments.
-                  </p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Progress</span>
+                      <span className="text-white font-medium">{generationProgress}%</span>
+                    </div>
+                    <Progress 
+                      value={generationProgress} 
+                      className="h-2 bg-zinc-800" 
+                      indicatorClassName="bg-[#5eead4]"
+                    />
+                  </div>
                   
-                  <Progress value={generationProgress} className="h-2 mb-8 bg-zinc-800 [&>div]:bg-[#5eead4]" />
-                  
-                  <div className="space-y-4">
-                    <div className={`flex items-center ${generationProgress >= 10 ? "text-[#5eead4]" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 10 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
-                        {generationProgress >= 10 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-xs">1</span>
-                        )}
-                      </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Clock className="h-4 w-4 text-[#5eead4]" />
                       <span>Analyzing campaign brief</span>
+                      {generationProgress >= 10 && <span className="text-[#5eead4] ml-auto">✓</span>}
                     </div>
-                    
-                    <div className={`flex items-center ${generationProgress >= 30 ? "text-[#5eead4]" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 30 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
-                        {generationProgress >= 30 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-xs">2</span>
-                        )}
-                      </div>
-                      <span>Creating target personas</span>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Users className="h-4 w-4 text-[#5eead4]" />
+                      <span>Processing audience information</span>
+                      {generationProgress >= 30 && <span className="text-[#5eead4] ml-auto">✓</span>}
                     </div>
-                    
-                    <div className={`flex items-center ${generationProgress >= 50 ? "text-[#5eead4]" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 50 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
-                        {generationProgress >= 50 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-xs">3</span>
-                        )}
-                      </div>
-                      <span>Building campaign structure</span>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Target className="h-4 w-4 text-[#5eead4]" />
+                      <span>Tailoring to your brand voice</span>
+                      {generationProgress >= 50 && <span className="text-[#5eead4] ml-auto">✓</span>}
                     </div>
-                    
-                    <div className={`flex items-center ${generationProgress >= 70 ? "text-[#5eead4]" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 70 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
-                        {generationProgress >= 70 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-xs">4</span>
-                        )}
-                      </div>
-                      <span>Creating content for each channel</span>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <FileText className="h-4 w-4 text-[#5eead4]" />
+                      <span>Generating content pieces</span>
+                      {generationProgress >= 70 && <span className="text-[#5eead4] ml-auto">✓</span>}
                     </div>
-                    
-                    <div className={`flex items-center ${generationProgress >= 90 ? "text-[#5eead4]" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 90 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
-                        {generationProgress >= 90 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-xs">5</span>
-                        )}
-                      </div>
-                      <span>Finalizing campaign</span>
-                    </div>
-                    
-                    <div className={`flex items-center ${generationProgress >= 100 ? "text-[#5eead4]" : "text-gray-500"}`}>
-                      <div className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${generationProgress >= 100 ? "bg-[#5eead4]/10 border border-[#5eead4]" : "bg-zinc-800 border border-zinc-700"}`}>
-                        {generationProgress >= 100 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-xs">6</span>
-                        )}
-                      </div>
-                      <span>Campaign ready!</span>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Calendar className="h-4 w-4 text-[#5eead4]" />
+                      <span>Building campaign timeline</span>
+                      {generationProgress >= 90 && <span className="text-[#5eead4] ml-auto">✓</span>}
                     </div>
                   </div>
                 </div>
               </div>
             )}
             
-            {/* Results with improved layout and interaction */}
             {activeTab === "results" && campaign && (
               <div className="space-y-8">
-                {/* Campaign Overview */}
-                <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
-                    <div className="flex justify-between flex-wrap gap-4">
-                      <div>
-                        <CardTitle className="text-xl text-white flex items-center">
-                          <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#5eead4]/10 border border-[#5eead4]/30">
-                            <Zap className="h-5 w-5 text-[#5eead4]" />
-                          </div>
-                          {campaign.name}
-                        </CardTitle>
-                        <CardDescription>Campaign Overview</CardDescription>
+                <Card className="bg-black border border-[#222] rounded-xl shadow-xl overflow-hidden">
+                  <CardHeader className="px-6 py-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center justify-center w-8 h-8">
+                          <FileText className="h-5 w-5 text-[#5eead4]" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-white text-lg">{campaign.name}</CardTitle>
+                          <CardDescription className="text-gray-400 text-sm">
+                            {campaign.objective.length > 120 
+                              ? campaign.objective.substring(0, 120) + "..." 
+                              : campaign.objective}
+                          </CardDescription>
+                        </div>
                       </div>
-                      
-                      <div className="flex space-x-2">
-                        <Button 
-                          className="bg-[#5eead4] hover:bg-[#5eead4]/90 text-black"
-                          onClick={handleSaveCampaign}
-                        >
-                          Save Campaign
-                        </Button>
-                      </div>
+                      <Button 
+                        className="bg-[#5eead4] hover:bg-[#4fd8c0] text-black"
+                        onClick={handleSaveCampaign}
+                      >
+                        Save Campaign
+                      </Button>
                     </div>
                   </CardHeader>
-                  
-                  <CardContent className="p-0">
-                    <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-800/60">
-                      {/* Campaign Info */}
-                      <div className="p-6">
-                        <h3 className="text-white font-medium mb-4 flex items-center">
-                          <Target className="h-4 w-4 mr-2 text-[#5eead4]" />
-                          Campaign Details
-                        </h3>
-                        
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="text-gray-400 text-sm">Objective</h4>
-                            <p className="text-white mt-1">{campaign.objective}</p>
+                  <CardContent className="px-6 pb-5 space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
+                        <div className="flex flex-col h-full">
+                          <h3 className="text-gray-400 text-sm font-medium mb-1">Target Audience</h3>
+                          <div className="flex-1">
+                            {campaign.targetAudience.length > 0 ? (
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {campaign.targetAudience.map((audience, i) => (
+                                  <Badge 
+                                    key={i}
+                                    variant="outline"
+                                    className="bg-[#5eead4]/10 text-[#5eead4] border-[#5eead4]/30"
+                                  >
+                                    {audience}
+                                  </Badge>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-gray-500 text-sm mt-2">No specific audience selected</p>
+                            )}
                           </div>
-                          
-                          <div>
-                            <h4 className="text-gray-400 text-sm">Target Audience</h4>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
+                        <div className="flex flex-col h-full">
+                          <h3 className="text-gray-400 text-sm font-medium mb-1">Channels</h3>
+                          <div className="flex-1">
                             <div className="flex flex-wrap gap-2 mt-2">
-                              {campaign.targetAudience.map((audience, idx) => (
-                                <Badge key={idx} variant="outline" className="bg-zinc-900">
-                                  {audience}
+                              {campaign.channels.map((channel, i) => (
+                                <Badge 
+                                  key={i}
+                                  variant="outline"
+                                  className="bg-zinc-800 text-white border-zinc-700"
+                                >
+                                  {channel}
                                 </Badge>
                               ))}
                             </div>
@@ -1532,388 +1569,241 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                         </div>
                       </div>
                       
-                      {/* Timeline */}
-                      <div className="p-6">
-                        <h3 className="text-white font-medium mb-4 flex items-center">
-                          <Calendar className="h-4 w-4 mr-2 text-[#5eead4]" />
-                          Timeline
-                        </h3>
-                        
-                        <div className="space-y-4">
-                          <div className="flex items-center">
-                            <div className="h-10 w-10 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
-                              <Clock className="h-5 w-5 text-[#5eead4]" />
-                            </div>
-                            <div>
-                              <p className="text-gray-400 text-sm">Duration</p>
-                              <p className="text-white">
-                                {new Date(campaign.timeline.start).toLocaleDateString()} - {new Date(campaign.timeline.end).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center">
-                            <div className="h-10 w-10 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
-                              <Users className="h-5 w-5 text-[#5eead4]" />
-                            </div>
-                            <div>
-                              <p className="text-gray-400 text-sm">Channels</p>
-                              <div className="flex flex-wrap gap-2 mt-1">
-                                {campaign.channels.map((channel, idx) => (
-                                  <Badge key={idx} variant="outline" className="bg-zinc-900">
-                                    {channel}
-                                  </Badge>
-                                ))}
+                      <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
+                        <div className="flex flex-col h-full">
+                          <h3 className="text-gray-400 text-sm font-medium mb-1">Timeline</h3>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between text-sm text-white mt-2">
+                              <div>
+                                <span className="text-gray-500">Start:</span> {campaign.timeline.start}
+                              </div>
+                              <div>
+                                <span className="text-gray-500">End:</span> {campaign.timeline.end}
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      
-                      {/* Content Summary */}
-                      <div className="p-6">
-                        <h3 className="text-white font-medium mb-4 flex items-center">
-                          <FileText className="h-4 w-4 mr-2 text-[#5eead4]" />
-                          Content Summary
-                        </h3>
-                        
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'email').length}</p>
-                              <p className="text-gray-400 text-sm">Emails</p>
-                            </div>
-                            
-                            <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'social').length}</p>
-                              <p className="text-gray-400 text-sm">LinkedIn Posts</p>
-                            </div>
-                            
-                            <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'blog').length}</p>
-                              <p className="text-gray-400 text-sm">Blog Articles</p>
-                            </div>
-                            
-                            <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
-                              <p className="text-[#5eead4] text-lg font-bold">{campaign.contents.filter(c => c.type === 'webinar').length}</p>
-                              <p className="text-gray-400 text-sm">Webinars</p>
-                            </div>
-                          </div>
-                          
-                          <Button 
-                            className="w-full bg-[#5eead4] hover:bg-[#4fd8c0] text-black"
-                            onClick={handleSaveCampaign}
-                          >
-                            <PlusCircle className="h-4 w-4 mr-2" />
-                            Save to Campaigns
-                          </Button>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-                
-                {/* Campaign Content */}
-                <Card className="bg-black border border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden">
-                  <CardHeader className="border-b border-zinc-800/60 bg-gradient-to-r from-[#0e1b33] to-black px-6">
-                    <CardTitle className="text-xl text-white flex items-center">
-                      <div className="h-8 w-8 mr-3 flex items-center justify-center rounded-md bg-[#5eead4]/10 border border-[#5eead4]/30">
-                        <FileText className="h-5 w-5 text-[#5eead4]" />
-                      </div>
-                      {campaign.name} Content
-                    </CardTitle>
-                    <CardDescription>
-                      Review and customize your generated content pieces
-                    </CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="p-0">
-                    <Tabs defaultValue="all" className="w-full">
-                      <div className="border-b border-zinc-800/60">
-                        <div className="px-6">
-                          <TabsList className="bg-black h-14">
-                            <TabsTrigger value="all" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
-                              All Content
-                            </TabsTrigger>
-                            <TabsTrigger value="email" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
+                    
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-medium text-white">Campaign Content</h3>
+                      
+                      <Tabs defaultValue="all" className="w-full">
+                        <TabsList className="bg-zinc-900 border-b border-zinc-800 p-0 h-12 rounded-lg mb-6">
+                          <TabsTrigger 
+                            value="all" 
+                            className="flex-1 h-full data-[state=active]:bg-black data-[state=active]:border-t-2 data-[state=active]:border-t-[#5eead4] data-[state=active]:rounded-t-md data-[state=active]:shadow-none"
+                          >
+                            All Content
+                          </TabsTrigger>
+                          {selectedContentTypes.email && (
+                            <TabsTrigger 
+                              value="email" 
+                              className="flex-1 h-full data-[state=active]:bg-black data-[state=active]:border-t-2 data-[state=active]:border-t-[#5eead4] data-[state=active]:rounded-t-md data-[state=active]:shadow-none"
+                            >
                               Email
                             </TabsTrigger>
-                            <TabsTrigger value="social" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
+                          )}
+                          {selectedContentTypes.social && (
+                            <TabsTrigger 
+                              value="social" 
+                              className="flex-1 h-full data-[state=active]:bg-black data-[state=active]:border-t-2 data-[state=active]:border-t-[#5eead4] data-[state=active]:rounded-t-md data-[state=active]:shadow-none"
+                            >
                               LinkedIn
                             </TabsTrigger>
-                            <TabsTrigger value="blog" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
+                          )}
+                          {selectedContentTypes.blog && (
+                            <TabsTrigger 
+                              value="blog" 
+                              className="flex-1 h-full data-[state=active]:bg-black data-[state=active]:border-t-2 data-[state=active]:border-t-[#5eead4] data-[state=active]:rounded-t-md data-[state=active]:shadow-none"
+                            >
                               Blog
                             </TabsTrigger>
-                            <TabsTrigger value="webinar" className="data-[state=active]:bg-[#5eead4]/10 data-[state=active]:text-[#5eead4]">
+                          )}
+                          {selectedContentTypes.webinar && (
+                            <TabsTrigger 
+                              value="webinar" 
+                              className="flex-1 h-full data-[state=active]:bg-black data-[state=active]:border-t-2 data-[state=active]:border-t-[#5eead4] data-[state=active]:rounded-t-md data-[state=active]:shadow-none"
+                            >
                               Webinar
                             </TabsTrigger>
-                          </TabsList>
-                        </div>
-                      </div>
-                      
-                      <TabsContent value="all" className="p-6 space-y-6">
-                        {campaign.contents.map((content) => (
-                          <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
-                            <div className="bg-zinc-900 p-4 flex justify-between items-center">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                          )}
+                        </TabsList>
+                        
+                        <TabsContent value="all" className="space-y-6 mt-0">
+                          {campaign.contents.map((content, i) => (
+                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
+                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
                                   {content.icon}
-                                </div>
-                                <div>
-                                  <h3 className="text-white font-medium">{content.title}</h3>
-                                  <div className="flex items-center text-sm space-x-2 mt-1">
-                                    <Badge variant="outline" className="bg-zinc-800 text-gray-300">
-                                      {content.type === 'social' ? 'LinkedIn' : content.type.charAt(0).toUpperCase() + content.type.slice(1)}
-                                    </Badge>
-                                    <span className="text-gray-500">•</span>
-                                    <span className="text-gray-400">{content.persona}</span>
-                                    {content.deliveryDate && (
-                                      <>
-                                        <span className="text-gray-500">•</span>
-                                        <span className="text-gray-400">{new Date(content.deliveryDate).toLocaleDateString()}</span>
-                                      </>
-                                    )}
+                                  <div>
+                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
+                                        {content.channel || content.type}
+                                      </Badge>
+                                      <span className="text-xs text-gray-500">
+                                        For: {content.persona}
+                                      </span>
+                                      {content.deliveryDate && (
+                                        <span className="text-xs text-gray-500">
+                                          Delivery: {content.deliveryDate}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              
-                              <div className="flex items-center space-x-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="border-zinc-700 hover:bg-zinc-800"
-                                >
-                                  Edit
-                                </Button>
+                              <div className="p-4">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                  {content.content}
+                                </pre>
                               </div>
                             </div>
-                            
-                            <div className="p-4 bg-black">
-                              <pre className="text-sm text-gray-300 whitespace-pre-wrap bg-black font-sans">
-                                {content.content}
-                              </pre>
-                            </div>
-                          </div>
-                        ))}
-                      </TabsContent>
-                      
-                      <TabsContent value="email" className="p-6 space-y-6">
-                        {campaign.contents.filter(c => c.type === 'email').map((content) => (
-                          <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
-                            <div className="bg-zinc-900 p-4 flex justify-between items-center">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                          ))}
+                        </TabsContent>
+                        
+                        <TabsContent value="email" className="space-y-6 mt-0">
+                          {campaign.contents.filter(c => c.type === 'email').map((content, i) => (
+                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
+                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
                                   <MessageSquare className="h-5 w-5 text-[#5eead4]" />
-                                </div>
-                                <div>
-                                  <h3 className="text-white font-medium">{content.title}</h3>
-                                  <div className="flex items-center text-sm space-x-2 mt-1">
-                                    <Badge variant="outline" className="bg-zinc-800 text-gray-300">
-                                      Email
-                                    </Badge>
-                                    <span className="text-gray-500">•</span>
-                                    <span className="text-gray-400">{content.persona}</span>
-                                    {content.deliveryDate && (
-                                      <>
-                                        <span className="text-gray-500">•</span>
-                                        <span className="text-gray-400">{new Date(content.deliveryDate).toLocaleDateString()}</span>
-                                      </>
-                                    )}
+                                  <div>
+                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
+                                        {content.channel || content.type}
+                                      </Badge>
+                                      <span className="text-xs text-gray-500">
+                                        For: {content.persona}
+                                      </span>
+                                      {content.deliveryDate && (
+                                        <span className="text-xs text-gray-500">
+                                          Delivery: {content.deliveryDate}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              
-                              <div className="flex items-center space-x-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="border-zinc-700 hover:bg-zinc-800"
-                                >
-                                  Edit
-                                </Button>
+                              <div className="p-4">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                  {content.content}
+                                </pre>
                               </div>
                             </div>
-                            
-                            <div className="p-4 bg-black">
-                              <pre className="text-sm text-gray-300 whitespace-pre-wrap bg-black font-sans">
-                                {content.content}
-                              </pre>
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </TabsContent>
                         
-                        {campaign.contents.filter(c => c.type === 'email').length === 0 && (
-                          <div className="text-center py-12">
-                            <p className="text-gray-400">No email content in this campaign</p>
-                          </div>
-                        )}
-                      </TabsContent>
-                      
-                      <TabsContent value="social" className="p-6 space-y-6">
-                        {campaign.contents.filter(c => c.type === 'social').map((content) => (
-                          <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
-                            <div className="bg-zinc-900 p-4 flex justify-between items-center">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                        <TabsContent value="social" className="space-y-6 mt-0">
+                          {campaign.contents.filter(c => c.type === 'social').map((content, i) => (
+                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
+                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-[#5eead4]" />
-                                </div>
-                                <div>
-                                  <h3 className="text-white font-medium">{content.title}</h3>
-                                  <div className="flex items-center text-sm space-x-2 mt-1">
-                                    <Badge variant="outline" className="bg-zinc-800 text-gray-300">
-                                      LinkedIn
-                                    </Badge>
-                                    <span className="text-gray-500">•</span>
-                                    <span className="text-gray-400">{content.persona}</span>
-                                    {content.deliveryDate && (
-                                      <>
-                                        <span className="text-gray-500">•</span>
-                                        <span className="text-gray-400">{new Date(content.deliveryDate).toLocaleDateString()}</span>
-                                      </>
-                                    )}
+                                  <div>
+                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
+                                        {content.channel || content.type}
+                                      </Badge>
+                                      <span className="text-xs text-gray-500">
+                                        For: {content.persona}
+                                      </span>
+                                      {content.deliveryDate && (
+                                        <span className="text-xs text-gray-500">
+                                          Delivery: {content.deliveryDate}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              
-                              <div className="flex items-center space-x-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="border-zinc-700 hover:bg-zinc-800"
-                                >
-                                  Edit
-                                </Button>
+                              <div className="p-4">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                  {content.content}
+                                </pre>
                               </div>
                             </div>
-                            
-                            <div className="p-4 bg-black">
-                              <pre className="text-sm text-gray-300 whitespace-pre-wrap bg-black font-sans">
-                                {content.content}
-                              </pre>
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </TabsContent>
                         
-                        {campaign.contents.filter(c => c.type === 'social').length === 0 && (
-                          <div className="text-center py-12">
-                            <p className="text-gray-400">No LinkedIn content in this campaign</p>
-                          </div>
-                        )}
-                      </TabsContent>
-                      
-                      <TabsContent value="blog" className="p-6 space-y-6">
-                        {campaign.contents.filter(c => c.type === 'blog').map((content) => (
-                          <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
-                            <div className="bg-zinc-900 p-4 flex justify-between items-center">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
+                        <TabsContent value="blog" className="space-y-6 mt-0">
+                          {campaign.contents.filter(c => c.type === 'blog').map((content, i) => (
+                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
+                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-[#5eead4]" />
-                                </div>
-                                <div>
-                                  <h3 className="text-white font-medium">{content.title}</h3>
-                                  <div className="flex items-center text-sm space-x-2 mt-1">
-                                    <Badge variant="outline" className="bg-zinc-800 text-gray-300">
-                                      Blog
-                                    </Badge>
-                                    <span className="text-gray-500">•</span>
-                                    <span className="text-gray-400">{content.persona}</span>
-                                    {content.deliveryDate && (
-                                      <>
-                                        <span className="text-gray-500">•</span>
-                                        <span className="text-gray-400">{new Date(content.deliveryDate).toLocaleDateString()}</span>
-                                      </>
-                                    )}
+                                  <div>
+                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
+                                        {content.channel || content.type}
+                                      </Badge>
+                                      <span className="text-xs text-gray-500">
+                                        For: {content.persona}
+                                      </span>
+                                      {content.deliveryDate && (
+                                        <span className="text-xs text-gray-500">
+                                          Delivery: {content.deliveryDate}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              
-                              <div className="flex items-center space-x-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="border-zinc-700 hover:bg-zinc-800"
-                                >
-                                  Edit
-                                </Button>
+                              <div className="p-4">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                  {content.content}
+                                </pre>
                               </div>
                             </div>
-                            
-                            <div className="p-4 bg-black">
-                              <pre className="text-sm text-gray-300 whitespace-pre-wrap bg-black font-sans">
-                                {content.content}
-                              </pre>
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </TabsContent>
                         
-                        {campaign.contents.filter(c => c.type === 'blog').length === 0 && (
-                          <div className="text-center py-12">
-                            <p className="text-gray-400">No blog content in this campaign</p>
-                          </div>
-                        )}
-                      </TabsContent>
-                      
-                      <TabsContent value="webinar" className="p-6 space-y-6">
-                        {campaign.contents.filter(c => c.type === 'webinar').map((content) => (
-                          <div key={content.id} className="border border-zinc-800 rounded-lg overflow-hidden">
-                            <div className="bg-zinc-900 p-4 flex justify-between items-center">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 flex items-center justify-center rounded-md bg-[#5eead4]/10 mr-3">
-                                  <FileText className="h-5 w-5 text-[#5eead4]" />
-                                </div>
-                                <div>
-                                  <h3 className="text-white font-medium">{content.title}</h3>
-                                  <div className="flex items-center text-sm space-x-2 mt-1">
-                                    <Badge variant="outline" className="bg-zinc-800 text-gray-300">
-                                      Webinar
-                                    </Badge>
-                                    <span className="text-gray-500">•</span>
-                                    <span className="text-gray-400">{content.persona}</span>
-                                    {content.deliveryDate && (
-                                      <>
-                                        <span className="text-gray-500">•</span>
-                                        <span className="text-gray-400">{new Date(content.deliveryDate).toLocaleDateString()}</span>
-                                      </>
-                                    )}
+                        <TabsContent value="webinar" className="space-y-6 mt-0">
+                          {campaign.contents.filter(c => c.type === 'webinar').map((content, i) => (
+                            <div key={i} className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
+                              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <Zap className="h-5 w-5 text-[#5eead4]" />
+                                  <div>
+                                    <h4 className="font-medium text-white">{content.title}</h4>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Badge variant="outline" className="bg-zinc-800 text-white border-zinc-700 text-xs">
+                                        {content.channel || content.type}
+                                      </Badge>
+                                      <span className="text-xs text-gray-500">
+                                        For: {content.persona}
+                                      </span>
+                                      {content.deliveryDate && (
+                                        <span className="text-xs text-gray-500">
+                                          Delivery: {content.deliveryDate}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              
-                              <div className="flex items-center space-x-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="border-zinc-700 hover:bg-zinc-800"
-                                >
-                                  Edit
-                                </Button>
+                              <div className="p-4">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                  {content.content}
+                                </pre>
                               </div>
                             </div>
-                            
-                            <div className="p-4 bg-black">
-                              <pre className="text-sm text-gray-300 whitespace-pre-wrap bg-black font-sans">
-                                {content.content}
-                              </pre>
-                            </div>
-                          </div>
-                        ))}
-                        
-                        {campaign.contents.filter(c => c.type === 'webinar').length === 0 && (
-                          <div className="text-center py-12">
-                            <p className="text-gray-400">No webinar content in this campaign</p>
-                          </div>
-                        )}
-                      </TabsContent>
-                    </Tabs>
+                          ))}
+                        </TabsContent>
+                      </Tabs>
+                    </div>
                   </CardContent>
-                  
-                  <CardFooter className="border-t border-zinc-800/60 px-6 py-4 flex justify-between">
+                  <CardFooter className="px-6 py-4 bg-zinc-950 border-t border-zinc-900 flex justify-between">
                     <Button 
-                      variant="outline" 
-                      className="border-zinc-700 hover:bg-zinc-800"
+                      variant="outline"
+                      className="border-[#5eead4] text-[#5eead4] hover:bg-[#5eead4]/10"
                       onClick={() => setActiveTab("input")}
                     >
-                      <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
                       Edit Campaign
                     </Button>
                     
