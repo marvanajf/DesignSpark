@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory } from "lucide-react";
+import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory, Link } from "lucide-react";
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
