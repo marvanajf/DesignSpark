@@ -193,6 +193,21 @@ export const campaigns = pgTable("campaigns", {
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
 
+export const campaignFactoryCampaigns = pgTable("campaign_factory_campaigns", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").notNull().references(() => users.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  objective: text("objective"),
+  target_audience: jsonb("target_audience"), // Array of audience strings
+  channels: jsonb("channels"), // Array of channel strings
+  timeline_start: text("timeline_start"),
+  timeline_end: text("timeline_end"),
+  contents: jsonb("contents"), // Array of content objects with type, title, content, delivery date
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull()
+});
+
 export const campaignContents = pgTable("campaign_contents", {
   id: serial("id").primaryKey(),
   campaign_id: integer("campaign_id").notNull().references(() => campaigns.id),
@@ -306,6 +321,18 @@ export const insertCampaignContentSchema = createInsertSchema(campaignContents).
   content_id: true
 });
 
+export const insertCampaignFactorySchema = createInsertSchema(campaignFactoryCampaigns).pick({
+  user_id: true,
+  name: true,
+  description: true,
+  objective: true,
+  target_audience: true,
+  channels: true,
+  timeline_start: true,
+  timeline_end: true,
+  contents: true
+});
+
 export const insertLeadContactSchema = createInsertSchema(leadContacts).pick({
   name: true,
   email: true,
@@ -342,6 +369,9 @@ export type InsertCampaignContent = z.infer<typeof insertCampaignContentSchema>;
 
 export type LeadContact = typeof leadContacts.$inferSelect;
 export type InsertLeadContact = z.infer<typeof insertLeadContactSchema>;
+
+export type CampaignFactory = typeof campaignFactoryCampaigns.$inferSelect;
+export type InsertCampaignFactory = z.infer<typeof insertCampaignFactorySchema>;
 
 // Create predefined personas for seed data
 export const predefinedPersonas = [
