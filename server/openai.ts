@@ -123,9 +123,11 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
 2. Next add "Preview:" with a brief preview of the email content 
 3. Finally add the full email body
           
-DO NOT use any markdown formatting symbols like asterisks or hashtags.
+DO NOT use any markdown formatting symbols like asterisks, hashtags, or section numbers.
 DO NOT include placeholder text like "[Name]" - simply write the email as if to the specific recipient.
-Ensure the content is well-structured with clear paragraphs and spacing.`
+Ensure the content is well-structured with clear paragraphs and spacing.
+NEVER start sections with ## or any number of # characters.
+DO NOT use any hashtags (#) anywhere in the content.`
         });
       } 
       // If social post, give specific instructions
@@ -135,11 +137,13 @@ Ensure the content is well-structured with clear paragraphs and spacing.`
           content: `Format your social media post response as plain text:
           
 1. First, write the main content of the post without any markdown or formatting
-2. At the end, add relevant hashtags (separated by spaces)
+2. Instead of adding hashtags with # symbols, simply include keywords naturally in the text
           
 DO NOT use any markdown formatting or special text formatting.
+DO NOT include hashtags (#) in your response - reword your content to avoid them entirely.
 Make sure the post is appropriate for LinkedIn, not Twitter or other platforms.
-Use professional language and focus on business value.`
+Use professional language and focus on business value.
+NEVER start sections with ## or any number of # characters.`
         });
       }
       // If blog post, format with clear headings and sections
@@ -150,10 +154,13 @@ Use professional language and focus on business value.`
           
 1. Start with a clear title on its own line
 2. Follow with an introductory paragraph
-3. Add sections with headings followed by paragraphs
+3. Add sections with headings followed by paragraphs (don't use numbers or symbols before headings)
 4. Use blank lines between sections for clarity
           
 DO NOT use any markdown formatting (*, #, etc.).
+DO NOT start sections with numbers like "1." or "1:" - just use plain text headings.
+NEVER start sections with ## or any number of # characters.
+DO NOT use any hashtags (#) anywhere in the content.
 Instead, structure the blog with clear section titles on their own lines.
 Make sure each section has a clear heading followed by relevant content.`
         });
@@ -165,13 +172,12 @@ Make sure each section has a clear heading followed by relevant content.`
           content: `Format your webinar description as clean, plain text:
           
 1. Start with a clear, compelling webinar title
-2. Include key webinar details:
-   - Duration
-   - Target audience
-   - Main description
-   - Key takeaways or learning outcomes
+2. Include key webinar details as plain text paragraphs, not markdown
           
-DO NOT use markdown formatting.
+DO NOT use markdown formatting of any kind.
+DO NOT start sections with numbers like "1." or "1:" - just use plain text sections.
+NEVER start sections with ## or any number of # characters.
+DO NOT use any hashtags (#) anywhere in the content.
 Structure the content with clear sections and blank lines for readability.
 Focus on making the value proposition and audience benefits very clear.`
         });
@@ -190,15 +196,30 @@ Focus on making the value proposition and audience benefits very clear.`
       // Extract the generated content
       const generatedContent = completion.choices[0].message.content || '';
       
-      // Remove any potential markdown formatting that might have slipped through
-      const cleanedContent = generatedContent
-        .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
-        .replace(/\*([^*]+)\*/g, '$1')     // Italic
-        .replace(/^#+ (.+)$/gm, '$1')      // Headers
-        .replace(/^- (.+)$/gm, '• $1')     // List items
+      // Remove any potential markdown formatting and other unwanted characters
+      let cleanedContent = generatedContent
+        .replace(/\*\*([^*]+)\*\*/g, '$1')         // Bold
+        .replace(/\*([^*]+)\*/g, '$1')             // Italic
+        .replace(/^#{1,6}\s+(.+)$/gm, '$1')        // Headers (# Header)
+        .replace(/^##\s*\d+[\.:]?\s*/gm, '')       // Section numbers (## 1. or ## 2:)
+        .replace(/^##+\s*(.+)$/gm, '$1')           // Multiple hash headers
+        .replace(/^-\s+(.+)$/gm, '• $1')           // List items
         .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // Links
-            
-      // Return the plain text content
+      
+      // Remove hashtags from all content types
+      // First, remove hashtags that appear grouped at the end of the text
+      cleanedContent = cleanedContent.replace(/\s+(#\w+\s*)+$/g, '');
+      
+      // For any remaining hashtags in the content, remove the # symbol
+      cleanedContent = cleanedContent.replace(/#(\w+)/g, '$1');
+      
+      // Also remove any section markers that look like ## or ### with numbers
+      cleanedContent = cleanedContent.replace(/^#{1,6}\s*\d+[\.:]?\s*/gm, '');
+      
+      // Remove any remaining ## markers without numbers
+      cleanedContent = cleanedContent.replace(/^#{1,6}\s+/gm, '');
+      
+      // Return the cleaned plain text content
       res.json({ content: cleanedContent });
     } catch (error: any) {
       console.error("Error generating content with OpenAI:", error);
