@@ -1179,8 +1179,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
               </Button>
             </div>
             
-            {/* Fetch and display saved campaigns */}
-            <SavedCampaignsSection />
+
           </div>
           
           {/* Process timeline - more subtle, smaller and cleaner */}
