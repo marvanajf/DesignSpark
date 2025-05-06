@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory, Link, FolderOpen } from "lucide-react";
+import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory, Link, FolderOpen, Pencil } from "lucide-react";
 
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
@@ -1911,12 +1911,49 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                           <FileText className="h-5 w-5 text-[#5eead4]" />
                         </div>
                         <div>
-                          <CardTitle className="text-white text-lg">{campaign.name}</CardTitle>
-                          <CardDescription className="text-gray-400 text-sm">
-                            {campaign.objective.length > 120 
-                              ? campaign.objective.substring(0, 120) + "..." 
-                              : campaign.objective}
-                          </CardDescription>
+                          {/* Editable Campaign Title */}
+                          <div className="relative group">
+                            <input 
+                              type="text"
+                              value={campaign.name}
+                              onChange={(e) => {
+                                setCampaign({
+                                  ...campaign,
+                                  name: e.target.value
+                                });
+                              }}
+                              className="bg-transparent text-white text-lg font-medium w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded px-1 py-0.5"
+                              placeholder="Campaign Title"
+                            />
+                            <Pencil className="h-3.5 w-3.5 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-1.5 right-1.5 transition-opacity" />
+                          </div>
+                          {/* Editable Campaign Description/Objective */}
+                          <div className="relative group">
+                            <textarea
+                              value={campaign.objective.length > 120 
+                                ? campaign.objective.substring(0, 120) + "..." 
+                                : campaign.objective}
+                              onChange={(e) => {
+                                setCampaign({
+                                  ...campaign,
+                                  objective: e.target.value
+                                });
+                              }}
+                              onClick={(e) => {
+                                // When clicked, show the full objective
+                                if (campaign.objective.length > 120) {
+                                  setCampaign({
+                                    ...campaign,
+                                    objective: campaign.objective.replace('...', '')
+                                  });
+                                }
+                              }}
+                              className="bg-transparent text-gray-400 text-sm w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded px-1 py-0.5 resize-none"
+                              rows={2}
+                              placeholder="Campaign objective or description"
+                            />
+                            <Pencil className="h-3.5 w-3.5 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-1.5 right-1.5 transition-opacity" />
+                          </div>
                         </div>
                       </div>
                       <Button 
@@ -2015,11 +2052,31 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                   {icon}
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <h4 className="font-medium text-white text-sm truncate">
-                                    {content.title || (content.type === 'email' ? 'Email Campaign' : 
-                                      content.type === 'social' ? 'LinkedIn Post' : 
-                                      content.type === 'blog' ? 'Blog Article' : 'Webinar')}
-                                  </h4>
+                                  {/* Editable content title */}
+                                  <div className="relative group">
+                                    <input
+                                      type="text"
+                                      value={content.title || (content.type === 'email' ? 'Email Campaign' : 
+                                        content.type === 'social' ? 'LinkedIn Post' : 
+                                        content.type === 'blog' ? 'Blog Article' : 'Webinar')}
+                                      onChange={(e) => {
+                                        // Update the title for this specific content
+                                        const updatedContents = [...campaign.contents];
+                                        updatedContents[i] = {
+                                          ...updatedContents[i],
+                                          title: e.target.value
+                                        };
+                                        
+                                        setCampaign({
+                                          ...campaign,
+                                          contents: updatedContents
+                                        });
+                                      }}
+                                      className="font-medium text-white text-sm w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded px-1 py-0.5"
+                                      placeholder={`${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Campaign`}
+                                    />
+                                    <Pencil className="h-3 w-3 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-1.5 right-1.5 transition-opacity" />
+                                  </div>
                                   <div className="flex items-center flex-wrap gap-2 mt-1">
                                     <Badge variant="outline" className="bg-zinc-900 text-[#5eead4] border-[#5eead4]/30 text-xs">
                                       {content.type}
