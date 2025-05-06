@@ -1965,15 +1965,15 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                             
                             {/* Campaign Waterfall Chart */}
                             <div className="campaign-waterfall mt-4 overflow-x-auto pb-2" style={{ overflowY: "hidden", width: "100%" }}>
-                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "1200px", width: "100%", paddingRight: "50px", paddingLeft: "20px" }}>
+                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "1200px", width: "100%", paddingRight: "100px", paddingLeft: "100px" }}>
                                 {/* Timeline base */}
                                 <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
                                 
                                 {/* Timeline nodes with content preview */}
                                 {campaign.contents.map((content, i) => {
                                   // Calculate positions based on delivery date
-                                  // For demo, we'll spread them evenly
-                                  const positionPercent = (i / (campaign.contents.length - 1 || 1)) * 100;
+                                  // For demo, we'll spread them evenly with a margin on both ends
+                                  const positionPercent = 5 + ((i / (campaign.contents.length - 1 || 1)) * 90);
                                   const isEven = i % 2 === 0;
                                   
                                   // Get icon based on content type
@@ -2020,7 +2020,8 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                           minWidth: '200px',
                                           maxWidth: '200px',
                                           zIndex: 20,
-                                          margin: '0 10px'
+                                          margin: '0 10px',
+                                          wordBreak: 'break-word'
                                         }}
                                       >
                                         <div className="flex items-center gap-1 mb-1">
