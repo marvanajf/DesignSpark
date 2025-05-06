@@ -1,6 +1,7 @@
 import { GeneratedContent, Campaign } from "@shared/schema";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { cleanContent } from "@/lib/utils";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
@@ -151,7 +152,7 @@ export default function SavedContentListItem({
   });
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(content.content_text);
+    navigator.clipboard.writeText(cleanContent(content.content_text));
     toast({
       title: "Content copied",
       description: "The content has been copied to your clipboard",
@@ -263,7 +264,7 @@ export default function SavedContentListItem({
       </CardHeader>
       <CardContent className="text-sm">
         <div className="prose prose-sm prose-stone dark:prose-invert max-w-none line-clamp-4">
-          {content.content_text}
+          {cleanContent(content.content_text)}
         </div>
       </CardContent>
       <CardFooter className="border-t p-3 bg-background/5 flex justify-between items-center">

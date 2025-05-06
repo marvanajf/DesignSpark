@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/use-auth';
 import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
+import { cleanContent } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -107,7 +108,7 @@ function ContentList({ contents }: { contents: CampaignContent[] }) {
           {expandedContentIndex === index && content.content && (
             <div className="mt-3 border-t border-gray-800 pt-3">
               <p className="text-sm text-gray-300 whitespace-pre-wrap">
-                {content.content}
+                {cleanContent(content.content)}
               </p>
             </div>
           )}
