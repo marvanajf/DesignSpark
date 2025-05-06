@@ -22,11 +22,11 @@ import {
 } from 'lucide-react';
 
 interface IndustrySelectorProps {
-  onSelect: (industry: Industry) => void;
-  selectedIndustryId: string | null;
+  onSelectIndustry: (industry: Industry) => void;
+  selectedIndustry: Industry | null;
 }
 
-export function IndustrySelector({ onSelect, selectedIndustryId }: IndustrySelectorProps) {
+export function IndustrySelector({ onSelectIndustry, selectedIndustry }: IndustrySelectorProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('grid');
 
@@ -91,12 +91,12 @@ export function IndustrySelector({ onSelect, selectedIndustryId }: IndustrySelec
               <Card 
                 key={industry.id} 
                 className={`cursor-pointer border border-gray-800/60 bg-black hover:bg-[#0e131f] transition-all duration-200 
-                  ${selectedIndustryId === industry.id ? 'border-[#74d1ea] bg-[#0e131f] shadow-[0_0_15px_rgba(116,209,234,0.15)]' : ''}
+                  ${selectedIndustry?.id === industry.id ? 'border-[#74d1ea] bg-[#0e131f] shadow-[0_0_15px_rgba(116,209,234,0.15)]' : ''}
                 `}
-                onClick={() => onSelect(industry)}
+                onClick={() => onSelectIndustry(industry)}
               >
                 <CardContent className="p-4 flex items-center space-x-3">
-                  <div className={`${selectedIndustryId === industry.id ? 'bg-[#74d1ea]/20' : 'bg-[#0e131f]'} rounded-lg p-2.5`}>
+                  <div className={`${selectedIndustry?.id === industry.id ? 'bg-[#74d1ea]/20' : 'bg-[#0e131f]'} rounded-lg p-2.5`}>
                     {getIcon(industry.icon)}
                   </div>
                   <div>
@@ -115,9 +115,9 @@ export function IndustrySelector({ onSelect, selectedIndustryId }: IndustrySelec
               <div 
                 key={industry.id} 
                 className={`cursor-pointer flex items-center p-3 rounded-lg border border-gray-800/60 bg-black hover:bg-[#0e131f] transition-all duration-200
-                  ${selectedIndustryId === industry.id ? 'border-[#74d1ea] bg-[#0e131f] shadow-[0_0_15px_rgba(116,209,234,0.15)]' : ''}
+                  ${selectedIndustry?.id === industry.id ? 'border-[#74d1ea] bg-[#0e131f] shadow-[0_0_15px_rgba(116,209,234,0.15)]' : ''}
                 `}
-                onClick={() => onSelect(industry)}
+                onClick={() => onSelectIndustry(industry)}
               >
                 <div className={`${selectedIndustryId === industry.id ? 'bg-[#74d1ea]/20' : 'bg-[#0e131f]'} rounded-lg p-2.5 mr-3`}>
                   {getIcon(industry.icon)}

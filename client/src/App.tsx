@@ -12,7 +12,7 @@ import HomePage from "@/pages/home-page";
 import DashboardPage from "@/pages/dashboard-page";
 import ToneAnalysisPage from "@/pages/tone-analysis-page-new";
 import ToneResultsPage from "@/pages/tone-results-page";
-import PersonaSelectionPage from "@/pages/persona-selection-page";
+import PersonaSelectionPage from "@/pages/persona-selection-page-updated";
 import ContentGeneratorPage from "@/pages/content-generator-page";
 import SavedContentPage from "@/pages/saved-content-page";
 import AccountPage from "@/pages/account-page";
