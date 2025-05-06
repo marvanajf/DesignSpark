@@ -249,6 +249,10 @@ Focus on making the value proposition and audience benefits very clear.`
         messages,
         max_tokens: Math.min(maxLength, 4000), // Ensure we don't exceed API limits
         temperature: 0.7, // Higher creativity for more intelligent content
+        // Use plain text format for social media content
+        ...(contentType === 'social' || contentType === 'linkedin' ? {
+          response_format: { type: "text" }
+        } : {})
       });
       
       // Extract the generated content
@@ -265,6 +269,18 @@ Focus on making the value proposition and audience benefits very clear.`
         .replace(/^#\s*\d+[\.:]?\s*(.*)/gm, '$1')
         // Remove hashtag and number combinations
         .replace(/^#+\s*\d+[\.:]?\s*(.*)/gm, '$1');
+      
+      // Special processing for numbered lists in LinkedIn content (1. 2. 3.)
+      if (contentType === 'social' || contentType === 'linkedin') {
+        // For LinkedIn content, convert numbered items to cleaner format without numbers
+        cleanedContent = cleanedContent
+          // Convert patterns like "1. **Item**" to "Item"
+          .replace(/^\d+\.\s+\*\*([^*]+)\*\*/gm, '$1')
+          // Convert patterns like "1. Item" to "Item"
+          .replace(/^\d+\.\s+(.+)/gm, '$1')
+          // Convert patterns with asterisks and numbers
+          .replace(/^\s*\d+\.\s+\*\*([^*]+)\*\*/gm, '$1');
+      }
       
       // Remove any asterisks used for emphasis/bold
       cleanedContent = cleanedContent
@@ -288,7 +304,11 @@ Focus on making the value proposition and audience benefits very clear.`
         // Remove any hashtags in the middle of text
         .replace(/#(\w+)/g, '$1')
         // Specifically remove any hashtag at the beginning of a line
-        .replace(/^#(\w+)/gm, '$1');
+        .replace(/^#(\w+)/gm, '$1')
+        // Remove the hash symbol when it appears as the first character of any line
+        .replace(/^#/gm, '')
+        // Remove any remaining # symbols anywhere in the text
+        .replace(/#/g, '');
         
       // Final removal of any markdown or formatting characters that might have been missed
       cleanedContent = cleanedContent
@@ -299,7 +319,9 @@ Focus on making the value proposition and audience benefits very clear.`
         .replace(/~+/g, '')         // Any remaining tildes
         .replace(/^\d+\.\s+/gm, '') // Numbered list items at start of line
         .replace(/=+/g, '')         // Equal signs (sometimes used for headers)
-        .replace(/-+$/gm, '');      // Dash lines (sometimes used for headers)
+        .replace(/-+$/gm, '')       // Dash lines (sometimes used for headers)
+        .replace(/\d+\.\s+\*\*([^*]+)\*\*/g, '$1') // Numbered items with bold text
+        .replace(/\d+\.\s+([^*]+)/g, '$1'); // Any remaining numbered items
       
       // Return the cleaned plain text content
       res.json({ content: cleanedContent });
@@ -588,13 +610,20 @@ HUMAN WRITING PATTERN:
 CONTENT FORMAT REQUIREMENTS: 
 Create an engaging LinkedIn post appropriate for a company page that would resonate with ${ctx.persona}s in the ${ctx.industry} sector.
 
+THIS CONTENT WILL BE PUBLISHED AS-IS - YOU MUST FOLLOW THESE STRICT FORMATTING RULES:
+- Write in PURE plain text with NO special characters or formatting
+- DO NOT use hashtags (# symbol) anywhere in your response
+- DO NOT use markdown formatting like asterisks (*) or hash symbols (#)
+- DO NOT use numbered points (1., 2., etc.) - use simple paragraphs instead
+- NO bullets, asterisks, or any special formatting characters
+- AVOID ALL formatting that isn't plain text
+
 Include:
-1. A compelling opening that draws the reader in with a relevant statistic, question, or insight about ${ctx.industry} challenges
-2. A concise, value-packed middle section highlighting the importance of ${ctx.benefit} in addressing key challenges identified in the campaign brief
-3. A clear value proposition that emphasizes outcomes specific to the campaign brief, not features
-4. At least one thought-provoking question to encourage engagement that relates to the core message
-5. A clear but soft call-to-action directing readers to learn more
-6. 3-5 relevant hashtags that would reach your target audience of ${ctx.persona}s in the ${ctx.industry}
+- A compelling opening that draws the reader in with a relevant statistic, question, or insight
+- A concise, value-packed middle section highlighting the importance of ${ctx.benefit}
+- A clear value proposition that emphasizes outcomes, not features
+- At least one thought-provoking question to encourage engagement
+- A clear but soft call-to-action directing readers to learn more
 
 LINKEDIN POST EFFECTIVENESS REQUIREMENTS:
 - Optimize for LinkedIn's algorithm by creating conversation-starting content
