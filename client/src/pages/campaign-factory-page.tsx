@@ -343,6 +343,53 @@ export default function CampaignFactoryPage() {
             emailSubject2 = `Follow-up: ${words.slice(0, 3).join(' ')} opportunities`;
         }
         
+        // Extract key information from campaign prompt for more targeted content
+        const keyTerms = campaignPrompt.toLowerCase().split(' ');
+        
+        // Identify potential product/service types
+        const productTerms = [
+          'software', 'solution', 'platform', 'service', 'system', 'product', 'application', 
+          'tool', 'package', 'packaging', 'container', 'subscription', 'program'
+        ];
+        
+        // Identify potential industries/sectors
+        const industryTerms = [
+          'retail', 'healthcare', 'finance', 'manufacturing', 'education', 'government', 
+          'technology', 'automotive', 'food', 'beverage', 'hospitality', 'construction',
+          'logistics', 'transportation', 'energy', 'agriculture', 'pharma', 'telecom'
+        ];
+        
+        // Identify potential features/benefits
+        const benefitTerms = [
+          'sustainable', 'efficient', 'secure', 'compliant', 'automated', 'integrated', 
+          'scalable', 'innovative', 'cost-effective', 'reliable', 'flexible', 'customizable',
+          'eco-friendly', 'green', 'recyclable', 'biodegradable', 'compostable'
+        ];
+        
+        // Identify potential regions/locations
+        const regionTerms = [
+          'global', 'local', 'regional', 'national', 'international', 
+          'european', 'american', 'asian', 'african', 'australian',
+          'north america', 'europe', 'asia', 'africa', 'australia',
+          'benelux', 'nordic', 'mediterranean', 'middle east'
+        ];
+        
+        // Extract product/service from campaign prompt
+        const productMatches = keyTerms.filter(term => productTerms.includes(term));
+        const product = productMatches.length > 0 ? productMatches[0] : 'solution';
+        
+        // Extract industry from campaign prompt
+        const industryMatches = keyTerms.filter(term => industryTerms.includes(term));
+        const industry = industryMatches.length > 0 ? industryMatches[0] : 'industry';
+        
+        // Extract benefits from campaign prompt
+        const benefitMatches = keyTerms.filter(term => benefitTerms.includes(term));
+        const benefit = benefitMatches.length > 0 ? benefitMatches[0] : 'effective';
+        
+        // Extract region from campaign prompt
+        const regionMatches = keyTerms.filter(term => regionTerms.includes(term));
+        const region = regionMatches.length > 0 ? regionMatches[0] : 'market';
+        
         // Generate expanded content from the brief prompt
         // For short prompts, intelligently expand based on context and use case
         let expandedPrompt = campaignPrompt;
@@ -351,19 +398,19 @@ export default function CampaignFactoryPage() {
           // Expand the short prompt based on the selected use case
           switch(selectedUseCase) {
             case 'upsell':
-              expandedPrompt = `Helping existing customers upgrade to more advanced solutions for ${campaignPrompt}, providing additional value and enhanced capabilities.`;
+              expandedPrompt = `Helping existing customers upgrade to more advanced ${product} for ${campaignPrompt}, providing additional value and enhanced capabilities for ${industry} businesses in the ${region} region.`;
               break;
             case 'acquisition':
-              expandedPrompt = `Attracting new customers by showcasing how our ${campaignPrompt} solutions address key pain points and deliver measurable business outcomes.`;
+              expandedPrompt = `Attracting new customers by showcasing how our ${benefit} ${product} solutions address key ${industry} pain points and deliver measurable business outcomes for organizations in the ${region} region.`;
               break;
             case 'retention':
-              expandedPrompt = `Strengthening relationships with existing customers by demonstrating continued value in our ${campaignPrompt} offerings and providing exceptional support.`;
+              expandedPrompt = `Strengthening relationships with existing ${industry} customers by demonstrating continued value in our ${benefit} ${product} offerings and providing exceptional support to businesses in the ${region} region.`;
               break;
             case 'launch':
-              expandedPrompt = `Introducing our innovative new ${campaignPrompt} solution designed to address emerging market needs with cutting-edge technology and proven methodologies.`;
+              expandedPrompt = `Introducing our innovative new ${benefit} ${product} solution designed specifically for the ${industry} sector in the ${region} region, addressing emerging market needs with cutting-edge technology and proven methodologies.`;
               break;
             default:
-              expandedPrompt = `Strategic approach to ${campaignPrompt} that delivers measurable results and addresses key business challenges.`;
+              expandedPrompt = `Strategic approach to ${campaignPrompt} that delivers measurable results and addresses key ${industry} business challenges in the ${region} region.`;
           }
         }
         
