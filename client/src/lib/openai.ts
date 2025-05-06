@@ -33,9 +33,68 @@ interface CampaignInputs {
 }
 
 /**
- * Generate campaign content using a comprehensive, context-aware approach
- * This builds a detailed prompt for the OpenAI API based on all campaign inputs
+ * Transform markdown formatting from OpenAI responses into properly formatted text
+ * Converts markdown to styled text that will render nicely in the UI
+ * Preserves heading structure while maintaining a clean appearance
  */
+function cleanMarkdownFormatting(content: string): string {
+  if (!content) return '';
+  
+  // Process email content specially
+  if (content.includes('Subject Line:') || content.includes('Subject:')) {
+    // Identify email parts
+    const subjectMatch = content.match(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i);
+    const subject = subjectMatch ? subjectMatch[1].trim() : '';
+    
+    // Clean up the content while preserving email structure
+    return content
+      // Format subject line as a heading
+      .replace(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i, 'Subject: $1\n')
+      // Clean up greeting line
+      .replace(/(?:\*\*)?Dear(?:\*\*)?\s+(.*?)(?:\*\*)?,/i, 'Dear $1,')
+      // Clean up other markdown
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/(?:^|\n)#+\s+(.+)$/gm, '$1')
+      .replace(/- \*\*([^:]+):\*\*/g, '- $1:')
+      .replace(/\*\*([^:]+):\*\*/g, '$1:')
+      .trim();
+  }
+  
+  // For social posts, blog, and other content
+  return content
+    // Keep bullet points intact but format them nicely
+    .replace(/^- (.+)$/gm, '• $1')
+    
+    // Format headers: preserve h1 and h2 but with clean styling
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    
+    // Format emphasis but don't completely remove it
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    
+    // Clean up other markdown artifacts 
+    .replace(/\*\*([^:]+):\*\*/g, '<strong>$1:</strong>')
+    
+    // Clean up specific placeholders
+    .replace(/\[Your Name\]/g, '[Your Name]')
+    .replace(/\[Your Position\]/g, '[Your Position]')
+    .replace(/\[Your Contact Information\]/g, '[Your Contact Information]')
+    
+    // Format numbered lists properly
+    .replace(/^(\d+)\.\s+(.+)$/gm, '$1. $2')
+    
+    // Add paragraph breaks for better readability
+    .replace(/\n\n/g, '</p><p>')
+    
+    // Wrap the content in paragraphs if it doesn't already have HTML
+    .replace(/^(.+)$/, '<p>$1</p>')
+    
+    .trim();
+}
+
 export async function generateCampaignContent(
   inputs: CampaignInputs
 ): Promise<string> {
@@ -113,7 +172,8 @@ export async function generateCampaignContent(
     }
 
     const data = await response.json();
-    return data.content;
+    // Clean the content from excessive markdown formatting
+    return cleanMarkdownFormatting(data.content);
   } catch (error) {
     console.error('Error generating content with OpenAI:', error);
     return fallbackContent(inputs);
