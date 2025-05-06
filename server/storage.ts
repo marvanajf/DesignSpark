@@ -8,6 +8,7 @@ import {
   leadContacts,
   campaigns,
   campaignContents,
+  campaignFactoryCampaigns,
   type User, 
   type InsertUser, 
   type ToneAnalysis, 
@@ -26,6 +27,8 @@ import {
   type InsertCampaign,
   type CampaignContent,
   type InsertCampaignContent,
+  type CampaignFactory,
+  type InsertCampaignFactory,
   type SubscriptionPlanType,
   predefinedPersonas
 } from "@shared/schema";
@@ -118,6 +121,13 @@ export interface IStorage {
   removeContentFromCampaign(campaignId: number, contentId: number): Promise<void>;
   deleteCampaignContents(campaignId: number): Promise<void>;
   
+  // Campaign Factory methods
+  createCampaignFactory(campaign: InsertCampaignFactory): Promise<CampaignFactory>;
+  getCampaignFactory(id: number): Promise<CampaignFactory | undefined>;
+  getCampaignFactoriesByUserId(userId: number): Promise<CampaignFactory[]>;
+  updateCampaignFactory(id: number, updates: Partial<InsertCampaignFactory>): Promise<CampaignFactory>;
+  deleteCampaignFactory(id: number): Promise<void>;
+  
   // Lead contact methods
   createLeadContact(contact: InsertLeadContact): Promise<LeadContact>;
   getLeadContact(id: number): Promise<LeadContact | undefined>;
@@ -142,6 +152,7 @@ export class MemStorage implements IStorage {
   private blogPosts: Map<number, BlogPost>;
   private campaigns: Map<number, Campaign>;
   private campaignContents: Map<number, CampaignContent>;
+  private campaignFactories: Map<number, CampaignFactory>;
   private leadContacts: Map<number, LeadContact>;
   private userIdCounter: number;
   private toneAnalysisIdCounter: number;
@@ -151,6 +162,7 @@ export class MemStorage implements IStorage {
   private blogPostIdCounter: number;
   private campaignIdCounter: number;
   private campaignContentIdCounter: number;
+  private campaignFactoryIdCounter: number;
   private leadContactIdCounter: number;
   sessionStore: session.Store;
 
@@ -163,6 +175,7 @@ export class MemStorage implements IStorage {
     this.blogPosts = new Map();
     this.campaigns = new Map();
     this.campaignContents = new Map();
+    this.campaignFactories = new Map();
     this.leadContacts = new Map();
     this.userIdCounter = 1;
     this.toneAnalysisIdCounter = 1;
@@ -172,6 +185,7 @@ export class MemStorage implements IStorage {
     this.blogPostIdCounter = 1;
     this.campaignIdCounter = 1;
     this.campaignContentIdCounter = 1;
+    this.campaignFactoryIdCounter = 1;
     this.leadContactIdCounter = 1;
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000 // prune expired entries every 24h
