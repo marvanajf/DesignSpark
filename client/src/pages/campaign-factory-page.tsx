@@ -644,12 +644,33 @@ export default function CampaignFactoryPage() {
         console.error("Error generating social content:", error);
       }
       
-      // Calculate delivery dates for content
-      const firstFollowupDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7));
-      const socialPostDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3));
-      const webinarDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14));
-      const articleDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10));
-      const blogPostDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5));
+      // Get the total campaign duration in days to intelligently space content
+      const campaignStart = new Date(campaignStartDate);
+      const campaignEnd = new Date(campaignEndDate);
+      const campaignDurationDays = Math.max(
+        14, // Minimum 14 days even for short campaigns
+        Math.floor((campaignEnd.getTime() - campaignStart.getTime()) / (1000 * 60 * 60 * 24))
+      );
+      
+      // Helper function to calculate dates distributed across the campaign timeline
+      const calculateDistributedDate = (positionPercent: number): Date => {
+        // Ensure we don't exceed the end date by limiting to 95% of duration
+        const maxPercent = Math.min(positionPercent, 0.95);
+          
+        // Calculate days to add based on relative position percentage
+        const daysToAdd = Math.floor(maxPercent * campaignDurationDays);
+        
+        // Create a new date by adding the calculated days
+        return new Date(new Date(campaignStartDate).setDate(campaignStart.getDate() + daysToAdd));
+      };
+      
+      // Calculate intelligently distributed delivery dates for content
+      // First email always at the start (day 0)
+      const firstFollowupDate = calculateDistributedDate(0.15); // 15% into the campaign
+      const socialPostDate = calculateDistributedDate(0.25);    // 25% into the campaign
+      const webinarDate = calculateDistributedDate(0.5);        // Middle of the campaign
+      const articleDate = calculateDistributedDate(0.7);        // 70% into the campaign
+      const blogPostDate = calculateDistributedDate(0.35);      // 35% into the campaign
       
       // Simulate final processing
       await new Promise(resolve => setTimeout(resolve, 1000));
