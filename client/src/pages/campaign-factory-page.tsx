@@ -1977,33 +1977,57 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                         </div>
                         <div className="w-full">
                           {/* Editable Campaign Title */}
+                          {/* Editable Campaign Name */}
                           <div className="relative group">
+                            <Label htmlFor="campaignName" className="text-gray-400 text-xs mb-1">Campaign Name</Label>
                             <input 
+                              id="campaignName"
                               type="text"
-                              value={campaign.name}
+                              value={campaignName}
                               onChange={(e) => {
+                                setCampaignName(e.target.value);
+                                // Also update the campaign object
                                 setCampaign({
                                   ...campaign,
                                   name: e.target.value
                                 });
                               }}
                               className="bg-transparent text-white text-lg font-medium w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded px-1 py-0.5"
-                              placeholder="Campaign Title"
+                              placeholder="Name your campaign"
                             />
-                            <Pencil className="h-3.5 w-3.5 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-1.5 right-1.5 transition-opacity" />
+                            <Pencil className="h-3.5 w-3.5 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-6 right-1.5 transition-opacity" />
                           </div>
-                          {/* Editable Campaign Description/Objective */}
-                          <div className="relative group">
+                          
+                          {/* Editable Campaign Description */}
+                          <div className="relative group mt-4">
+                            <Label htmlFor="campaignDescription" className="text-gray-400 text-xs mb-1">Campaign Description</Label>
                             <textarea
+                              id="campaignDescription"
+                              value={campaignDescription}
+                              onChange={(e) => {
+                                setCampaignDescription(e.target.value);
+                                // Also update the campaign object
+                                setCampaign({
+                                  ...campaign,
+                                  description: e.target.value
+                                });
+                              }}
+                              className="bg-transparent text-gray-400 text-sm w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded px-1 py-0.5 resize-none"
+                              rows={2}
+                              placeholder="Describe your campaign"
+                            />
+                            <Pencil className="h-3.5 w-3.5 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-6 right-1.5 transition-opacity" />
+                          </div>
+                          
+                          {/* Campaign Objective (read-only) */}
+                          <div className="mt-4">
+                            <Label htmlFor="campaignObjective" className="text-gray-400 text-xs mb-1">Campaign Objective</Label>
+                            <textarea
+                              id="campaignObjective"
                               value={campaign.objective.length > 120 
                                 ? campaign.objective.substring(0, 120) + "..." 
                                 : campaign.objective}
-                              onChange={(e) => {
-                                setCampaign({
-                                  ...campaign,
-                                  objective: e.target.value
-                                });
-                              }}
+                              readOnly
                               onClick={(e) => {
                                 // When clicked, show the full objective
                                 if (campaign.objective.length > 120) {
@@ -2013,11 +2037,9 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                   });
                                 }
                               }}
-                              className="bg-transparent text-gray-400 text-sm w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded px-1 py-0.5 resize-none"
+                              className="bg-transparent text-gray-400 text-sm w-full focus:outline-none rounded px-1 py-0.5 resize-none cursor-pointer"
                               rows={2}
-                              placeholder="Campaign objective or description"
                             />
-                            <Pencil className="h-3.5 w-3.5 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-1.5 right-1.5 transition-opacity" />
                           </div>
                         </div>
                       </div>
