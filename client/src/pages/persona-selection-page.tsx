@@ -56,13 +56,6 @@ export default function PersonaSelectionPage() {
   // Fetch personas
   const { data: personas, isLoading, error } = useQuery({
     queryKey: ["/api/personas"],
-    onError: (err: any) => {
-      toast({
-        title: "Failed to load personas",
-        description: err.message,
-        variant: "destructive",
-      });
-    },
   }) as { data: any[]; isLoading: boolean; error: Error | null };
 
   // Seed predefined personas if none exist
@@ -414,6 +407,17 @@ export default function PersonaSelectionPage() {
   }
 
   if (error || !personas) {
+    // Display error toast if there's an error
+    useEffect(() => {
+      if (error) {
+        toast({
+          title: "Failed to load personas",
+          description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }, [error]);
+
     return (
       <Layout showSidebar={true}>
         <div className="flex-1 overflow-y-auto bg-black">
