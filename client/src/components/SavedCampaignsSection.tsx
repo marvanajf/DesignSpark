@@ -696,7 +696,7 @@ export default function SavedCampaignsSection() {
                                 
                                 {/* Content Body */}
                                 <div className="p-5 text-sm text-gray-200 whitespace-pre-wrap bg-gradient-to-b from-zinc-900/10 to-black">
-                                  {content.content}
+                                  {cleanContent(content.content)}
                                 </div>
                               </div>
                             ))
