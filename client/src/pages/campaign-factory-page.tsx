@@ -494,7 +494,7 @@ Key Takeaways:
 Presenter:
 [${industryExtracted || 'Industry'} Expert Name], with 15+ years of experience helping ${audienceRoleVal}s implement successful ${useCaseName.toLowerCase()} solutions in the ${industryExtracted || 'industry'} sector.
 
-Registration includes a complimentary 30-minute consultation focused on your specific ${campaignPrompt.split(' ').slice(0, 3).join(' ')}... challenges.`),
+Registration includes a complimentary 30-minute consultation focused on your specific ${industryExtracted || 'industry'} implementation challenges.`),
           deliveryDate: webinarDate.toISOString().split('T')[0],
           channel: "Webinar",
           icon: <FileText className="h-5 w-5" />
