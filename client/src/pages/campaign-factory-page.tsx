@@ -32,6 +32,16 @@ type Persona = {
   icon?: React.ReactNode;
 };
 
+// Component for safely rendering HTML content
+const CampaignContentDisplay = ({ content }: { content: string }) => {
+  return (
+    <pre 
+      className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content"
+      dangerouslySetInnerHTML={{ __html: content }}
+    ></pre>
+  );
+};
+
 type CampaignContent = {
   id: number;
   type: 'email' | 'social' | 'blog' | 'webinar';
