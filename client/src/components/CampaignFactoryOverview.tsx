@@ -113,28 +113,66 @@ export function CampaignFactoryOverview() {
   };
 
   // Parse stringified JSON content safely
-  const parseContent = (jsonString: string) => {
-    try {
-      return JSON.parse(jsonString);
-    } catch (e) {
-      console.error('Error parsing JSON:', e);
-      return [];
+  const parseContent = (jsonString: string | any) => {
+    if (!jsonString) return [];
+    
+    // If it's already an array, return it
+    if (Array.isArray(jsonString)) {
+      return jsonString;
     }
+    
+    // If it's a string, try to parse it
+    if (typeof jsonString === 'string') {
+      try {
+        const parsed = JSON.parse(jsonString);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+        return [];
+      } catch (e) {
+        console.error('Error parsing JSON:', e);
+        return [];
+      }
+    }
+    
+    // Fallback: return empty array
+    return [];
   };
 
   // Parse selected campaign contents
   const getSelectedCampaignContents = (): CampaignContent[] => {
     if (!selectedCampaign) return [];
-    return parseContent(selectedCampaign.contents);
+    
+    const contents = selectedCampaign.contents;
+    console.log('Campaign contents type:', typeof contents);
+    console.log('Campaign contents:', contents);
+    
+    return parseContent(contents);
   };
 
-  // Helper to parse tone profile
+  // Helper to parse tone profile 
   const getToneProfile = () => {
     if (!selectedCampaign) return {};
+    console.log('Tone profile type:', typeof selectedCampaign.tone_profile);
+    console.log('Tone profile:', selectedCampaign.tone_profile);
+    
     try {
-      return JSON.parse(selectedCampaign.tone_profile);
+      // Handle different formats of tone_profile
+      if (typeof selectedCampaign.tone_profile === 'string') {
+        // Try to parse the string as JSON
+        try {
+          return JSON.parse(selectedCampaign.tone_profile);
+        } catch (parseError) {
+          console.error('Error parsing tone profile string:', parseError);
+          return {};
+        }
+      } else if (selectedCampaign.tone_profile && typeof selectedCampaign.tone_profile === 'object') {
+        // It's already an object
+        return selectedCampaign.tone_profile;
+      }
+      return {};
     } catch (e) {
-      console.error('Error parsing tone profile:', e);
+      console.error('Error processing tone profile:', e);
       return {};
     }
   };
