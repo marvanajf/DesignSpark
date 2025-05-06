@@ -45,6 +45,7 @@ export interface CampaignFactoryCampaign {
   contents: string;
   tone_profile: string;
   user_id: number;
+  metadata?: string; // Added metadata field for campaign title, boilerplate, and objectives
 }
 
 // Interface for the parsed content of a campaign
@@ -183,6 +184,34 @@ export default function SavedCampaignsSection() {
     } catch (e) {
       console.error('Error processing tone profile:', e);
       return {};
+    }
+  };
+  
+  // Helper to parse campaign metadata
+  const getCampaignMetadata = () => {
+    if (!selectedCampaign || !selectedCampaign.metadata) return null;
+    console.log('Campaign metadata type:', typeof selectedCampaign.metadata);
+    console.log('Campaign metadata:', selectedCampaign.metadata);
+    
+    try {
+      // Handle different formats of metadata
+      if (typeof selectedCampaign.metadata === 'string') {
+        // Try to parse the string as JSON
+        try {
+          const metadata = JSON.parse(selectedCampaign.metadata);
+          return metadata && typeof metadata === 'object' ? metadata : null;
+        } catch (parseError) {
+          console.error('Error parsing metadata string:', parseError);
+          return null;
+        }
+      } else if (selectedCampaign.metadata && typeof selectedCampaign.metadata === 'object') {
+        // It's already an object
+        return selectedCampaign.metadata;
+      }
+      return null;
+    } catch (e) {
+      console.error('Error processing campaign metadata:', e);
+      return null;
     }
   };
 

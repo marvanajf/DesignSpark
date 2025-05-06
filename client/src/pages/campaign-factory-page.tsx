@@ -1053,6 +1053,12 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
           persuasive: 75,
           educational: 80,
           enthusiastic: 60
+        },
+        // Add campaign metadata
+        metadata: campaignMetadata || {
+          title: suggestedName,
+          boilerplate: suggestedDescription.substring(0, 120) + (suggestedDescription.length > 120 ? "..." : ""),
+          objectives: [useCaseObj?.description || "Increase brand awareness and drive conversions"]
         }
       });
       
@@ -1180,7 +1186,8 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
         timeline_start: campaign.timeline.start,
         timeline_end: campaign.timeline.end,
         contents: JSON.stringify(campaign.contents),
-        tone_profile: JSON.stringify(campaign.toneProfile)
+        tone_profile: JSON.stringify(campaign.toneProfile),
+        metadata: campaign.metadata ? JSON.stringify(campaign.metadata) : null
       };
       
       // Send data to API
@@ -2075,6 +2082,41 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                               rows={2}
                             />
                           </div>
+                          
+                          {/* Campaign Metadata Section */}
+                          {campaign.metadata && (
+                            <div className="mt-6 border-t border-zinc-800 pt-4">
+                              <h3 className="text-white text-sm font-medium mb-2">Campaign Metadata</h3>
+                              
+                              {/* Campaign Title */}
+                              {campaign.metadata.title && (
+                                <div className="mb-3">
+                                  <Label className="text-gray-400 text-xs mb-1">Title</Label>
+                                  <p className="text-sm text-white bg-transparent px-1 rounded">{campaign.metadata.title}</p>
+                                </div>
+                              )}
+                              
+                              {/* Campaign Boilerplate */}
+                              {campaign.metadata.boilerplate && (
+                                <div className="mb-3">
+                                  <Label className="text-gray-400 text-xs mb-1">Boilerplate</Label>
+                                  <p className="text-sm text-gray-300 bg-transparent px-1 rounded">{campaign.metadata.boilerplate}</p>
+                                </div>
+                              )}
+                              
+                              {/* Campaign Objectives */}
+                              {campaign.metadata.objectives && campaign.metadata.objectives.length > 0 && (
+                                <div>
+                                  <Label className="text-gray-400 text-xs mb-1">Objectives</Label>
+                                  <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
+                                    {campaign.metadata.objectives.map((objective, idx) => (
+                                      <li key={idx}>{objective}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <Button 
