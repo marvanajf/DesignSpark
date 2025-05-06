@@ -2,6 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Campaign content formatting styles */
+.campaign-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: white;
+}
+
+.campaign-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  color: white;
+}
+
+.campaign-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.campaign-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.campaign-content strong {
+  font-weight: 600;
+}
+
+.campaign-content em {
+  font-style: italic;
+}
+
+.campaign-content ul, .campaign-content ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.campaign-content li {
+  margin-bottom: 0.5rem;
+}
+
+.campaign-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+/* Email-specific formatting */
+.campaign-content .email-subject {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.campaign-content .email-greeting {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
