@@ -239,6 +239,9 @@ export default function CampaignFactoryPage() {
         const selectedToneAnalysisObj = toneAnalyses?.find(tone => tone.id.toString() === selectedToneAnalysisId);
         const toneAnalysisName = selectedToneAnalysisObj ? selectedToneAnalysisObj.name : "Professional";
         
+        // Extract tone profile from the selected analysis
+        const selectedToneResults = selectedToneAnalysisObj?.tone_results || null;
+        
         // Generate a descriptive campaign name based on user inputs
         const campaignName = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
         
@@ -472,49 +475,49 @@ What has been your experience measuring the full spectrum of returns on strategi
             type: "blog" as const,
             title: `Industry Trends in ${useCaseName} - Strategic Analysis`,
             persona: audienceName,
-            content: `# The Evolution of Strategic Execution: What Leading Organizations Are Doing Differently
+            content: `5 Critical Challenges in Strategic Execution (And How to Address Them)
 
-The competitive landscape has transformed dramatically in recent years. Organizations that consistently outperform their peers are taking fundamentally different approaches to address both emerging challenges and persistent pain points.
+In today's landscape, businesses face sophisticated challenges that require thoughtful solutions. According to recent research, many organizations struggle with these issues, yet only a small percentage are adequately prepared to address them.
 
-Based on our analysis of industry leaders and extensive client engagements, we've identified the five critical differentiators that separate market leaders from laggards:
+After working with hundreds of clients, we've identified the most common challenges that companies face—and how our approach helps solve them efficiently and affordably.
 
-## 1. Integrated Systems vs. Fragmented Solutions
+## 1. Inefficient Processes
 
-**The Challenge**: Most organizations operate with disconnected tools that create data silos and workflow inefficiencies.
+The Challenge: Most teams waste valuable time on manual, repetitive tasks.
 
-**The Leadership Approach**: Industry leaders implement unified platforms with seamless integration points, creating consistent data flows and unified experiences.
+The Solution: Our automation tools streamline workflows and eliminate bottlenecks, allowing your team to focus on high-value activities.
 
-*"By consolidating our previously fragmented systems, we've eliminated 72% of manual processes and accelerated project delivery by nearly 3 weeks per cycle." — CIO, Global Manufacturing Company*
+"Since implementing the solution, we've seen productivity increase by 30%. Our team can confidently tackle strategic projects knowing the routine work is handled efficiently." — Client testimonial
 
-## 2. Predictive vs. Reactive Strategic Planning
+## 2. Lack of Integration
 
-**The Challenge**: Traditional approaches rely on historical data and react to changes after they've impacted performance.
+The Challenge: Disparate systems lead to data silos and communication gaps.
 
-**The Leadership Approach**: Forward-thinking organizations leverage predictive analytics and scenario planning to anticipate shifts and position resources proactively.
+The Solution: Our unified platform brings all your essential tools together, ensuring seamless information flow across your organization.
 
-## 3. Continuous Evolution vs. Periodic Updates
+## 3. Scalability Constraints
 
-**The Challenge**: Traditional implementation cycles with long gaps between major updates leave organizations vulnerable to changing conditions.
+The Challenge: Many businesses struggle to scale their operations efficiently.
 
-**The Leadership Approach**: Leaders implement agile methodologies with continuous improvement cycles, allowing for rapid adaptation and regular capability enhancements.
+The Solution: Our flexible architecture grows with your business, allowing you to expand without the typical growing pains.
 
-## 4. Skills-Focused vs. Tool-Focused Implementation
+## 4. Visibility and Insights
 
-**The Challenge**: Most deployments focus primarily on technical implementation rather than human capability development.
+The Challenge: Without proper analytics, making informed decisions becomes difficult.
 
-**The Leadership Approach**: Successful organizations invest equally in platform capabilities and team skill development, ensuring technology adoption and utilization.
+The Solution: Our comprehensive reporting and analysis tools give you real-time insights into your operations, enabling data-driven decision making.
 
-## 5. Outcome-Driven vs. Feature-Driven Approaches
+## 5. Implementation Challenges
 
-**The Challenge**: Traditional implementations focus on feature completion rather than business outcomes.
+The Challenge: Organizations often lack the expertise to fully implement new solutions.
 
-**The Leadership Approach**: Leading organizations define success through measurable business outcomes and align all activities to these priority metrics.
+The Solution: Our guided implementation process and ongoing support ensure you maximize the value of your investment from day one.
 
-## The Strategic Imperative
+## The Bottom Line
 
-Organizations that embrace these leadership approaches achieve 3.4x greater ROI on their investments and substantially higher competitive positioning. The gap between leaders and laggards continues to widen, creating both risk and opportunity.
+The cost of inefficiency and missed opportunities can be substantial when including lost productivity, missed opportunities, and competitive disadvantage. By comparison, our solution provides enterprise-grade capabilities at an accessible price point, typically paying for itself within the first year.
 
-*Ready to transform your strategic approach? [Contact our strategy team] for a complimentary assessment of your current capabilities and strategic opportunities.*`,
+Ready to transform your strategic approach? [Contact us] for a complimentary assessment.`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5)).toISOString().split('T')[0],
             channel: "Blog",
             icon: <FileText className="h-5 w-5" />
@@ -573,7 +576,13 @@ Organizations that embrace these leadership approaches achieve 3.4x greater ROI 
             end: campaignEndDate
           },
           contents: selectedContents,
-          toneProfile: {
+          toneProfile: selectedToneResults ? {
+            professional: selectedToneResults.professional || 85,
+            conversational: selectedToneResults.conversational || 65,
+            persuasive: selectedToneResults.persuasive || 75,
+            educational: selectedToneResults.educational || 80,
+            enthusiastic: selectedToneResults.enthusiastic || 60
+          } : {
             professional: 85,
             conversational: 65,
             persuasive: 75,
