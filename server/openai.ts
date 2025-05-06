@@ -1,143 +1,294 @@
+import { Express, Request, Response } from "express";
 import OpenAI from "openai";
-import { Express } from "express";
 
 // Initialize OpenAI client
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let openai: OpenAI | null = null;
 
-// Create a reusable system prompt template
-const getSystemPrompt = (params: {
-  campaignType: string;
-  persona: string;
-  toneProfile: any;
-  contentType: string;
-}) => {
-  const { campaignType, persona, toneProfile, contentType } = params;
-  
-  // Determine tone instructions based on profile 
-  let toneInstructions = "Use a professional and persuasive tone.";
-  
-  if (toneProfile) {
-    const toneElements = [];
-    
-    if (toneProfile.professional > 70) {
-      toneElements.push("professional (data-driven, precise, authoritative)");
-    }
-    
-    if (toneProfile.conversational > 70) {
-      toneElements.push("conversational (friendly, relatable, using 'you' and 'we')");
-    }
-    
-    if (toneProfile.persuasive > 70) {
-      toneElements.push("persuasive (compelling, action-oriented, emphasizing benefits)");
-    }
-    
-    if (toneProfile.educational > 70) {
-      toneElements.push("educational (informative, thorough, explanatory)");
-    }
-    
-    if (toneProfile.enthusiastic > 70) {
-      toneElements.push("enthusiastic (energetic, passionate, dynamic)");
-    }
-    
-    if (toneElements.length > 0) {
-      toneInstructions = `Use a tone that is ${toneElements.join(", ")}.`;
-    }
+// Initialize OpenAI with API key from environment variables
+const initializeOpenAI = () => {
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn("OpenAI API key not found in environment variables");
+    return false;
   }
   
-  // Base system prompt
-  let systemPrompt = `You are an expert ${campaignType} campaign content creator for ${persona} audiences.
-${toneInstructions}
-Focus on creating compelling, highly relevant content specifically tailored to the campaign brief.
-Extract key concepts, industry terms, and benefits from the brief to create targeted messaging.`;
-
-  // Add content-specific instructions
-  switch (contentType) {
-    case 'email':
-      systemPrompt += `
-Create a persuasive marketing email that:
-- Has a compelling subject line
-- Addresses the reader directly with a clear value proposition
-- Includes specific benefits and pain points relevant to the campaign brief
-- Ends with a clear call to action
-- Format as "Subject: [subject line]" followed by the email content
-- Keep professional and concise, with proper email structure`;
-      break;
-    case 'social':
-      systemPrompt += `
-Create a LinkedIn post that:
-- Starts with an attention-grabbing statement or statistic
-- Presents a clear value proposition related to the campaign brief
-- Includes bullet points highlighting key benefits
-- Ends with a question to engage followers or a clear call to action
-- Includes 3-5 relevant hashtags
-- Is formatted for easy reading with short paragraphs and spacing`;
-      break;
-    case 'blog':
-      systemPrompt += `
-Create a blog post overview that:
-- Has a compelling title directly related to the campaign brief
-- Includes an introduction that clearly states the problem or opportunity
-- Has 3-5 subheadings with brief content under each
-- Each section should specifically address aspects of the campaign brief
-- Ends with a conclusion and call to action
-- Format with proper Markdown headings and structure`;
-      break;
-    case 'webinar':
-      systemPrompt += `
-Create a webinar description that:
-- Has an attention-grabbing title related to the campaign brief
-- Includes a compelling description of what attendees will learn
-- Lists 3-5 specific topics or agenda items
-- Specifies webinar duration and format
-- Highlights speaker expertise relevant to the topic
-- Ends with benefits of attending and registration instructions`;
-      break;
+  try {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    console.log("OpenAI API client initialized successfully");
+    return true;
+  } catch (error) {
+    console.error("Error initializing OpenAI API client:", error);
+    return false;
   }
-  
-  return systemPrompt;
 };
 
-// Register OpenAI-related routes
+// Setup OpenAI routes for content generation
 export function registerOpenAIRoutes(app: Express) {
-  app.post("/api/openai/generate", async (req, res) => {
-    try {
-      const { 
-        prompt, 
-        campaignType, 
-        persona, 
-        toneProfile, 
-        contentType,
-        maxLength = 1000
-      } = req.body;
-      
-      if (!prompt) {
-        return res.status(400).json({ error: "Missing required parameter: prompt" });
-      }
-      
-      const systemPrompt = getSystemPrompt({
-        campaignType: campaignType || "marketing",
-        persona: persona || "business decision makers",
-        toneProfile,
-        contentType: contentType || "general"
+  console.log("Registering OpenAI routes");
+  
+  // Initialize OpenAI client if API key is available
+  const isInitialized = initializeOpenAI();
+  if (!isInitialized) {
+    console.warn("OpenAI features will be unavailable");
+  }
+  
+  // Route for generating campaign content
+  app.post("/api/openai/generate", async (req: Request, res: Response) => {
+    // Check authentication
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    // Validate required parameters
+    const { prompt, campaignType, persona, toneProfile, contentType, maxLength = 1000 } = req.body;
+    
+    if (!prompt || !contentType) {
+      return res.status(400).json({ error: "Missing required parameters (prompt, contentType)" });
+    }
+    
+    // If OpenAI is not initialized, return error
+    if (!openai) {
+      return res.status(503).json({ 
+        error: "OpenAI service is not available. Please check your API key.",
+        requires_api_key: true
       });
+    }
+    
+    try {
+      // Build prompt based on content type and campaign info
+      const systemPrompt = buildSystemPrompt(contentType, campaignType, persona, toneProfile);
       
-      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-      const response = await openai.chat.completions.create({
+      // Generate content using OpenAI
+      const completion = await openai.chat.completions.create({
+        // The newest OpenAI model is "gpt-4o" which was released May 13, 2024
+        // Do not change this unless explicitly requested by the user
         model: "gpt-4o",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: `Create ${contentType} content for a campaign with this brief: "${prompt}"` }
+          { role: "user", content: prompt }
         ],
-        max_tokens: Math.min(maxLength, 2000),
-        temperature: 0.7,
+        max_tokens: Math.min(maxLength, 4000), // Ensure we don't exceed API limits
+        temperature: 0.8, // Slightly higher creativity
       });
       
-      const generatedContent = response.choices[0].message.content;
+      // Extract the generated content
+      const generatedContent = completion.choices[0].message.content;
       
+      // Return the generated content
       res.json({ content: generatedContent });
     } catch (error: any) {
-      console.error("OpenAI API error:", error.message);
-      res.status(500).json({ error: "Failed to generate content" });
+      console.error("Error generating content with OpenAI:", error);
+      
+      if (error.response?.status === 401) {
+        return res.status(401).json({ 
+          error: "Invalid OpenAI API key. Please provide a valid API key.",
+          requires_api_key: true 
+        });
+      }
+      
+      res.status(500).json({ 
+        error: "Error generating content", 
+        details: error.message 
+      });
     }
   });
+  
+  // Route for analyzing tone
+  app.post("/api/openai/analyze-tone", async (req: Request, res: Response) => {
+    // Check authentication
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    // Validate required parameters
+    const { text } = req.body;
+    
+    if (!text) {
+      return res.status(400).json({ error: "Missing required parameter: text" });
+    }
+    
+    // If OpenAI is not initialized, return error
+    if (!openai) {
+      return res.status(503).json({ 
+        error: "OpenAI service is not available. Please check your API key.",
+        requires_api_key: true
+      });
+    }
+    
+    try {
+      // Generate tone analysis using OpenAI
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { 
+            role: "system", 
+            content: `Analyze the tone of the following text and provide scores (0-100) for the following dimensions:
+              - professional: How formal and business-appropriate the tone is
+              - conversational: How casual and approachable the tone is
+              - persuasive: How convincing and influential the tone is
+              - educational: How informative and instructional the tone is
+              - enthusiastic: How energetic and passionate the tone is
+              Respond in JSON format only with these five dimensions as keys and scores as values.` 
+          },
+          { role: "user", content: text }
+        ],
+        temperature: 0.3, // More consistent results
+        response_format: { type: "json_object" },
+      });
+      
+      // Parse the JSON response
+      const toneResults = JSON.parse(completion.choices[0].message.content || "{}");
+      
+      // Return the tone analysis
+      res.json(toneResults);
+    } catch (error: any) {
+      console.error("Error analyzing tone with OpenAI:", error);
+      
+      if (error.response?.status === 401) {
+        return res.status(401).json({ 
+          error: "Invalid OpenAI API key. Please provide a valid API key.",
+          requires_api_key: true 
+        });
+      }
+      
+      res.status(500).json({ 
+        error: "Error analyzing tone", 
+        details: error.message 
+      });
+    }
+  });
+  
+  // Route for generating personas
+  app.post("/api/openai/generate-persona", async (req: Request, res: Response) => {
+    // Check authentication
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    // Validate required parameters
+    const { description } = req.body;
+    
+    if (!description) {
+      return res.status(400).json({ error: "Missing required parameter: description" });
+    }
+    
+    // If OpenAI is not initialized, return error
+    if (!openai) {
+      return res.status(503).json({ 
+        error: "OpenAI service is not available. Please check your API key.",
+        requires_api_key: true
+      });
+    }
+    
+    try {
+      // Generate persona using OpenAI
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { 
+            role: "system", 
+            content: `Create a buyer persona based on the description. Include:
+              - name: A professional name appropriate for the role
+              - role: Their job title
+              - pains: 4-5 specific pain points they face in their role (as an array of strings)
+              - goals: 4-5 specific goals they want to achieve (as an array of strings)
+              
+              Respond in JSON format with these fields.` 
+          },
+          { role: "user", content: description }
+        ],
+        temperature: 0.7,
+        response_format: { type: "json_object" },
+      });
+      
+      // Parse the JSON response
+      const personaData = JSON.parse(completion.choices[0].message.content || "{}");
+      
+      // Return the generated persona
+      res.json(personaData);
+    } catch (error: any) {
+      console.error("Error generating persona with OpenAI:", error);
+      
+      if (error.response?.status === 401) {
+        return res.status(401).json({ 
+          error: "Invalid OpenAI API key. Please provide a valid API key.",
+          requires_api_key: true 
+        });
+      }
+      
+      res.status(500).json({ 
+        error: "Error generating persona", 
+        details: error.message 
+      });
+    }
+  });
+}
+
+// Helper function to build system prompts based on content type
+function buildSystemPrompt(
+  contentType: string, 
+  campaignType: string, 
+  persona: string, 
+  toneProfile: any
+): string {
+  // Default professional tone if none provided
+  const tone = toneProfile || {
+    professional: 80,
+    conversational: 50,
+    persuasive: 70,
+    educational: 60,
+    enthusiastic: 50
+  };
+  
+  // Determine primary tone characteristics based on highest scores
+  const toneEntries = Object.entries(tone) as [string, number][];
+  const sortedTones = toneEntries.sort((a, b) => b[1] - a[1]);
+  const primaryTone = sortedTones[0][0];
+  const secondaryTone = sortedTones[1][0];
+  
+  // Base prompt for all content types
+  let basePrompt = `You are an expert marketing copywriter specializing in ${contentType} content for ${campaignType} campaigns.
+  
+Your primary audience is: ${persona}
+
+Your writing style should be primarily ${primaryTone} and secondarily ${secondaryTone}.
+Ensure the content is highly relevant, specific, and tailored to the exact campaign brief.
+Avoid generic statements and focus on specifics from the prompt.
+DO NOT mention Microsoft, Microsoft 365, or any other product/brand unless specifically mentioned in the prompt.
+If regions are mentioned in the prompt, be sure to reference them in your content.
+`;
+
+  // Content-specific instructions
+  switch (contentType) {
+    case 'email':
+      return `${basePrompt}
+Create a professional marketing email that resonates with the target audience.
+Include a subject line, greeting, body, and sign-off.
+The email should be concise (250-400 words) and include a clear call to action.
+Focus on benefits rather than features and create a sense of urgency.`;
+      
+    case 'social':
+      return `${basePrompt}
+Create an engaging LinkedIn post (not a tweet) that would be appropriate for a company page.
+Include relevant hashtags (3-5) at the end.
+The post should be 150-300 words and include a thought-provoking question or call to action.
+Make it visually scannable with bullet points, numbers, or other formatting as appropriate.`;
+      
+    case 'blog':
+      return `${basePrompt}
+Create a professional blog post outline with an engaging title and 4-6 main sections with brief content for each.
+Include an introduction and conclusion.
+The blog should be informative, providing valuable insights related to the campaign topic.
+Use subheadings, bullet points, and other formatting to improve readability.
+Include statistics or data points where relevant (you can make these up realistically).`;
+      
+    case 'webinar':
+      return `${basePrompt}
+Create a webinar outline including title, duration, target audience, description, agenda (5-6 points), and key takeaways.
+The webinar should be educational and provide actionable insights.
+Include information about the presenter and registration benefits.
+Keep the total word count between 200-350 words.`;
+    
+    default:
+      return basePrompt;
+  }
 }

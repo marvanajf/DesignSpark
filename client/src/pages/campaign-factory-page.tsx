@@ -434,6 +434,7 @@ export default function CampaignFactoryPage() {
             "• Mitigates implementation and adoption risks"
           ];
         
+        // Generate content using predefined templates
         const allContentPieces = [
           {
             id: 1,
@@ -444,15 +445,15 @@ export default function CampaignFactoryPage() {
 
 Dear [${audienceRole}],
 
-I recently came across your organization's initiatives and was particularly impressed with your focus on innovation in your industry.
+I recently came across your organization's initiatives regarding ${campaignPrompt} and was particularly impressed with your focus on innovation in this area.
 
-Many of our clients in similar sectors have been exploring new ways to optimize their operations and achieve more sustainable growth. The results they've achieved include:
+Many of our clients in the ${industry} sector have been exploring new ways to implement ${benefit} ${product} solutions for the ${region} region. The results they've achieved include:
 
 ${personaBenefits.join('\n')}
 
-Based on your market position and industry challenges, I believe we could offer valuable insights related to your current priorities.
+Based on your market position and the specific challenges of ${campaignPrompt}, I believe we could offer valuable insights related to your current priorities.
 
-Would you have 20 minutes next week to discuss potential approaches that have proven successful for similar organizations?
+Would you have 20 minutes next week to discuss how our ${benefit} approach has proven successful for similar organizations in the ${region} region?
 
 Best regards,
 [Your Name]`),
@@ -469,15 +470,15 @@ Best regards,
 
 Dear [${audienceRole}],
 
-I wanted to follow up on my previous message about potential opportunities for innovation in your sector.
+I wanted to follow up on my previous message about ${campaignPrompt} opportunities for your organization.
 
-Recent industry research highlights that organizations taking a proactive approach to optimization are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
+Recent ${industry} research highlights that organizations in the ${region} region taking a proactive approach to ${benefit} ${product} solutions are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
 
-Based on common challenges in your industry, our approach could help with:
+Based on common challenges in the ${industry} sector, our approach could help with:
 
 ${personaPains.join('\n')}
 
-Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies similar to yours.
+Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies in the ${region} region similar to yours.
 
 Looking forward to your response,
 [Your Name]`),
@@ -490,22 +491,22 @@ Looking forward to your response,
             type: "social" as const,
             title: `LinkedIn Thought Leadership for ${useCaseName}`,
             persona: audienceName,
-            content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month."
+            content: adaptContentToTone(`"We reduced ${campaignPrompt} implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${region} region."
 
-This is what our clients are achieving with modern approaches to operational excellence.
+This is what our clients in the ${industry} sector are achieving with our ${benefit} ${product} solutions.
 
-Organizations that consistently outperform their competition are prioritizing:
+Organizations in the ${region} region that consistently outperform their competition are prioritizing:
 
 • Cross-functional collaboration with integrated platforms
 • Data-driven decision making with real-time analytics
-• Streamlined processes that eliminate redundancies
-• Robust security and compliance frameworks
+• Streamlined processes for ${campaignPrompt}
+• Robust ${benefit} frameworks tailored to ${industry} needs
 
-What strategies is your organization implementing to stay ahead of industry changes?
+What strategies is your organization implementing to stay ahead of ${industry} changes in the ${region} region?
 
-[Learn more about our approach - Link]
+[Learn more about our ${campaignPrompt} approach - Link]
 
-#IndustryInnovation #BusinessTransformation #StrategicGrowth #LinkedIn`),
+#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business #LinkedIn`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />

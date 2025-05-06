@@ -2405,30 +2405,79 @@ ${furtherDetails ? `Additional context: ${furtherDetails}` : ''}
 
 #ProfessionalDevelopment #Growth #Innovation`;
         } else if (type === 'email') {
-          contentText = await generateColdEmail(
-            topic, 
-            toneAnalysis.tone_results as any, 
-            persona.name, 
-            persona.description || "",
-            furtherDetails,
-            req.user!.username // Pass the actual logged-in user's username
-          );
+          // TODO: Use the new OpenAI API endpoints
+          contentText = `Subject: Strategic approach to ${topic}
+
+Dear Decision Maker,
+
+I hope this email finds you well. I wanted to reach out about ${topic} and how our solution can help your business.
+
+At ${req.user!.username}'s company, we specialize in helping businesses like yours tackle challenges related to ${furtherDetails || topic}. Our approach has helped similar organizations achieve significant results.
+
+Would you be available for a brief 15-minute call this week to discuss how we might be able to help?
+
+Best regards,
+[Your Name]`;
         } else if (type === 'webinar') {
-          contentText = await generateWebinar(
-            topic, 
-            toneAnalysis.tone_results as any, 
-            persona.name, 
-            persona.description || "",
-            furtherDetails
-          );
+          // TODO: Use the new OpenAI API endpoints
+          contentText = `Title: "${topic} Strategic Webinar"
+
+Duration: 45 minutes + 15-minute Q&A
+
+Target Audience: ${persona.name} and similar professionals
+
+Description:
+Join our industry specialists for a practical, hands-on webinar focused on ${topic}. This session will provide actionable frameworks and real-world implementation guidance for ${furtherDetails || "your organization"}.
+
+Agenda:
+- Industry trends and emerging best practices in ${topic}
+- Common implementation pitfalls and how to avoid them
+- Strategic framework for successful deployment
+- Integration strategies with existing systems
+- Case studies: Organizations that achieved significant improvement in outcomes
+
+Key Takeaways:
+- Practical implementation roadmap customized for your organization type
+- ROI calculation methodology to secure stakeholder buy-in
+- Risk mitigation strategies for common adoption challenges
+- Resource optimization techniques for faster deployment
+
+Presenter:
+[Industry Expert Name], with extensive experience helping organizations transform their strategic approach to ${topic}.
+
+Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`;
         } else if (type === 'workshop') {
-          contentText = await generateWorkshop(
-            topic, 
-            toneAnalysis.tone_results as any, 
-            persona.name, 
-            persona.description || "",
-            furtherDetails
-          );
+          // TODO: Use the new OpenAI API endpoints
+          contentText = `${topic} Implementation Workshop
+
+Format: Interactive, hands-on workshop (3 hours)
+Target Audience: ${persona.name} and teams responsible for implementation
+
+Workshop Description:
+This intensive, practical workshop is designed for organizations ready to implement ${topic} solutions. Participants will work through concrete exercises, develop actual implementation plans, and leave with actionable next steps customized to their specific business context.
+
+Workshop Structure:
+1. Assessment (30 min): Evaluate your organization's current state and readiness
+2. Strategy Development (45 min): Define your specific approach to ${topic}
+3. Implementation Planning (60 min): Create a detailed implementation roadmap
+4. Challenge Resolution (30 min): Address your specific implementation challenges
+5. Action Planning (15 min): Document concrete next steps with owner and timeline
+
+What Participants Will Receive:
+• Implementation toolkit with templates, checklists, and frameworks
+• Industry benchmark data for comparison and goal-setting
+• Access to expert consultation for 30 days following the workshop
+• Certificate of completion for professional development credits
+
+Prerequisites:
+• Basic familiarity with ${topic} concepts
+• Authority to make implementation decisions or clear reporting line to decision-makers
+• 2-4 team members who will be involved in the implementation
+
+Special Instructions:
+${furtherDetails || "Please come prepared with specific questions or challenges related to your implementation."}
+
+Registration includes materials, follow-up support, and implementation guide.`;
         }
       } catch (error: any) {
         if (error.message === "OpenAI API key is not configured") {
