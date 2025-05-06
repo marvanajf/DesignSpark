@@ -123,11 +123,14 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
 2. Next add "Preview:" with a brief preview of the email content 
 3. Finally add the full email body
           
-DO NOT use any markdown formatting symbols like asterisks, hashtags, or section numbers.
+DO NOT use markdown formatting of any kind.
+DO NOT use numbered sections like "1." or "1:" at the beginning of paragraphs.
+DO NOT start lines with numbers followed by periods or colons.
+NEVER use hash symbols (#) anywhere in the content - not for headers or hashtags.
+NEVER use asterisks (*) or markdown anywhere in your response.
+DO NOT add section numbers like "1. Section Name" - use plain text headings without numbers.
 DO NOT include placeholder text like "[Name]" - simply write the email as if to the specific recipient.
-Ensure the content is well-structured with clear paragraphs and spacing.
-NEVER start sections with ## or any number of # characters.
-DO NOT use any hashtags (#) anywhere in the content.`
+Ensure the content is well-structured with clear paragraphs and spacing.`
         });
       } 
       // If social post, give specific instructions
@@ -139,11 +142,14 @@ DO NOT use any hashtags (#) anywhere in the content.`
 1. First, write the main content of the post without any markdown or formatting
 2. Instead of adding hashtags with # symbols, simply include keywords naturally in the text
           
-DO NOT use any markdown formatting or special text formatting.
-DO NOT include hashtags (#) in your response - reword your content to avoid them entirely.
+DO NOT use markdown formatting of any kind.
+DO NOT use numbered sections like "1." or "1:" at the beginning of paragraphs.
+DO NOT start lines with numbers followed by periods or colons.
+NEVER use hash symbols (#) anywhere in the content - not for headers or hashtags.
+NEVER use asterisks (*) or markdown anywhere in your response.
+DO NOT add section numbers like "1. Section Name" - use plain text headings without numbers.
 Make sure the post is appropriate for LinkedIn, not Twitter or other platforms.
-Use professional language and focus on business value.
-NEVER start sections with ## or any number of # characters.`
+Use professional language and focus on business value.`
         });
       }
       // If blog post, format with clear headings and sections
@@ -157,10 +163,12 @@ NEVER start sections with ## or any number of # characters.`
 3. Add sections with headings followed by paragraphs (don't use numbers or symbols before headings)
 4. Use blank lines between sections for clarity
           
-DO NOT use any markdown formatting (*, #, etc.).
-DO NOT start sections with numbers like "1." or "1:" - just use plain text headings.
-NEVER start sections with ## or any number of # characters.
-DO NOT use any hashtags (#) anywhere in the content.
+DO NOT use markdown formatting of any kind.
+DO NOT use numbered sections like "1." or "1:" at the beginning of paragraphs.
+DO NOT start lines with numbers followed by periods or colons.
+NEVER use hash symbols (#) anywhere in the content - not for headers or hashtags.
+NEVER use asterisks (*) or markdown anywhere in your response.
+DO NOT add section numbers like "1. Section Name" - use plain text headings without numbers.
 Instead, structure the blog with clear section titles on their own lines.
 Make sure each section has a clear heading followed by relevant content.`
         });
@@ -175,9 +183,11 @@ Make sure each section has a clear heading followed by relevant content.`
 2. Include key webinar details as plain text paragraphs, not markdown
           
 DO NOT use markdown formatting of any kind.
-DO NOT start sections with numbers like "1." or "1:" - just use plain text sections.
-NEVER start sections with ## or any number of # characters.
-DO NOT use any hashtags (#) anywhere in the content.
+DO NOT use numbered sections like "1." or "1:" at the beginning of paragraphs.
+DO NOT start lines with numbers followed by periods or colons.
+NEVER use hash symbols (#) anywhere in the content - not for headers or hashtags.
+NEVER use asterisks (*) or markdown anywhere in your response.
+DO NOT add section numbers like "1. Section Name" - use plain text headings without numbers.
 Structure the content with clear sections and blank lines for readability.
 Focus on making the value proposition and audience benefits very clear.`
         });
@@ -196,28 +206,52 @@ Focus on making the value proposition and audience benefits very clear.`
       // Extract the generated content
       const generatedContent = completion.choices[0].message.content || '';
       
-      // Remove any potential markdown formatting and other unwanted characters
-      let cleanedContent = generatedContent
-        .replace(/\*\*([^*]+)\*\*/g, '$1')         // Bold
-        .replace(/\*([^*]+)\*/g, '$1')             // Italic
-        .replace(/^#{1,6}\s+(.+)$/gm, '$1')        // Headers (# Header)
-        .replace(/^##\s*\d+[\.:]?\s*/gm, '')       // Section numbers (## 1. or ## 2:)
-        .replace(/^##+\s*(.+)$/gm, '$1')           // Multiple hash headers
-        .replace(/^-\s+(.+)$/gm, '• $1')           // List items
-        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // Links
+      // Apply an aggressive cleaning to remove ALL markdown and unwanted formatting
+      let cleanedContent = generatedContent;
       
-      // Remove hashtags from all content types
-      // First, remove hashtags that appear grouped at the end of the text
-      cleanedContent = cleanedContent.replace(/\s+(#\w+\s*)+$/g, '');
+      // First, remove anything that looks like a header or section marker
+      cleanedContent = cleanedContent
+        // Remove any line starting with hashtags
+        .replace(/^#+\s*(.*)/gm, '$1')
+        // Remove any lines starting with #number format
+        .replace(/^#\s*\d+[\.:]?\s*(.*)/gm, '$1')
+        // Remove hashtag and number combinations
+        .replace(/^#+\s*\d+[\.:]?\s*(.*)/gm, '$1');
       
-      // For any remaining hashtags in the content, remove the # symbol
-      cleanedContent = cleanedContent.replace(/#(\w+)/g, '$1');
-      
-      // Also remove any section markers that look like ## or ### with numbers
-      cleanedContent = cleanedContent.replace(/^#{1,6}\s*\d+[\.:]?\s*/gm, '');
-      
-      // Remove any remaining ## markers without numbers
-      cleanedContent = cleanedContent.replace(/^#{1,6}\s+/gm, '');
+      // Remove any asterisks used for emphasis/bold
+      cleanedContent = cleanedContent
+        .replace(/\*\*([^*]+)\*\*/g, '$1')        // Bold (**word**)
+        .replace(/\*([^*]+)\*/g, '$1')            // Italic (*word*)
+        .replace(/^\*\s+(.*)/gm, '• $1')          // List items with asterisk
+        .replace(/^\s*\*\s+(.*)/gm, '• $1');      // List items with space + asterisk
+          
+      // Clean up any remaining markdown elements
+      cleanedContent = cleanedContent
+        .replace(/^-\s+(.+)/gm, '• $1')           // List items with dash
+        .replace(/^\s*-\s+(.+)/gm, '• $1')        // List items with space + dash
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Links [text](url)
+        .replace(/^>\s+(.*)/gm, '$1')             // Blockquotes
+        .replace(/`([^`]+)`/g, '$1');             // Inline code
+        
+      // Remove any standalone hashtags throughout the content
+      cleanedContent = cleanedContent
+        // Remove hashtags at the end of text
+        .replace(/\s+(#\w+\s*)+$/g, '')
+        // Remove any hashtags in the middle of text
+        .replace(/#(\w+)/g, '$1')
+        // Specifically remove any hashtag at the beginning of a line
+        .replace(/^#(\w+)/gm, '$1');
+        
+      // Final removal of any markdown or formatting characters that might have been missed
+      cleanedContent = cleanedContent
+        .replace(/^>\s+/gm, '')     // Any remaining blockquote markers
+        .replace(/^#+\s*/gm, '')    // Any remaining header markers
+        .replace(/\*+/g, '')        // Any remaining asterisks
+        .replace(/`+/g, '')         // Any remaining backticks
+        .replace(/~+/g, '')         // Any remaining tildes
+        .replace(/^\d+\.\s+/gm, '') // Numbered list items at start of line
+        .replace(/=+/g, '')         // Equal signs (sometimes used for headers)
+        .replace(/-+$/gm, '');      // Dash lines (sometimes used for headers)
       
       // Return the cleaned plain text content
       res.json({ content: cleanedContent });
