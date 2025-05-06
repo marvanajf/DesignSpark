@@ -417,18 +417,24 @@ Best regards,
 
 Dear [${audienceRoleVal}],
 
-I wanted to follow up on my previous message regarding innovative solutions for your organization.
+I wanted to follow up regarding my previous message about ${useCaseName.toLowerCase()} solutions specifically designed for ${industryExtracted || 'your industry'}.
 
-Recent research highlights that organizations in your industry taking a proactive approach to implementing modern solutions are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
+After reviewing your organization's specific challenges around ${campaignPrompt.split(' ').slice(0, 8).join(' ')}..., I've prepared some insights that directly address:
 
-Based on common challenges in your sector, our approach could help with:
+1. How our ${productExtracted || 'solution'} has helped similar ${audienceRoleVal}s in the ${regionExtracted || 'region'} achieve ${benefitExtracted || 'improved outcomes'}
 
-${audiencePainsVal.map(pain => `• Eliminates ${pain.toLowerCase()}`).join('\n')}
+2. Specific strategies to overcome ${audiencePainsVal[0] || 'key challenges'} without disrupting your existing operations
 
-Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies similar to yours.
+3. A customized implementation approach that has helped organizations achieve ${audienceGoalsVal[0] || 'their primary objectives'} in as little as 4-6 weeks
 
-Looking forward to your response,
-[Your Name]`),
+I've also prepared a brief case study showing how another ${industryExtracted || 'industry'} leader addressed similar challenges to yours and achieved measurable results.
+
+Would you have 15 minutes this week to discuss how these approaches might be adapted for your specific situation?
+
+Best regards,
+[Your Name]
+
+P.S. I'm also attaching our latest research on ${useCaseName.toLowerCase()} trends specific to the ${industryExtracted || 'industry'} sector that I believe you'll find valuable regardless of whether we connect.`),
           deliveryDate: firstFollowupDate.toISOString().split('T')[0],
           channel: "Email",
           icon: <MessageSquare className="h-5 w-5" />
