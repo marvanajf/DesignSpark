@@ -242,32 +242,109 @@ export default function CampaignFactoryPage() {
         // Generate a descriptive campaign name based on user inputs
         const campaignName = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
         
-        // Generate content based on the user's campaign prompt and selected use case
-        const emailSubject1 = `${campaignPrompt.split(' ').slice(0, 6).join(' ')}...`;
-        const emailSubject2 = `Follow-up: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
+        // Intelligently process the campaign prompt and selected use case
+        // Generate more detailed content titles and subjects based on the campaign type
+        
+        // Extract key information from campaign prompt
+        const words = campaignPrompt.split(' ');
+        const isShortPrompt = words.length < 10;
+        
+        // Generate more intelligent email subjects based on use case
+        let emailSubject1 = '';
+        let emailSubject2 = '';
+        
+        // Get the target audience name and role for more personalized content
+        const targetPersona = personas.find(p => selectedPersonas.includes(p.id));
+        const audienceName = targetPersona?.name || "Target Audience";
+        const audienceRole = targetPersona?.role || "Decision Maker";
+        
+        // Create subject lines based on use case type instead of just repeating prompt
+        switch(selectedUseCase) {
+          case 'upsell':
+            emailSubject1 = `Enhance your results with our premium ${words.slice(0, 3).join(' ')} solution`;
+            emailSubject2 = `Following up: Upgrade opportunity for your ${words.slice(0, 2).join(' ')} needs`;
+            break;
+          case 'acquisition':
+            emailSubject1 = `Solve your ${words.slice(0, 3).join(' ')} challenges with our proven approach`;
+            emailSubject2 = `Quick question about your ${words.slice(0, 2).join(' ')} strategy`;
+            break;
+          case 'retention':
+            emailSubject1 = `Maximizing the value of your current ${words.slice(0, 3).join(' ')} investment`;
+            emailSubject2 = `Exclusive benefits for our valued ${words.slice(0, 2).join(' ')} customers`;
+            break;
+          case 'launch':
+            emailSubject1 = `Introducing our innovative ${words.slice(0, 3).join(' ')} solution`;
+            emailSubject2 = `Early access: Be the first to experience our new ${words.slice(0, 2).join(' ')} offering`;
+            break;
+          default:
+            // Fallback if no use case selected
+            emailSubject1 = `Strategic approach to ${words.slice(0, 3).join(' ')}`;
+            emailSubject2 = `Follow-up: ${words.slice(0, 3).join(' ')} opportunities`;
+        }
+        
+        // Generate expanded content from the brief prompt
+        // For short prompts, intelligently expand based on context and use case
+        let expandedPrompt = campaignPrompt;
+        
+        if (isShortPrompt) {
+          // Expand the short prompt based on the selected use case
+          switch(selectedUseCase) {
+            case 'upsell':
+              expandedPrompt = `Helping existing customers upgrade to more advanced solutions for ${campaignPrompt}, providing additional value and enhanced capabilities.`;
+              break;
+            case 'acquisition':
+              expandedPrompt = `Attracting new customers by showcasing how our ${campaignPrompt} solutions address key pain points and deliver measurable business outcomes.`;
+              break;
+            case 'retention':
+              expandedPrompt = `Strengthening relationships with existing customers by demonstrating continued value in our ${campaignPrompt} offerings and providing exceptional support.`;
+              break;
+            case 'launch':
+              expandedPrompt = `Introducing our innovative new ${campaignPrompt} solution designed to address emerging market needs with cutting-edge technology and proven methodologies.`;
+              break;
+            default:
+              expandedPrompt = `Strategic approach to ${campaignPrompt} that delivers measurable results and addresses key business challenges.`;
+          }
+        }
+        
+        // Generate persona-specific benefits based on the selected persona's pains/goals
+        const personaBenefits = targetPersona ? 
+          targetPersona.goals.map(goal => `• ${goal}`) :
+          [
+            "• Improved operational efficiency",
+            "• Reduced costs and resource requirements",
+            "• Enhanced team productivity and collaboration",
+            "• Better strategic decision-making capabilities"
+          ];
+        
+        // Generate persona-specific pain points addressed
+        const personaPains = targetPersona ? 
+          targetPersona.pains.map(pain => `• Eliminates ${pain.toLowerCase()}`) :
+          [
+            "• Eliminates workflow bottlenecks",
+            "• Addresses security and compliance concerns",
+            "• Resolves data management challenges",
+            "• Mitigates implementation and adoption risks"
+          ];
         
         const allContentPieces = [
           {
             id: 1,
             type: "email" as const,
-            title: `${useCaseName} Email for ${personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience"}`,
-            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            title: `${useCaseName} Initial Outreach for ${audienceName}`,
+            persona: audienceName,
             content: `Subject: ${emailSubject1}
 
-Dear [Recipient],
+Dear [${audienceRole}],
 
-${campaignPrompt}
+I recently came across your organization's initiatives and was particularly impressed with your focus on innovation in your industry.
 
-Based on our discussion about your needs, I believe our solution can help you achieve your goals by:
+Many of our clients in similar sectors have been exploring new ways to optimize their operations and achieve more sustainable growth. The results they've achieved include:
 
-• Improving efficiency in your processes
-• Reducing operational costs
-• Enhancing your team's productivity
-• Staying ahead of industry trends
+${personaBenefits.join('\n')}
 
-I'd like to offer a personalized consultation to discuss how our solutions align with your specific requirements.
+Based on your market position and industry challenges, I believe we could offer valuable insights related to your current priorities.
 
-Would you have 20 minutes next week to discuss how we can help you achieve your objectives?
+Would you have 20 minutes next week to discuss potential approaches that have proven successful for similar organizations?
 
 Best regards,
 [Your Name]`,
@@ -278,17 +355,21 @@ Best regards,
           {
             id: 2,
             type: "email" as const,
-            title: `Follow-up Email for ${useCaseName}`,
-            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
+            title: `${useCaseName} Follow-up for ${audienceName}`,
+            persona: audienceName,
             content: `Subject: ${emailSubject2}
 
-Dear [Recipient],
+Dear [${audienceRole}],
 
-I wanted to follow up on my previous email about ${campaignPrompt}.
+I wanted to follow up on my previous message about potential opportunities for innovation in your sector.
 
-In light of recent developments in your industry, I thought you might be interested in our latest solutions that can address the challenges you're facing.
+Recent industry research highlights that organizations taking a proactive approach to optimization are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
 
-Would you be available for a brief 15-minute demo this Thursday or Friday? I'd be happy to show you how other companies similar to yours have achieved success with our approach.
+Based on common challenges in your industry, our approach could help with:
+
+${personaPains.join('\n')}
+
+Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies similar to yours.
 
 Looking forward to your response,
 [Your Name]`,
@@ -299,21 +380,24 @@ Looking forward to your response,
           {
             id: 3,
             type: "social" as const,
-            title: `LinkedIn Post for ${useCaseName}`,
-            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
-            content: `"${campaignPrompt}" - This is what our clients tell us about their experience.
+            title: `LinkedIn Thought Leadership for ${useCaseName}`,
+            persona: audienceName,
+            content: `"We reduced implementation time by 65% and improved team adoption by 83% within the first month."
 
-Are you facing similar challenges in your business?
+This is what our clients are achieving with modern approaches to operational excellence.
 
-Our solution delivers:
-• Streamlined workflows 
-• Advanced collaboration features
-• Comprehensive management from one dashboard
-• Enterprise-grade features at an affordable price
+Organizations that consistently outperform their competition are prioritizing:
 
-Learn more about our approach: [Link]
+• Cross-functional collaboration with integrated platforms
+• Data-driven decision making with real-time analytics
+• Streamlined processes that eliminate redundancies
+• Robust security and compliance frameworks
 
-#BusinessGrowth #Productivity #Solutions #LinkedIn`,
+What strategies is your organization implementing to stay ahead of industry changes?
+
+[Learn more about our approach - Link]
+
+#IndustryInnovation #BusinessTransformation #StrategicGrowth #LinkedIn`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -321,34 +405,34 @@ Learn more about our approach: [Link]
           {
             id: 4,
             type: "webinar" as const,
-            title: `${useCaseName} Webinar for Industry Professionals`,
-            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
-            content: `Title: "${campaignPrompt} - A Strategic Approach"
+            title: `Strategic ${useCaseName} Webinar for ${audienceName}`,
+            persona: audienceName,
+            content: `Title: "Strategic Innovation Framework for Industry Leaders"
 
 Duration: 45 minutes + 15-minute Q&A
 
-Target Audience: ${personas.find(p => selectedPersonas.includes(p.id))?.role || "Industry Professionals"}
+Target Audience: ${audienceRole}s and Strategic Decision Makers
 
 Description:
-Join our specialists for an in-depth webinar on ${campaignPrompt}. In this session, we'll demonstrate how our approach creates comprehensive solutions for modern challenges.
+Join our industry specialists for a practical, hands-on webinar focused on implementing effective strategies for competitive advantage in today's rapidly evolving marketplace. This session will provide actionable frameworks and real-world implementation guidance.
 
 Agenda:
-- Current trends and challenges in the industry
-- Live demonstration of our solution's capabilities
-- Best practices for implementation in various scenarios
-- Integration with existing systems and processes
-- Case study: How Company X improved performance by 70% in 90 days
+- Industry trends and emerging best practices
+- Common implementation pitfalls and how to avoid them
+- Strategic framework for successful deployment
+- Integration strategies with existing systems
+- Case studies: Organizations that achieved 40%+ improvement in outcomes
 
 Key Takeaways:
-- Understanding of specific challenges facing businesses like yours
-- Actionable steps for implementing effective solutions
-- Custom assessment methodology to identify your most critical needs
-- Implementation roadmap template for success
+- Practical implementation roadmap customized for your organization type
+- ROI calculation methodology to secure stakeholder buy-in
+- Risk mitigation strategies for common adoption challenges
+- Resource optimization techniques for faster deployment
 
 Presenter:
-[Specialist Name], Solutions Architect with 10+ years of experience helping organizations achieve their goals.
+[Industry Expert Name], with extensive experience helping organizations transform their strategic approach to industry-specific challenges.
 
-Registration includes a complimentary consultation and access to our implementation guide.`,
+Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
             channel: "Webinar",
             icon: <FileText className="h-5 w-5" />
@@ -356,27 +440,29 @@ Registration includes a complimentary consultation and access to our implementat
           {
             id: 5,
             type: "social" as const,
-            title: `LinkedIn Article on ${useCaseName} Benefits`,
+            title: `LinkedIn Article on ${useCaseName} ROI`,
             persona: (personas.find(p => selectedPersonas[1]) ? personas.find(p => p.id === selectedPersonas[1])?.name : personas.find(p => selectedPersonas.includes(p.id))?.name) || "Target Audience",
-            content: `# The True ROI of ${campaignPrompt}: Beyond the Basics
+            content: `# Beyond Traditional Metrics: Measuring the True ROI of Strategic Initiatives
 
-When calculating the return on investment for solutions like ours, many businesses focus only on immediate benefits. But our approach delivers value far beyond the basics.
+Most organizations evaluate investments using standard financial metrics, but this approach misses critical value dimensions that drive long-term competitive advantage.
 
-Here are 5 unexpected ways our solution drives operational efficiency:
+Our research across 250+ implementations reveals five often-overlooked ROI factors:
 
-1. **Reduced firefighting**: Automated processes mean your team spends less time on repetitive tasks and more time on strategic initiatives.
+1. **Operational Agility**: Organizations with optimized approaches report 64% faster response to market changes and competitive pressures.
 
-2. **Simplified operations**: Built-in tools reduce preparation time by up to 75% on average.
+2. **Knowledge Retention**: Effective systems reduce organizational knowledge loss by 58%, preserving critical expertise despite personnel changes.
 
-3. **Accelerated team productivity**: Streamlined management cuts implementation time in half while maintaining quality standards.
+3. **Innovation Capacity**: Teams report 41% more time dedicated to innovation rather than maintenance activities.
 
-4. **Enhanced collaboration**: Teams experience fewer disruptions from process-related issues.
+4. **Decision-Making Quality**: Data-driven organizations report 37% higher confidence in strategic decisions and 29% fewer costly reversals.
 
-5. **Reduced workarounds**: When tools are intuitive, employees are much less likely to seek unauthorized alternatives.
+5. **Talent Attraction**: Companies with modern, efficient systems report 45% better recruitment outcomes for high-demand roles.
 
-What's your perspective? Has your organization quantified the operational benefits of your investments in this area? 
+The combined impact of these "hidden ROI factors" often exceeds the direct cost savings by 3-4x, fundamentally changing the investment calculation.
 
-#BusinessEfficiency #Productivity #OperationalExcellence #LinkedIn`,
+What has been your experience measuring the full spectrum of returns on strategic initiatives?
+
+#BusinessStrategy #ROIAnalysis #StrategicLeadership #LinkedIn`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -384,51 +470,51 @@ What's your perspective? Has your organization quantified the operational benefi
           {
             id: 6,
             type: "blog" as const,
-            title: `Blog Post: 5 Critical Challenges in ${campaignPrompt}`,
-            persona: personas.find(p => selectedPersonas.includes(p.id))?.name || "Target Audience",
-            content: `# 5 Critical Challenges in ${campaignPrompt} (And How to Address Them)
+            title: `Industry Trends in ${useCaseName} - Strategic Analysis`,
+            persona: audienceName,
+            content: `# The Evolution of Strategic Execution: What Leading Organizations Are Doing Differently
 
-In today's landscape, businesses face sophisticated challenges that require thoughtful solutions. According to recent research, many organizations struggle with these issues, yet only a small percentage are adequately prepared to address them.
+The competitive landscape has transformed dramatically in recent years. Organizations that consistently outperform their peers are taking fundamentally different approaches to address both emerging challenges and persistent pain points.
 
-After working with hundreds of clients, we've identified the most common challenges that companies face—and how our approach helps solve them efficiently and affordably.
+Based on our analysis of industry leaders and extensive client engagements, we've identified the five critical differentiators that separate market leaders from laggards:
 
-## 1. Inefficient Processes
+## 1. Integrated Systems vs. Fragmented Solutions
 
-**The Challenge**: Most teams waste valuable time on manual, repetitive tasks.
+**The Challenge**: Most organizations operate with disconnected tools that create data silos and workflow inefficiencies.
 
-**The Solution**: Our automation tools streamline workflows and eliminate bottlenecks, allowing your team to focus on high-value activities.
+**The Leadership Approach**: Industry leaders implement unified platforms with seamless integration points, creating consistent data flows and unified experiences.
 
-*"Since implementing the solution, we've seen productivity increase by 30%. Our team can confidently tackle strategic projects knowing the routine work is handled efficiently." — Client testimonial*
+*"By consolidating our previously fragmented systems, we've eliminated 72% of manual processes and accelerated project delivery by nearly 3 weeks per cycle." — CIO, Global Manufacturing Company*
 
-## 2. Lack of Integration
+## 2. Predictive vs. Reactive Strategic Planning
 
-**The Challenge**: Disparate systems lead to data silos and communication gaps.
+**The Challenge**: Traditional approaches rely on historical data and react to changes after they've impacted performance.
 
-**The Solution**: Our unified platform brings all your essential tools together, ensuring seamless information flow across your organization.
+**The Leadership Approach**: Forward-thinking organizations leverage predictive analytics and scenario planning to anticipate shifts and position resources proactively.
 
-## 3. Scalability Constraints
+## 3. Continuous Evolution vs. Periodic Updates
 
-**The Challenge**: Many businesses struggle to scale their operations efficiently.
+**The Challenge**: Traditional implementation cycles with long gaps between major updates leave organizations vulnerable to changing conditions.
 
-**The Solution**: Our flexible architecture grows with your business, allowing you to expand without the typical growing pains.
+**The Leadership Approach**: Leaders implement agile methodologies with continuous improvement cycles, allowing for rapid adaptation and regular capability enhancements.
 
-## 4. Visibility and Insights
+## 4. Skills-Focused vs. Tool-Focused Implementation
 
-**The Challenge**: Without proper analytics, making informed decisions becomes difficult.
+**The Challenge**: Most deployments focus primarily on technical implementation rather than human capability development.
 
-**The Solution**: Our comprehensive reporting and analysis tools give you real-time insights into your operations, enabling data-driven decision making.
+**The Leadership Approach**: Successful organizations invest equally in platform capabilities and team skill development, ensuring technology adoption and utilization.
 
-## 5. Implementation Challenges
+## 5. Outcome-Driven vs. Feature-Driven Approaches
 
-**The Challenge**: Organizations often lack the expertise to fully implement new solutions.
+**The Challenge**: Traditional implementations focus on feature completion rather than business outcomes.
 
-**The Solution**: Our guided implementation process and ongoing support ensure you maximize the value of your investment from day one.
+**The Leadership Approach**: Leading organizations define success through measurable business outcomes and align all activities to these priority metrics.
 
-## The Bottom Line
+## The Strategic Imperative
 
-The cost of inefficiency and missed opportunities can be substantial when including lost productivity, missed opportunities, and competitive disadvantage. By comparison, our solution provides enterprise-grade capabilities at an accessible price point, typically paying for itself within the first year.
+Organizations that embrace these leadership approaches achieve 3.4x greater ROI on their investments and substantially higher competitive positioning. The gap between leaders and laggards continues to widen, creating both risk and opportunity.
 
-*Ready to transform your approach to ${campaignPrompt}? [Contact us] for a complimentary assessment.*`,
+*Ready to transform your strategic approach? [Contact our strategy team] for a complimentary assessment of your current capabilities and strategic opportunities.*`,
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5)).toISOString().split('T')[0],
             channel: "Blog",
             icon: <FileText className="h-5 w-5" />
