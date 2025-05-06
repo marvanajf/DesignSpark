@@ -322,30 +322,34 @@ export default function SavedCampaignsSection() {
           
           {selectedCampaign && (
             <div className="space-y-6">
-              {/* Campaign Overview Section */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Campaign Overview Section - Horizontal Layout */}
+              <div className="space-y-5">
                 <div className="p-4 border border-gray-800 rounded-lg bg-zinc-900/30">
-                  <h3 className="text-sm text-gray-400 mb-2">Objective</h3>
-                  <p className="text-white text-sm">{selectedCampaign.objective}</p>
-                </div>
-                <div className="p-4 border border-gray-800 rounded-lg bg-zinc-900/30">
-                  <h3 className="text-sm text-gray-400 mb-2">Timeline</h3>
-                  <p className="text-white text-sm">
-                    {new Date(selectedCampaign.timeline_start).toLocaleDateString()} to {new Date(selectedCampaign.timeline_end).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="p-4 border border-gray-800 rounded-lg bg-zinc-900/30">
-                  <h3 className="text-sm text-gray-400 mb-2">Channels</h3>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedCampaign.channels.map((channel, index) => (
-                      <Badge 
-                        key={index}
-                        variant="outline"
-                        className="bg-[#0e131f] text-[#5eead4] border-[#5eead4]/30 text-xs"
-                      >
-                        {channel}
-                      </Badge>
-                    ))}
+                  <div className="flex flex-col sm:flex-row gap-6">
+                    <div className="flex-1">
+                      <h3 className="text-sm text-gray-400 mb-2 font-medium">Objective</h3>
+                      <p className="text-white text-sm">{selectedCampaign.objective}</p>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm text-gray-400 mb-2 font-medium">Timeline</h3>
+                      <p className="text-white text-sm">
+                        {new Date(selectedCampaign.timeline_start).toLocaleDateString()} to {new Date(selectedCampaign.timeline_end).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm text-gray-400 mb-2 font-medium">Channels</h3>
+                      <div className="flex flex-wrap gap-1">
+                        {selectedCampaign.channels.map((channel, index) => (
+                          <Badge 
+                            key={index}
+                            variant="outline"
+                            className="bg-[#0e131f] text-[#5eead4] border-[#5eead4]/30 text-xs"
+                          >
+                            {channel}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
