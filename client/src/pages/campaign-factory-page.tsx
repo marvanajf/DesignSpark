@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { Sparkles, Loader2, Calendar, FileText, Target, Clock, Users, ChevronRight, ArrowRight, PlusCircle, MessageSquare, Zap, Factory, Link, FolderOpen } from "lucide-react";
-import SavedCampaignsSection from "@/components/SavedCampaignsSection";
+
 import { useLocation } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -2277,24 +2277,6 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                 </Card>
               </div>
             )}
-            
-            {/* Saved Campaigns Section */}
-            <div className="mt-16 border-t border-zinc-800 pt-12">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">Your Saved Campaigns</h2>
-                  <p className="text-gray-400">View and manage your AI-generated marketing campaigns</p>
-                </div>
-                <Button
-                  onClick={() => navigate('/campaign-factory/saved')}
-                  variant="outline"
-                  className="text-[#5eead4] border-[#5eead4]/30 hover:bg-[#5eead4]/10"
-                >
-                  View All Campaigns
-                </Button>
-              </div>
-              <SavedCampaignsSection />
-            </div>
           </div>
         </div>
       </div>
