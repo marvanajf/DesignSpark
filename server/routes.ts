@@ -1611,6 +1611,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 // Set subscription end date from subscription data
                 periodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
               });
+              
+              // Send a thank you email for upgrading to a paid plan
+              try {
+                // Get user details to personalize the email
+                const user = await storage.getUser(userId);
+                if (user) {
+                  // Import required email functions
+                  const { sendEmail } = await import('./email');
+                  const { createUpgradeThankYouEmailHtml, createUpgradeThankYouEmailText } = await import('./gmail');
+                  
+                  // Get the plan name from subscriptionPlans
+                  const planInfo = subscriptionPlans[planId as SubscriptionPlanType] || subscriptionPlans.standard;
+                  const planName = planInfo.name;
+                  
+                  // Get user's name (use full_name or username or the part before @ in email)
+                  const userName = user.full_name || user.username || user.email.split('@')[0];
+                  
+                  console.log(`Sending subscription thank you email to ${user.email} for ${planName} plan`);
+                  
+                  // Send the upgrade thank you email
+                  const emailSent = await sendEmail({
+                    to: user.email,
+                    subject: `Thank You for Choosing Tovably ${planName}!`,
+                    html: createUpgradeThankYouEmailHtml(userName, planName),
+                    text: createUpgradeThankYouEmailText(userName, planName)
+                  });
+                  
+                  if (emailSent) {
+                    console.log(`Subscription thank you email sent successfully to ${user.email}`);
+                  } else {
+                    console.warn(`Failed to send subscription thank you email to ${user.email}`);
+                  }
+                }
+              } catch (emailError) {
+                // Non-fatal error - log but continue with subscription processing
+                console.error("Error sending subscription thank you email:", 
+                  emailError instanceof Error ? emailError.message : String(emailError));
+              }
             } else if (shouldCreateSubscription) {
               // For payment mode, create a subscription manually using price ID
               try {
@@ -1646,6 +1684,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   status: subscription.status,
                   periodEnd: new Date((subscription as any).current_period_end * 1000)
                 });
+                
+                // Send a thank you email for upgrading to a paid plan here as well
+                try {
+                  // Get user details to personalize the email
+                  const user = await storage.getUser(userId);
+                  if (user) {
+                    // Import required email functions
+                    const { sendEmail } = await import('./email');
+                    const { createUpgradeThankYouEmailHtml, createUpgradeThankYouEmailText } = await import('./gmail');
+                    
+                    // Get the plan name from subscriptionPlans
+                    const planInfo = subscriptionPlans[planId as SubscriptionPlanType] || subscriptionPlans.standard;
+                    const planName = planInfo.name;
+                    
+                    // Get user's name (use full_name or username or the part before @ in email)
+                    const userName = user.full_name || user.username || user.email.split('@')[0];
+                    
+                    console.log(`Sending subscription thank you email to ${user.email} for ${planName} plan`);
+                    
+                    // Send the upgrade thank you email
+                    const emailSent = await sendEmail({
+                      to: user.email,
+                      subject: `Thank You for Choosing Tovably ${planName}!`,
+                      html: createUpgradeThankYouEmailHtml(userName, planName),
+                      text: createUpgradeThankYouEmailText(userName, planName)
+                    });
+                    
+                    if (emailSent) {
+                      console.log(`Subscription thank you email sent successfully to ${user.email}`);
+                    } else {
+                      console.warn(`Failed to send subscription thank you email to ${user.email}`);
+                    }
+                  }
+                } catch (emailError) {
+                  // Non-fatal error - log but continue with subscription processing
+                  console.error("Error sending subscription thank you email:", 
+                    emailError instanceof Error ? emailError.message : String(emailError));
+                }
               } catch (subError) {
                 console.error("Failed to create subscription for existing user:", subError);
               }
@@ -1798,6 +1874,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: 'active',
         periodEnd: periodEnd
       });
+      
+      // Send a thank you email for subscription upgrade
+      try {
+        // Import required email functions
+        const { sendEmail } = await import('./email');
+        const { createUpgradeThankYouEmailHtml, createUpgradeThankYouEmailText } = await import('./gmail');
+        
+        // Get the plan name from subscriptionPlans
+        const planInfo = subscriptionPlans[plan] || subscriptionPlans.standard;
+        const planName = planInfo.name;
+        
+        // Get user's name (use full_name or username or the part before @ in email)
+        const userName = req.user!.full_name || req.user!.username || req.user!.email.split('@')[0];
+        
+        console.log(`Sending subscription thank you email to ${req.user!.email} for ${planName} plan`);
+        
+        // Send the upgrade thank you email
+        const emailSent = await sendEmail({
+          to: req.user!.email,
+          subject: `Thank You for Choosing Tovably ${planName}!`,
+          html: createUpgradeThankYouEmailHtml(userName, planName),
+          text: createUpgradeThankYouEmailText(userName, planName)
+        });
+        
+        if (emailSent) {
+          console.log(`Subscription thank you email sent successfully to ${req.user!.email}`);
+        } else {
+          console.warn(`Failed to send subscription thank you email to ${req.user!.email}`);
+        }
+      } catch (emailError) {
+        // Non-fatal error - log but continue with subscription processing
+        console.error("Error sending subscription thank you email:", 
+          emailError instanceof Error ? emailError.message : String(emailError));
+      }
       
       res.status(200).json({
         message: "Subscription updated successfully",
