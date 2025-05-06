@@ -489,7 +489,7 @@ export default function SavedCampaignsSection() {
                 </h3>
                 <div className="relative mb-8">
                   {/* Timeline Line */}
-                  <div className="absolute left-[40px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#74d1ea] to-transparent"></div>
+                  <div className="absolute left-[46px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#74d1ea] to-transparent"></div>
                   
                   {/* Timeline Items */}
                   {getSelectedCampaignContents()
@@ -497,11 +497,11 @@ export default function SavedCampaignsSection() {
                       new Date(a.deliveryDate || '').getTime() - new Date(b.deliveryDate || '').getTime()
                     )
                     .map((content, index) => (
-                      <div key={index} className="flex mb-6 relative">
+                      <div key={index} className="flex mb-8 relative">
                         {/* Timeline Node */}
-                        <div className="w-20 flex-shrink-0 text-center relative">
+                        <div className="w-24 flex-shrink-0 relative">
                           <div className="absolute left-10 top-0 w-4 h-4 bg-black border-2 border-[#74d1ea] rounded-full z-10"></div>
-                          <div className="text-xs text-gray-400 absolute left-0 top-0">
+                          <div className="text-xs text-gray-400 absolute left-0 top-[-3px] w-20 text-right pr-5">
                             {content.deliveryDate ? new Date(content.deliveryDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Unscheduled'}
                           </div>
                         </div>
