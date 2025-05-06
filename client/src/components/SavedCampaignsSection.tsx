@@ -450,6 +450,55 @@ export default function SavedCampaignsSection() {
                   <p className="text-gray-300 text-sm leading-relaxed">{selectedCampaign.objective}</p>
                 </div>
                 
+                {/* Campaign Metadata Section */}
+                {(() => {
+                  const metadata = getCampaignMetadata();
+                  if (!metadata) return null;
+                  
+                  return (
+                    <div className="p-6 border border-gray-800 rounded-lg bg-zinc-900/30">
+                      <h3 className="text-md font-medium text-white mb-3 flex items-center">
+                        <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
+                        Campaign Metadata
+                      </h3>
+                      
+                      <div className="space-y-4">
+                        {/* Campaign Title */}
+                        {metadata.title && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-400 mb-1">Title</h4>
+                            <p className="text-white text-sm bg-black/40 rounded-md px-3 py-2 border border-gray-800">
+                              {metadata.title}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Campaign Boilerplate */}
+                        {metadata.boilerplate && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-400 mb-1">Boilerplate</h4>
+                            <p className="text-gray-300 text-sm bg-black/40 rounded-md px-3 py-2 border border-gray-800">
+                              {metadata.boilerplate}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Campaign Objectives */}
+                        {metadata.objectives && metadata.objectives.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-400 mb-1">Objectives</h4>
+                            <ul className="list-disc pl-6 space-y-1 text-gray-300 text-sm bg-black/40 rounded-md px-3 py-2 border border-gray-800">
+                              {metadata.objectives.map((objective, idx) => (
+                                <li key={idx}>{objective}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
+                
                 {/* Timeline and channels in a single row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-6 border border-gray-800 rounded-lg bg-zinc-900/30">

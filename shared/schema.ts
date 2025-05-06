@@ -205,6 +205,7 @@ export const campaignFactoryCampaigns = pgTable("campaign_factory_campaigns", {
   timeline_end: text("timeline_end"),
   contents: jsonb("contents"), // Array of content objects with type, title, content, delivery date
   tone_profile: jsonb("tone_profile"), // Tone profile percentages
+  metadata: jsonb("metadata"), // Campaign metadata (title, boilerplate, objectives)
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
