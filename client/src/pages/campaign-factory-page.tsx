@@ -322,6 +322,7 @@ type ToneAnalysis = {
 type Campaign = {
   id: number;
   name: string;
+  description: string;
   objective: string;
   targetAudience: string[];
   channels: string[];
@@ -414,6 +415,8 @@ export default function CampaignFactoryPage() {
   const [selectedUseCase, setSelectedUseCase] = useState<string>("");
   const [generationProgress, setGenerationProgress] = useState(0);
   const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [campaignName, setCampaignName] = useState<string>("");
+  const [campaignDescription, setCampaignDescription] = useState<string>("");
   const [selectedPersonas, setSelectedPersonas] = useState<number[]>([]);
   const [personaBalance, setPersonaBalance] = useState<"equal" | "weighted">("equal");
   const [useGeneratedPersonas, setUseGeneratedPersonas] = useState<boolean>(false);
@@ -976,10 +979,19 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
         }
       }
       
+      // Initialize default campaign name and description
+      const suggestedName = campaignTitleVal;
+      const suggestedDescription = campaignPrompt;
+      
+      // Set the campaign name and description state variables
+      setCampaignName(suggestedName);
+      setCampaignDescription(suggestedDescription);
+            
       // Set up the campaign
       setCampaign({
         id: 1,
-        name: campaignTitleVal,
+        name: suggestedName,
+        description: suggestedDescription,
         objective: campaignPrompt || "Increase brand awareness and drive conversions",
         targetAudience: personas && Array.isArray(personas) && personas.length > 0 && selectedPersonas.length > 0
           ? selectedPersonas.map(id => {
@@ -1126,7 +1138,8 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
     try {
       // Prepare campaign data for API request
       const campaignData = {
-        name: campaign.name,
+        name: campaignName || campaign.name,
+        description: campaignDescription || campaign.description,
         objective: campaign.objective,
         target_audience: campaign.targetAudience,
         channels: campaign.channels,
