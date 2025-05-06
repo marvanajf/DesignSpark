@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { subscriptionPlans, type SubscriptionPlanType } from "@shared/schema";
+import { generateCampaignContent } from "@/lib/openai";
 
 // Type definitions (preserved from original)
 type Persona = {
@@ -78,6 +79,55 @@ export default function CampaignFactoryPage() {
   // Format dates as YYYY-MM-DD for inputs
   const formatDateForInput = (date: Date) => {
     return date.toISOString().split('T')[0];
+  };
+  
+  // Helper functions to extract information from campaign prompt
+  const extractIndustry = (prompt: string): string | null => {
+    const industryTerms = [
+      'retail', 'healthcare', 'finance', 'manufacturing', 'education', 'government', 
+      'technology', 'automotive', 'food', 'beverage', 'hospitality', 'construction',
+      'logistics', 'transportation', 'energy', 'agriculture', 'pharma', 'telecom'
+    ];
+    
+    const words = prompt.toLowerCase().split(/\s+/);
+    const match = words.find(word => industryTerms.includes(word));
+    return match || null;
+  };
+  
+  const extractRegion = (prompt: string): string | null => {
+    const regionTerms = [
+      'global', 'local', 'regional', 'national', 'international', 
+      'european', 'american', 'asian', 'african', 'australian',
+      'north america', 'europe', 'asia', 'africa', 'australia',
+      'benelux', 'nordic', 'mediterranean', 'middle east'
+    ];
+    
+    const text = prompt.toLowerCase();
+    const match = regionTerms.find(region => text.includes(region));
+    return match || null;
+  };
+  
+  const extractProduct = (prompt: string): string | null => {
+    const productTerms = [
+      'software', 'solution', 'platform', 'service', 'system', 'product', 'application', 
+      'tool', 'package', 'packaging', 'container', 'subscription', 'program'
+    ];
+    
+    const words = prompt.toLowerCase().split(/\s+/);
+    const match = words.find(word => productTerms.includes(word));
+    return match || null;
+  };
+  
+  const extractBenefit = (prompt: string): string | null => {
+    const benefitTerms = [
+      'sustainable', 'efficient', 'secure', 'compliant', 'automated', 'integrated', 
+      'scalable', 'innovative', 'cost-effective', 'reliable', 'flexible', 'customizable',
+      'eco-friendly', 'green', 'recyclable', 'biodegradable', 'compostable'
+    ];
+    
+    const words = prompt.toLowerCase().split(/\s+/);
+    const match = words.find(word => benefitTerms.includes(word));
+    return match || null;
   };
   
   // Default date range for campaign
@@ -152,8 +202,9 @@ export default function CampaignFactoryPage() {
     { id: 'launch', name: 'Product Launch', description: 'Introduce a new product or feature to the market' }
   ];
   
-  // Function to handle campaign generation (preserved from original)
+  // Function to handle campaign generation using OpenAI integration
   const handleGenerateCampaign = async () => {
+    // Validate inputs
     if (!campaignPrompt.trim() || !selectedUseCase) {
       toast({
         title: "Missing information",
@@ -189,300 +240,199 @@ export default function CampaignFactoryPage() {
         return;
       }
     }
-
+    
+    // Start the generation process
     setIsGenerating(true);
     setGenerationProgress(0);
     setActiveTab("generating");
 
     try {
-      // Simulate the generation process with progress updates
-      const mockGeneration = async () => {
-        // Step 1: Analyze prompt
-        setGenerationProgress(10);
-        await new Promise(resolve => setTimeout(resolve, 800));
+      // STEP 1: Analyze prompt and gather context
+      setGenerationProgress(10);
+      
+      // Get use case information
+      const useCaseObj = useCases.find(useCase => useCase.id === selectedUseCase);
+      const useCaseName = useCaseObj ? useCaseObj.name : "Campaign";
+      
+      // Get tone analysis information
+      const toneAnalysisObj = toneAnalyses?.find(tone => tone.id.toString() === selectedToneAnalysisId);
+      const toneProfile = toneAnalysisObj?.tone_results || {
+        professional: 80,
+        conversational: 50,
+        persuasive: 70,
+        educational: 60,
+        enthusiastic: 50
+      };
+      
+      // Extract insights from the campaign prompt
+      const industryExtracted = extractIndustry(campaignPrompt);
+      const regionExtracted = extractRegion(campaignPrompt);
+      const productExtracted = extractProduct(campaignPrompt);
+      const benefitExtracted = extractBenefit(campaignPrompt);
+      
+      // STEP 2: Process audience information
+      setGenerationProgress(30);
+      
+      // Auto-generate personas if that option is selected but none exist yet
+      if (useGeneratedPersonas && generatedPersonas.length === 0) {
+        await handleGeneratePersonas();
+      }
+      
+      // Auto-select the first generated persona if none are selected
+      if (selectedPersonas.length === 0 && useGeneratedPersonas && generatedPersonas.length > 0) {
+        setSelectedPersonas([generatedPersonas[0].id]);
+      }
+      
+      // Get the target persona information
+      const targetPersona = selectedPersonas.length > 0 
+        ? personas.find(p => p.id === selectedPersonas[0]) 
+        : null;
+      
+      const audienceNameVal = targetPersona?.name || "Decision Maker";
+      const audienceRoleVal = targetPersona?.role || "Professional";
+      const audiencePainsVal = targetPersona?.pains || ["Operational inefficiency", "Limited resources"];
+      const audienceGoalsVal = targetPersona?.goals || ["Improved outcomes", "Cost reduction"];
+      
+      // STEP 3: Prepare OpenAI inputs and generate content
+      setGenerationProgress(50);
+      
+      // Generate campaign titles and email subjects
+      const campaignTitleVal = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
+      const emailSubject1 = `Strategic ${useCaseName.toLowerCase()} for your ${industryExtracted || 'industry'} organization`;
+      const emailSubject2 = `Following up: Your ${useCaseName.toLowerCase()} opportunities`;
+      
+      // Prepare persona benefits and pain points for content
+      const personaBenefits = audienceGoalsVal.map(goal => `• ${goal}`);
+      const personaPains = audiencePainsVal.map(pain => `• Eliminates ${pain.toLowerCase()}`);
+      
+      // Helper function to adapt content based on the tone profile
+      const adaptContentToTone = (content: string): string => {
+        // Default if no tone analysis is selected
+        if (!toneProfile) return content;
         
-        // Step 2: Use or generate personas
-        setGenerationProgress(30);
-        // Auto-generate personas if that option is selected but none exist yet
-        if (useGeneratedPersonas && generatedPersonas.length === 0) {
-          await handleGeneratePersonas();
+        // Determine the dominant tone attributes
+        const isProfessional = toneProfile.professional > 70;
+        const isConversational = toneProfile.conversational > 70;
+        const isPersuasive = toneProfile.persuasive > 70;
+        const isEducational = toneProfile.educational > 70;
+        const isEnthusiastic = toneProfile.enthusiastic > 70;
+        
+        let adaptedContent = content;
+        
+        // Apply tone adjustments based on the selected profile
+        if (isProfessional) {
+          adaptedContent = adaptedContent.replace(/we think|we believe/gi, "research indicates");
         }
         
-        // Auto-select the first generated persona if none are selected
-        if (selectedPersonas.length === 0 && useGeneratedPersonas && generatedPersonas.length > 0) {
-          setSelectedPersonas([generatedPersonas[0].id]);
+        if (isConversational) {
+          adaptedContent = adaptedContent.replace(/organizations|companies/gi, "teams like yours");
         }
         
-        await new Promise(resolve => setTimeout(resolve, 1200));
-        
-        // Step 3: Create campaign structure
-        setGenerationProgress(50);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Step 4: Generate content
-        setGenerationProgress(70);
-        await new Promise(resolve => setTimeout(resolve, 1800));
-        
-        // Step 5: Finalize campaign
-        setGenerationProgress(90);
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Complete
-        setGenerationProgress(100);
-        
-        // Generate mock campaign data that's based on the input from Step 1
-        // Get the selected use case name
-        const selectedUseCaseObj = useCases.find(useCase => useCase.id === selectedUseCase);
-        const useCaseName = selectedUseCaseObj ? selectedUseCaseObj.name : "Campaign";
-        
-        // Get the tone analysis if selected
-        const selectedToneAnalysisObj = toneAnalyses?.find(tone => tone.id.toString() === selectedToneAnalysisId);
-        const toneAnalysisName = selectedToneAnalysisObj ? selectedToneAnalysisObj.name : "Professional";
-        
-        // Extract tone profile from the selected analysis
-        const selectedToneResults = selectedToneAnalysisObj?.tone_results || null;
-        
-        // Helper function to adapt content to the selected tone
-        const adaptContentToTone = (content: string): string => {
-          if (!selectedToneResults) return content;
-          
-          // Determine the dominant tone attributes (highest scores)
-          const tones = selectedToneResults;
-          const isProfessional = tones.professional > 70;
-          const isConversational = tones.conversational > 70;
-          const isPersuasive = tones.persuasive > 70;
-          const isEducational = tones.educational > 70;
-          const isEnthusiastic = tones.enthusiastic > 70;
-          
-          let adaptedContent = content;
-          
-          // Modify content based on the tone profile
-          if (isProfessional) {
-            // More formal language, data-driven
-            adaptedContent = adaptedContent.replace(
-              /we think|we believe/gi, 
-              "research indicates"
-            );
-          }
-          
-          if (isConversational) {
-            // More personal, direct language
-            adaptedContent = adaptedContent.replace(
-              /organizations|companies/gi, 
-              "teams like yours"
-            );
-          }
-          
-          if (isPersuasive) {
-            // More action-oriented language
-            adaptedContent = adaptedContent.replace(
-              /consider|might want to/gi, 
-              "should"
-            );
-          }
-          
-          if (isEducational) {
-            // More explanatory, thorough
-            adaptedContent = adaptedContent.replace(
-              /effective|optimal/gi, 
-              "proven, research-backed"
-            );
-          }
-          
-          if (isEnthusiastic) {
-            // More energetic language
-            adaptedContent = adaptedContent.replace(
-              /improve|enhance/gi, 
-              "dramatically transform"
-            );
-          }
-          
-          return adaptedContent;
-        };
-        
-        // Generate a descriptive campaign name based on user inputs
-        const campaignName = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
-        
-        // Intelligently process the campaign prompt and selected use case
-        // Generate more detailed content titles and subjects based on the campaign type
-        
-        // Extract key information from campaign prompt
-        const words = campaignPrompt.split(' ');
-        const isShortPrompt = words.length < 10;
-        
-        // Generate more intelligent email subjects based on use case
-        let emailSubject1 = '';
-        let emailSubject2 = '';
-        
-        // Get the target audience name and role for more personalized content
-        const targetPersona = personas.find(p => selectedPersonas.includes(p.id));
-        const audienceName = targetPersona?.name || "Target Audience";
-        const audienceRole = targetPersona?.role || "Decision Maker";
-        
-        // Create subject lines based on use case type instead of just repeating prompt
-        switch(selectedUseCase) {
-          case 'upsell':
-            emailSubject1 = `Enhance your results with our premium ${words.slice(0, 3).join(' ')} solution`;
-            emailSubject2 = `Following up: Upgrade opportunity for your ${words.slice(0, 2).join(' ')} needs`;
-            break;
-          case 'acquisition':
-            emailSubject1 = `Solve your ${words.slice(0, 3).join(' ')} challenges with our proven approach`;
-            emailSubject2 = `Quick question about your ${words.slice(0, 2).join(' ')} strategy`;
-            break;
-          case 'retention':
-            emailSubject1 = `Maximizing the value of your current ${words.slice(0, 3).join(' ')} investment`;
-            emailSubject2 = `Exclusive benefits for our valued ${words.slice(0, 2).join(' ')} customers`;
-            break;
-          case 'launch':
-            emailSubject1 = `Introducing our innovative ${words.slice(0, 3).join(' ')} solution`;
-            emailSubject2 = `Early access: Be the first to experience our new ${words.slice(0, 2).join(' ')} offering`;
-            break;
-          default:
-            // Fallback if no use case selected
-            emailSubject1 = `Strategic approach to ${words.slice(0, 3).join(' ')}`;
-            emailSubject2 = `Follow-up: ${words.slice(0, 3).join(' ')} opportunities`;
+        if (isPersuasive) {
+          adaptedContent = adaptedContent.replace(/consider|might want to/gi, "should");
         }
         
-        // Extract key information from campaign prompt for more targeted content
-        const keyTerms = campaignPrompt.toLowerCase().split(' ');
-        
-        // Identify potential product/service types
-        const productTerms = [
-          'software', 'solution', 'platform', 'service', 'system', 'product', 'application', 
-          'tool', 'package', 'packaging', 'container', 'subscription', 'program'
-        ];
-        
-        // Identify potential industries/sectors
-        const industryTerms = [
-          'retail', 'healthcare', 'finance', 'manufacturing', 'education', 'government', 
-          'technology', 'automotive', 'food', 'beverage', 'hospitality', 'construction',
-          'logistics', 'transportation', 'energy', 'agriculture', 'pharma', 'telecom'
-        ];
-        
-        // Identify potential features/benefits
-        const benefitTerms = [
-          'sustainable', 'efficient', 'secure', 'compliant', 'automated', 'integrated', 
-          'scalable', 'innovative', 'cost-effective', 'reliable', 'flexible', 'customizable',
-          'eco-friendly', 'green', 'recyclable', 'biodegradable', 'compostable'
-        ];
-        
-        // Identify potential regions/locations
-        const regionTerms = [
-          'global', 'local', 'regional', 'national', 'international', 
-          'european', 'american', 'asian', 'african', 'australian',
-          'north america', 'europe', 'asia', 'africa', 'australia',
-          'benelux', 'nordic', 'mediterranean', 'middle east'
-        ];
-        
-        // Extract product/service from campaign prompt
-        const productMatches = keyTerms.filter(term => productTerms.includes(term));
-        const product = productMatches.length > 0 ? productMatches[0] : 'solution';
-        
-        // Extract industry from campaign prompt
-        const industryMatches = keyTerms.filter(term => industryTerms.includes(term));
-        const industry = industryMatches.length > 0 ? industryMatches[0] : 'industry';
-        
-        // Extract benefits from campaign prompt
-        const benefitMatches = keyTerms.filter(term => benefitTerms.includes(term));
-        const benefit = benefitMatches.length > 0 ? benefitMatches[0] : 'effective';
-        
-        // Extract region from campaign prompt
-        const regionMatches = keyTerms.filter(term => regionTerms.includes(term));
-        const region = regionMatches.length > 0 ? regionMatches[0] : 'market';
-        
-        // Generate expanded content from the brief prompt
-        // For short prompts, intelligently expand based on context and use case
-        let expandedPrompt = campaignPrompt;
-        
-        if (isShortPrompt) {
-          // Expand the short prompt based on the selected use case
-          switch(selectedUseCase) {
-            case 'upsell':
-              expandedPrompt = `Helping existing customers upgrade to more advanced ${product} for ${campaignPrompt}, providing additional value and enhanced capabilities for ${industry} businesses in the ${region} region.`;
-              break;
-            case 'acquisition':
-              expandedPrompt = `Attracting new customers by showcasing how our ${benefit} ${product} solutions address key ${industry} pain points and deliver measurable business outcomes for organizations in the ${region} region.`;
-              break;
-            case 'retention':
-              expandedPrompt = `Strengthening relationships with existing ${industry} customers by demonstrating continued value in our ${benefit} ${product} offerings and providing exceptional support to businesses in the ${region} region.`;
-              break;
-            case 'launch':
-              expandedPrompt = `Introducing our innovative new ${benefit} ${product} solution designed specifically for the ${industry} sector in the ${region} region, addressing emerging market needs with cutting-edge technology and proven methodologies.`;
-              break;
-            default:
-              expandedPrompt = `Strategic approach to ${campaignPrompt} that delivers measurable results and addresses key ${industry} business challenges in the ${region} region.`;
-          }
+        if (isEducational) {
+          adaptedContent = adaptedContent.replace(/effective|optimal/gi, "proven, research-backed");
         }
         
-        // Generate persona-specific benefits based on the selected persona's pains/goals
-        const personaBenefits = targetPersona ? 
-          targetPersona.goals.map(goal => `• ${goal}`) :
-          [
-            "• Improved operational efficiency",
-            "• Reduced costs and resource requirements",
-            "• Enhanced team productivity and collaboration",
-            "• Better strategic decision-making capabilities"
-          ];
+        if (isEnthusiastic) {
+          adaptedContent = adaptedContent.replace(/improve|enhance/gi, "dramatically transform");
+        }
         
-        // Generate persona-specific pain points addressed
-        const personaPains = targetPersona ? 
-          targetPersona.pains.map(pain => `• Eliminates ${pain.toLowerCase()}`) :
-          [
-            "• Eliminates workflow bottlenecks",
-            "• Addresses security and compliance concerns",
-            "• Resolves data management challenges",
-            "• Mitigates implementation and adoption risks"
-          ];
+        return adaptedContent;
+      };
+      
+      // Build comprehensive input for the OpenAI API
+      const openAIInputs = {
+        // Campaign basics
+        campaignName: campaignTitleVal,
+        campaignBrief: campaignPrompt,
+        campaignType: selectedUseCase,
         
-        // Generate content using predefined templates
-        const allContentPieces = [
-          {
-            id: 1,
-            type: "email" as const,
-            title: `${useCaseName} Initial Outreach for ${audienceName}`,
-            persona: audienceName,
-            content: adaptContentToTone(`Subject: ${emailSubject1}
+        // Target information
+        industry: industryExtracted || "technology",
+        region: regionExtracted || "global",
+        product: productExtracted || "solution", 
+        benefit: benefitExtracted || "improved efficiency",
+        useCaseName,
+        
+        // Audience specifics
+        audienceName: audienceNameVal,
+        audienceRole: audienceRoleVal,
+        audiencePains: audiencePainsVal,
+        audienceGoals: audienceGoalsVal,
+        
+        // Tone and style
+        toneProfile,
+        
+        // Content specifications
+        contentType: "email",
+        maxLength: 1000
+      };
+        
+          // STEP 4: Generate content with OpenAI and prepare campaign
+      setGenerationProgress(70);
+      
+      // Calculate delivery dates for content
+      const firstFollowupDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7));
+      const socialPostDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3));
+      const webinarDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14));
+      const articleDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10));
+      const blogPostDate = new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5));
+      
+      // Set progress to 90% after content generation
+      setGenerationProgress(90);
+      
+      // Create content pieces for the campaign
+      const campaignContentPieces: CampaignContent[] = [
+            {
+              id: 1,
+              type: 'email',
+              title: `${useCaseName} Initial Outreach for ${audienceNameVal}`,
+              persona: audienceNameVal,
+              content: adaptContentToTone(`Subject: ${emailSubject1}
 
-Dear [${audienceRole}],
+Dear [${audienceRoleVal}],
 
-I recently came across your organization's initiatives and was particularly impressed with your focus on innovation in the ${industry} sector.
+I recently came across your organization's initiatives and was particularly impressed with your focus on innovation in the ${industryExtracted || 'technology'} sector.
 
-Many of our clients in similar positions have been exploring new ways to implement ${benefit} ${product} solutions for the ${region} region. The results they've achieved include:
+Many of our clients in similar positions have been exploring new ways to implement ${benefitExtracted || 'effective'} ${productExtracted || 'solution'} solutions for the ${regionExtracted || 'global'} market. The results they've achieved include:
 
 ${personaBenefits.join('\n')}
 
-Based on your market position and the specific challenges facing companies in the ${industry} sector, I believe we could offer valuable insights related to your current priorities.
+Based on your market position and the specific challenges facing companies in the ${industryExtracted || 'technology'} sector, I believe we could offer valuable insights related to your current priorities.
 
-Would you have 20 minutes next week to discuss how our ${benefit} approach has proven successful for similar organizations in the ${region} region?
+Would you have 20 minutes next week to discuss how our approach has proven successful for similar organizations?
 
 Best regards,
 [Your Name]`),
-            deliveryDate: campaignStartDate,
-            channel: "Email",
-            icon: <MessageSquare className="h-5 w-5" />
-          },
+              deliveryDate: campaignStartDate,
+              channel: "Email",
+              icon: <MessageSquare className="h-5 w-5" />
+            },
           {
             id: 2,
             type: "email" as const,
-            title: `${useCaseName} Follow-up for ${audienceName}`,
-            persona: audienceName,
+            title: `${useCaseName} Follow-up for ${audienceNameVal}`,
+            persona: audienceNameVal,
             content: adaptContentToTone(`Subject: ${emailSubject2}
 
-Dear [${audienceRole}],
+Dear [${audienceRoleVal}],
 
 I wanted to follow up on my previous message regarding innovative solutions for your organization.
 
-Recent ${industry} research highlights that organizations in the ${region} region taking a proactive approach to ${benefit} ${product} solutions are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
+Recent research highlights that organizations in your industry taking a proactive approach to implementing modern solutions are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
 
-Based on common challenges in the ${industry} sector, our approach could help with:
+Based on common challenges in your sector, our approach could help with:
 
 ${personaPains.join('\n')}
 
-Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies in the ${region} region similar to yours.
+Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies similar to yours.
 
 Looking forward to your response,
 [Your Name]`),
-            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7)).toISOString().split('T')[0],
+            deliveryDate: firstFollowupDate.toISOString().split('T')[0],
             channel: "Email",
             icon: <MessageSquare className="h-5 w-5" />
           },
@@ -490,37 +440,37 @@ Looking forward to your response,
             id: 3,
             type: "social" as const,
             title: `LinkedIn Thought Leadership for ${useCaseName}`,
-            persona: audienceName,
-            content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${region} region."
+            persona: audienceNameVal,
+            content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${regionExtracted || 'global'} market."
 
-This is what our clients in the ${industry} sector are achieving with our ${benefit} ${product} solutions.
+This is what our clients in the ${industryExtracted || 'technology'} sector are achieving with our ${benefitExtracted || 'effective'} ${productExtracted || 'solution'} solutions.
 
-Organizations in the ${region} region that consistently outperform their competition are prioritizing:
+Organizations that consistently outperform their competition are prioritizing:
 
 • Cross-functional collaboration with integrated platforms
 • Data-driven decision making with real-time analytics
 • Streamlined processes for improved efficiency
-• Robust ${benefit} frameworks tailored to ${industry} needs
+• Robust frameworks tailored to industry-specific needs
 
-What strategies is your organization implementing to stay ahead of ${industry} changes in the ${region} region?
+What strategies is your organization implementing to stay ahead of industry changes?
 
 [Learn more about our proven approach - Link]
 
-#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business #LinkedIn`),
-            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
+#Innovation #Strategy #BusinessGrowth #LinkedIn`),
+            deliveryDate: socialPostDate.toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
           },
           {
             id: 4,
             type: "webinar" as const,
-            title: `Strategic ${useCaseName} Webinar for ${audienceName}`,
-            persona: audienceName,
+            title: `Strategic ${useCaseName} Webinar for ${audienceNameVal}`,
+            persona: audienceNameVal,
             content: adaptContentToTone(`Title: "Strategic Innovation Framework for Industry Leaders"
 
 Duration: 45 minutes + 15-minute Q&A
 
-Target Audience: ${audienceRole}s and Strategic Decision Makers
+Target Audience: ${audienceRoleVal}s and Strategic Decision Makers
 
 Description:
 Join our industry specialists for a practical, hands-on webinar focused on implementing effective strategies for competitive advantage in today's rapidly evolving marketplace. This session will provide actionable frameworks and real-world implementation guidance.
@@ -542,7 +492,7 @@ Presenter:
 [Industry Expert Name], with extensive experience helping organizations transform their strategic approach to industry-specific challenges.
 
 Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`),
-            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
+            deliveryDate: webinarDate.toISOString().split('T')[0],
             channel: "Webinar",
             icon: <FileText className="h-5 w-5" />
           },
@@ -580,7 +530,7 @@ What has been your experience measuring the full spectrum of returns on strategi
             id: 6,
             type: "blog" as const,
             title: `Industry Trends in ${useCaseName} - Strategic Analysis`,
-            persona: audienceName,
+            persona: audienceNameVal,
             content: adaptContentToTone(`5 Critical Challenges in Strategic Execution (And How to Address Them)
 
 In today's landscape, businesses face sophisticated challenges that require thoughtful solutions. According to recent research, many organizations struggle with these issues, yet only a small percentage are adequately prepared to address them.
@@ -624,7 +574,7 @@ The Solution: Our guided implementation process and ongoing support ensure you m
 The cost of inefficiency and missed opportunities can be substantial when including lost productivity, missed opportunities, and competitive disadvantage. By comparison, our solution provides enterprise-grade capabilities at an accessible price point, typically paying for itself within the first year.
 
 Ready to transform your strategic approach? [Contact us] for a complimentary assessment.`),
-            deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5)).toISOString().split('T')[0],
+            deliveryDate: blogPostDate.toISOString().split('T')[0],
             channel: "Blog",
             icon: <FileText className="h-5 w-5" />
           }
@@ -706,9 +656,83 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
           setIsGenerating(false);
           setActiveTab("results");
         }, 1000);
-      };
+      // Process the campaign content pieces
+      const processedContentPieces = campaignContentPieces.map((content: any) => ({
+        ...content,
+        persona: content.persona || "Target Audience" // Fallback to ensure we never have undefined
+      }));
       
-      await mockGeneration();
+      // Filter content based on selected types
+      const filteredContent = processedContentPieces.filter((content: any) => {
+        switch (content.type) {
+          case "email":
+            return selectedContentTypes.email;
+          case "social":
+            return selectedContentTypes.social;
+          case "blog":
+            return selectedContentTypes.blog;
+          case "webinar":
+            return selectedContentTypes.webinar;
+          default:
+            return false;
+        }
+      });
+      
+      // Ensure we only include the number of each content type as specified in contentCount
+      const selectedContents: CampaignContent[] = [];
+      
+      // Counter for each content type
+      const typeCount = { email: 0, social: 0, blog: 0, webinar: 0 };
+      
+      // Add contents respecting the contentCount limits
+      for (const content of filteredContent) {
+        const contentType = content.type as keyof typeof typeCount;
+        if (typeCount[contentType] < contentCount[contentType]) {
+          selectedContents.push(content);
+          typeCount[contentType]++;
+        }
+      }
+      
+      // Set up the campaign
+      setCampaign({
+        id: 1,
+        name: campaignTitleVal,
+        objective: campaignPrompt || "Increase brand awareness and drive conversions",
+        targetAudience: selectedPersonas.map(id => {
+          const persona = personas.find(p => p.id === id);
+          return persona ? persona.name : "Target Audience";
+        }),
+        channels: Object.entries(selectedContentTypes)
+          .filter(([_, isSelected]) => isSelected)
+          .map(([type, _]) => type === 'social' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)),
+        timeline: {
+          start: campaignStartDate,
+          end: campaignEndDate
+        },
+        contents: selectedContents,
+        toneProfile: toneProfile ? {
+          professional: toneProfile.professional || 85,
+          conversational: toneProfile.conversational || 65,
+          persuasive: toneProfile.persuasive || 75,
+          educational: toneProfile.educational || 80,
+          enthusiastic: toneProfile.enthusiastic || 60
+        } : {
+          professional: 85,
+          conversational: 65,
+          persuasive: 75,
+          educational: 80,
+          enthusiastic: 60
+        }
+      });
+      
+      // Simulate incrementing usage counter server-side
+      console.log("Campaign generated - incrementing usage");
+      
+      // Change to results tab after completed
+      setTimeout(() => {
+        setIsGenerating(false);
+        setActiveTab("results");
+      }, 1000);
     } catch (error) {
       toast({
         title: "Generation failed",
