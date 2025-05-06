@@ -113,26 +113,41 @@ export default function SavedCampaignsSection() {
   };
 
   // Parse stringified JSON content safely
-  const parseContent = (jsonString: string) => {
-    try {
-      return JSON.parse(jsonString);
-    } catch (e) {
-      console.error('Error parsing JSON:', e);
-      return [];
+  const parseContent = (jsonString: string | any) => {
+    if (!jsonString) return [];
+    
+    // If it's already an array, return it
+    if (Array.isArray(jsonString)) {
+      return jsonString;
     }
+    
+    // If it's a string, try to parse it
+    if (typeof jsonString === 'string') {
+      try {
+        const parsed = JSON.parse(jsonString);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+        return [];
+      } catch (e) {
+        console.error('Error parsing JSON:', e);
+        return [];
+      }
+    }
+    
+    // Fallback: return empty array
+    return [];
   };
 
   // Parse selected campaign contents
   const getSelectedCampaignContents = (): CampaignContent[] => {
     if (!selectedCampaign) return [];
-    console.log('Campaign contents:', selectedCampaign.contents);
-    // Attempt to parse the contents - check if it's already a string or needs to be parsed
-    if (typeof selectedCampaign.contents === 'string') {
-      return parseContent(selectedCampaign.contents);
-    } else if (Array.isArray(selectedCampaign.contents)) {
-      return selectedCampaign.contents;
-    }
-    return [];
+    
+    const contents = selectedCampaign.contents;
+    console.log('Campaign contents type:', typeof contents);
+    console.log('Campaign contents:', contents);
+    
+    return parseContent(contents);
   };
 
   // Filter content by selected type
@@ -419,40 +434,55 @@ export default function SavedCampaignsSection() {
                   
                   <TabsContent value={activeContentType} className="mt-0">
                     <ScrollArea className="h-[400px] pr-4">
-                      <div className="space-y-3">
-                        {getFilteredContents().map((content, index) => (
-                          <div 
-                            key={index}
-                            className="p-4 border border-gray-800 rounded-lg bg-zinc-900/30 group hover:bg-zinc-900/70 transition-colors"
-                          >
-                            <div className="flex justify-between items-start mb-2">
-                              <div className="flex items-center">
-                                <div className="h-7 w-7 rounded-md bg-[#0e131f] border border-gray-800 flex items-center justify-center mr-3">
-                                  {contentTypeIcons[content.type] || <MessageSquare className="h-4 w-4" />}
-                                </div>
-                                <div>
-                                  <h4 className="text-white text-sm">{content.title || `${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Content`}</h4>
-                                  <p className="text-xs text-gray-400">{content.persona}</p>
+                      <div className="space-y-4">
+                        {getFilteredContents().length > 0 ? (
+                          getFilteredContents().map((content, index) => (
+                            <div 
+                              key={index}
+                              className="border border-gray-800 rounded-lg overflow-hidden bg-black shadow-lg"
+                            >
+                              {/* Content Header */}
+                              <div className="p-4 border-b border-gray-800 bg-zinc-900/50">
+                                <div className="flex justify-between items-start">
+                                  <div className="flex items-center">
+                                    <div className="h-8 w-8 rounded-md bg-[#0e131f] border border-[#5eead4]/20 flex items-center justify-center mr-3 shadow-[0_0_10px_rgba(94,234,212,0.05)]">
+                                      {contentTypeIcons[content.type] || <MessageSquare className="h-4 w-4 text-[#5eead4]" />}
+                                    </div>
+                                    <div>
+                                      <h4 className="text-white font-medium">
+                                        {content.title || `${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Content`}
+                                      </h4>
+                                      <div className="flex items-center gap-3 mt-1">
+                                        <span className="text-xs text-gray-400 flex items-center">
+                                          <Users className="h-3 w-3 mr-1 text-gray-500" />
+                                          {content.persona}
+                                        </span>
+                                        {content.deliveryDate && (
+                                          <span className="text-xs text-gray-400 flex items-center">
+                                            <Clock className="h-3 w-3 mr-1 text-gray-500" />
+                                            {new Date(content.deliveryDate).toLocaleDateString()}
+                                          </span>
+                                        )}
+                                        {content.channel && (
+                                          <Badge variant="outline" className="bg-[#0e131f] text-[#5eead4] border-[#5eead4]/30 text-xs">
+                                            {content.channel}
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              {content.deliveryDate && (
-                                <div className="flex items-center text-xs text-gray-400">
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  <span>
-                                    {new Date(content.deliveryDate).toLocaleDateString()}
-                                  </span>
-                                </div>
-                              )}
+                              
+                              {/* Content Body */}
+                              <div className="p-5 text-sm text-gray-200 whitespace-pre-wrap bg-gradient-to-b from-zinc-900/10 to-black">
+                                {content.content}
+                              </div>
                             </div>
-                            
-                            <div className="mt-3 text-sm text-gray-200 whitespace-pre-wrap">
-                              {content.content}
-                            </div>
-                          </div>
-                        ))}
-                        
-                        {getFilteredContents().length === 0 && (
-                          <div className="text-center py-6 border border-dashed border-gray-800 rounded-lg">
+                          ))
+                        ) : (
+                          <div className="text-center py-8 border border-dashed border-gray-800 rounded-lg">
+                            <MessageSquare className="h-10 w-10 text-gray-600 mx-auto mb-2" />
                             <p className="text-gray-400">
                               No {activeContentType !== 'all' ? activeContentType : ''} content found in this campaign
                             </p>
