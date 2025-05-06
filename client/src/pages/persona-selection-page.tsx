@@ -510,7 +510,7 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Create Persona Section */}
-          <div className="mb-8 border border-gray-800/60 rounded-xl p-6 bg-black/40">
+          <div className="mb-8 border border-gray-800/30 rounded-xl p-6 bg-gradient-to-b from-black/30 to-black/10 backdrop-blur-sm">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <UserCircle className="h-5 w-5 text-[#74d1ea]" />
@@ -523,9 +523,9 @@ export default function PersonaSelectionPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* AI Generator Card */}
-              <Card className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
+              <div className="group relative bg-black/40 backdrop-blur-sm border border-gray-800/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <CardContent className="p-6">
+                <div className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                       <Sparkles className="h-5 w-5 text-[#74d1ea]" />
@@ -633,13 +633,13 @@ export default function PersonaSelectionPage() {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Manual Create Card */}
-              <Card className="group relative bg-black border border-gray-800/60 rounded-xl overflow-hidden transition-all duration-300 shadow-[0_0_25px_rgba(116,209,234,0.05)] hover:shadow-[0_0_25px_rgba(116,209,234,0.15)] cursor-pointer">
+              <div className="group relative bg-black/40 backdrop-blur-sm border border-gray-800/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#74d1ea]/5 via-transparent to-transparent pointer-events-none opacity-50"></div>
-                <CardContent className="p-6">
+                <div className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                       <UserCircle className="h-5 w-5 text-[#74d1ea]" />
@@ -724,13 +724,13 @@ export default function PersonaSelectionPage() {
                       </form>
                     </DialogContent>
                   </Dialog>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Example Personas Section */}
-          <div className="mb-8 border border-gray-800/60 rounded-xl p-6 bg-black/40">
+          <div className="mb-8 border border-gray-800/30 rounded-xl p-6 bg-gradient-to-b from-black/30 to-black/10 backdrop-blur-sm">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <Users className="h-5 w-5 text-[#74d1ea]" />
@@ -862,7 +862,7 @@ export default function PersonaSelectionPage() {
           </div>
 
           {/* Your Personas Section */}
-          <div className="mb-8 mt-8 border border-gray-800/60 rounded-xl p-6 bg-black/40">
+          <div className="mb-8 mt-8 border border-gray-800/30 rounded-xl p-6 bg-gradient-to-b from-black/30 to-black/10 backdrop-blur-sm">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-[#0e131f] border border-[#74d1ea]/20 rounded-lg p-2.5 shadow-[0_0_15px_rgba(116,209,234,0.15)]">
                 <UserCircle className="h-5 w-5 text-[#74d1ea]" />
