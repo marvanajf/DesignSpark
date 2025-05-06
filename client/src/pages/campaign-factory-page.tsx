@@ -1183,17 +1183,23 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                               <div>
                                 <p className="text-gray-500 mb-1">Pain Points:</p>
                                 <ul className="list-disc list-inside space-y-1">
-                                  {persona.pains.map((pain, i) => (
-                                    <li key={i} className="text-gray-300">{pain}</li>
-                                  ))}
+                                  {persona.pains && Array.isArray(persona.pains) ? 
+                                    persona.pains.map((pain, i) => (
+                                      <li key={i} className="text-gray-300">{pain}</li>
+                                    )) : 
+                                    <li className="text-gray-300">No pain points specified</li>
+                                  }
                                 </ul>
                               </div>
                               <div>
                                 <p className="text-gray-500 mb-1">Goals:</p>
                                 <ul className="list-disc list-inside space-y-1">
-                                  {persona.goals.map((goal, i) => (
-                                    <li key={i} className="text-gray-300">{goal}</li>
-                                  ))}
+                                  {persona.goals && Array.isArray(persona.goals) ? 
+                                    persona.goals.map((goal, i) => (
+                                      <li key={i} className="text-gray-300">{goal}</li>
+                                    )) : 
+                                    <li className="text-gray-300">No goals specified</li>
+                                  }
                                 </ul>
                               </div>
                             </div>
