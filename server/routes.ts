@@ -2826,7 +2826,21 @@ Registration includes materials, follow-up support, and implementation guide.`;
 
       try {
         // Generate persona with OpenAI
-        const generatedPersona = await generatePersona(description);
+        // Call the OpenAI API endpoint for persona generation
+        const response = await fetch(`http://localhost:${process.env.PORT || 5000}/api/openai/generate-persona`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': req.headers.cookie // Forward authentication cookie
+          },
+          body: JSON.stringify({ description })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`OpenAI API returned status ${response.status}`);
+        }
+        
+        const generatedPersona = await response.json();
         
         // Save the generated persona
         const persona = await storage.createPersona({
