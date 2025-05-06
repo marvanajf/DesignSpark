@@ -1955,6 +1955,11 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                         className={`w-[180px] bg-zinc-800 border border-zinc-700 rounded-md p-2 absolute left-1/2 -translate-x-1/2 ${
                                           isEven ? 'top-[60px]' : 'bottom-[60px]'
                                         }`}
+                                        style={{ 
+                                          minWidth: '180px',
+                                          maxWidth: '180px',
+                                          zIndex: 20
+                                        }}
                                       >
                                         <div className="flex items-center gap-1 mb-1">
                                           {icon}

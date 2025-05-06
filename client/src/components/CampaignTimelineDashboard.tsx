@@ -222,7 +222,7 @@ export function CampaignTimelineDashboard() {
                   
                   {/* Campaign Waterfall Chart */}
                   <div className="campaign-waterfall mt-4 overflow-x-auto">
-                    <div className="relative min-h-[150px] pb-6">
+                    <div className="relative min-h-[150px] pb-6" style={{ minWidth: "800px", width: "100%" }}>
                       {/* Timeline base */}
                       <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
                       
@@ -257,6 +257,11 @@ export function CampaignTimelineDashboard() {
                               className={`w-[180px] bg-zinc-800 border border-zinc-700 rounded-md p-2 absolute left-1/2 -translate-x-1/2 ${
                                 isEven ? 'top-[60px]' : 'bottom-[60px]'
                               }`}
+                              style={{ 
+                                minWidth: '180px',
+                                maxWidth: '180px',
+                                zIndex: 20
+                              }}
                             >
                               <div className="flex items-center gap-1 mb-1">
                                 {icon}
