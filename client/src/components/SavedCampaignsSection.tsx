@@ -20,7 +20,8 @@ import {
   Clock,
   Users,
   ArrowRight,
-  Trash2
+  Trash2,
+  Plus
 } from 'lucide-react';
 
 // Content Type Icon Mapping
@@ -352,16 +353,45 @@ export default function SavedCampaignsSection() {
 
       {/* Campaign Details Modal */}
       <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-black border border-gray-800">
-          <DialogHeader>
-            <DialogTitle className="text-xl text-white">
-              {selectedCampaign?.name}
-            </DialogTitle>
-            {selectedCampaign?.description && (
-              <DialogDescription className="mt-2 text-gray-400">
-                {selectedCampaign.description}
-              </DialogDescription>
-            )}
+        <DialogContent 
+          className="max-w-4xl max-h-[80vh] overflow-y-auto bg-black border border-gray-800 shadow-[0_0_20px_rgba(116,209,234,0.1)]"
+          aria-describedby="campaign-details-description"
+        >
+          <div id="campaign-details-description" className="sr-only">
+            Campaign details showing all content, timeline, audience and tone profile
+          </div>
+          {/* Branding watermark */}
+          <div className="absolute top-3 right-3 opacity-10 pointer-events-none">
+            <div className="flex items-center">
+              <Rocket className="h-6 w-6 text-[#74d1ea]" />
+              <span className="text-xs font-bold ml-1 text-[#74d1ea]">Tovably Campaign Factory</span>
+            </div>
+          </div>
+          <DialogHeader className="border-b border-gray-800 pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <DialogTitle className="text-xl text-white flex items-center group">
+                  <input 
+                    className="bg-transparent border-none outline-none focus:ring-0 text-xl font-semibold w-full group-hover:text-[#74d1ea] transition-colors" 
+                    value={selectedCampaign?.name || ''}
+                    onChange={(e) => {
+                      if (selectedCampaign) {
+                        setSelectedCampaign({
+                          ...selectedCampaign,
+                          name: e.target.value
+                        });
+                      }
+                    }}
+                  />
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs text-gray-400">(click to edit)</span>
+                  </span>
+                </DialogTitle>
+                <p className="text-gray-400 text-sm mt-1">
+                  Created {selectedCampaign && getTimeAgo(selectedCampaign.created_at)}
+                </p>
+              </div>
+            </div>
           </DialogHeader>
           
           {selectedCampaign && (
@@ -400,44 +430,70 @@ export default function SavedCampaignsSection() {
               
               {/* Target Audience */}
               <div>
-                <h3 className="text-white font-medium mb-2">Target Audience</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedCampaign.target_audience.map((audience, index) => (
-                    <Badge 
-                      key={index}
-                      variant="outline"
-                      className="bg-[#5eead4]/10 text-[#5eead4] border-[#5eead4]/30"
-                    >
-                      {audience}
-                    </Badge>
-                  ))}
+                <h3 className="text-white font-medium mb-4 flex items-center">
+                  <span className="inline-block w-2 h-2 rounded-full bg-[#5eead4] mr-2"></span>
+                  Target Audience
+                </h3>
+                <div className="p-5 border border-gray-800 rounded-lg bg-zinc-900/30">
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCampaign.target_audience.map((audience, index) => (
+                      <Badge 
+                        key={index}
+                        variant="outline"
+                        className="bg-black/40 text-[#5eead4] border-[#5eead4]/30 text-xs px-3 py-1"
+                      >
+                        <Users className="h-3 w-3 mr-1.5" />
+                        {audience}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </div>
               
               {/* Tone Profile */}
               <div>
-                <h3 className="text-white font-medium mb-2">Tone Profile</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                  {Object.entries(getToneProfile()).map(([key, value]) => (
-                    <div key={key} className="p-3 border border-gray-800 rounded-lg bg-zinc-900/30">
-                      <h4 className="text-xs text-gray-400 mb-1 capitalize">{key}</h4>
-                      <p className="text-white text-sm">{value as number}%</p>
-                    </div>
-                  ))}
+                <h3 className="text-white font-medium mb-4 flex items-center">
+                  <span className="inline-block w-2 h-2 rounded-full bg-[#74d1ea] mr-2"></span>
+                  Tone Profile
+                </h3>
+                <div className="p-5 border border-gray-800 rounded-lg bg-zinc-900/30">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    {Object.entries(getToneProfile()).map(([key, value]) => (
+                      <div 
+                        key={key} 
+                        className="p-4 border border-gray-800 rounded-lg bg-black/40 hover:border-[#74d1ea]/30 hover:shadow-[0_0_10px_rgba(116,209,234,0.05)] transition-all duration-300"
+                      >
+                        <h4 className="text-xs text-gray-400 mb-2 capitalize flex items-center">
+                          <span className="w-1 h-1 rounded-full bg-[#74d1ea] mr-1.5"></span>
+                          {key}
+                        </h4>
+                        <p className="text-white text-base font-medium">{value as number}%</p>
+                        <div className="mt-2 w-full bg-gray-800 rounded-full h-1.5">
+                          <div 
+                            className="bg-gradient-to-r from-[#74d1ea]/70 to-[#74d1ea] h-1.5 rounded-full" 
+                            style={{ width: `${value as number}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               
               {/* Content Overview */}
               <div>
-                <h3 className="text-white font-medium mb-3">Generated Content</h3>
+                <h3 className="text-white font-medium mb-4 flex items-center">
+                  <span className="inline-block w-2 h-2 rounded-full bg-[#5eead4] mr-2"></span>
+                  Generated Content
+                </h3>
                 
                 <Tabs defaultValue="all" value={activeContentType} onValueChange={setActiveContentType}>
-                  <TabsList className="bg-zinc-900/50 mb-4">
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="email">Email</TabsTrigger>
-                    <TabsTrigger value="social">Social</TabsTrigger>
-                    <TabsTrigger value="blog">Blog</TabsTrigger>
-                    <TabsTrigger value="webinar">Webinar</TabsTrigger>
+                  <TabsList className="bg-zinc-900/50 mb-4 p-1 border border-gray-800">
+                    <TabsTrigger value="all" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">All</TabsTrigger>
+                    <TabsTrigger value="email" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Email</TabsTrigger>
+                    <TabsTrigger value="social" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Social</TabsTrigger>
+                    <TabsTrigger value="blog" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Blog</TabsTrigger>
+                    <TabsTrigger value="webinar" className="data-[state=active]:bg-[#0e131f] data-[state=active]:text-[#5eead4]">Webinar</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value={activeContentType} className="mt-0">
@@ -504,24 +560,44 @@ export default function SavedCampaignsSection() {
             </div>
           )}
           
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDetailsModalOpen(false)}
-            >
-              Close
-            </Button>
-            {selectedCampaign && (
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  handleDeleteCampaign(selectedCampaign.id);
-                }}
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete Campaign
-              </Button>
-            )}
+          <DialogFooter className="border-t border-gray-800 pt-4 mt-2">
+            <div className="flex w-full justify-between items-center">
+              <div>
+                {selectedCampaign && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-red-800/40 text-red-400 hover:bg-red-950/20 hover:text-red-300"
+                    onClick={() => {
+                      handleDeleteCampaign(selectedCampaign.id);
+                      setIsDetailsModalOpen(false);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete Campaign
+                  </Button>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-gray-700 hover:bg-gray-900"
+                  onClick={() => setIsDetailsModalOpen(false)}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black shadow-[0_0_10px_rgba(116,209,234,0.2)]"
+                  onClick={() => navigate('/campaign-factory')}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Campaign  
+                </Button>
+              </div>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
