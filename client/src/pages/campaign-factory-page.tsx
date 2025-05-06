@@ -445,13 +445,13 @@ export default function CampaignFactoryPage() {
 
 Dear [${audienceRole}],
 
-I recently came across your organization's initiatives regarding ${campaignPrompt} and was particularly impressed with your focus on innovation in this area.
+I recently came across your organization's initiatives and was particularly impressed with your focus on innovation in the ${industry} sector.
 
-Many of our clients in the ${industry} sector have been exploring new ways to implement ${benefit} ${product} solutions for the ${region} region. The results they've achieved include:
+Many of our clients in similar positions have been exploring new ways to implement ${benefit} ${product} solutions for the ${region} region. The results they've achieved include:
 
 ${personaBenefits.join('\n')}
 
-Based on your market position and the specific challenges of ${campaignPrompt}, I believe we could offer valuable insights related to your current priorities.
+Based on your market position and the specific challenges facing companies in the ${industry} sector, I believe we could offer valuable insights related to your current priorities.
 
 Would you have 20 minutes next week to discuss how our ${benefit} approach has proven successful for similar organizations in the ${region} region?
 
@@ -470,7 +470,7 @@ Best regards,
 
 Dear [${audienceRole}],
 
-I wanted to follow up on my previous message about ${campaignPrompt} opportunities for your organization.
+I wanted to follow up on my previous message regarding innovative solutions for your organization.
 
 Recent ${industry} research highlights that organizations in the ${region} region taking a proactive approach to ${benefit} ${product} solutions are seeing significant results - 27% improvement in overall performance and 32% reduction in operational costs on average.
 
@@ -491,7 +491,7 @@ Looking forward to your response,
             type: "social" as const,
             title: `LinkedIn Thought Leadership for ${useCaseName}`,
             persona: audienceName,
-            content: adaptContentToTone(`"We reduced ${campaignPrompt} implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${region} region."
+            content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${region} region."
 
 This is what our clients in the ${industry} sector are achieving with our ${benefit} ${product} solutions.
 
@@ -499,12 +499,12 @@ Organizations in the ${region} region that consistently outperform their competi
 
 • Cross-functional collaboration with integrated platforms
 • Data-driven decision making with real-time analytics
-• Streamlined processes for ${campaignPrompt}
+• Streamlined processes for improved efficiency
 • Robust ${benefit} frameworks tailored to ${industry} needs
 
 What strategies is your organization implementing to stay ahead of ${industry} changes in the ${region} region?
 
-[Learn more about our ${campaignPrompt} approach - Link]
+[Learn more about our proven approach - Link]
 
 #${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business #LinkedIn`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],

@@ -67,7 +67,7 @@ export function registerOpenAIRoutes(app: Express) {
           { role: "user", content: prompt }
         ],
         max_tokens: Math.min(maxLength, 4000), // Ensure we don't exceed API limits
-        temperature: 0.8, // Slightly higher creativity
+        temperature: 0.7, // Higher creativity for more intelligent content
       });
       
       // Extract the generated content
@@ -251,10 +251,12 @@ function buildSystemPrompt(
 Your primary audience is: ${persona}
 
 Your writing style should be primarily ${primaryTone} and secondarily ${secondaryTone}.
-Ensure the content is highly relevant, specific, and tailored to the exact campaign brief.
+Ensure the content is highly relevant, specific, and tailored to your audience's needs, not your marketing objectives.
+Focus on WHAT THE READER CARES ABOUT - never mention your campaign objectives or brief in the content itself.
 Avoid generic statements and focus on specifics from the prompt.
 DO NOT mention Microsoft, Microsoft 365, or any other product/brand unless specifically mentioned in the prompt.
 If regions are mentioned in the prompt, be sure to reference them in your content.
+Extract key details from the prompt but NEVER mention the campaign objectives directly in the content.
 `;
 
   // Content-specific instructions
