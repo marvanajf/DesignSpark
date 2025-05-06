@@ -470,3 +470,185 @@ The Tovably Team
 This is an automated message, please do not reply to this email.
   `;
 }
+
+// Email template for when users upgrade to a paid plan
+export function createUpgradeThankYouEmailHtml(name: string, planName: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>Thank You for Upgrading to Tovably ${planName}</title>
+  <!-- Import Open Sans font -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background-color: #1a1a27;
+      padding: 30px;
+      text-align: center;
+    }
+    .logo-text {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      color: #ffffff;
+      text-transform: lowercase;
+      letter-spacing: 1px;
+    }
+    .content {
+      padding: 30px;
+      background-color: #ffffff;
+    }
+    .footer {
+      background-color: #f5f5f7;
+      padding: 15px;
+      text-align: center;
+      font-size: 12px;
+      color: #666666;
+    }
+    .button {
+      display: inline-block;
+      background-color: #74d1ea;
+      color: #ffffff !important;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      margin-top: 20px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .button:hover {
+      background-color: #5ec7e2;
+    }
+    h1 {
+      color: #1a1a27;
+      font-weight: 700;
+      margin-bottom: 20px;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .accent {
+      color: #74d1ea;
+    }
+    p {
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+    .signature {
+      margin-top: 30px;
+    }
+    .badge {
+      background-color: #f0f9fc;
+      border-radius: 30px;
+      padding: 5px 12px;
+      color: #1a1a27;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .plan-details {
+      margin: 25px 0;
+      padding: 20px;
+      background-color: #f8f8f8;
+      border-radius: 6px;
+      border-left: 4px solid #74d1ea;
+    }
+    .plan-title {
+      font-weight: 700;
+      font-size: 18px;
+      color: #1a1a27;
+      margin-bottom: 10px;
+    }
+    .feature-list {
+      margin: 15px 0;
+      padding-left: 20px;
+    }
+    .feature-list li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Preheader text that will be shown in email previews -->
+  <div style="display: none; max-height: 0px; overflow: hidden;">
+    Thank you for upgrading to Tovably ${planName}! Your premium features are now active.
+  </div>
+  
+  <div class="container">
+    <div class="header">
+      <!-- Text-based logo instead of image -->
+      <div class="logo-text">tovably</div>
+    </div>
+    <div class="content">
+      <div class="badge">Subscription Activated</div>
+      <h1>Thank you for upgrading, <span class="accent">${name}</span>!</h1>
+      <p>Your Tovably ${planName} subscription has been successfully activated. We're excited to have you experience the premium features that will enhance your marketing and content creation process.</p>
+      
+      <div class="plan-details">
+        <div class="plan-title">Your ${planName} Plan Includes:</div>
+        <ul class="feature-list">
+          <li>Full access to Campaign Factory for complete marketing campaigns</li>
+          <li>Advanced tone analysis capabilities for deeper content insights</li>
+          <li>Increased usage limits across all platform features</li>
+          <li>Priority support from our team</li>
+        </ul>
+      </div>
+      
+      <p>We encourage you to explore all the premium features now available to you. If you need any assistance or have questions about your subscription, our support team is here to help.</p>
+      
+      <a href="https://tovably.com/dashboard" class="button">Go to Dashboard</a>
+      <div class="signature">
+        <p>Thank you for your support,<br><strong>The Tovably Team</strong></p>
+      </div>
+    </div>
+    <div class="footer">
+      <p>© ${new Date().getFullYear()} Tovably. All rights reserved.</p>
+      <p>This is an automated message, please do not reply to this email.</p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+}
+
+export function createUpgradeThankYouEmailText(name: string, planName: string): string {
+  return `
+Thank you for upgrading, ${name}!
+
+Your Tovably ${planName} subscription has been successfully activated. We're excited to have you experience the premium features that will enhance your marketing and content creation process.
+
+Your ${planName} Plan Includes:
+* Full access to Campaign Factory for complete marketing campaigns
+* Advanced tone analysis capabilities for deeper content insights
+* Increased usage limits across all platform features
+* Priority support from our team
+
+We encourage you to explore all the premium features now available to you. If you need any assistance or have questions about your subscription, our support team is here to help.
+
+Go to Dashboard: https://tovably.com/dashboard
+
+Thank you for your support,
+The Tovably Team
+
+© ${new Date().getFullYear()} Tovably. All rights reserved.
+This is an automated message, please do not reply to this email.
+  `;
+}
