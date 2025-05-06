@@ -1952,7 +1952,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                       
                       <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800">
                         <div className="flex flex-col h-full">
-                          <h3 className="text-gray-400 text-sm font-medium mb-1">Campaign Timeline</h3>
+                          <h3 className="text-gray-400 text-sm font-medium mb-3">Campaign Timeline</h3>
                           <div className="flex-1">
                             <div className="flex items-center justify-between text-sm text-white mt-2 mb-4">
                               <div>
@@ -1963,19 +1963,10 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                               </div>
                             </div>
                             
-                            {/* Campaign Waterfall Chart */}
-                            <div className="campaign-waterfall mt-4 overflow-x-auto pb-2" style={{ overflowY: "hidden", width: "100%" }}>
-                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "1200px", width: "100%", paddingRight: "100px", paddingLeft: "100px" }}>
-                                {/* Timeline base */}
-                                <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
-                                
-                                {/* Timeline nodes with content preview */}
+                            {/* Campaign Content Timeline - Capsule List View */}
+                            <div className="mt-4 mb-2">
+                              <div className="grid gap-3">
                                 {campaign.contents.map((content, i) => {
-                                  // Calculate positions based on delivery date
-                                  // For demo, we'll spread them evenly with a margin on both ends
-                                  const positionPercent = 5 + ((i / (campaign.contents.length - 1 || 1)) * 90);
-                                  const isEven = i % 2 === 0;
-                                  
                                   // Get icon based on content type
                                   let icon;
                                   switch(content.type) {
@@ -1998,45 +1989,34 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                   return (
                                     <div 
                                       key={i}
-                                      className="absolute transform -translate-x-1/2"
-                                      style={{ left: `${positionPercent}%`, top: isEven ? '5px' : 'auto', bottom: isEven ? 'auto' : '5px' }}
+                                      className="flex items-center gap-3 p-3 bg-zinc-800 border border-zinc-700 rounded-lg group hover:bg-zinc-800/80 transition-colors"
                                     >
-                                      {/* Vertical line to node */}
-                                      <div 
-                                        className={`w-[2px] bg-[#5eead4]/50 absolute left-1/2 -translate-x-1/2 ${isEven ? 'top-0 h-[50px]' : 'bottom-0 h-[50px]'}`}
-                                      ></div>
-                                      
-                                      {/* Node */}
-                                      <div 
-                                        className="h-4 w-4 rounded-full bg-[#5eead4] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10"
-                                      ></div>
-                                      
-                                      {/* Content card */}
-                                      <div 
-                                        className={`w-[200px] bg-zinc-800 border border-zinc-700 rounded-md p-3 absolute left-1/2 -translate-x-1/2 ${
-                                          isEven ? 'top-[60px]' : 'bottom-[60px]'
-                                        }`}
-                                        style={{ 
-                                          minWidth: '200px',
-                                          maxWidth: '200px',
-                                          zIndex: 20,
-                                          margin: '0 10px',
-                                          wordBreak: 'break-word'
-                                        }}
-                                      >
-                                        <div className="flex items-center gap-1 mb-1">
-                                          {icon}
-                                          <span className="text-xs font-medium capitalize text-white">{content.type}</span>
-                                        </div>
-                                        <div className="text-xs text-gray-400 truncate">
+                                      <div className="h-8 w-8 rounded-full bg-[#0e131f] border border-[#5eead4]/30 flex items-center justify-center">
+                                        {icon}
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <h4 className="font-medium text-white text-sm truncate">
                                           {content.title || (content.type === 'email' ? 'Email Campaign' : 
                                             content.type === 'social' ? 'LinkedIn Post' : 
                                             content.type === 'blog' ? 'Blog Article' : 'Webinar')}
-                                        </div>
-                                        <div className="text-xs text-[#5eead4] mt-1">
-                                          {content.deliveryDate || 'Delivery TBD'}
+                                        </h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <Badge variant="outline" className="bg-zinc-900 text-[#5eead4] border-[#5eead4]/30 text-xs">
+                                            {content.type}
+                                          </Badge>
+                                          {content.persona && (
+                                            <span className="text-xs text-gray-400">
+                                              {content.persona}
+                                            </span>
+                                          )}
                                         </div>
                                       </div>
+                                      {content.deliveryDate && (
+                                        <div className="text-xs text-gray-400 flex items-center">
+                                          <Clock className="h-3 w-3 mr-1" />
+                                          {content.deliveryDate}
+                                        </div>
+                                      )}
                                     </div>
                                   );
                                 })}
