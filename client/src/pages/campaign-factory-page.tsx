@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import "../styles/campaign-content.css";
+import "../styles/campaign-timeline.css";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1962,8 +1963,8 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                             </div>
                             
                             {/* Campaign Waterfall Chart */}
-                            <div className="campaign-waterfall mt-4 overflow-x-auto">
-                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "800px", width: "100%" }}>
+                            <div className="campaign-waterfall mt-4 overflow-x-auto pb-2" style={{ overflowY: "hidden" }}>
+                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "800px", width: "100%", paddingRight: "20px" }}>
                                 {/* Timeline base */}
                                 <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
                                 
@@ -2274,6 +2275,24 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                 </Card>
               </div>
             )}
+            
+            {/* Saved Campaigns Section */}
+            <div className="mt-16 border-t border-zinc-800 pt-12">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Your Saved Campaigns</h2>
+                  <p className="text-gray-400">View and manage your AI-generated marketing campaigns</p>
+                </div>
+                <Button
+                  onClick={() => navigate('/campaign-factory/saved')}
+                  variant="outline"
+                  className="text-[#5eead4] border-[#5eead4]/30 hover:bg-[#5eead4]/10"
+                >
+                  View All Campaigns
+                </Button>
+              </div>
+              <SavedCampaignsSection />
+            </div>
           </div>
         </div>
       </div>
