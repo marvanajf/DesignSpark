@@ -57,9 +57,9 @@ function cleanMarkdownFormatting(content: string): string {
       .replace(/^\s*[-*+]\s+(.+)$/gm, '<li>$1</li>')
       .replace(/^(\d+)\.\s+(.+)$/gm, '<li>$1. $2</li>')
       
-      // Wrap lists in ul/ol tags
-      .replace(/(<li>(?:(?!<li>).)*?<\/li>)+/gs, '<ul>$&</ul>')
-      .replace(/(<li>\d+\. (?:(?!<li>).)*?<\/li>)+/gs, '<ol>$&</ol>')
+      // Wrap lists in ul/ol tags - simplified for compatibility
+      .replace(/<li>[^<]*<\/li>/g, '<ul>$&</ul>')
+      .replace(/<li>\d+\. [^<]*<\/li>/g, '<ol>$&</ol>')
       
       // Paragraphs (multiple newlines to paragraph breaks)
       .replace(/\n\n+/g, '</p><p>')
@@ -224,58 +224,74 @@ function fallbackContent(inputs: CampaignInputs): string {
     audienceRole 
   } = inputs;
   
+  let content = '';
+  
   switch (contentType) {
     case 'email':
-      return `Subject: Innovative Solutions for ${industry} in the ${region} Region
+      content = `<div class="email-subject">Subject: Innovative Solutions for ${industry} in the ${region} Region</div>
 
-Dear [${audienceRole}],
+<p>Dear [${audienceRole}],</p>
 
-I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions and how they can benefit organizations in the ${industry} sector.
+<p>I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions and how they can benefit organizations in the ${industry} sector.</p>
 
-Our approach has been designed specifically to address the challenges faced by businesses in the ${region} region. I'd love to schedule a brief call to discuss how we can help.
+<p>Our approach has been designed specifically to address the challenges faced by businesses in the ${region} region. I'd love to schedule a brief call to discuss how we can help.</p>
 
-Best regards,
-[Your Name]`;
+<p>Best regards,<br/>
+<em>[Your Name]</em></p>`;
+      break;
+      
     case 'social':
-      return `"We've helped ${industry} organizations in the ${region} region achieve remarkable results with our ${benefit} approach."
+      content = `<p><strong>"We've helped ${industry} organizations in the ${region} region achieve remarkable results with our ${benefit} approach."</strong></p>
 
-Our ${product} solutions deliver measurable improvements for ${audienceRole}s facing today's complex challenges.
+<p>Our ${product} solutions deliver measurable improvements for ${audienceRole}s facing today's complex challenges.</p>
 
-Learn how our proven methodology can transform your operations: [Link]
+<p>Learn how our proven methodology can transform your operations: <a href="#">[Link]</a></p>
 
-#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business`;
+<p>#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business</p>`;
+      break;
+      
     case 'blog':
-      return `# Strategic Innovation for ${industry}: ${benefit} Solutions
+      content = `<h1>Strategic Innovation for ${industry}: ${benefit} Solutions</h1>
 
-In today's competitive landscape, ${industry} organizations in the ${region} region need innovative approaches to stay ahead. This article explores how our ${product} solutions help businesses achieve their strategic goals.
+<p>In today's competitive landscape, ${industry} organizations in the ${region} region need innovative approaches to stay ahead. This article explores how our ${product} solutions help businesses achieve their strategic goals.</p>
 
-## Key Benefits for ${audienceRole}s
+<h2>Key Benefits for ${audienceRole}s</h2>
 
-1. Improved operational efficiency
-2. Enhanced competitive positioning
-3. Better customer experiences
-4. Strategic advantage in the ${industry} marketplace
+<ol>
+  <li>Improved operational efficiency</li>
+  <li>Enhanced competitive positioning</li>
+  <li>Better customer experiences</li>
+  <li>Strategic advantage in the ${industry} marketplace</li>
+</ol>
 
-Contact us to learn more about our proven approach for the ${region} region.`;
+<p>Contact us to learn more about our proven approach for the ${region} region.</p>`;
+      break;
+      
     case 'webinar':
-      return `Title: "Strategic Innovation Framework for ${industry} Leaders"
+      content = `<h1>Strategic Innovation Framework for ${industry} Leaders</h1>
 
-Duration: 45 minutes + 15-minute Q&A
+<p><strong>Duration:</strong> 45 minutes + 15-minute Q&A</p>
 
-Target Audience: ${audienceRole}s and Decision Makers in the ${region} region
+<p><strong>Target Audience:</strong> ${audienceRole}s and Decision Makers in the ${region} region</p>
 
-Description:
-Join our industry specialists for a practical, hands-on webinar focused on implementing effective ${benefit} strategies using our ${product} solutions. This session will provide actionable frameworks specifically designed for the ${industry} sector.
+<h2>Description:</h2>
+<p>Join our industry specialists for a practical, hands-on webinar focused on implementing effective ${benefit} strategies using our ${product} solutions. This session will provide actionable frameworks specifically designed for the ${industry} sector.</p>
 
-Key Takeaways:
-- Practical implementation roadmap for your organization
-- ROI calculation methodology
-- Risk mitigation strategies
-- Resource optimization techniques
+<h2>Key Takeaways:</h2>
+<ul>
+  <li>Practical implementation roadmap for your organization</li>
+  <li>ROI calculation methodology</li>
+  <li>Risk mitigation strategies</li>
+  <li>Resource optimization techniques</li>
+</ul>
 
-Presenter:
-[Industry Expert Name], with extensive experience helping organizations in the ${region} region transform their approach to ${industry}-specific challenges.`;
+<p><strong>Presenter:</strong><br/>
+<em>[Industry Expert Name]</em>, with extensive experience helping organizations in the ${region} region transform their approach to ${industry}-specific challenges.</p>`;
+      break;
+      
     default:
-      return `Content about ${product} solutions for ${audienceRole}s in the ${industry} sector (${region} region).`;
+      content = `<p>Content about ${product} solutions for ${audienceRole}s in the ${industry} sector (${region} region).</p>`;
   }
+  
+  return content;
 }

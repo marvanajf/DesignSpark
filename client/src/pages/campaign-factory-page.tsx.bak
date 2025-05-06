@@ -82,11 +82,6 @@ export default function CampaignFactoryPage() {
     return date.toISOString().split('T')[0];
   };
   
-  // Function to safely display HTML content
-  const createMarkup = (html: string) => {
-    return { __html: html };
-  };
-  
   // Helper functions to extract information from campaign prompt
   const extractIndustry = (prompt: string): string | null => {
     const industryTerms = [
