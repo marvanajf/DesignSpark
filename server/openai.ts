@@ -258,70 +258,71 @@ Focus on making the value proposition and audience benefits very clear.`
       // Extract the generated content
       const generatedContent = completion.choices[0].message.content || '';
       
-      // Apply an aggressive cleaning to remove ALL markdown and unwanted formatting
+      // Apply an extremely aggressive cleaning to remove ALL markdown and unwanted formatting
       let cleanedContent = generatedContent;
       
-      // First, remove anything that looks like a header or section marker
-      cleanedContent = cleanedContent
-        // Remove any line starting with hashtags
-        .replace(/^#+\s*(.*)/gm, '$1')
-        // Remove any lines starting with #number format
-        .replace(/^#\s*\d+[\.:]?\s*(.*)/gm, '$1')
-        // Remove hashtag and number combinations
-        .replace(/^#+\s*\d+[\.:]?\s*(.*)/gm, '$1');
-      
-      // Special processing for numbered lists in LinkedIn content (1. 2. 3.)
+      // Special case for LinkedIn/social content - apply extra aggressive cleaning
       if (contentType === 'social' || contentType === 'linkedin') {
-        // For LinkedIn content, convert numbered items to cleaner format without numbers
+        // COMPLETELY strip all special markdown characters first
         cleanedContent = cleanedContent
-          // Convert patterns like "1. **Item**" to "Item"
-          .replace(/^\d+\.\s+\*\*([^*]+)\*\*/gm, '$1')
-          // Convert patterns like "1. Item" to "Item"
-          .replace(/^\d+\.\s+(.+)/gm, '$1')
-          // Convert patterns with asterisks and numbers
-          .replace(/^\s*\d+\.\s+\*\*([^*]+)\*\*/gm, '$1');
-      }
-      
-      // Remove any asterisks used for emphasis/bold
-      cleanedContent = cleanedContent
-        .replace(/\*\*([^*]+)\*\*/g, '$1')        // Bold (**word**)
-        .replace(/\*([^*]+)\*/g, '$1')            // Italic (*word*)
-        .replace(/^\*\s+(.*)/gm, '• $1')          // List items with asterisk
-        .replace(/^\s*\*\s+(.*)/gm, '• $1');      // List items with space + asterisk
+          .replace(/#/g, '')          // Remove all # symbols completely
+          .replace(/\*/g, '')         // Remove all * symbols completely
+          .replace(/`/g, '')          // Remove all backticks completely
+          .replace(/~/g, '')          // Remove all tildes completely
+          .replace(/\[|\]/g, '')      // Remove all square brackets completely
+          .replace(/\(|\)/g, '')      // Remove all parentheses completely
+          .replace(/^\d+\.\s+/gm, '') // Remove numbered lists completely
+          .replace(/^-\s+/gm, '')     // Remove dash lists completely
+          .replace(/^>\s+/gm, '')     // Remove blockquotes completely
+          .replace(/^=+$/gm, '')      // Remove equals line separators
+          .replace(/^-+$/gm, '')      // Remove dash line separators
+          .replace(/_{2,}/g, '')      // Remove underscore formatting
+          .replace(/\|/g, ' | ');     // Fix table formatting
+      } else {
+        // For non-LinkedIn content, use standard cleaning but still be thorough
+        
+        // First, remove anything that looks like a header or section marker
+        cleanedContent = cleanedContent
+          .replace(/^#+\s*(.*)/gm, '$1')           // Remove headers with #
+          .replace(/^#\s*\d+[\.:]?\s*(.*)/gm, '$1') // Remove #number format
+          .replace(/^#+\s*\d+[\.:]?\s*(.*)/gm, '$1'); // Remove hashtag and number combinations
+        
+        // Remove any asterisks used for emphasis/bold
+        cleanedContent = cleanedContent
+          .replace(/\*\*([^*]+)\*\*/g, '$1')        // Bold (**word**)
+          .replace(/\*([^*]+)\*/g, '$1')            // Italic (*word*)
+          .replace(/^\*\s+(.*)/gm, '• $1')          // List items with asterisk
+          .replace(/^\s*\*\s+(.*)/gm, '• $1');      // List items with space + asterisk
+            
+        // Clean up any remaining markdown elements
+        cleanedContent = cleanedContent
+          .replace(/^-\s+(.+)/gm, '• $1')           // List items with dash
+          .replace(/^\s*-\s+(.+)/gm, '• $1')        // List items with space + dash
+          .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Links [text](url)
+          .replace(/^>\s+(.*)/gm, '$1')             // Blockquotes
+          .replace(/`([^`]+)`/g, '$1');             // Inline code
           
-      // Clean up any remaining markdown elements
-      cleanedContent = cleanedContent
-        .replace(/^-\s+(.+)/gm, '• $1')           // List items with dash
-        .replace(/^\s*-\s+(.+)/gm, '• $1')        // List items with space + dash
-        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Links [text](url)
-        .replace(/^>\s+(.*)/gm, '$1')             // Blockquotes
-        .replace(/`([^`]+)`/g, '$1');             // Inline code
-        
-      // Remove any standalone hashtags throughout the content
-      cleanedContent = cleanedContent
-        // Remove hashtags at the end of text
-        .replace(/\s+(#\w+\s*)+$/g, '')
-        // Remove any hashtags in the middle of text
-        .replace(/#(\w+)/g, '$1')
-        // Specifically remove any hashtag at the beginning of a line
-        .replace(/^#(\w+)/gm, '$1')
-        // Remove the hash symbol when it appears as the first character of any line
-        .replace(/^#/gm, '')
-        // Remove any remaining # symbols anywhere in the text
-        .replace(/#/g, '');
-        
-      // Final removal of any markdown or formatting characters that might have been missed
-      cleanedContent = cleanedContent
-        .replace(/^>\s+/gm, '')     // Any remaining blockquote markers
-        .replace(/^#+\s*/gm, '')    // Any remaining header markers
-        .replace(/\*+/g, '')        // Any remaining asterisks
-        .replace(/`+/g, '')         // Any remaining backticks
-        .replace(/~+/g, '')         // Any remaining tildes
-        .replace(/^\d+\.\s+/gm, '') // Numbered list items at start of line
-        .replace(/=+/g, '')         // Equal signs (sometimes used for headers)
-        .replace(/-+$/gm, '')       // Dash lines (sometimes used for headers)
-        .replace(/\d+\.\s+\*\*([^*]+)\*\*/g, '$1') // Numbered items with bold text
-        .replace(/\d+\.\s+([^*]+)/g, '$1'); // Any remaining numbered items
+        // Remove any standalone hashtags throughout the content
+        cleanedContent = cleanedContent
+          .replace(/\s+(#\w+\s*)+$/g, '')           // Remove hashtags at the end of text
+          .replace(/#(\w+)/g, '$1')                 // Remove any hashtags in the middle of text
+          .replace(/^#(\w+)/gm, '$1')               // Remove any hashtag at the beginning of a line
+          .replace(/^#/gm, '')                      // Remove the hash symbol at the start of any line
+          .replace(/#/g, '');                       // Remove any remaining # symbols
+          
+        // Final removal of any markdown or formatting characters that might have been missed
+        cleanedContent = cleanedContent
+          .replace(/^>\s+/gm, '')                   // Any remaining blockquote markers
+          .replace(/^#+\s*/gm, '')                  // Any remaining header markers
+          .replace(/\*+/g, '')                      // Any remaining asterisks
+          .replace(/`+/g, '')                       // Any remaining backticks
+          .replace(/~+/g, '')                       // Any remaining tildes
+          .replace(/^\d+\.\s+/gm, '')               // Numbered list items at start of line
+          .replace(/=+/g, '')                       // Equal signs (sometimes used for headers)
+          .replace(/-+$/gm, '')                     // Dash lines (sometimes used for headers)
+          .replace(/\d+\.\s+\*\*([^*]+)\*\*/g, '$1') // Numbered items with bold text
+          .replace(/\d+\.\s+([^*]+)/g, '$1');       // Any remaining numbered items
+      }
       
       // Return the cleaned plain text content
       res.json({ content: cleanedContent });
@@ -610,13 +611,19 @@ HUMAN WRITING PATTERN:
 CONTENT FORMAT REQUIREMENTS: 
 Create an engaging LinkedIn post appropriate for a company page that would resonate with ${ctx.persona}s in the ${ctx.industry} sector.
 
-THIS CONTENT WILL BE PUBLISHED AS-IS - YOU MUST FOLLOW THESE STRICT FORMATTING RULES:
-- Write in PURE plain text with NO special characters or formatting
-- DO NOT use hashtags (# symbol) anywhere in your response
-- DO NOT use markdown formatting like asterisks (*) or hash symbols (#)
-- DO NOT use numbered points (1., 2., etc.) - use simple paragraphs instead
-- NO bullets, asterisks, or any special formatting characters
-- AVOID ALL formatting that isn't plain text
+ABSOLUTELY CRITICAL FORMATTING REQUIREMENTS:
+I WILL REJECT ANY RESPONSE THAT CONTAINS # OR * CHARACTERS.
+DO NOT USE ANY # SYMBOLS OR * ASTERISKS IN YOUR RESPONSE FOR ANY REASON.
+DO NOT USE MARKDOWN FORMATTING UNDER ANY CIRCUMSTANCES.
+THE CONTENT MUST BE 100% PURE PLAIN TEXT ONLY.
+
+Format your content as follows:
+- Start with a clean headline (no # symbols)
+- Write in simple paragraphs with line breaks between them
+- DO NOT use bullet points with symbols
+- DO NOT use numbered lists (1., 2., etc.)
+- DO NOT use ANY formatting characters whatsoever
+- If you need to emphasize something, use quotes or ALL CAPS instead of asterisks
 
 Include:
 - A compelling opening that draws the reader in with a relevant statistic, question, or insight
@@ -654,6 +661,12 @@ Make sure the content would fit naturally in a LinkedIn feed and would encourage
 CONTENT FORMAT REQUIREMENTS:
 Create a structured outline for an informative blog post that would provide genuine value to ${ctx.persona}s in the ${ctx.industry} sector.
 
+IMPORTANT FORMATTING RULES:
+- DO NOT use hashtags (#) or asterisks (*) anywhere in your content
+- Format all headings as plain text without special characters
+- Use plain text without markdown formatting
+- Avoid using special characters for formatting - use ONLY plain text
+
 Include:
 1. An engaging title that incorporates ${ctx.benefit} and ${ctx.industry} (12 words maximum)
 2. A brief introduction (100-150 words) that establishes the specific industry context and primary challenge from the campaign brief
@@ -680,6 +693,12 @@ Ensure the content is educational first and promotional second - it should provi
       return `${basePrompt}
 CONTENT FORMAT REQUIREMENTS:
 Create a compelling webinar outline that would attract ${ctx.persona}s from the ${ctx.industry} sector specifically addressing the needs identified in the campaign brief.
+
+IMPORTANT FORMATTING RULES:
+- DO NOT use hashtags (#) or asterisks (*) anywhere in your content
+- Format all headings as plain text without special characters
+- Use plain text without markdown formatting
+- Avoid using special characters for formatting - use ONLY plain text
 
 Include:
 1. An engaging, benefit-focused webinar title (under 10 words) that directly addresses the campaign brief
