@@ -113,83 +113,68 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
       // Add specific instructions based on content type
       let responseFormat: { type: "json_object" } | undefined = undefined;
       
-      // If email, use JSON format for better structure
+      // Add format-specific instructions for each content type
       if (contentType === 'email') {
         messages.push({
           role: "system",
-          content: `Format your response as a structured JSON object with the following properties:
-          {
-            "type": "email",
-            "subject": "The subject line of the email",
-            "preview": "The preview text/first line that appears in email clients",
-            "body": "The full body text of the email without any markdown formatting like **bold** or headers"
-          }
+          content: `Format your email response with clean, plain text formatting:
+
+1. Start with "Subject:" followed by a clear, compelling subject line
+2. Next add "Preview:" with a brief preview of the email content 
+3. Finally add the full email body
           
-          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response. 
-          DO NOT add prefixes like "Subject Line:" to your content.
-          Always include the "type":"email" field.`
+DO NOT use any markdown formatting symbols like asterisks or hashtags.
+DO NOT include placeholder text like "[Name]" - simply write the email as if to the specific recipient.
+Ensure the content is well-structured with clear paragraphs and spacing.`
         });
-        responseFormat = { type: "json_object" };
       } 
-      // If social post, structure with content and hashtags
+      // If social post, give specific instructions
       else if (contentType === 'social') {
         messages.push({
           role: "system",
-          content: `Format your response as a structured JSON object with the following properties:
-          {
-            "type": "social",
-            "content": "The main body of the LinkedIn post without any markdown formatting",
-            "hashtags": ["array", "of", "hashtags"]
-          }
+          content: `Format your social media post response as plain text:
           
-          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response.
-          Always include the "type":"social" field.`
+1. First, write the main content of the post without any markdown or formatting
+2. At the end, add relevant hashtags (separated by spaces)
+          
+DO NOT use any markdown formatting or special text formatting.
+Make sure the post is appropriate for LinkedIn, not Twitter or other platforms.
+Use professional language and focus on business value.`
         });
-        responseFormat = { type: "json_object" };
       }
-      // If blog post, structure with title, intro and sections
+      // If blog post, format with clear headings and sections
       else if (contentType === 'blog') {
         messages.push({
           role: "system",
-          content: `Format your response as a structured JSON object with the following properties:
-          {
-            "type": "blog",
-            "title": "The blog title",
-            "intro": "The introductory paragraph without markdown formatting",
-            "sections": [
-              {
-                "heading": "First section heading",
-                "content": "First section content without markdown formatting"
-              },
-              {
-                "heading": "Second section heading",
-                "content": "Second section content without markdown formatting"
-              }
-            ]
-          }
+          content: `Format your blog post response as plain text with clear structure:
           
-          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response.
-          Always include the "type":"blog" field.`
+1. Start with a clear title on its own line
+2. Follow with an introductory paragraph
+3. Add sections with headings followed by paragraphs
+4. Use blank lines between sections for clarity
+          
+DO NOT use any markdown formatting (*, #, etc.).
+Instead, structure the blog with clear section titles on their own lines.
+Make sure each section has a clear heading followed by relevant content.`
         });
-        responseFormat = { type: "json_object" };
       }
-      // If webinar, structure with title, duration, audience and details
+      // If webinar, structure in a clear, readable format
       else if (contentType === 'webinar') {
         messages.push({
           role: "system",
-          content: `Format your response as a structured JSON object with the following properties:
-          {
-            "type": "webinar",
-            "title": "The webinar title",
-            "duration": "Duration (e.g., '45 minutes')",
-            "audience": "Target audience description",
-            "details": "Full webinar description including key takeaways without markdown formatting"
-          }
+          content: `Format your webinar description as clean, plain text:
           
-          VERY IMPORTANT: DO NOT include markdown formatting or use symbols like asterisks in your response.
-          Always include the "type":"webinar" field.`
+1. Start with a clear, compelling webinar title
+2. Include key webinar details:
+   - Duration
+   - Target audience
+   - Main description
+   - Key takeaways or learning outcomes
+          
+DO NOT use markdown formatting.
+Structure the content with clear sections and blank lines for readability.
+Focus on making the value proposition and audience benefits very clear.`
         });
-        responseFormat = { type: "json_object" };
       }
       
       // Generate content using OpenAI with enhanced context
@@ -200,40 +185,21 @@ Ensure each piece of content has its own distinct purpose and maintains a cohesi
         messages,
         max_tokens: Math.min(maxLength, 4000), // Ensure we don't exceed API limits
         temperature: 0.7, // Higher creativity for more intelligent content
-        ...(responseFormat ? { response_format: responseFormat } : {})
       });
       
       // Extract the generated content
-      const generatedContent = completion.choices[0].message.content;
+      const generatedContent = completion.choices[0].message.content || '';
       
-      // For structured content types, validate JSON format
-      if (responseFormat && responseFormat.type === "json_object") {
-        try {
-          // Parse to validate proper JSON format
-          const jsonContent = JSON.parse(generatedContent || "{}");
-          
-          // Add content type to the response
-          if (contentType === 'email' && !jsonContent.type) {
-            jsonContent.type = 'email';
-          } else if (contentType === 'social' && !jsonContent.type) {
-            jsonContent.type = 'social';
-          } else if (contentType === 'blog' && !jsonContent.type) {
-            jsonContent.type = 'blog';
-          } else if (contentType === 'webinar' && !jsonContent.type) {
-            jsonContent.type = 'webinar';
-          }
-          
-          // Return the validated and enhanced JSON content
-          res.json({ content: JSON.stringify(jsonContent) });
-        } catch (e) {
-          // If JSON parsing fails, return the raw content
-          console.warn("Failed to parse structured content:", e);
-          res.json({ content: generatedContent });
-        }
-      } else {
-        // Return the generated content as is (plain text)
-        res.json({ content: generatedContent });
-      }
+      // Remove any potential markdown formatting that might have slipped through
+      const cleanedContent = generatedContent
+        .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
+        .replace(/\*([^*]+)\*/g, '$1')     // Italic
+        .replace(/^#+ (.+)$/gm, '$1')      // Headers
+        .replace(/^- (.+)$/gm, '• $1')     // List items
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // Links
+            
+      // Return the plain text content
+      res.json({ content: cleanedContent });
     } catch (error: any) {
       console.error("Error generating content with OpenAI:", error);
       

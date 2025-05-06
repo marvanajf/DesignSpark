@@ -284,27 +284,9 @@ export async function generateCampaignContent(
     const data = await response.json();
     console.log("Raw API response:", data.content.substring(0, 100) + "...");
     
-    // Detect if the content is already in JSON format from the server
-    let structuredContent;
-    if (data.content.trim().startsWith('{') && data.content.trim().endsWith('}')) {
-      try {
-        const parsedContent = JSON.parse(data.content);
-        
-        // If the content has a recognized type, add it to the response
-        if (['email', 'social', 'blog', 'webinar'].includes(contentType) && !parsedContent.type) {
-          parsedContent.type = contentType;
-        }
-        
-        structuredContent = JSON.stringify(parsedContent);
-        return structuredContent;
-      } catch (e) {
-        console.warn("Error parsing JSON response:", e);
-        // If parsing fails, continue with markdown cleaning
-      }
-    }
-    
-    // Clean the content from excessive markdown formatting
-    return cleanMarkdownFormatting(data.content);
+    // Return the cleaned content directly from the server
+    // No need to process it further as the server should handle the cleaning
+    return data.content;
   } catch (error) {
     console.error('Error generating content with OpenAI:', error);
     return fallbackContent(inputs);
@@ -328,9 +310,10 @@ function fallbackContent(inputs: CampaignInputs): string {
   
   switch (contentType) {
     case 'email': {
-      const subject = `Innovative Solutions for ${industry} in the ${region} Region`;
-      const preview = `I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions.`;
-      const body = `Dear [${audienceRole}],
+      return `Subject: Innovative Solutions for ${industry} in the ${region} Region
+Preview: I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions.
+
+Dear ${audienceRole},
 
 I hope this email finds you well. I wanted to reach out about our ${benefit} ${product} solutions and how they can benefit organizations in the ${industry} sector.
 
@@ -338,64 +321,35 @@ Our approach has been designed specifically to address the challenges faced by b
 
 Best regards,
 [Your Name]`;
-      
-      return JSON.stringify({
-        type: 'email',
-        subject: subject,
-        preview: preview,
-        body: body
-      });
     }
       
     case 'social': {
-      const mainContent = `"We've helped ${industry} organizations in the ${region} region achieve remarkable results with our ${benefit} approach."
+      return `We've helped ${industry} organizations in the ${region} region achieve remarkable results with our ${benefit} approach.
 
 Our ${product} solutions deliver measurable improvements for ${audienceRole}s facing today's complex challenges.
 
-Learn how our proven methodology can transform your operations: [Link]`;
-      
-      const hashtags = [
-        `#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation`,
-        `#${benefit.charAt(0).toUpperCase() + benefit.slice(1)}`,
-        `#${region.charAt(0).toUpperCase() + region.slice(1)}Business`
-      ];
-      
-      return JSON.stringify({
-        type: 'social',
-        content: mainContent,
-        hashtags: hashtags
-      });
+Learn how our proven methodology can transform your operations: [Link]
+
+#${industry.charAt(0).toUpperCase() + industry.slice(1)}Innovation #${benefit.charAt(0).toUpperCase() + benefit.slice(1)} #${region.charAt(0).toUpperCase() + region.slice(1)}Business`;
     }
       
     case 'blog': {
-      const title = `Strategic Innovation for ${industry}: ${benefit} Solutions`;
-      const intro = `In today's competitive landscape, ${industry} organizations in the ${region} region need innovative approaches to stay ahead. This article explores how our ${product} solutions help businesses achieve their strategic goals.`;
-      
-      const sections = [
-        {
-          heading: `Key Benefits for ${audienceRole}s`,
-          content: `1. Improved operational efficiency
+      return `Strategic Innovation for ${industry}: ${benefit} Solutions
+
+In today's competitive landscape, ${industry} organizations in the ${region} region need innovative approaches to stay ahead. This article explores how our ${product} solutions help businesses achieve their strategic goals.
+
+Key Benefits for ${audienceRole}s
+
+1. Improved operational efficiency
 2. Enhanced competitive positioning
 3. Better customer experiences
 4. Strategic advantage in the ${industry} marketplace
 
-Contact us to learn more about our proven approach for the ${region} region.`
-        }
-      ];
-      
-      return JSON.stringify({
-        type: 'blog',
-        title: title,
-        intro: intro,
-        sections: sections
-      });
+Contact us to learn more about our proven approach for the ${region} region.`;
     }
       
     case 'webinar': {
-      const title = `Strategic Innovation Framework for ${industry} Leaders`;
-      const duration = `45 minutes + 15-minute Q&A`;
-      const audience = `${audienceRole}s and Decision Makers in the ${region} region`;
-      const details = `Strategic Innovation Framework for ${industry} Leaders
+      return `Strategic Innovation Framework for ${industry} Leaders
 
 Duration: 45 minutes + 15-minute Q&A
 
@@ -412,14 +366,6 @@ Key Takeaways:
 
 Presenter:
 [Industry Expert Name], with extensive experience helping organizations in the ${region} region transform their approach to ${industry}-specific challenges.`;
-      
-      return JSON.stringify({
-        type: 'webinar',
-        title: title,
-        duration: duration,
-        audience: audience,
-        details: details
-      });
     }
       
     default:
