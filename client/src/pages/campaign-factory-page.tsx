@@ -289,6 +289,7 @@ type Campaign = {
 export default function CampaignFactoryPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("input");
+  const [, navigate] = useLocation();
   
   // Format dates as YYYY-MM-DD for inputs
   const formatDateForInput = (date: Date) => {
@@ -1963,8 +1964,8 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                             </div>
                             
                             {/* Campaign Waterfall Chart */}
-                            <div className="campaign-waterfall mt-4 overflow-x-auto pb-2" style={{ overflowY: "hidden" }}>
-                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "800px", width: "100%", paddingRight: "20px" }}>
+                            <div className="campaign-waterfall mt-4 overflow-x-auto pb-2" style={{ overflowY: "hidden", width: "100%" }}>
+                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "1200px", width: "100%", paddingRight: "50px", paddingLeft: "20px" }}>
                                 {/* Timeline base */}
                                 <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
                                 
@@ -2012,13 +2013,14 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                       
                                       {/* Content card */}
                                       <div 
-                                        className={`w-[180px] bg-zinc-800 border border-zinc-700 rounded-md p-2 absolute left-1/2 -translate-x-1/2 ${
+                                        className={`w-[200px] bg-zinc-800 border border-zinc-700 rounded-md p-3 absolute left-1/2 -translate-x-1/2 ${
                                           isEven ? 'top-[60px]' : 'bottom-[60px]'
                                         }`}
                                         style={{ 
-                                          minWidth: '180px',
-                                          maxWidth: '180px',
-                                          zIndex: 20
+                                          minWidth: '200px',
+                                          maxWidth: '200px',
+                                          zIndex: 20,
+                                          margin: '0 10px'
                                         }}
                                       >
                                         <div className="flex items-center gap-1 mb-1">
