@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/use-auth';
 import { useLocation } from 'wouter';
@@ -60,6 +60,55 @@ const contentTypeIcons: Record<string, React.ReactNode> = {
   blog: <MessageSquare className="h-4 w-4" />,
   webinar: <Calendar className="h-4 w-4" />
 };
+
+// Separate component for content list to properly use React hooks
+function ContentList({ contents }: { contents: CampaignContent[] }) {
+  const [expandedContentIndex, setExpandedContentIndex] = useState<number | null>(null);
+
+  return (
+    <div className="space-y-3">
+      {contents.map((content, index) => (
+        <div 
+          key={index}
+          className="p-3 border border-gray-800 rounded-lg bg-zinc-900/30 group hover:bg-zinc-900/70 transition-colors"
+        >
+          <div className="flex justify-between items-start">
+            <div className="flex items-center">
+              <div className="h-7 w-7 rounded-md bg-[#0e131f] border border-gray-800 flex items-center justify-center mr-3">
+                {contentTypeIcons[content.type] || <MessageSquare className="h-4 w-4" />}
+              </div>
+              <div>
+                <h4 
+                  className="text-white text-sm hover:text-[#74d1ea] cursor-pointer flex items-center"
+                  onClick={() => setExpandedContentIndex(expandedContentIndex === index ? null : index)}
+                >
+                  {content.title || `${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Content`}
+                  <span className="ml-1 text-xs">
+                    {expandedContentIndex === index ? '▲' : '▼'}
+                  </span>
+                </h4>
+                <p className="text-xs text-gray-400">{content.persona}</p>
+              </div>
+            </div>
+            {content.deliveryDate && (
+              <span className="text-xs text-gray-400">
+                {new Date(content.deliveryDate).toLocaleDateString()}
+              </span>
+            )}
+          </div>
+          
+          {expandedContentIndex === index && content.content && (
+            <div className="mt-3 border-t border-gray-800 pt-3">
+              <p className="text-sm text-gray-300 whitespace-pre-wrap">
+                {content.content}
+              </p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function CampaignFactoryOverview() {
   const { user } = useAuth();
@@ -421,31 +470,7 @@ export function CampaignFactoryOverview() {
               {/* Content Overview */}
               <div>
                 <h3 className="text-white font-medium mb-2">Generated Content</h3>
-                <div className="space-y-3">
-                  {getSelectedCampaignContents().map((content, index) => (
-                    <div 
-                      key={index}
-                      className="p-3 border border-gray-800 rounded-lg bg-zinc-900/30 group hover:bg-zinc-900/70 transition-colors"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center">
-                          <div className="h-7 w-7 rounded-md bg-[#0e131f] border border-gray-800 flex items-center justify-center mr-3">
-                            {contentTypeIcons[content.type] || <MessageSquare className="h-4 w-4" />}
-                          </div>
-                          <div>
-                            <h4 className="text-white text-sm">{content.title || `${content.type.charAt(0).toUpperCase() + content.type.slice(1)} Content`}</h4>
-                            <p className="text-xs text-gray-400">{content.persona}</p>
-                          </div>
-                        </div>
-                        {content.deliveryDate && (
-                          <span className="text-xs text-gray-400">
-                            {new Date(content.deliveryDate).toLocaleDateString()}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <ContentList contents={getSelectedCampaignContents()} />
               </div>
               
               {/* Tone Profile */}
