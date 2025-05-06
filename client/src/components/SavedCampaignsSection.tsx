@@ -488,51 +488,59 @@ export default function SavedCampaignsSection() {
                   Content Timeline
                 </h3>
                 <div className="relative mb-8">
-                  {/* Timeline Line */}
-                  <div className="absolute left-[46px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#74d1ea] to-transparent"></div>
-                  
-                  {/* Timeline Items */}
-                  {getSelectedCampaignContents()
-                    .sort((a, b) => 
-                      new Date(a.deliveryDate || '').getTime() - new Date(b.deliveryDate || '').getTime()
-                    )
-                    .map((content, index) => (
-                      <div key={index} className="flex mb-8 relative">
-                        {/* Timeline Node */}
-                        <div className="w-24 flex-shrink-0 relative">
-                          <div className="absolute left-10 top-0 w-4 h-4 bg-black border-2 border-[#74d1ea] rounded-full z-10"></div>
-                          <div className="text-xs text-gray-400 absolute left-0 top-[-3px] w-20 text-right pr-5">
-                            {content.deliveryDate ? new Date(content.deliveryDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Unscheduled'}
-                          </div>
-                        </div>
-                        
-                        {/* Content Card */}
-                        <div className="bg-black border border-gray-800 rounded-lg p-4 ml-4 w-full hover:border-[#74d1ea]/50 transition-colors">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <div className="flex items-center mb-2">
-                                <div className="h-5 w-5 rounded-md bg-[#0e131f] border border-gray-800 flex items-center justify-center mr-2">
-                                  {contentTypeIcons[content.type] || <MessageSquare className="h-3 w-3" />}
-                                </div>
-                                <h4 className="text-white text-sm font-medium">{content.title}</h4>
+                  {/* Timeline */}
+                  <div className="relative">
+                    {/* Timeline Items */}
+                    <div className="relative">
+                      {/* Vertical Line */}
+                      <div className="absolute left-[35px] top-0 bottom-0 w-[2px] bg-[#74d1ea]/50"></div>
+                    
+                      {getSelectedCampaignContents()
+                        .sort((a, b) => 
+                          new Date(a.deliveryDate || '').getTime() - new Date(b.deliveryDate || '').getTime()
+                        )
+                        .map((content, index) => (
+                          <div key={index} className="flex mb-8 last:mb-0">
+                            {/* Date and Node Column */}
+                            <div className="w-[70px] flex-shrink-0 relative pr-3">
+                              <div className="absolute right-0 top-3 transform translate-x-1/2 w-3 h-3 bg-black border-2 border-[#74d1ea] rounded-full z-10"></div>
+                              <div className="text-xs text-gray-400 text-right pr-4">
+                                {content.deliveryDate ? new Date(content.deliveryDate).toLocaleDateString(undefined, { 
+                                  day: 'numeric',
+                                  month: 'numeric'
+                                }) : '-'}
                               </div>
-                              <p className="text-xs text-gray-400 mb-2">{content.persona}</p>
                             </div>
-                            <Badge variant="outline" className="bg-[#0e131f] text-[#74d1ea] border-[#74d1ea]/30 text-xs">
-                              {content.type}
-                            </Badge>
-                          </div>
-                          <div className="mt-2 overflow-hidden">
-                            <div className="cursor-pointer" onClick={() => toggleContentExpansion(index)}>
-                              <p className="text-sm text-gray-300 line-clamp-2">
-                                {content.content?.substring(0, 100)}...
-                              </p>
-                              <p className="text-[#74d1ea] text-xs mt-1">Click to view full content</p>
+                        
+                          {/* Content Card */}
+                          <div className="bg-black border border-gray-800 rounded-lg p-4 ml-4 w-full hover:border-[#74d1ea]/50 transition-colors">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <div className="flex items-center mb-2">
+                                  <div className="h-5 w-5 rounded-md bg-[#0e131f] border border-gray-800 flex items-center justify-center mr-2">
+                                    {contentTypeIcons[content.type] || <MessageSquare className="h-3 w-3" />}
+                                  </div>
+                                  <h4 className="text-white text-sm font-medium">{content.title}</h4>
+                                </div>
+                                <p className="text-xs text-gray-400 mb-2">{content.persona}</p>
+                              </div>
+                              <Badge variant="outline" className="bg-[#0e131f] text-[#74d1ea] border-[#74d1ea]/30 text-xs">
+                                {content.type}
+                              </Badge>
+                            </div>
+                            <div className="mt-2 overflow-hidden">
+                              <div className="cursor-pointer" onClick={() => toggleContentExpansion(index)}>
+                                <p className="text-sm text-gray-300 line-clamp-2">
+                                  {content.content?.substring(0, 100)}...
+                                </p>
+                                <p className="text-[#74d1ea] text-xs mt-1">Click to view full content</p>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 
                 {/* Tone Profile */}
