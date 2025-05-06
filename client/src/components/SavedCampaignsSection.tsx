@@ -488,9 +488,6 @@ export default function SavedCampaignsSection() {
                   Content Timeline
                 </h3>
                 <div className="relative mb-8">
-                  {/* Timeline vertical line */}
-                  <div className="absolute left-4 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#74d1ea] to-transparent"></div>
-                  
                   {/* Timeline Items */}
                   {getSelectedCampaignContents()
                     .sort((a, b) => 
