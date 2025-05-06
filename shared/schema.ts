@@ -333,7 +333,8 @@ export const insertCampaignFactorySchema = createInsertSchema(campaignFactoryCam
   timeline_start: true,
   timeline_end: true,
   contents: true,
-  tone_profile: true
+  tone_profile: true,
+  metadata: true
 });
 
 export const insertLeadContactSchema = createInsertSchema(leadContacts).pick({

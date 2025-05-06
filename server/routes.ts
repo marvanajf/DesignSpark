@@ -14,6 +14,7 @@ import Stripe from "stripe";
 import { db, pool, withRetry } from "./db";
 import { eq, sql } from "drizzle-orm";
 import { createCampaignFactoryTable } from "./migrations/create-campaign-factory-table";
+import { addMetadataToFactoryCampaign } from "./migrations/add-metadata-to-campaign-factory";
 
 // Initialize Stripe with the secret key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -37,6 +38,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   try {
     await createCampaignFactoryTable();
     console.log("Campaign factory table migration completed successfully");
+    
+    // Run the metadata column migration
+    await addMetadataToFactoryCampaign();
   } catch (error) {
     console.error("Error running campaign factory table migration:", error);
   }
