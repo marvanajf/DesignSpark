@@ -204,6 +204,7 @@ export const campaignFactoryCampaigns = pgTable("campaign_factory_campaigns", {
   timeline_start: text("timeline_start"),
   timeline_end: text("timeline_end"),
   contents: jsonb("contents"), // Array of content objects with type, title, content, delivery date
+  tone_profile: jsonb("tone_profile"), // Tone profile percentages
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
@@ -330,7 +331,8 @@ export const insertCampaignFactorySchema = createInsertSchema(campaignFactoryCam
   channels: true,
   timeline_start: true,
   timeline_end: true,
-  contents: true
+  contents: true,
+  tone_profile: true
 });
 
 export const insertLeadContactSchema = createInsertSchema(leadContacts).pick({

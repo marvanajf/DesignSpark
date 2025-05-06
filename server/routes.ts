@@ -13,6 +13,7 @@ import { registerBlogRoutes } from "./blog-routes";
 import Stripe from "stripe";
 import { db, pool, withRetry } from "./db";
 import { eq, sql } from "drizzle-orm";
+import { createCampaignFactoryTable } from "./migrations/create-campaign-factory-table";
 
 // Initialize Stripe with the secret key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -32,6 +33,13 @@ import path from "path";
 import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Run database migrations
+  try {
+    await createCampaignFactoryTable();
+    console.log("Campaign factory table migration completed successfully");
+  } catch (error) {
+    console.error("Error running campaign factory table migration:", error);
+  }
   // Comprehensive sitemap route handler - covers all possible paths
   app.get(["/sitemap.xml", "/sitemap.html", "/sitemap", "/sitemap/"], (req, res, next) => {
     // Always check for search bots first
