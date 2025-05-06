@@ -419,7 +419,7 @@ Dear [${audienceRoleVal}],
 
 I wanted to follow up regarding my previous message about ${useCaseName.toLowerCase()} solutions specifically designed for ${industryExtracted || 'your industry'}.
 
-After reviewing your organization's specific challenges around ${campaignPrompt.split(' ').slice(0, 8).join(' ')}..., I've prepared some insights that directly address:
+Based on the challenges facing ${audienceRoleVal}s today, I've prepared some specific insights that directly address:
 
 1. How our ${productExtracted || 'solution'} has helped similar ${audienceRoleVal}s in the ${regionExtracted || 'region'} achieve ${benefitExtracted || 'improved outcomes'}
 
@@ -444,22 +444,22 @@ P.S. I'm also attaching our latest research on ${useCaseName.toLowerCase()} tren
           type: "social",
           title: `LinkedIn Thought Leadership for ${useCaseName}`,
           persona: audienceNameVal,
-          content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month for our clients in the ${regionExtracted || 'global'} market."
+          content: adaptContentToTone(`"How one ${audienceRoleVal} solved their ${audiencePainsVal[0] || 'biggest challenge'} and achieved ${audienceGoalsVal[0] || 'their primary goal'} in just 90 days with our specialized ${productExtracted || 'solution'} for the ${industryExtracted || 'industry'} sector."
 
-This is what our clients in the ${industryExtracted || 'technology'} sector are achieving with our ${benefitExtracted || 'effective'} ${productExtracted || 'solution'} solutions.
+As ${regionExtracted || 'market'} leaders in ${useCaseName.toLowerCase()}, we've seen ${audienceRoleVal}s across the ${industryExtracted || 'industry'} sector transform their strategic approach with remarkable results.
 
-Organizations that consistently outperform their competition are prioritizing:
+${audienceRoleVal}s who are achieving the most significant results are focusing on:
 
-• Cross-functional collaboration with integrated platforms
-• Data-driven decision making with real-time analytics
-• Streamlined processes for improved efficiency
-• Robust frameworks tailored to industry-specific needs
+• Addressing ${audiencePainsVal[0] || 'key challenges'} without disrupting core operations
+• Implementing ${productExtracted || 'solutions'} that directly support ${audienceGoalsVal[0] || 'core business objectives'} 
+• Creating ${benefitExtracted || 'optimization'} frameworks specifically designed for their ${industryExtracted || 'industry'} context
+• Measuring impact through metrics that matter to ${audienceRoleVal}s
 
-What strategies is your organization implementing to stay ahead of industry changes?
+What specific ${industryExtracted || 'industry'} challenges is your organization prioritizing this quarter?
 
-[Learn more about our proven approach - Link]
+[See our ${industryExtracted || 'industry'}-specific approach - Link]
 
-#Innovation #Strategy #BusinessGrowth #LinkedIn`),
+#${industryExtracted || 'Industry'}Strategy #${useCaseName.replace(/\s+/g, '')} #${audienceRoleVal.replace(/\s+/g, '')}Solutions #LinkedIn`),
           deliveryDate: socialPostDate.toISOString().split('T')[0],
           channel: "LinkedIn",
           icon: <FileText className="h-5 w-5" />
@@ -467,34 +467,34 @@ What strategies is your organization implementing to stay ahead of industry chan
         {
           id: 4,
           type: "webinar",
-          title: `Strategic ${useCaseName} Webinar for ${audienceNameVal}`,
+          title: `Strategic ${useCaseName} Webinar for ${audienceNameVal} in ${industryExtracted || 'Your Industry'}`,
           persona: audienceNameVal,
-          content: adaptContentToTone(`Title: "Strategic Innovation Framework for Industry Leaders"
+          content: adaptContentToTone(`Title: "Solving ${audiencePainsVal[0] || 'Key Challenges'} for ${audienceRoleVal}s: A ${industryExtracted || 'Industry'}-Specific Framework"
 
 Duration: 45 minutes + 15-minute Q&A
 
-Target Audience: ${audienceRoleVal}s and Strategic Decision Makers
+Target Audience: ${audienceRoleVal}s and Decision Makers in the ${industryExtracted || 'industry'} sector
 
 Description:
-Join our industry specialists for a practical, hands-on webinar focused on implementing effective strategies for competitive advantage in today's rapidly evolving marketplace. This session will provide actionable frameworks and real-world implementation guidance.
+Join our specialized ${industryExtracted || 'industry'} team for a tailored webinar addressing the unique challenges facing ${audienceRoleVal}s implementing ${useCaseName.toLowerCase()} solutions. This interactive session will focus specifically on how to achieve ${audienceGoalsVal[0] || 'your primary objectives'} while addressing common ${audiencePainsVal[0] || 'pain points'} in the ${industryExtracted || 'industry'} sector.
 
 Agenda:
-- Industry trends and emerging best practices
-- Common implementation pitfalls and how to avoid them
-- Strategic framework for successful deployment
-- Integration strategies with existing systems
-- Case studies: Organizations that achieved 40%+ improvement in outcomes
+- ${industryExtracted || 'Industry'}-specific trends affecting ${useCaseName.toLowerCase()} implementation
+- How ${regionExtracted || 'similar'} organizations have overcome ${audiencePainsVal[0] || 'key challenges'}
+- Tailored framework for ${productExtracted || 'solution'} deployment in your specific context
+- Integration strategies for your existing ${industryExtracted || 'industry'} systems
+- Case study: How a ${audienceRoleVal} achieved ${benefitExtracted || 'key benefits'} in just 90 days
 
 Key Takeaways:
-- Practical implementation roadmap customized for your organization type
-- ROI calculation methodology to secure stakeholder buy-in
-- Risk mitigation strategies for common adoption challenges
-- Resource optimization techniques for faster deployment
+- Customized implementation roadmap for ${audienceRoleVal}s in the ${industryExtracted || 'industry'} sector
+- Proven strategies to secure buy-in from key stakeholders in your organization
+- Specific approaches to overcome ${audiencePainsVal[1] || 'common roadblocks'} without disrupting operations
+- Resource planning template tailored to ${audienceRoleVal}s with limited time/resources
 
 Presenter:
-[Industry Expert Name], with extensive experience helping organizations transform their strategic approach to industry-specific challenges.
+[${industryExtracted || 'Industry'} Expert Name], with 15+ years of experience helping ${audienceRoleVal}s implement successful ${useCaseName.toLowerCase()} solutions in the ${industryExtracted || 'industry'} sector.
 
-Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`),
+Registration includes a complimentary 30-minute consultation focused on your specific ${campaignPrompt.split(' ').slice(0, 3).join(' ')}... challenges.`),
           deliveryDate: webinarDate.toISOString().split('T')[0],
           channel: "Webinar",
           icon: <FileText className="h-5 w-5" />
