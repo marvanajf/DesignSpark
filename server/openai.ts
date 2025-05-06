@@ -90,13 +90,16 @@ export function registerOpenAIRoutes(app: Express) {
       
       // Construct a comprehensive user prompt that extracts key information
       const userPrompt = `
----CONTEXT FOR THE AI (NOT TO BE MENTIONED DIRECTLY IN CONTENT)---
+---CAMPAIGN BRIEF (PRIMARY SOURCE OF INFORMATION - DO NOT REFERENCE DIRECTLY)---
 ${prompt}
 
 ---WRITING TASK---
-Create ${contentType} content that addresses the needs and concerns of the audience described above.
-Focus on their pain points and aspirations without directly mentioning the campaign brief.
-Be specific, engaging, and compelling while maintaining the appropriate professional tone.
+Create exceptional ${contentType} content that addresses the specific needs and concerns of the audience described above.
+Your content must be informed primarily by the campaign brief while being tailored to the specific format requirements.
+Extract key themes, specific pain points, and industry insights from the campaign brief to create highly relevant content.
+Focus on their pain points and aspirations without directly mentioning the campaign brief or using any meta-language.
+Be specific, engaging, compelling, and publication-ready with absolutely professional quality.
+Ensure each piece of content has its own distinct purpose and maintains a cohesive connection to the overall campaign objective.
 `;
       
       // Generate content using OpenAI with enhanced context
@@ -322,13 +325,25 @@ PRODUCT/SERVICE CONTEXT:
 - The content relates to the ${ctx.region} market
 - Focus on the ${ctx.useCaseName} use case that is relevant to this audience
 
+QUALITY STANDARDS:
+- All content must be absolutely top-tier professional quality
+- Every word and sentence must have purpose and impact
+- Content must be ready for immediate publication without further editing
+- Follow the latest best practices for ${ctx.contentType} marketing content
+- Be highly specific to this industry and audience - avoid generic statements
+- Always include concrete examples and specifics rather than vague claims
+- Content should demonstrate insider knowledge of ${ctx.industry} challenges
+
 CRITICAL INSTRUCTIONS:
-1. Focus ENTIRELY on the audience's perspective - what they care about, their goals, and their challenges
-2. NEVER mention "campaign objectives," "marketing goals," or refer to a "campaign brief" in your content
-3. Address the audience's pain points directly and position solutions as enablers of their goals
-4. Use specific, concrete language and examples rather than vague generalities
-5. Do not mention Microsoft, Microsoft 365, or any other brand unless specifically mentioned in the instructions
-6. Make the content genuinely valuable to the reader - educational, insightful, and actionable
+1. The campaign brief is your PRIMARY source of information - extract key insights from it
+2. Focus ENTIRELY on the audience's perspective - what they care about, their goals, and their challenges
+3. NEVER mention "campaign objectives," "marketing goals," or refer to a "campaign brief" in your content
+4. Address the audience's pain points directly and position solutions as enablers of their goals
+5. Use specific, concrete language and examples rather than vague generalities
+6. Do not mention Microsoft, Microsoft 365, or any other brand unless specifically mentioned in the instructions
+7. Make the content genuinely valuable to the reader - educational, insightful, and actionable
+8. Each content piece should have its own distinct purpose and value proposition
+9. Emphasize benefits over features and focus on ROI, time savings, or competitive advantage
 
 `;
 
@@ -342,13 +357,22 @@ Create a compelling marketing email that would motivate a ${ctx.persona} in the 
 Include:
 1. An attention-grabbing subject line with 6-10 words mentioning ${ctx.benefit} for ${ctx.industry}
 2. A personalized greeting addressing the ${ctx.persona} role directly
-3. A concise opening paragraph (2-3 sentences) that immediately addresses a key pain point
+3. A concise opening paragraph (2-3 sentences) that immediately addresses a key pain point from the campaign brief
 4. 2-3 short body paragraphs highlighting specific, tangible benefits of ${ctx.product} for ${ctx.industry} professionals
-5. Bullet points (if appropriate) to highlight key advantages or results
+5. Bullet points (if appropriate) to highlight key advantages or results that directly relate to the campaign brief
 6. A single, clear call-to-action focusing on the next step
 7. A professional sign-off with a name placeholder
 
-The email should be 250-350 words total and create a sense of credibility and urgency without being pushy.
+EMAIL EFFECTIVENESS REQUIREMENTS:
+- The subject line must have immediate relevance to the recipient's role and challenges
+- The opening must hook the reader in the first 3 seconds of reading
+- The email should create a sense of credibility and appropriate urgency without being pushy
+- Every word must be purposeful - ${ctx.persona}s receive dozens of emails daily
+- Create professional curiosity by hinting at valuable insights, but don't reveal everything
+- Ensure the email clearly conveys "what's in it for them" within the first paragraph
+- Focus more on their pains and goals than on product descriptions
+
+The email should be 250-350 words total and formatted for easy mobile reading with short paragraphs.
 Make every sentence count - decision-makers in ${ctx.industry} have limited time and need to immediately see relevance.`;
       
     case 'social':
@@ -358,13 +382,22 @@ Create an engaging LinkedIn post appropriate for a company page that would reson
 
 Include:
 1. A compelling opening that draws the reader in with a relevant statistic, question, or insight about ${ctx.industry} challenges
-2. A concise, value-packed middle section highlighting the importance of ${ctx.benefit} in addressing key challenges
-3. A clear value proposition that emphasizes outcomes, not features
-4. At least one thought-provoking question to encourage engagement
+2. A concise, value-packed middle section highlighting the importance of ${ctx.benefit} in addressing key challenges identified in the campaign brief
+3. A clear value proposition that emphasizes outcomes specific to the campaign brief, not features
+4. At least one thought-provoking question to encourage engagement that relates to the core message
 5. A clear but soft call-to-action directing readers to learn more
-6. 3-5 relevant hashtags that would reach your target audience of ${ctx.persona}s
+6. 3-5 relevant hashtags that would reach your target audience of ${ctx.persona}s in the ${ctx.industry}
 
-The post should be 150-270 words and be formatted for easy scanning with short paragraphs, bullet points where appropriate, and a professional tone that balances authority with approachability.
+LINKEDIN POST EFFECTIVENESS REQUIREMENTS:
+- Optimize for LinkedIn's algorithm by creating conversation-starting content
+- Ensure the first 2-3 lines are extremely compelling to hook readers before the "see more" cutoff
+- Structure content for easy mobile viewing with short paragraphs and strategic line breaks
+- Use a conversational yet authoritative voice that positions the author as a helpful industry expert
+- Include one specific, memorable data point or insight that readers will remember and potentially share
+- Write in a way that encourages comments by posing thoughtful questions or inviting experiences
+- Avoid overly promotional language - focus on providing genuine value through education or insight
+
+The post should be 150-270 words and formatted for easy scanning with short paragraphs, strategic line breaks, and a professional tone that balances authority with approachability.
 Make sure the content would fit naturally in a LinkedIn feed and would encourage shares among ${ctx.industry} professionals.`;
       
     case 'blog':
@@ -374,31 +407,51 @@ Create a structured outline for an informative blog post that would provide genu
 
 Include:
 1. An engaging title that incorporates ${ctx.benefit} and ${ctx.industry} (12 words maximum)
-2. A brief introduction (100-150 words) that establishes the industry context and primary challenge
-3. 4-6 main sections with engaging subheadings and brief content (150-200 words each)
-4. Key statistics or data points to support main arguments (cite industry benchmarks)
-5. Practical advice that applies directly to the ${ctx.region} market
-6. A conclusion that summarizes key takeaways and offers next steps
-7. A brief author/company bio paragraph at the end
+2. A brief introduction (100-150 words) that establishes the specific industry context and primary challenge from the campaign brief
+3. 4-6 main sections with engaging subheadings and brief content descriptions (150-200 words each)
+4. Key statistics or data points to support main arguments (cite relevant industry benchmarks)
+5. Practical advice that applies directly to the ${ctx.region} market and ${ctx.useCaseName}
+6. A conclusion that summarizes key takeaways and offers clear next steps
+7. A brief author/company bio paragraph at the end that establishes credibility
 
-The outline should demonstrate expertise in ${ctx.industry} challenges while providing actionable insights specifically related to ${ctx.benefit} and ${ctx.useCaseName}.
+BLOG EFFECTIVENESS REQUIREMENTS:
+- Structure for online readability with short paragraphs, subheadings, and scannable sections
+- Use SEO-friendly principles including proper heading structure and relevant keywords
+- Include at least one unexpected insight or contrary perspective to conventional wisdom
+- Ensure all statistics and data points directly support your key arguments
+- Create a narrative flow that guides the reader logically through the topic
+- Every section should have a clear takeaway that readers can implement immediately
+- The introduction must clearly communicate the value proposition of reading the entire piece
+- Make sure the blog format suits business readers who are seeking solutions rather than entertainment
+
+The blog should demonstrate deep expertise in ${ctx.industry} challenges while providing actionable insights specifically related to ${ctx.benefit} and ${ctx.useCaseName}.
 Ensure the content is educational first and promotional second - it should provide standalone value even if the reader never becomes a customer.`;
       
     case 'webinar':
       return `${basePrompt}
 CONTENT FORMAT REQUIREMENTS:
-Create a compelling webinar outline that would attract ${ctx.persona}s from the ${ctx.industry} sector.
+Create a compelling webinar outline that would attract ${ctx.persona}s from the ${ctx.industry} sector specifically addressing the needs identified in the campaign brief.
 
 Include:
-1. An engaging, benefit-focused webinar title (under 10 words)
-2. Clear webinar details: duration (45 minutes + Q&A), target audience, and format
-3. A persuasive description (100-120 words) explaining why this topic is crucial for ${ctx.industry} professionals
-4. 5-6 specific agenda points that promise valuable, actionable content
-5. 3-4 specific key takeaways participants will gain
-6. Brief presenter information emphasizing expertise in ${ctx.industry} and ${ctx.benefit}
-7. Registration incentives (e.g., resources, toolkits, or follow-up consultation)
+1. An engaging, benefit-focused webinar title (under 10 words) that directly addresses the campaign brief
+2. Clear webinar details: duration (45 minutes + Q&A), target audience specifications, and interactive format
+3. A persuasive description (100-120 words) explaining why this topic is crucial for ${ctx.industry} professionals right now
+4. 5-6 specific agenda points that promise valuable, actionable content directly tied to the campaign brief
+5. 3-4 concrete, specific key takeaways participants will gain (not vague promises)
+6. Brief presenter information emphasizing relevant expertise in ${ctx.industry} and ${ctx.benefit}
+7. Registration incentives that specifically address the pain points mentioned in the campaign brief
 
-The entire webinar description should be 250-350 words and position the event as an educational opportunity rather than a sales pitch.
+WEBINAR EFFECTIVENESS REQUIREMENTS:
+- Position the webinar as a high-value educational experience, not a sales presentation
+- Include at least one proprietary framework, process, or methodology that attendees can't get elsewhere
+- Ensure the title creates a sense of timeliness and relevance (e.g., "new approach," "latest trends")
+- Clearly articulate why this webinar is different from standard industry presentations
+- Focus on solving specific problems mentioned in the campaign brief rather than generic industry issues
+- The description should create a sense of exclusivity and limited opportunity
+- Make sure each agenda item promises practical, implementable knowledge rather than theory
+- Emphasize ROI-focused content that helps justify the time investment to attend
+
+The entire webinar description should be 250-350 words and position the event as a premium educational opportunity rather than a sales pitch.
 Focus on the practical knowledge and actionable strategies participants will gain related to ${ctx.useCaseName} that would be valuable to ${ctx.persona}s in the ${ctx.industry} sector.`;
     
     default:
