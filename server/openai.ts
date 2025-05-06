@@ -416,10 +416,10 @@ Focus on making the value proposition and audience benefits very clear.`
     }
     
     // Validate required parameters
-    const { description } = req.body;
+    const { description, industry } = req.body;
     
-    if (!description) {
-      return res.status(400).json({ error: "Missing required parameter: description" });
+    if (!description && !industry) {
+      return res.status(400).json({ error: "Missing required parameters: either description or industry must be provided" });
     }
     
     // If OpenAI is not initialized, return error
@@ -431,21 +431,59 @@ Focus on making the value proposition and audience benefits very clear.`
     }
     
     try {
+      let systemPrompt = '';
+      let userPrompt = '';
+      
+      if (industry && !description) {
+        // Generate a persona based on industry without user description
+        systemPrompt = `Create a detailed buyer persona for a professional in the ${industry} industry. Include:
+          - name: A professional name appropriate for the role
+          - role: Their job title with specificity to ${industry}
+          - company: A fictional company name appropriate for the industry
+          - experience: Years of experience in the field (as a number)
+          - demographics: Brief details about age, education, etc.
+          - pains: 4-5 specific pain points they face in their role (as an array of strings)
+          - goals: 4-5 specific goals they want to achieve (as an array of strings)
+          - interests: 3-4 professional interests (as an array of strings)
+          
+          Make the persona realistic, specific to ${industry}, and detailed enough to be useful for targeted marketing.
+          Respond in JSON format with these fields.`;
+        userPrompt = `Please create a realistic buyer persona for a decision-maker in the ${industry} industry.`;
+      } else if (description && !industry) {
+        // Generate a persona based on user description only
+        systemPrompt = `Create a buyer persona based on the description. Include:
+          - name: A professional name appropriate for the role
+          - role: Their job title
+          - company: A fictional company name appropriate for their sector
+          - pains: 4-5 specific pain points they face in their role (as an array of strings)
+          - goals: 4-5 specific goals they want to achieve (as an array of strings)
+          - interests: 3-4 professional interests (as an array of strings)
+          
+          Respond in JSON format with these fields.`;
+        userPrompt = description;
+      } else {
+        // Generate a persona based on both industry and user description
+        systemPrompt = `Create a buyer persona based on the description for the ${industry} industry. Include:
+          - name: A professional name appropriate for the role
+          - role: Their job title specific to ${industry}
+          - company: A fictional company name appropriate for ${industry}
+          - experience: Years of experience in the field (as a number)
+          - demographics: Brief details about age, education, etc.
+          - pains: 4-5 specific pain points they face in their role (as an array of strings)
+          - goals: 4-5 specific goals they want to achieve (as an array of strings)
+          - interests: 3-4 professional interests (as an array of strings)
+          
+          Make the persona realistic, specific to ${industry}, and incorporate elements from the user's description.
+          Respond in JSON format with these fields.`;
+        userPrompt = description;
+      }
+      
       // Generate persona using OpenAI
       const completion = await openai.chat.completions.create({
         model: "gpt-4o",
         messages: [
-          { 
-            role: "system", 
-            content: `Create a buyer persona based on the description. Include:
-              - name: A professional name appropriate for the role
-              - role: Their job title
-              - pains: 4-5 specific pain points they face in their role (as an array of strings)
-              - goals: 4-5 specific goals they want to achieve (as an array of strings)
-              
-              Respond in JSON format with these fields.` 
-          },
-          { role: "user", content: description }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
         ],
         temperature: 0.7,
         response_format: { type: "json_object" },
