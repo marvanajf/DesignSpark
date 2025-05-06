@@ -242,6 +242,64 @@ export default function CampaignFactoryPage() {
         // Extract tone profile from the selected analysis
         const selectedToneResults = selectedToneAnalysisObj?.tone_results || null;
         
+        // Helper function to adapt content to the selected tone
+        const adaptContentToTone = (content: string): string => {
+          if (!selectedToneResults) return content;
+          
+          // Determine the dominant tone attributes (highest scores)
+          const tones = selectedToneResults;
+          const isProfessional = tones.professional > 70;
+          const isConversational = tones.conversational > 70;
+          const isPersuasive = tones.persuasive > 70;
+          const isEducational = tones.educational > 70;
+          const isEnthusiastic = tones.enthusiastic > 70;
+          
+          let adaptedContent = content;
+          
+          // Modify content based on the tone profile
+          if (isProfessional) {
+            // More formal language, data-driven
+            adaptedContent = adaptedContent.replace(
+              /we think|we believe/gi, 
+              "research indicates"
+            );
+          }
+          
+          if (isConversational) {
+            // More personal, direct language
+            adaptedContent = adaptedContent.replace(
+              /organizations|companies/gi, 
+              "teams like yours"
+            );
+          }
+          
+          if (isPersuasive) {
+            // More action-oriented language
+            adaptedContent = adaptedContent.replace(
+              /consider|might want to/gi, 
+              "should"
+            );
+          }
+          
+          if (isEducational) {
+            // More explanatory, thorough
+            adaptedContent = adaptedContent.replace(
+              /effective|optimal/gi, 
+              "proven, research-backed"
+            );
+          }
+          
+          if (isEnthusiastic) {
+            // More energetic language
+            adaptedContent = adaptedContent.replace(
+              /improve|enhance/gi, 
+              "dramatically transform"
+            );
+          }
+          
+          return adaptedContent;
+        };
+        
         // Generate a descriptive campaign name based on user inputs
         const campaignName = `${useCaseName}: ${campaignPrompt.split(' ').slice(0, 4).join(' ')}...`;
         
@@ -335,7 +393,7 @@ export default function CampaignFactoryPage() {
             type: "email" as const,
             title: `${useCaseName} Initial Outreach for ${audienceName}`,
             persona: audienceName,
-            content: `Subject: ${emailSubject1}
+            content: adaptContentToTone(`Subject: ${emailSubject1}
 
 Dear [${audienceRole}],
 
@@ -350,7 +408,7 @@ Based on your market position and industry challenges, I believe we could offer 
 Would you have 20 minutes next week to discuss potential approaches that have proven successful for similar organizations?
 
 Best regards,
-[Your Name]`,
+[Your Name]`),
             deliveryDate: campaignStartDate,
             channel: "Email",
             icon: <MessageSquare className="h-5 w-5" />
@@ -360,7 +418,7 @@ Best regards,
             type: "email" as const,
             title: `${useCaseName} Follow-up for ${audienceName}`,
             persona: audienceName,
-            content: `Subject: ${emailSubject2}
+            content: adaptContentToTone(`Subject: ${emailSubject2}
 
 Dear [${audienceRole}],
 
@@ -375,7 +433,7 @@ ${personaPains.join('\n')}
 Would you be available for a brief 15-minute conversation this Thursday or Friday? I'd be happy to share relevant case studies from companies similar to yours.
 
 Looking forward to your response,
-[Your Name]`,
+[Your Name]`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 7)).toISOString().split('T')[0],
             channel: "Email",
             icon: <MessageSquare className="h-5 w-5" />
@@ -385,7 +443,7 @@ Looking forward to your response,
             type: "social" as const,
             title: `LinkedIn Thought Leadership for ${useCaseName}`,
             persona: audienceName,
-            content: `"We reduced implementation time by 65% and improved team adoption by 83% within the first month."
+            content: adaptContentToTone(`"We reduced implementation time by 65% and improved team adoption by 83% within the first month."
 
 This is what our clients are achieving with modern approaches to operational excellence.
 
@@ -400,7 +458,7 @@ What strategies is your organization implementing to stay ahead of industry chan
 
 [Learn more about our approach - Link]
 
-#IndustryInnovation #BusinessTransformation #StrategicGrowth #LinkedIn`,
+#IndustryInnovation #BusinessTransformation #StrategicGrowth #LinkedIn`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 3)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -410,7 +468,7 @@ What strategies is your organization implementing to stay ahead of industry chan
             type: "webinar" as const,
             title: `Strategic ${useCaseName} Webinar for ${audienceName}`,
             persona: audienceName,
-            content: `Title: "Strategic Innovation Framework for Industry Leaders"
+            content: adaptContentToTone(`Title: "Strategic Innovation Framework for Industry Leaders"
 
 Duration: 45 minutes + 15-minute Q&A
 
@@ -435,7 +493,7 @@ Key Takeaways:
 Presenter:
 [Industry Expert Name], with extensive experience helping organizations transform their strategic approach to industry-specific challenges.
 
-Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`,
+Registration includes access to our implementation toolkit and a complimentary strategy session with our consulting team.`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 14)).toISOString().split('T')[0],
             channel: "Webinar",
             icon: <FileText className="h-5 w-5" />
@@ -445,7 +503,7 @@ Registration includes access to our implementation toolkit and a complimentary s
             type: "social" as const,
             title: `LinkedIn Article on ${useCaseName} ROI`,
             persona: (personas.find(p => selectedPersonas[1]) ? personas.find(p => p.id === selectedPersonas[1])?.name : personas.find(p => selectedPersonas.includes(p.id))?.name) || "Target Audience",
-            content: `# Beyond Traditional Metrics: Measuring the True ROI of Strategic Initiatives
+            content: adaptContentToTone(`# Beyond Traditional Metrics: Measuring the True ROI of Strategic Initiatives
 
 Most organizations evaluate investments using standard financial metrics, but this approach misses critical value dimensions that drive long-term competitive advantage.
 
@@ -465,7 +523,7 @@ The combined impact of these "hidden ROI factors" often exceeds the direct cost 
 
 What has been your experience measuring the full spectrum of returns on strategic initiatives?
 
-#BusinessStrategy #ROIAnalysis #StrategicLeadership #LinkedIn`,
+#BusinessStrategy #ROIAnalysis #StrategicLeadership #LinkedIn`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
             channel: "LinkedIn",
             icon: <FileText className="h-5 w-5" />
@@ -475,7 +533,7 @@ What has been your experience measuring the full spectrum of returns on strategi
             type: "blog" as const,
             title: `Industry Trends in ${useCaseName} - Strategic Analysis`,
             persona: audienceName,
-            content: `5 Critical Challenges in Strategic Execution (And How to Address Them)
+            content: adaptContentToTone(`5 Critical Challenges in Strategic Execution (And How to Address Them)
 
 In today's landscape, businesses face sophisticated challenges that require thoughtful solutions. According to recent research, many organizations struggle with these issues, yet only a small percentage are adequately prepared to address them.
 
@@ -517,7 +575,7 @@ The Solution: Our guided implementation process and ongoing support ensure you m
 
 The cost of inefficiency and missed opportunities can be substantial when including lost productivity, missed opportunities, and competitive disadvantage. By comparison, our solution provides enterprise-grade capabilities at an accessible price point, typically paying for itself within the first year.
 
-Ready to transform your strategic approach? [Contact us] for a complimentary assessment.`,
+Ready to transform your strategic approach? [Contact us] for a complimentary assessment.`),
             deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 5)).toISOString().split('T')[0],
             channel: "Blog",
             icon: <FileText className="h-5 w-5" />
