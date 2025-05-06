@@ -787,6 +787,53 @@ export class MemStorage implements IStorage {
     }
   }
   
+  // Campaign Factory methods
+  async createCampaignFactory(campaign: InsertCampaignFactory): Promise<CampaignFactory> {
+    const id = this.campaignFactoryIdCounter++;
+    const now = new Date();
+    const newCampaign: CampaignFactory = {
+      ...campaign,
+      id,
+      created_at: now,
+      updated_at: now
+    };
+    this.campaignFactories.set(id, newCampaign);
+    return newCampaign;
+  }
+
+  async getCampaignFactory(id: number): Promise<CampaignFactory | undefined> {
+    return this.campaignFactories.get(id);
+  }
+
+  async getCampaignFactoriesByUserId(userId: number): Promise<CampaignFactory[]> {
+    return Array.from(this.campaignFactories.values())
+      .filter(campaign => campaign.user_id === userId)
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+  }
+
+  async updateCampaignFactory(id: number, updates: Partial<InsertCampaignFactory>): Promise<CampaignFactory> {
+    const campaign = this.campaignFactories.get(id);
+    if (!campaign) {
+      throw new Error(`Campaign factory with id ${id} not found`);
+    }
+    
+    const updatedCampaign = {
+      ...campaign,
+      ...updates,
+      updated_at: new Date()
+    };
+    
+    this.campaignFactories.set(id, updatedCampaign);
+    return updatedCampaign;
+  }
+  
+  async deleteCampaignFactory(id: number): Promise<void> {
+    if (!this.campaignFactories.has(id)) {
+      throw new Error(`Campaign factory with id ${id} not found`);
+    }
+    this.campaignFactories.delete(id);
+  }
+  
   async updateUserPassword(userId: number, hashedPassword: string): Promise<User> {
     const user = this.users.get(userId);
     
@@ -1580,6 +1627,49 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(campaignContents)
       .where(eq(campaignContents.campaign_id, campaignId));
+  }
+  
+  // Campaign Factory methods
+  async createCampaignFactory(campaign: InsertCampaignFactory): Promise<CampaignFactory> {
+    const [newCampaign] = await db
+      .insert(campaignFactoryCampaigns)
+      .values(campaign)
+      .returning();
+    return newCampaign;
+  }
+
+  async getCampaignFactory(id: number): Promise<CampaignFactory | undefined> {
+    const [campaign] = await db
+      .select()
+      .from(campaignFactoryCampaigns)
+      .where(eq(campaignFactoryCampaigns.id, id));
+    return campaign;
+  }
+
+  async getCampaignFactoriesByUserId(userId: number): Promise<CampaignFactory[]> {
+    return await db
+      .select()
+      .from(campaignFactoryCampaigns)
+      .where(eq(campaignFactoryCampaigns.user_id, userId))
+      .orderBy(desc(campaignFactoryCampaigns.created_at));
+  }
+
+  async updateCampaignFactory(id: number, updates: Partial<InsertCampaignFactory>): Promise<CampaignFactory> {
+    const [updatedCampaign] = await db
+      .update(campaignFactoryCampaigns)
+      .set({
+        ...updates,
+        updated_at: new Date()
+      })
+      .where(eq(campaignFactoryCampaigns.id, id))
+      .returning();
+    return updatedCampaign;
+  }
+  
+  async deleteCampaignFactory(id: number): Promise<void> {
+    await db
+      .delete(campaignFactoryCampaigns)
+      .where(eq(campaignFactoryCampaigns.id, id));
   }
   
   async updateUserPassword(userId: number, hashedPassword: string): Promise<User> {
