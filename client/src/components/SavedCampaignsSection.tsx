@@ -4,7 +4,7 @@ import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -34,6 +34,7 @@ const contentTypeIcons: Record<string, React.ReactNode> = {
 export interface CampaignFactoryCampaign {
   id: number;
   name: string;
+  description?: string;  // Added description field
   objective: string;
   target_audience: string[];
   channels: string[];
@@ -257,7 +258,7 @@ export default function SavedCampaignsSection() {
             </CardHeader>
             <CardContent className="pb-2">
               <div className="line-clamp-2 text-sm text-gray-300 mb-3">
-                {campaign.objective}
+                {campaign.description || campaign.objective}
               </div>
               <div className="grid grid-cols-2 gap-2 mt-2 mb-3 text-xs text-gray-400">
                 <div className="flex items-center">
@@ -318,6 +319,11 @@ export default function SavedCampaignsSection() {
             <DialogTitle className="text-xl text-white">
               {selectedCampaign?.name}
             </DialogTitle>
+            {selectedCampaign?.description && (
+              <DialogDescription className="mt-2 text-gray-400">
+                {selectedCampaign.description}
+              </DialogDescription>
+            )}
           </DialogHeader>
           
           {selectedCampaign && (
