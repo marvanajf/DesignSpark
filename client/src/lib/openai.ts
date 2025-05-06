@@ -34,11 +34,42 @@ interface CampaignInputs {
 
 /**
  * Transform markdown formatting from OpenAI responses into properly formatted text
- * Converts markdown to styled text that will render nicely in the UI
+ * Converts markdown to HTML/styled text that will render nicely in the UI
  * Preserves heading structure while maintaining a clean appearance
  */
 function cleanMarkdownFormatting(content: string): string {
   if (!content) return '';
+
+  // Convert GitHub Flavored Markdown style content to HTML
+  const processMarkdownToHTML = (text: string): string => {
+    return text
+      // Headers
+      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      
+      // Emphasis (bold, italic)
+      .replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      
+      // Lists
+      .replace(/^\s*[-*+]\s+(.+)$/gm, '<li>$1</li>')
+      .replace(/^(\d+)\.\s+(.+)$/gm, '<li>$1. $2</li>')
+      
+      // Wrap lists in ul/ol tags
+      .replace(/(<li>(?:(?!<li>).)*?<\/li>)+/gs, '<ul>$&</ul>')
+      .replace(/(<li>\d+\. (?:(?!<li>).)*?<\/li>)+/gs, '<ol>$&</ol>')
+      
+      // Paragraphs (multiple newlines to paragraph breaks)
+      .replace(/\n\n+/g, '</p><p>')
+      
+      // Links
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+      
+      // Remove excessive spacing
+      .trim();
+  };
   
   // Process email content specially
   if (content.includes('Subject Line:') || content.includes('Subject:')) {
@@ -46,53 +77,53 @@ function cleanMarkdownFormatting(content: string): string {
     const subjectMatch = content.match(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i);
     const subject = subjectMatch ? subjectMatch[1].trim() : '';
     
-    // Clean up the content while preserving email structure
-    return content
+    let emailText = content
       // Format subject line as a heading
-      .replace(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i, 'Subject: $1\n')
+      .replace(/(?:\*\*)?Subject(?:\s+Line)?:(?:\*\*)?\s*(.*?)(?:\n|$)/i, '<div class="email-subject">Subject: $1</div>\n')
       // Clean up greeting line
-      .replace(/(?:\*\*)?Dear(?:\*\*)?\s+(.*?)(?:\*\*)?,/i, 'Dear $1,')
+      .replace(/(?:\*\*)?Dear(?:\*\*)?\s+(.*?)(?:\*\*)?,/i, '<p>Dear $1,</p>')
       // Clean up other markdown
-      .replace(/\*\*([^*]+)\*\*/g, '$1')
-      .replace(/\*([^*]+)\*/g, '$1')
-      .replace(/(?:^|\n)#+\s+(.+)$/gm, '$1')
-      .replace(/- \*\*([^:]+):\*\*/g, '- $1:')
-      .replace(/\*\*([^:]+):\*\*/g, '$1:')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/(?:^|\n)#+\s+(.+)$/gm, '<h3>$1</h3>')
+      .replace(/^- (.+)$/gm, '<li>$1</li>')
+      .trim();
+      
+    // Ensure paragraphs are properly wrapped
+    if (!emailText.includes('<p>') && !emailText.startsWith('<div class="email-subject">')) {
+      const paragraphs = emailText.split('\n\n');
+      emailText = paragraphs.map(p => `<p>${p}</p>`).join('');
+    }
+    
+    return emailText;
+  }
+  
+  // For social posts - simpler formatting with fewer HTML tags
+  if (content.length < 500 && !content.includes('#')) {
+    return content
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '<br/><br/>')
+      .replace(/^- (.+)$/gm, '• $1')
       .trim();
   }
   
-  // For social posts, blog, and other content
-  return content
-    // Keep bullet points intact but format them nicely
-    .replace(/^- (.+)$/gm, '• $1')
-    
-    // Format headers: preserve h1 and h2 but with clean styling
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    
-    // Format emphasis but don't completely remove it
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    
-    // Clean up other markdown artifacts 
-    .replace(/\*\*([^:]+):\*\*/g, '<strong>$1:</strong>')
-    
-    // Clean up specific placeholders
-    .replace(/\[Your Name\]/g, '[Your Name]')
-    .replace(/\[Your Position\]/g, '[Your Position]')
-    .replace(/\[Your Contact Information\]/g, '[Your Contact Information]')
-    
-    // Format numbered lists properly
-    .replace(/^(\d+)\.\s+(.+)$/gm, '$1. $2')
-    
-    // Add paragraph breaks for better readability
-    .replace(/\n\n/g, '</p><p>')
-    
-    // Wrap the content in paragraphs if it doesn't already have HTML
-    .replace(/^(.+)$/, '<p>$1</p>')
-    
-    .trim();
+  // For blog posts and longer content - full HTML formatting
+  let processedContent = processMarkdownToHTML(content);
+  
+  // Make sure content starts with a paragraph tag if it doesn't have a header
+  if (!processedContent.startsWith('<h') && !processedContent.startsWith('<p')) {
+    processedContent = `<p>${processedContent}</p>`;
+  }
+  
+  // Replace special placeholders
+  processedContent = processedContent
+    .replace(/\[Your Name\]/g, '<em>[Your Name]</em>')
+    .replace(/\[Your Position\]/g, '<em>[Your Position]</em>')
+    .replace(/\[Your Contact Information\]/g, '<em>[Your Contact Information]</em>')
+    .replace(/\[Company Name\]/g, '<em>[Company Name]</em>');
+  
+  return processedContent;
 }
 
 export async function generateCampaignContent(

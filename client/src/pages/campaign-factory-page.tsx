@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import "../styles/campaign-content.css";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1759,7 +1760,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
                                   {content.content}
                                 </pre>
                               </div>
@@ -1792,7 +1793,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
                                   {content.content}
                                 </pre>
                               </div>
@@ -1825,7 +1826,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
                                   {content.content}
                                 </pre>
                               </div>
@@ -1858,7 +1859,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
                                   {content.content}
                                 </pre>
                               </div>
@@ -1891,7 +1892,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                                 </div>
                               </div>
                               <div className="p-4">
-                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white">
+                                <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
                                   {content.content}
                                 </pre>
                               </div>
