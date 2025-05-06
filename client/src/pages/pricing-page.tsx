@@ -252,6 +252,11 @@ export default function PricingPage() {
                       </li>
 
                     </ul>
+                    
+                    {/* Adding the monthly refresh note */}
+                    <div className="text-xs text-gray-500 italic mt-2">
+                      All quotas refresh monthly
+                    </div>
                   </div>
 
                   <div className="px-6 pb-6">

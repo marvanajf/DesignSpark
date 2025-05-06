@@ -956,6 +956,11 @@ export default function LandingPage() {
                         <span className="text-gray-300">{planId === 'free' ? 'Standard Support' : 'Priority Support'}</span>
                       </li>
                     </ul>
+                    
+                    {/* Adding the monthly refresh note */}
+                    <div className="text-xs text-gray-500 italic mt-2">
+                      All quotas refresh monthly
+                    </div>
                   </div>
 
                   <div className="px-6 pb-6">
