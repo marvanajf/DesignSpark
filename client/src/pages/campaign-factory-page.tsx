@@ -829,7 +829,7 @@ The combined impact of these "hidden ROI factors" often exceeds the direct cost 
 What has been your experience measuring the full spectrum of returns on strategic initiatives?
 
 #BusinessStrategy #ROIAnalysis #StrategicLeadership #LinkedIn`),
-          deliveryDate: new Date(new Date(campaignStartDate).setDate(new Date(campaignStartDate).getDate() + 10)).toISOString().split('T')[0],
+          deliveryDate: articleDate.toISOString().split('T')[0],
           channel: "LinkedIn",
           icon: <FileText className="h-5 w-5" />
         },
