@@ -4,8 +4,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Sparkles } from 'lucide-react';
-import * as LucideIcons from 'lucide-react';
+import { 
+  Search, 
+  Sparkles, 
+  Laptop, 
+  Heart, 
+  Banknote, 
+  GraduationCap, 
+  ShoppingBag,
+  Factory,
+  Home,
+  Utensils,
+  BarChart,
+  Scale,
+  Zap,
+  CircleDot
+} from 'lucide-react';
 
 interface IndustrySelectorProps {
   onSelect: (industry: Industry) => void;
@@ -24,8 +38,20 @@ export function IndustrySelector({ onSelect, selectedIndustryId }: IndustrySelec
 
   // Function to get the appropriate icon
   const getIcon = (iconName: string) => {
-    const IconComponent = LucideIcons[iconName as keyof typeof LucideIcons] || LucideIcons.CircleDot;
-    return <IconComponent className="h-5 w-5" />;
+    switch (iconName) {
+      case 'Laptop': return <Laptop className="h-5 w-5" />;
+      case 'Heart': return <Heart className="h-5 w-5" />;
+      case 'Banknote': return <Banknote className="h-5 w-5" />;
+      case 'GraduationCap': return <GraduationCap className="h-5 w-5" />;
+      case 'ShoppingBag': return <ShoppingBag className="h-5 w-5" />;
+      case 'Factory': return <Factory className="h-5 w-5" />;
+      case 'Home': return <Home className="h-5 w-5" />;
+      case 'Utensils': return <Utensils className="h-5 w-5" />;
+      case 'BarChart': return <BarChart className="h-5 w-5" />;
+      case 'Scale': return <Scale className="h-5 w-5" />;
+      case 'Zap': return <Zap className="h-5 w-5" />;
+      default: return <CircleDot className="h-5 w-5" />;
+    }
   };
 
   return (

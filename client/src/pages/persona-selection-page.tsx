@@ -16,7 +16,8 @@ import {
   Trash2,
   AlertTriangle,
   ArrowRight,
-  AlertCircle
+  AlertCircle,
+  Building2
 } from "lucide-react";
 import { SubscriptionLimitModal } from "@/components/SubscriptionLimitModal";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,8 @@ import Layout from "@/components/Layout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { IndustrySelector } from "@/components/IndustrySelector";
+import { Industry } from "@/lib/industries";
 
 export default function PersonaSelectionPage() {
   const { toast } = useToast();
@@ -37,8 +40,10 @@ export default function PersonaSelectionPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
   const [personaDescription, setPersonaDescription] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
   const [personaToDelete, setPersonaToDelete] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [generateTab, setGenerateTab] = useState<'description' | 'industry'>('description');
   
   // Subscription limit state
   const [showLimitModal, setShowLimitModal] = useState(false);
@@ -51,14 +56,14 @@ export default function PersonaSelectionPage() {
   // Fetch personas
   const { data: personas, isLoading, error } = useQuery({
     queryKey: ["/api/personas"],
-    onError: (err: Error) => {
+    onError: (err: any) => {
       toast({
         title: "Failed to load personas",
         description: err.message,
         variant: "destructive",
       });
     },
-  });
+  }) as { data: any[]; isLoading: boolean; error: Error | null };
 
   // Seed predefined personas if none exist
   const seedPersonasMutation = useMutation({
@@ -100,11 +105,11 @@ export default function PersonaSelectionPage() {
     },
   });
 
-  // Generate a new persona with OpenAI
+  // Generate a new persona with OpenAI using description
   const generatePersonaMutation = useMutation({
     mutationFn: async (description: string) => {
       try {
-        const res = await apiRequest("POST", "/api/generate-persona", { description });
+        const res = await apiRequest("POST", "/api/openai/generate-persona", { description });
         
         // Check for subscription limit (402 Payment Required)
         if (res.status === 402) {
@@ -126,6 +131,60 @@ export default function PersonaSelectionPage() {
     onSuccess: (data) => {
       setIsGenerateDialogOpen(false);
       setPersonaDescription("");
+      setSelectedIndustry(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/personas"] });
+      toast({
+        title: "Persona created",
+        description: `"${data.name}" has been created successfully`,
+      });
+    },
+    onError: (error: any) => {
+      if (error.message === "Subscription limit reached") {
+        // This is already handled by setting showLimitModal to true
+        return;
+      } else if (error.message?.includes("OpenAI API is not available")) {
+        toast({
+          title: "API Key Required",
+          description: "An OpenAI API key is required to generate personas. Please add your API key in the settings.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Failed to generate persona",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    },
+  });
+  
+  // Generate a new persona with OpenAI using industry
+  const generatePersonaByIndustryMutation = useMutation({
+    mutationFn: async (industry: string) => {
+      try {
+        const res = await apiRequest("POST", "/api/openai/generate-persona", { industry });
+        
+        // Check for subscription limit (402 Payment Required)
+        if (res.status === 402) {
+          const limitInfo = await res.json();
+          setLimitData({
+            limitType: limitInfo.limitType,
+            current: limitInfo.current,
+            limit: limitInfo.limit
+          });
+          setShowLimitModal(true);
+          throw new Error("Subscription limit reached");
+        }
+        
+        return res.json();
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: (data) => {
+      setIsGenerateDialogOpen(false);
+      setPersonaDescription("");
+      setSelectedIndustry(null);
       queryClient.invalidateQueries({ queryKey: ["/api/personas"] });
       toast({
         title: "Persona created",
@@ -296,16 +355,31 @@ export default function PersonaSelectionPage() {
   };
 
   const handleGeneratePersona = () => {
-    if (!personaDescription.trim()) {
-      toast({
-        title: "Description required",
-        description: "Please enter a description to generate a persona",
-        variant: "destructive",
-      });
-      return;
+    if (generateTab === 'description') {
+      if (!personaDescription.trim()) {
+        toast({
+          title: "Description required",
+          description: "Please enter a description to generate a persona",
+          variant: "destructive",
+        });
+        return;
+      }
+      generatePersonaMutation.mutate(personaDescription);
+    } else {
+      if (!selectedIndustry) {
+        toast({
+          title: "Industry required",
+          description: "Please select an industry to generate a persona",
+          variant: "destructive",
+        });
+        return;
+      }
+      generatePersonaByIndustryMutation.mutate(selectedIndustry.id);
     }
-
-    generatePersonaMutation.mutate(personaDescription);
+  };
+  
+  const handleIndustrySelect = (industry: Industry) => {
+    setSelectedIndustry(industry);
   };
   
   const handleDeletePersona = (id: number) => {
@@ -364,7 +438,7 @@ export default function PersonaSelectionPage() {
         <SubscriptionLimitModal
           isOpen={showLimitModal}
           onClose={() => setShowLimitModal(false)}
-          limitType={limitData.limitType}
+          limitType={"personas" as "personas" | "toneAnalyses" | "contentGeneration" | "campaigns"}
           currentUsage={limitData.current}
           limit={limitData.limit}
           currentPlan={user?.subscription_plan || "free"}
@@ -467,46 +541,91 @@ export default function PersonaSelectionPage() {
                         Generate with AI
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="bg-black border border-gray-800 text-white">
+                    <DialogContent className="bg-black border border-gray-800 text-white max-w-4xl max-h-[90vh] overflow-y-auto">
                       <DialogHeader>
-                        <DialogTitle className="text-lg font-semibold">Generate Persona with AI</DialogTitle>
+                        <DialogTitle className="text-xl font-semibold">Generate Persona with AI</DialogTitle>
                         <DialogDescription className="text-gray-400">
-                          Describe the role, industry, or audience profile and our AI will create a detailed persona.
+                          Create a detailed persona based on your specific requirements or select an industry
                         </DialogDescription>
                       </DialogHeader>
+
                       <div className="py-4">
-                        <Textarea
-                          value={personaDescription}
-                          onChange={(e) => setPersonaDescription(e.target.value)}
-                          placeholder="E.g., Founder of a 50-person SaaS startup in the HR tech industry, focused on enterprise clients"
-                          className="h-36 bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
-                        />
-                        <p className="mt-2 text-xs text-gray-500">
-                          The more specific your description, the better the AI-generated persona will be.
-                        </p>
+                        <div className="mb-6 border-b border-gray-800">
+                          <div className="flex">
+                            <button
+                              onClick={() => setGenerateTab('description')}
+                              className={`px-4 py-2 font-medium text-sm flex items-center ${
+                                generateTab === 'description' 
+                                ? 'text-[#74d1ea] border-b-2 border-[#74d1ea]' 
+                                : 'text-gray-400 hover:text-gray-300'
+                              }`}
+                            >
+                              <Sparkles className="mr-2 h-4 w-4" />
+                              By Description
+                            </button>
+                            <button
+                              onClick={() => setGenerateTab('industry')}
+                              className={`px-4 py-2 font-medium text-sm flex items-center ${
+                                generateTab === 'industry' 
+                                ? 'text-[#74d1ea] border-b-2 border-[#74d1ea]' 
+                                : 'text-gray-400 hover:text-gray-300'
+                              }`}
+                            >
+                              <Building2 className="mr-2 h-4 w-4" />
+                              By Industry
+                            </button>
+                          </div>
+                        </div>
+
+                        {generateTab === 'description' ? (
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-1">Custom Description</label>
+                              <Textarea
+                                value={personaDescription}
+                                onChange={(e) => setPersonaDescription(e.target.value)}
+                                placeholder="E.g., Founder of a 50-person SaaS startup in the HR tech industry, focused on enterprise clients"
+                                className="h-36 bg-black border-gray-700 text-white focus:border-[#74d1ea] focus:ring-1 focus:ring-[#74d1ea] focus:shadow-[0_0_10px_rgba(116,209,234,0.3)]"
+                              />
+                              <p className="mt-2 text-xs text-gray-500">
+                                The more specific your description, the better the AI-generated persona will be.
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            <IndustrySelector 
+                              onSelect={handleIndustrySelect} 
+                              selectedIndustryId={selectedIndustry?.id || null} 
+                            />
+                          </div>
+                        )}
                       </div>
-                      <DialogFooter>
-                        <Button
-                          variant="outline"
-                          className="border-gray-700 text-gray-300 hover:text-white"
-                          onClick={() => setIsGenerateDialogOpen(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
-                          onClick={handleGeneratePersona}
-                          disabled={generatePersonaMutation.isPending}
-                        >
-                          {generatePersonaMutation.isPending ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Generating...
-                            </>
-                          ) : (
-                            "Generate Persona"
-                          )}
-                        </Button>
+
+                      <DialogFooter className="flex items-center justify-between">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            className="border-gray-700 text-gray-300 hover:text-white"
+                            onClick={() => setIsGenerateDialogOpen(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                            onClick={handleGeneratePersona}
+                            disabled={generatePersonaMutation.isPending || generatePersonaByIndustryMutation.isPending}
+                          >
+                            {generatePersonaMutation.isPending || generatePersonaByIndustryMutation.isPending ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Generating...
+                              </>
+                            ) : (
+                              "Generate Persona"
+                            )}
+                          </Button>
+                        </div>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
