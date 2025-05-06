@@ -32,13 +32,13 @@ type Persona = {
   icon?: React.ReactNode;
 };
 
-// Component for safely rendering HTML content
+// Component for rendering campaign content with proper formatting
 const CampaignContentDisplay = ({ content }: { content: string }) => {
+  // Simple text-only renderer
   return (
-    <pre 
-      className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content"
-      dangerouslySetInnerHTML={{ __html: content }}
-    ></pre>
+    <pre className="font-sans whitespace-pre-wrap overflow-auto text-white campaign-content">
+      {content}
+    </pre>
   );
 };
 
