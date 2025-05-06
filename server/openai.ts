@@ -347,6 +347,9 @@ CRITICAL INSTRUCTIONS:
 7. Make the content genuinely valuable to the reader - educational, insightful, and actionable
 8. Each content piece should have its own distinct purpose and value proposition
 9. Emphasize benefits over features and focus on ROI, time savings, or competitive advantage
+10. DO NOT use HTML tags or other markup in your responses - use plain text only
+11. For formatting, use simple text-based approaches (like * for bullet points, blank lines between paragraphs)
+12. Never add class names, div tags, or any other HTML elements in your output
 
 `;
 
