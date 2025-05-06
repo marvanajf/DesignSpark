@@ -30,6 +30,18 @@ interface CampaignInputs {
   contentType: string;
   contentPurpose?: string; // Added this field for more specific content generation
   maxLength?: number;
+  
+  // Flag to generate campaign metadata (title, boilerplate, objectives)
+  generateCampaignMetadata?: boolean;
+}
+
+/**
+ * Interface for campaign metadata (title, boilerplate, objectives)
+ */
+export interface CampaignMetadata {
+  title: string;      // Concise campaign title 
+  boilerplate: string; // Brief summary of the campaign (2-3 sentences)
+  objectives: string[]; // List of campaign objectives (3-5 items)
 }
 
 /**
@@ -205,7 +217,7 @@ function cleanMarkdownFormatting(content: string): string {
 
 export async function generateCampaignContent(
   inputs: CampaignInputs
-): Promise<string> {
+): Promise<string | CampaignMetadata> {
   try {
     // Extract all relevant inputs
     const {
@@ -223,7 +235,8 @@ export async function generateCampaignContent(
       audienceGoals,
       toneProfile,
       contentType,
-      maxLength = 1000
+      maxLength = 1000,
+      generateCampaignMetadata = false
     } = inputs;
     
     // Build a comprehensive context prompt that explains the business situation
@@ -252,6 +265,9 @@ export async function generateCampaignContent(
     
     console.log("Generating content for type:", contentType);
     
+    // If generating campaign metadata, change content type to 'campaign_metadata'
+    const apiContentType = generateCampaignMetadata ? 'campaign_metadata' : contentType;
+    
     // Send the comprehensive context to the API
     const response = await fetch('/api/openai/generate', {
       method: 'POST',
@@ -263,8 +279,8 @@ export async function generateCampaignContent(
         campaignType,
         persona: `${audienceRole} (${audienceName})`,
         toneProfile,
-        contentType,
-        contentPurpose: inputs.contentPurpose, // Add the content purpose
+        contentType: apiContentType,
+        contentPurpose: inputs.contentPurpose,
         maxLength,
         // Additional metadata to help the server-side processing
         industry,
@@ -273,7 +289,8 @@ export async function generateCampaignContent(
         benefit,
         useCaseName,
         audiencePains,
-        audienceGoals
+        audienceGoals,
+        generateCampaignMetadata
       }),
     });
 
@@ -282,13 +299,91 @@ export async function generateCampaignContent(
     }
 
     const data = await response.json();
+    
+    // Handle campaign metadata response
+    if (generateCampaignMetadata) {
+      try {
+        if (data.campaignMetadata) {
+          return data.campaignMetadata as CampaignMetadata;
+        }
+        
+        // If the response didn't include the structured metadata, try to parse it from content
+        if (data.content) {
+          // Try to parse as JSON if the content is already in JSON format
+          try {
+            const parsed = JSON.parse(data.content);
+            if (parsed.title && parsed.boilerplate && parsed.objectives) {
+              return parsed as CampaignMetadata;
+            }
+          } catch (e) {
+            // Not JSON, try to extract manually
+            const lines = data.content.split('\n');
+            const metadata: Partial<CampaignMetadata> = {
+              title: '',
+              boilerplate: '',
+              objectives: []
+            };
+            
+            // Find title, boilerplate and objectives in text response
+            let currentSection = '';
+            for (const line of lines) {
+              if (line.includes('Title:') || line.includes('Campaign Title:')) {
+                metadata.title = line.split(':').slice(1).join(':').trim();
+                currentSection = 'title';
+              } else if (line.includes('Boilerplate:')) {
+                metadata.boilerplate = line.split(':').slice(1).join(':').trim();
+                currentSection = 'boilerplate';
+              } else if (line.includes('Objectives:')) {
+                currentSection = 'objectives';
+              } else if (currentSection === 'objectives' && line.trim().startsWith('-')) {
+                metadata.objectives!.push(line.trim().substring(1).trim());
+              } else if (currentSection === 'title' && !metadata.title) {
+                metadata.title = line.trim();
+              } else if (currentSection === 'boilerplate' && !metadata.boilerplate) {
+                metadata.boilerplate = line.trim();
+              }
+            }
+            
+            // If we've extracted at least partial metadata, return it
+            if (metadata.title) {
+              return {
+                title: metadata.title,
+                boilerplate: metadata.boilerplate || 'Campaign boilerplate text',
+                objectives: metadata.objectives?.length ? metadata.objectives : ['Campaign objective']
+              };
+            }
+          }
+        }
+        
+        // Fallback metadata if we couldn't parse from response
+        return {
+          title: campaignName || 'Campaign Title',
+          boilerplate: 'This campaign aims to address key challenges in the industry.',
+          objectives: ['Increase brand awareness', 'Generate qualified leads', 'Drive conversions']
+        };
+      } catch (error) {
+        console.error('Error parsing campaign metadata:', error);
+        return {
+          title: campaignName || 'Campaign Title',
+          boilerplate: 'This campaign aims to address key challenges in the industry.',
+          objectives: ['Increase brand awareness', 'Generate qualified leads', 'Drive conversions']
+        };
+      }
+    }
+    
     console.log("Raw API response:", data.content.substring(0, 100) + "...");
     
     // Return the cleaned content directly from the server
-    // No need to process it further as the server should handle the cleaning
     return data.content;
   } catch (error) {
     console.error('Error generating content with OpenAI:', error);
+    if (inputs.generateCampaignMetadata) {
+      return {
+        title: inputs.campaignName || 'Campaign Title',
+        boilerplate: 'This campaign aims to address key challenges in the industry.',
+        objectives: ['Increase brand awareness', 'Generate qualified leads', 'Drive conversions']
+      };
+    }
     return fallbackContent(inputs);
   }
 }
