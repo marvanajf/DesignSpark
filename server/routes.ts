@@ -2795,6 +2795,141 @@ Registration includes materials, follow-up support, and implementation guide.`;
     }
   });
 
+  // Campaign Factory endpoints
+  app.get("/api/campaign-factory", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const campaigns = await storage.getCampaignFactoriesByUserId(req.user!.id);
+      res.json(campaigns);
+    } catch (error) {
+      console.error("Error fetching campaign factory campaigns:", error);
+      res.status(500).json({ error: "Failed to fetch campaign factory campaigns" });
+    }
+  });
+
+  app.get("/api/campaign-factory/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaignFactory(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign factory not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to access this campaign" });
+      }
+
+      res.json(campaign);
+    } catch (error) {
+      console.error("Error fetching campaign factory:", error);
+      res.status(500).json({ error: "Failed to fetch campaign factory" });
+    }
+  });
+
+  app.post("/api/campaign-factory", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      // Check subscription limits
+      const userData = await storage.getUser(req.user!.id);
+      if (!userData) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const userPlan = userData.subscription_plan as keyof typeof subscriptionPlans;
+      const campaignFactoryLimit = subscriptionPlans[userPlan]?.campaignFactory || 0;
+      
+      if (userData.campaign_factory_used >= campaignFactoryLimit) {
+        return res.status(402).json({ 
+          error: "Subscription limit reached", 
+          limitType: "campaign_factory",
+          current: userData.campaign_factory_used,
+          limit: campaignFactoryLimit
+        });
+      }
+
+      // Create the campaign factory
+      const campaignData = {
+        ...req.body,
+        user_id: req.user!.id
+      };
+
+      const newCampaign = await storage.createCampaignFactory(campaignData);
+      
+      // Increment usage counter
+      await storage.incrementCampaignFactoryUsage(req.user!.id);
+
+      res.status(201).json(newCampaign);
+    } catch (error) {
+      console.error("Error creating campaign factory:", error);
+      res.status(500).json({ error: "Failed to create campaign factory" });
+    }
+  });
+
+  app.patch("/api/campaign-factory/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaignFactory(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign factory not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to update this campaign" });
+      }
+
+      // Update the campaign
+      const updatedCampaign = await storage.updateCampaignFactory(id, req.body);
+      res.json(updatedCampaign);
+    } catch (error) {
+      console.error("Error updating campaign factory:", error);
+      res.status(500).json({ error: "Failed to update campaign factory" });
+    }
+  });
+
+  app.delete("/api/campaign-factory/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
+
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid campaign ID" });
+      }
+
+      const campaign = await storage.getCampaignFactory(id);
+      
+      if (!campaign) {
+        return res.status(404).json({ error: "Campaign factory not found" });
+      }
+
+      if (campaign.user_id !== req.user!.id && req.user!.role !== 'admin') {
+        return res.status(403).json({ error: "Not authorized to delete this campaign" });
+      }
+
+      // Delete the campaign
+      await storage.deleteCampaignFactory(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting campaign factory:", error);
+      res.status(500).json({ error: "Failed to delete campaign factory" });
+    }
+  });
+
   // Generate a persona using OpenAI
   app.post("/api/generate-persona", async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
@@ -2920,42 +3055,6 @@ Registration includes materials, follow-up support, and implementation guide.`;
   });
 
   // Register OpenAI routes
-  // Campaign Factory API Routes
-  app.get('/api/campaign-factory-campaigns', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
-    }
-    
-    try {
-      // This is a placeholder endpoint. In a real implementation, you would fetch
-      // campaign data from storage, but currently this data is only maintained client-side
-      const campaigns = [];
-      
-      // Return the empty array for now (client will handle this)
-      return res.json(campaigns);
-    } catch (error) {
-      console.error("Error fetching campaign factory campaigns:", error);
-      return res.status(500).send("Server error");
-    }
-  });
-  
-  app.get('/api/campaign-factory/:id', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).send("Not authenticated");
-    }
-    
-    try {
-      // This is a placeholder endpoint. In a real implementation, you would fetch
-      // campaign data from storage, but currently this data is only maintained client-side
-      
-      // Return a 404 since we don't have server-side storage for these campaigns yet
-      return res.status(404).json({ error: "Campaign not found" });
-    } catch (error) {
-      console.error("Error fetching campaign factory by ID:", error);
-      return res.status(500).send("Server error");
-    }
-  });
-
   registerOpenAIRoutes(app);
   
   const httpServer = createServer(app);
