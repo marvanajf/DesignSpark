@@ -218,8 +218,8 @@ const EditableTitle = ({
 const EditableContent = ({ 
   content, 
   onContentChange, 
-  rows = 10,
-  minHeight = "200px" 
+  rows = 15,
+  minHeight = "300px" 
 }: { 
   content: string; 
   onContentChange: (newContent: string) => void; 
@@ -227,11 +227,12 @@ const EditableContent = ({
   minHeight?: string;
 }) => {
   return (
-    <div className="relative group">
+    <div className="relative group w-full">
       <textarea
-        className={`bg-transparent text-white w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded p-2 font-sans whitespace-pre-wrap min-h-[${minHeight}] campaign-content`}
+        className="bg-transparent text-white w-full focus:outline-none focus:ring-1 focus:ring-[#5eead4] rounded p-2 font-sans whitespace-pre-wrap h-auto resize-none campaign-content"
         value={content || ''}
         rows={rows}
+        style={{ minHeight }}
         onChange={(e) => onContentChange(e.target.value)}
       />
       <Pencil className="h-4 w-4 text-[#5eead4] opacity-0 group-hover:opacity-80 absolute top-2 right-2 transition-opacity" />
