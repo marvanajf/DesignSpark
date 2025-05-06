@@ -1988,7 +1988,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                             return (
                               <div 
                                 key={i}
-                                className="flex items-center gap-3 p-3 bg-zinc-800 border border-zinc-700 rounded-lg group hover:bg-zinc-800/80 transition-colors"
+                                className="flex items-center gap-3 p-3 bg-black border border-zinc-800 rounded-lg group hover:bg-black/90 transition-colors"
                               >
                                 <div className="h-10 w-10 rounded-full bg-[#0e131f] border border-[#5eead4]/30 flex items-center justify-center flex-shrink-0">
                                   {icon}
