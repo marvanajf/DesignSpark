@@ -90,7 +90,55 @@ export function registerOpenAIRoutes(app: Express) {
       // Build enhanced prompt based on all available context
       const systemPrompt = buildEnhancedSystemPrompt(enhancedContext);
       
-      // Construct a comprehensive user prompt that extracts key information
+      // Special case for campaign metadata content type
+      if (contentType === 'campaign_metadata') {
+        // Construct a specialized prompt for campaign metadata
+        const userPrompt = `
+---CAMPAIGN BRIEF (PRIMARY SOURCE OF INFORMATION)---
+${prompt}
+
+---TASK: GENERATE CAMPAIGN METADATA---
+Based on the campaign brief, generate the following campaign components:
+
+1. Title: Create a concise, compelling campaign title (5-8 words)
+2. Boilerplate: Write a brief summary of the campaign (2-3 sentences) that captures its essence, goals, and value proposition
+3. Objectives: Generate 3-5 specific, measurable campaign objectives in bullet point format
+
+Format your response in JSON format:
+{
+  "title": "Your Campaign Title Here",
+  "boilerplate": "Your campaign boilerplate description here...",
+  "objectives": ["Objective 1", "Objective 2", "Objective 3"]
+}
+
+The JSON format is critical for proper integration with our system.`;
+
+        // Generate campaign metadata with OpenAI
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o", // Use the best available model
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ],
+          temperature: 0.7,
+          max_tokens: 1000,
+          response_format: { type: "json_object" }
+        });
+
+        // Extract the response
+        const responseContent = completion.choices[0].message.content || '';
+        
+        // Return the JSON data as campaignMetadata
+        try {
+          const campaignMetadata = JSON.parse(responseContent);
+          return res.json({ campaignMetadata });
+        } catch (error) {
+          // If JSON parsing fails, still return the raw content
+          return res.json({ content: responseContent });
+        }
+      }
+      
+      // For regular content types, use the standard prompt
       const userPrompt = `
 ---CAMPAIGN BRIEF (PRIMARY SOURCE OF INFORMATION - DO NOT REFERENCE DIRECTLY)---
 ${prompt}

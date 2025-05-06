@@ -338,6 +338,12 @@ type Campaign = {
     educational: number;
     enthusiastic: number;
   };
+  // Campaign metadata
+  metadata?: {
+    title: string;
+    boilerplate: string;
+    objectives: string[];
+  };
 };
 
 export default function CampaignFactoryPage() {
@@ -654,7 +660,35 @@ export default function CampaignFactoryPage() {
         await new Promise(resolve => setTimeout(resolve, 100));
       }
       
-      // Now we make the actual API call to OpenAI
+      // First, generate the campaign metadata (title, boilerplate, and objectives)
+      let campaignMetadata = {
+        title: '',
+        boilerplate: '',
+        objectives: ['']
+      };
+      try {
+        // Set content type to trigger campaign metadata generation
+        const metadataResponse = await generateCampaignContent({
+          ...openAIInputs,
+          generateCampaignMetadata: true,
+          campaignBrief: campaignPrompt
+        });
+        
+        // Check if the response is CampaignMetadata
+        if (typeof metadataResponse !== 'string') {
+          campaignMetadata = metadataResponse;
+        }
+      } catch (error) {
+        console.error("Error generating campaign metadata:", error);
+        // Use fallback metadata
+        campaignMetadata = {
+          title: campaignTitleVal,
+          boilerplate: "This campaign targets key decision makers with valuable content.",
+          objectives: ["Increase brand awareness", "Generate qualified leads", "Drive engagement"]
+        };
+      }
+      
+      // Now we make the actual API call to OpenAI for content
       // First for email content
       openAIInputs.contentType = "email";
       let emailContent1 = "";
@@ -663,7 +697,7 @@ export default function CampaignFactoryPage() {
           ...openAIInputs,
           contentPurpose: "initial outreach",
           campaignBrief: campaignPrompt // Ensure we're passing the actual campaign brief
-        });
+        }) as string;
       } catch (error) {
         console.error("Error generating email content:", error);
         // We'll use fallback content if the API call fails
@@ -680,7 +714,7 @@ export default function CampaignFactoryPage() {
           contentType: "email",
           contentPurpose: "follow up",
           campaignBrief: campaignPrompt // Ensure we're passing the actual campaign brief
-        });
+        }) as string;
       } catch (error) {
         console.error("Error generating follow-up email content:", error);
       }
@@ -694,7 +728,7 @@ export default function CampaignFactoryPage() {
           contentType: "social",
           contentPurpose: "LinkedIn post",
           campaignBrief: campaignPrompt // Ensure we're passing the actual campaign brief
-        });
+        }) as string;
       } catch (error) {
         console.error("Error generating social content:", error);
       }
