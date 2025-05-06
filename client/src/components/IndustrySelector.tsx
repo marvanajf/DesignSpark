@@ -119,7 +119,7 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
                 `}
                 onClick={() => onSelectIndustry(industry)}
               >
-                <div className={`${selectedIndustryId === industry.id ? 'bg-[#74d1ea]/20' : 'bg-[#0e131f]'} rounded-lg p-2.5 mr-3`}>
+                <div className={`${selectedIndustry?.id === industry.id ? 'bg-[#74d1ea]/20' : 'bg-[#0e131f]'} rounded-lg p-2.5 mr-3`}>
                   {getIcon(industry.icon)}
                 </div>
                 <div>
