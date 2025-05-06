@@ -1904,7 +1904,7 @@ Ready to transform your strategic approach? [Contact us] for a complimentary ass
                             
                             {/* Campaign Waterfall Chart */}
                             <div className="campaign-waterfall mt-4 overflow-x-auto">
-                              <div className="relative min-h-[150px] pb-6">
+                              <div className="relative min-h-[150px] pb-6" style={{ minWidth: "800px", width: "100%" }}>
                                 {/* Timeline base */}
                                 <div className="absolute left-0 right-0 h-1 bg-zinc-800 top-[50%]"></div>
                                 
