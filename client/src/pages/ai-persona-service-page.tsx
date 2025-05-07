@@ -318,7 +318,7 @@ export default function AIPersonaServicePage() {
           <section id="features" className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-14">
-                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Features</div>
+                <div className="text-xs font-medium text-black tracking-wide uppercase mb-3">Features</div>
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
                   Create Professional-Grade <span className="text-black">Audience Personas</span>
                 </h2>
@@ -459,11 +459,11 @@ export default function AIPersonaServicePage() {
             <div className="container mx-auto px-4 sm:px-6">
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
-                  <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">How it works</div>
+                  <div className="text-xs font-medium text-black tracking-wide uppercase mb-3">How it works</div>
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
                     Blazingly fast, <span className="text-black">amazingly flexible</span>
                   </h2>
-                  <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                  <p className="text-base text-black max-w-2xl mx-auto">
                     Our AI persona service helps you build the perfect customer profiles for your marketing needs
                   </p>
                 </div>
@@ -585,11 +585,11 @@ export default function AIPersonaServicePage() {
           <section className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-12">
-                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Use Cases</div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
-                  Powerful Applications for <span className="text-indigo-600">Every Business</span>
+                <div className="text-xs font-medium text-black tracking-wide uppercase mb-3">Use Cases</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
+                  Powerful Applications for <span className="text-black">Every Business</span>
                 </h2>
-                <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base text-black max-w-2xl mx-auto">
                   Discover how our AI personas can transform your marketing strategy
                 </p>
               </div>
@@ -719,11 +719,11 @@ export default function AIPersonaServicePage() {
           <section id="pricing" className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-12">
-                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Pricing</div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
-                  <span className="text-indigo-600">Simple pricing</span>, for everyone
+                <div className="text-xs font-medium text-black tracking-wide uppercase mb-3">Pricing</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
+                  <span className="text-black">Simple pricing</span>, for everyone
                 </h2>
-                <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base text-black max-w-2xl mx-auto">
                   No hidden fees, no contracts, cancel anytime
                 </p>
               </div>
@@ -911,11 +911,11 @@ export default function AIPersonaServicePage() {
           <section id="demo" className="py-20 bg-gray-50 relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-12">
-                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Interactive Demo</div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
-                  Try it <span className="text-indigo-600">yourself</span>
+                <div className="text-xs font-medium text-black tracking-wide uppercase mb-3">Interactive Demo</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
+                  Try it <span className="text-black">yourself</span>
                 </h2>
-                <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base text-black max-w-2xl mx-auto">
                   Experience our AI persona generation technology with this interactive demo
                 </p>
               </div>
