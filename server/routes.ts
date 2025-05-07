@@ -3052,7 +3052,40 @@ Registration includes materials, follow-up support, and implementation guide.`;
     }
   });
 
-  // Generate a persona using OpenAI
+  // Demo persona generation (no authentication required)
+  app.post("/api/demo/generate-persona", async (req: Request, res: Response) => {
+    try {
+      const schema = z.object({
+        industry: z.string().min(1)
+      });
+
+      const { industry } = schema.parse(req.body);
+      
+      // Call the OpenAI API endpoint for persona generation
+      const response = await fetch(`http://localhost:${process.env.PORT || 5000}/api/openai/generate-persona`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Internal-Request': 'true'
+        },
+        body: JSON.stringify({ industry })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`OpenAI API returned status ${response.status}`);
+      }
+      
+      const generatedPersona = await response.json();
+      
+      // Return the persona directly without saving to the database
+      res.status(200).json(generatedPersona);
+    } catch (error: any) {
+      console.error("Error generating demo persona:", error);
+      res.status(400).json({ error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+  
+  // Generate a persona using OpenAI (requires authentication)
   app.post("/api/generate-persona", async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) return res.status(401).send("Unauthorized");
 

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet";
 import { Link } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { 
   BarChart3, 
   BrainCircuit,
@@ -10,6 +10,7 @@ import {
   Code,
   Compass,
   Layout,
+  Loader2,
   MessagesSquare,
   Microscope,
   Settings,
@@ -23,12 +24,52 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { PricingCard } from "@/components/PricingCard";
+import { IndustrySelector } from "@/components/IndustrySelector";
+import { Industry } from "@/lib/industries";
+import { Card, CardContent } from "@/components/ui/card";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function AIPersonaServicePage() {
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
+  // State for demo persona generation
+  const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
+  const [demoPersona, setDemoPersona] = useState<any>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Function to generate a demo persona
+  const generateDemoPersona = async () => {
+    if (!selectedIndustry) {
+      setError("Please select an industry first");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setError(null);
+    
+    try {
+      const response = await apiRequest('POST', '/api/demo/generate-persona', {
+        industry: selectedIndustry.name
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate persona');
+      }
+      
+      const persona = await response.json();
+      setDemoPersona(persona);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      console.error("Error generating demo persona:", err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <>
@@ -323,6 +364,165 @@ export default function AIPersonaServicePage() {
                   buttonHref="/contact"
                   footnote="All quotas refresh monthly"
                 />
+              </div>
+            </div>
+          </section>
+          
+          {/* Try Before You Buy Demo Section */}
+          <section id="try-demo" className="py-20 bg-gradient-to-b from-[#040a13] to-black relative">
+            <div className="container mx-auto px-4 sm:px-6">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  <span className="text-[#74d1ea]">Try</span> Before You Buy
+                </h2>
+                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                  Experience our AI persona generation technology with this interactive demo
+                </p>
+              </div>
+              
+              <div className="max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Persona Generation Column */}
+                  <div className="bg-black/40 backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-gray-800 shadow-xl">
+                    <h3 className="text-2xl font-semibold mb-6 text-white">Create a Persona</h3>
+                    
+                    <div className="mb-6">
+                      <h4 className="text-lg font-medium mb-3 text-[#74d1ea]">Select an Industry</h4>
+                      <div className="bg-black/70 rounded-lg p-4 border border-gray-800">
+                        <IndustrySelector 
+                          selectedIndustry={selectedIndustry} 
+                          onSelectIndustry={(industry) => {
+                            setSelectedIndustry(industry);
+                            setDemoPersona(null);
+                          }} 
+                        />
+                      </div>
+                    </div>
+                    
+                    {error && (
+                      <div className="mb-6 bg-red-900/30 border border-red-700 rounded-lg p-4 text-red-200">
+                        {error}
+                      </div>
+                    )}
+                    
+                    <div className="flex justify-center mt-8">
+                      <Button
+                        className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-8 py-3 text-lg"
+                        onClick={generateDemoPersona}
+                        disabled={isGenerating || !selectedIndustry}
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Generating Persona...
+                          </>
+                        ) : (
+                          'Generate Persona'
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {/* Persona Display Column */}
+                  <div className="bg-black/40 backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-gray-800 shadow-xl">
+                    <h3 className="text-2xl font-semibold mb-6 text-white">
+                      {demoPersona ? `Meet ${demoPersona.name}` : 'Your Generated Persona'}
+                    </h3>
+                    
+                    {!demoPersona && !isGenerating ? (
+                      <div className="flex flex-col items-center justify-center h-[400px] text-center">
+                        <Sparkles className="h-16 w-16 text-[#74d1ea]/40 mb-4" />
+                        <p className="text-gray-400 max-w-md">
+                          Select an industry from the list on the left and click "Generate Persona" 
+                          to create a detailed buyer persona for your marketing.
+                        </p>
+                      </div>
+                    ) : isGenerating ? (
+                      <div className="flex flex-col items-center justify-center h-[400px] text-center">
+                        <div className="w-16 h-16 border-4 border-[#74d1ea]/30 border-t-[#74d1ea] rounded-full animate-spin mb-4"></div>
+                        <p className="text-gray-300">
+                          Creating your persona...
+                        </p>
+                        <p className="text-gray-500 text-sm mt-2">
+                          This typically takes 10-15 seconds
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="overflow-y-auto max-h-[500px] pr-2">
+                        <div className="bg-gradient-to-r from-[#0c1a2e] to-[#111827] p-5 rounded-lg border border-gray-800 mb-6">
+                          <div className="flex items-center mb-4">
+                            <div className="bg-[#74d1ea]/20 p-2.5 rounded-full mr-4">
+                              <Users className="h-6 w-6 text-[#74d1ea]" />
+                            </div>
+                            <div>
+                              <h4 className="text-xl font-medium text-white">{demoPersona.name}</h4>
+                              <p className="text-[#74d1ea]">{demoPersona.role}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="mb-4">
+                            <div className="text-gray-400 text-sm mb-1">Company</div>
+                            <div className="text-white">{demoPersona.company}</div>
+                          </div>
+                          
+                          {demoPersona.experience && (
+                            <div className="mb-4">
+                              <div className="text-gray-400 text-sm mb-1">Experience</div>
+                              <div className="text-white">{demoPersona.experience} years</div>
+                            </div>
+                          )}
+                          
+                          {demoPersona.demographics && (
+                            <div className="mb-4">
+                              <div className="text-gray-400 text-sm mb-1">Demographics</div>
+                              <div className="text-white">{demoPersona.demographics}</div>
+                            </div>
+                          )}
+                          
+                          <div className="mb-4">
+                            <div className="text-gray-400 text-sm mb-1">Pain Points</div>
+                            <ul className="text-white list-disc list-inside">
+                              {demoPersona.pains?.map((pain: string, index: number) => (
+                                <li key={index} className="my-1">{pain}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          <div className="mb-4">
+                            <div className="text-gray-400 text-sm mb-1">Goals</div>
+                            <ul className="text-white list-disc list-inside">
+                              {demoPersona.goals?.map((goal: string, index: number) => (
+                                <li key={index} className="my-1">{goal}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          <div>
+                            <div className="text-gray-400 text-sm mb-1">Professional Interests</div>
+                            <ul className="text-white list-disc list-inside">
+                              {demoPersona.interests?.map((interest: string, index: number) => (
+                                <li key={index} className="my-1">{interest}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                        
+                        <div className="text-center">
+                          <p className="text-gray-400 mb-4">
+                            This is just a sample of what our AI can generate. Sign up for a full account to create, 
+                            save, and use personas in your marketing campaigns.
+                          </p>
+                          <Button
+                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-6 py-2"
+                            onClick={() => window.location.href = "#pricing"}
+                          >
+                            View Pricing Plans
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
