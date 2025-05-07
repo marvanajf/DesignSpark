@@ -475,7 +475,18 @@ export default function AIPersonaServicePage() {
                           {demoPersona.demographics && (
                             <div className="mb-4">
                               <div className="text-gray-400 text-sm mb-1">Demographics</div>
-                              <div className="text-white">{demoPersona.demographics}</div>
+                              <div className="text-white">
+                                {typeof demoPersona.demographics === 'string' 
+                                  ? demoPersona.demographics 
+                                  : typeof demoPersona.demographics === 'object' 
+                                    ? Object.entries(demoPersona.demographics).map(([key, value]) => (
+                                        <div key={key} className="mt-1">
+                                          <span className="font-medium capitalize">{key}: </span>
+                                          <span>{String(value)}</span>
+                                        </div>
+                                      ))
+                                    : 'Not specified'}
+                              </div>
                             </div>
                           )}
                           
