@@ -311,16 +311,17 @@ export default function AIPersonaServicePage() {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <PricingCard
-                  title="Starter"
-                  description="Perfect for small businesses and freelancers"
-                  price="$29"
+                  title="Basic"
+                  description="Perfect for individuals and small businesses"
+                  price="$49"
                   periodLabel="/month"
                   features={[
-                    "5 AI-generated personas per month",
-                    "Basic industry templates",
-                    "Downloadable PDF exports",
-                    "Email support",
-                    "Persona library access"
+                    "10 AI-generated personas per month",
+                    "Industry-specific insights",
+                    "Basic demographic analysis",
+                    "Core persona attributes only",
+                    "PDF export functionality",
+                    "Email support"
                   ]}
                   buttonText="Get Started"
                   buttonHref="/auth"
@@ -328,17 +329,19 @@ export default function AIPersonaServicePage() {
                 />
                 
                 <PricingCard
-                  title="Professional"
-                  description="Ideal for growing marketing teams"
-                  price="$79"
+                  title="Premium"
+                  description="For marketers needing advanced customization"
+                  price="$149"
                   periodLabel="/month"
                   features={[
-                    "15 AI-generated personas per month",
-                    "Advanced industry templates",
-                    "Custom attributes configuration",
-                    "Priority email support",
-                    "Content strategy recommendations",
-                    "Collaborative workspace"
+                    "30 AI-generated personas per month",
+                    "All Basic features",
+                    "Advanced psychographic analysis",
+                    "Market segment customization",
+                    "Regional adaptation options",
+                    "Buying stage customization",
+                    "Decision style profiling",
+                    "Priority email & chat support"
                   ]}
                   buttonText="Get Started"
                   buttonHref="/auth"
@@ -348,22 +351,84 @@ export default function AIPersonaServicePage() {
                 
                 <PricingCard
                   title="Enterprise"
-                  description="For agencies and large organizations"
-                  price="$199"
+                  description="For organizations needing deep audience insights"
+                  price="$499"
                   periodLabel="/month"
                   features={[
                     "Unlimited AI-generated personas",
-                    "Custom industry templates",
-                    "Advanced persona analytics",
-                    "Dedicated account manager",
-                    "API access for integration",
-                    "Team collaboration tools",
+                    "All Premium features",
+                    "Content strategy integration",
+                    "Competitive positioning analysis",
+                    "Objection prediction & countering",
+                    "Full persona API access",
                     "Training and onboarding"
                   ]}
                   buttonText="Contact Sales"
                   buttonHref="/contact"
                   footnote="All quotas refresh monthly"
                 />
+              </div>
+              
+              <div className="mt-16 max-w-3xl mx-auto">
+                <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
+                  <h3 className="text-xl font-semibold mb-4 text-white">Feature Comparison</h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                      <thead>
+                        <tr className="border-b border-gray-800">
+                          <th className="pb-3 text-left text-sm font-medium text-gray-300">Customization Feature</th>
+                          <th className="pb-3 text-center text-sm font-medium text-gray-300">Basic</th>
+                          <th className="pb-3 text-center text-sm font-medium text-gray-300">Premium</th>
+                          <th className="pb-3 text-center text-sm font-medium text-gray-300">Enterprise</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-gray-800">
+                          <td className="py-2 text-sm text-gray-300">Industry Selection</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                        <tr className="border-b border-gray-800">
+                          <td className="py-2 text-sm text-gray-300">Market Segment Targeting</td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                        <tr className="border-b border-gray-800">
+                          <td className="py-2 text-sm text-gray-300">Regional Adaptation</td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                        <tr className="border-b border-gray-800">
+                          <td className="py-2 text-sm text-gray-300">Buying Stage Customization</td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                        <tr className="border-b border-gray-800">
+                          <td className="py-2 text-sm text-gray-300">Decision Style Profiling</td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                        <tr className="border-b border-gray-800">
+                          <td className="py-2 text-sm text-gray-300">Content Strategy Integration</td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                        <tr>
+                          <td className="py-2 text-sm text-gray-300">Competitive Positioning Analysis</td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300"></td>
+                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -386,7 +451,7 @@ export default function AIPersonaServicePage() {
                   <div className="bg-black/40 backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-gray-800 shadow-xl">
                     <h3 className="text-2xl font-semibold mb-6 text-white">Create a Persona</h3>
                     
-                    <div className="mb-6">
+                    <div className="mb-4">
                       <h4 className="text-lg font-medium mb-3 text-[#74d1ea]">Select an Industry</h4>
                       <div className="bg-black/70 rounded-lg p-4 border border-gray-800">
                         <IndustrySelector 
@@ -399,13 +464,138 @@ export default function AIPersonaServicePage() {
                       </div>
                     </div>
                     
+                    <h4 className="text-lg font-medium mb-3 text-[#74d1ea]">Customization Options</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+                      {/* Market Segment */}
+                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
+                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                          <span>Market Segment</span>
+                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Premium</span>
+                        </label>
+                        <select 
+                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          disabled
+                        >
+                          <option>Enterprise (250+ employees)</option>
+                          <option>Mid-Market (50-249 employees)</option>
+                          <option>Small Business (1-49 employees)</option>
+                          <option>Consumer</option>
+                        </select>
+                      </div>
+                      
+                      {/* Regional Adaptation */}
+                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
+                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                          <span>Regional Adaptation</span>
+                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Premium</span>
+                        </label>
+                        <select 
+                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          disabled
+                        >
+                          <option>North America</option>
+                          <option>Europe</option>
+                          <option>Asia-Pacific</option>
+                          <option>Latin America</option>
+                          <option>Middle East & Africa</option>
+                        </select>
+                      </div>
+                      
+                      {/* Buying Stage */}
+                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
+                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                          <span>Buying Stage</span>
+                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Business</span>
+                        </label>
+                        <select 
+                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          disabled
+                        >
+                          <option>Awareness</option>
+                          <option>Consideration</option>
+                          <option>Decision</option>
+                          <option>Post-Purchase</option>
+                        </select>
+                      </div>
+                      
+                      {/* Psychographic Profile */}
+                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
+                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                          <span>Decision Style</span>
+                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Business</span>
+                        </label>
+                        <select 
+                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          disabled
+                        >
+                          <option>Analytical</option>
+                          <option>Collaborative</option>
+                          <option>Competitive</option>
+                          <option>Spontaneous</option>
+                          <option>Risk-Averse</option>
+                        </select>
+                      </div>
+                      
+                      {/* Content Strategy */}
+                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
+                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                          <span>Content Strategy Focus</span>
+                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Enterprise</span>
+                        </label>
+                        <select 
+                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          disabled
+                        >
+                          <option>Educational Content</option>
+                          <option>Problem-Solution Mapping</option>
+                          <option>Case Studies & Testimonials</option>
+                          <option>ROI & Metrics Focus</option>
+                        </select>
+                      </div>
+                      
+                      {/* Competitive Analysis */}
+                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
+                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                          <span>Competitive Positioning</span>
+                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Enterprise</span>
+                        </label>
+                        <select 
+                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          disabled
+                        >
+                          <option>Feature Comparison Focus</option>
+                          <option>Price Sensitivity Analysis</option>
+                          <option>Vendor Relationship History</option>
+                          <option>Innovation Adoption Timeline</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-[#74d1ea]/10 rounded-lg p-3 border border-[#74d1ea]/30 mb-5">
+                      <div className="flex items-start">
+                        <div className="mr-3 mt-1">
+                          <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-300">
+                            <span className="text-[#74d1ea] font-medium">Premium features</span> allow you to tailor 
+                            personas for specific market segments and regional considerations. 
+                            <span className="text-[#74d1ea] font-medium"> Business features</span> include buying stage 
+                            customization and decision-making style profiles. 
+                            <span className="text-[#74d1ea] font-medium"> Enterprise features</span> provide advanced content 
+                            strategy and competitive positioning insights.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
                     {error && (
                       <div className="mb-6 bg-red-900/30 border border-red-700 rounded-lg p-4 text-red-200">
                         {error}
                       </div>
                     )}
                     
-                    <div className="flex justify-center mt-8">
+                    <div className="flex justify-center mt-6">
                       <Button
                         className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-8 py-3 text-lg"
                         onClick={generateDemoPersona}
@@ -414,10 +604,10 @@ export default function AIPersonaServicePage() {
                         {isGenerating ? (
                           <>
                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                            Generating Persona...
+                            Generating Basic Persona...
                           </>
                         ) : (
-                          'Generate Persona'
+                          'Generate Basic Persona'
                         )}
                       </Button>
                     </div>
