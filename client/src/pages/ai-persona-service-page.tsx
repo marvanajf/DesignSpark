@@ -806,30 +806,30 @@ export default function AIPersonaServicePage() {
                     </p>
                   </div>
                   
-                  <div className="border border-gray-800 rounded-lg p-6 bg-black/50">
-                    <h3 className="text-xl font-semibold mb-3">Can I customize the personas after they're generated?</h3>
-                    <p className="text-gray-400">
+                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Can I customize the personas after they're generated?</h3>
+                    <p className="text-gray-600">
                       Yes, all generated personas can be customized. You can edit demographics, goals, pain points, behaviors, and other attributes to better match your specific target audience.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-800 rounded-lg p-6 bg-black/50">
-                    <h3 className="text-xl font-semibold mb-3">Do I need technical skills to use this service?</h3>
-                    <p className="text-gray-400">
+                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Do I need technical skills to use this service?</h3>
+                    <p className="text-gray-600">
                       No technical skills are required. Our intuitive interface guides you through the process with simple selections and clear instructions. You'll be able to generate professional personas in minutes.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-800 rounded-lg p-6 bg-black/50">
-                    <h3 className="text-xl font-semibold mb-3">How do I integrate these personas with my marketing strategy?</h3>
-                    <p className="text-gray-400">
+                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">How do I integrate these personas with my marketing strategy?</h3>
+                    <p className="text-gray-600">
                       Each persona includes recommendations for content types, messaging approaches, and channels that work best for that audience. You can use these insights to tailor your marketing campaigns, product messaging, and sales approaches.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-800 rounded-lg p-6 bg-black/50">
-                    <h3 className="text-xl font-semibold mb-3">Can I use this as a standalone service, or do I need the full Tovably platform?</h3>
-                    <p className="text-gray-400">
+                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Can I use this as a standalone service, or do I need the full Tovably platform?</h3>
+                    <p className="text-gray-600">
                       The AI Persona Service is available as a standalone offering with its own pricing plans. While it integrates seamlessly with the full Tovably platform for enhanced capabilities, you don't need to subscribe to other Tovably services to use it.
                     </p>
                   </div>
@@ -839,18 +839,18 @@ export default function AIPersonaServicePage() {
           </section>
 
           {/* CTA Section */}
-          <section className="py-20 bg-gradient-to-b from-black to-[#091425] relative">
-            <div className="absolute inset-0 bg-[url('/persona-pattern.svg')] opacity-10 z-0"></div>
+          <section className="py-20 bg-indigo-600 relative">
+            <div className="absolute inset-0 bg-[url('/dots-pattern.svg')] opacity-10 z-0"></div>
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
               <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                  Ready to Understand Your Audience on a <span className="text-[#74d1ea]">Deeper Level</span>?
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+                  Ready to Understand Your Audience on a <span className="text-indigo-200">Deeper Level</span>?
                 </h2>
-                <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+                <p className="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
                   Start creating detailed, AI-powered personas today and transform your marketing strategy with deeper audience insights.
                 </p>
                 <Button 
-                  className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black text-lg py-6 px-8"
+                  className="bg-white hover:bg-gray-100 text-indigo-600 font-medium text-lg py-4 px-8 rounded-md shadow-md"
                   onClick={() => window.location.href = "#pricing"}
                 >
                   Get Started Now
