@@ -81,37 +81,36 @@ export default function AIPersonaServicePage() {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="min-h-screen bg-white text-gray-900 flex flex-col">
         <Navbar />
 
         <main className="flex-grow">
           {/* Hero Section */}
           <section className="relative py-20 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#091425] to-black z-0"></div>
-            <div className="absolute inset-0 bg-[url('/persona-pattern.svg')] opacity-20 z-0"></div>
+            <div className="absolute inset-0 bg-gray-50 z-0"></div>
+            <div className="absolute inset-0 bg-[url('/persona-pattern.svg')] opacity-10 z-0"></div>
             
-            {/* Glow effect */}
-            <div className="absolute top-40 left-1/4 w-96 h-96 bg-[#74d1ea] rounded-full filter blur-[150px] opacity-20 z-0"></div>
-            <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-[#74d1ea] rounded-full filter blur-[120px] opacity-10 z-0"></div>
+            {/* Background dots pattern inspired by screenshots */}
+            <div className="absolute right-0 top-0 w-1/2 h-full bg-[url('/dots-pattern.svg')] bg-no-repeat bg-right-top opacity-40 z-0"></div>
             
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
               <div className="max-w-4xl mx-auto text-center">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-[#74d1ea]">
-                  AI-Powered Audience Personas
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">
+                  AI-Powered <span className="text-indigo-600">Audience Personas</span>
                 </h1>
-                <p className="text-xl md:text-2xl mb-10 text-gray-300">
+                <p className="text-xl md:text-2xl mb-10 text-gray-600">
                   Create detailed, customized audience profiles to power your marketing strategy
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button 
-                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black text-lg py-6 px-8"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-4 px-8 rounded-md shadow-md"
                     onClick={() => window.location.href = "#pricing"}
                   >
-                    Get Started
+                    Start for free
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-[#74d1ea] text-[#74d1ea] hover:bg-[#74d1ea]/10 text-lg py-6 px-8"
+                    className="border-gray-300 text-gray-700 hover:bg-gray-50 text-lg py-4 px-8 rounded-md"
                     onClick={() => window.location.href = "#features"}
                   >
                     Explore Features
@@ -122,92 +121,121 @@ export default function AIPersonaServicePage() {
           </section>
 
           {/* Key Features */}
-          <section id="features" className="py-20 bg-black relative">
+          <section id="features" className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Create Professional-Grade <span className="text-[#74d1ea]">Audience Personas</span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Create Professional-Grade <span className="text-indigo-600">Audience Personas</span>
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Our AI Persona Service helps you develop comprehensive audience profiles that power your marketing strategy
                 </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <FeatureCard 
-                  icon={<BrainCircuit className="h-6 w-6 text-[#74d1ea]" />}
-                  title="AI-Powered Persona Creation" 
-                  description="Generate detailed personas based on industry, demographics, and psychographics using OpenAI's advanced language models."
-                />
-                <FeatureCard 
-                  icon={<Microscope className="h-6 w-6 text-[#74d1ea]" />}
-                  title="Deep Audience Insights" 
-                  description="Understand motivations, pain points, goals, and behavior patterns of your target audience with psychological depth."
-                />
-                <FeatureCard 
-                  icon={<Layout className="h-6 w-6 text-[#74d1ea]" />}
-                  title="Visual Persona Profiles" 
-                  description="Create beautifully formatted persona documents with structured information in an easy-to-reference format."
-                />
-                <FeatureCard 
-                  icon={<Target className="h-6 w-6 text-[#74d1ea]" />}
-                  title="Industry-Specific Targeting" 
-                  description="Choose from over 20 industry categories to generate personas specifically tailored to your business sector."
-                />
-                <FeatureCard 
-                  icon={<MessagesSquare className="h-6 w-6 text-[#74d1ea]" />}
-                  title="Content Strategy Guidance" 
-                  description="Get recommendations for content topics, formats, and channels that will resonate with each persona."
-                />
-                <FeatureCard 
-                  icon={<Settings className="h-6 w-6 text-[#74d1ea]" />}
-                  title="Customizable Attributes" 
-                  description="Fine-tune generated personas by adjusting attributes, goals, and characteristics to match your business needs."
-                />
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <BrainCircuit className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-xl text-gray-900">AI-Powered Creation</h3>
+                  </div>
+                  <p className="text-gray-600">Generate detailed personas based on industry, demographics, and psychographics using OpenAI's advanced language models.</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Microscope className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-xl text-gray-900">Deep Audience Insights</h3>
+                  </div>
+                  <p className="text-gray-600">Understand motivations, pain points, goals, and behavior patterns of your target audience with psychological depth.</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Layout className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-xl text-gray-900">Visual Profiles</h3>
+                  </div>
+                  <p className="text-gray-600">Create beautifully formatted persona documents with structured information in an easy-to-reference format.</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Target className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-xl text-gray-900">Industry Targeting</h3>
+                  </div>
+                  <p className="text-gray-600">Choose from over 20 industry categories to generate personas specifically tailored to your business sector.</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <MessagesSquare className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-xl text-gray-900">Content Strategy</h3>
+                  </div>
+                  <p className="text-gray-600">Get recommendations for content topics, formats, and channels that will resonate with each persona.</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Settings className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <h3 className="font-semibold text-xl text-gray-900">Customizable Attributes</h3>
+                  </div>
+                  <p className="text-gray-600">Fine-tune generated personas by adjusting attributes, goals, and characteristics to match your business needs.</p>
+                </div>
               </div>
             </div>
           </section>
 
           {/* How It Works */}
-          <section className="py-20 bg-gradient-to-b from-black to-[#040a13] relative">
+          <section className="py-20 bg-gray-50 relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  How It <span className="text-[#74d1ea]">Works</span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  How It <span className="text-indigo-600">Works</span>
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Creating AI personas is simple with our streamlined process
                 </p>
               </div>
               
               <div className="max-w-5xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
-                      <span className="text-2xl font-bold text-[#74d1ea]">1</span>
+                  <div className="text-center bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mb-5">
+                      <span className="text-xl font-bold text-indigo-600">1</span>
                     </div>
-                    <h3 className="text-xl font-semibold mb-3">Select Your Industry</h3>
-                    <p className="text-gray-400">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Select Your Industry</h3>
+                    <p className="text-gray-600">
                       Choose from over 20 industry categories or describe your specific business niche
                     </p>
                   </div>
                   
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
-                      <span className="text-2xl font-bold text-[#74d1ea]">2</span>
+                  <div className="text-center bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mb-5">
+                      <span className="text-xl font-bold text-indigo-600">2</span>
                     </div>
-                    <h3 className="text-xl font-semibold mb-3">Generate Personas</h3>
-                    <p className="text-gray-400">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Generate Personas</h3>
+                    <p className="text-gray-600">
                       Our AI creates detailed personas complete with demographics, goals, pain points, and behaviors
                     </p>
                   </div>
                   
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#74d1ea]/20 mb-5 border border-[#74d1ea]/30">
-                      <span className="text-2xl font-bold text-[#74d1ea]">3</span>
+                  <div className="text-center bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mb-5">
+                      <span className="text-xl font-bold text-indigo-600">3</span>
                     </div>
-                    <h3 className="text-xl font-semibold mb-3">Refine & Download</h3>
-                    <p className="text-gray-400">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Refine & Download</h3>
+                    <p className="text-gray-600">
                       Customize the generated personas and save them for use in your marketing strategy
                     </p>
                   </div>
@@ -215,7 +243,7 @@ export default function AIPersonaServicePage() {
                 
                 <div className="mt-16 text-center">
                   <Button 
-                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black text-lg py-6 px-8"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-4 px-8 rounded-md shadow-md"
                     onClick={() => window.location.href = "#pricing"}
                   >
                     Start Creating Personas
@@ -226,68 +254,68 @@ export default function AIPersonaServicePage() {
           </section>
 
           {/* Use Cases */}
-          <section className="py-20 bg-[#040a13] relative">
+          <section className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Powerful <span className="text-[#74d1ea]">Use Cases</span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Powerful <span className="text-indigo-600">Use Cases</span>
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Discover how our AI personas can transform your marketing strategy
                 </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div className="bg-black/50 border border-gray-800 rounded-lg p-6 hover:border-[#74d1ea]/30 transition-all duration-300">
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="flex items-start mb-4">
-                    <div className="bg-[#74d1ea]/20 p-2 rounded mr-4">
-                      <Target className="h-6 w-6 text-[#74d1ea]" />
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Target className="h-6 w-6 text-indigo-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">Content Targeting</h3>
-                      <p className="text-gray-400">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Content Targeting</h3>
+                      <p className="text-gray-600">
                         Create content specifically tailored to the needs, interests, and pain points of your target audience, increasing engagement and conversion rates.
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-black/50 border border-gray-800 rounded-lg p-6 hover:border-[#74d1ea]/30 transition-all duration-300">
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="flex items-start mb-4">
-                    <div className="bg-[#74d1ea]/20 p-2 rounded mr-4">
-                      <Compass className="h-6 w-6 text-[#74d1ea]" />
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Compass className="h-6 w-6 text-indigo-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">Product Development</h3>
-                      <p className="text-gray-400">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Product Development</h3>
+                      <p className="text-gray-600">
                         Guide product development and feature prioritization based on deep understanding of customer needs and preferences.
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-black/50 border border-gray-800 rounded-lg p-6 hover:border-[#74d1ea]/30 transition-all duration-300">
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="flex items-start mb-4">
-                    <div className="bg-[#74d1ea]/20 p-2 rounded mr-4">
-                      <Building2 className="h-6 w-6 text-[#74d1ea]" />
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Building2 className="h-6 w-6 text-indigo-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">Market Expansion</h3>
-                      <p className="text-gray-400">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Market Expansion</h3>
+                      <p className="text-gray-600">
                         Identify and understand new market segments to inform your expansion strategy and messaging approach.
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-black/50 border border-gray-800 rounded-lg p-6 hover:border-[#74d1ea]/30 transition-all duration-300">
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="flex items-start mb-4">
-                    <div className="bg-[#74d1ea]/20 p-2 rounded mr-4">
-                      <Users className="h-6 w-6 text-[#74d1ea]" />
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <Users className="h-6 w-6 text-indigo-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">Sales Enablement</h3>
-                      <p className="text-gray-400">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Sales Enablement</h3>
+                      <p className="text-gray-600">
                         Equip your sales team with detailed buyer personas to improve prospecting, conversations, and closing rates.
                       </p>
                     </div>
@@ -298,132 +326,161 @@ export default function AIPersonaServicePage() {
           </section>
 
           {/* Pricing Section */}
-          <section id="pricing" className="py-20 bg-gradient-to-b from-[#040a13] to-black relative">
+          <section id="pricing" className="py-20 bg-gray-50 relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Simple, Transparent <span className="text-[#74d1ea]">Pricing</span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Simple, Transparent <span className="text-indigo-600">Pricing</span>
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Choose the plan that fits your business needs
                 </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <PricingCard
-                  title="Basic"
-                  description="Perfect for individuals and small businesses"
-                  price="$49"
-                  periodLabel="/month"
-                  features={[
-                    "10 AI-generated personas per month",
-                    "Industry-specific insights",
-                    "Basic demographic analysis",
-                    "Core persona attributes only",
-                    "PDF export functionality",
-                    "Email support"
-                  ]}
-                  buttonText="Get Started"
-                  buttonHref="/auth"
-                  footnote="All quotas refresh monthly"
-                />
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Basic</h3>
+                    <p className="text-gray-600 mb-4">Perfect for individuals and small businesses</p>
+                    <p className="text-3xl font-bold text-gray-900 mb-4">$49<span className="text-lg text-gray-500 font-normal">/month</span></p>
+                    <ul className="space-y-3 mb-6">
+                      {[
+                        "10 AI-generated personas per month",
+                        "Industry-specific insights",
+                        "Basic demographic analysis",
+                        "Core persona attributes only",
+                        "PDF export functionality",
+                        "Email support"
+                      ].map((feature, i) => (
+                        <li className="flex items-center" key={i}>
+                          <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
+                          <span className="text-gray-600 text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md">
+                      Get Started
+                    </Button>
+                    <p className="text-gray-500 text-xs text-center mt-4">All quotas refresh monthly</p>
+                  </div>
+                </div>
                 
-                <PricingCard
-                  title="Premium"
-                  description="For marketers needing advanced customization"
-                  price="$149"
-                  periodLabel="/month"
-                  features={[
-                    "30 AI-generated personas per month",
-                    "All Basic features",
-                    "Advanced psychographic analysis",
-                    "Market segment customization",
-                    "Regional adaptation options",
-                    "Buying stage customization",
-                    "Decision style profiling",
-                    "Priority email & chat support"
-                  ]}
-                  buttonText="Get Started"
-                  buttonHref="/auth"
-                  isPopular={true}
-                  footnote="All quotas refresh monthly"
-                />
+                <div className="bg-white rounded-lg border-2 border-indigo-600 shadow-md overflow-hidden relative">
+                  <div className="absolute top-0 inset-x-0 bg-indigo-600 text-white text-xs py-1 text-center font-medium">
+                    MOST POPULAR
+                  </div>
+                  <div className="p-6 pt-8">
+                    <h3 className="text-lg font-semibold text-gray-900">Premium</h3>
+                    <p className="text-gray-600 mb-4">For marketers needing advanced customization</p>
+                    <p className="text-3xl font-bold text-gray-900 mb-4">$149<span className="text-lg text-gray-500 font-normal">/month</span></p>
+                    <ul className="space-y-3 mb-6">
+                      {[
+                        "30 AI-generated personas per month",
+                        "All Basic features",
+                        "Advanced psychographic analysis",
+                        "Market segment customization",
+                        "Regional adaptation options",
+                        "Buying stage customization",
+                        "Decision style profiling",
+                        "Priority email & chat support"
+                      ].map((feature, i) => (
+                        <li className="flex items-center" key={i}>
+                          <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
+                          <span className="text-gray-600 text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md">
+                      Get Started
+                    </Button>
+                    <p className="text-gray-500 text-xs text-center mt-4">All quotas refresh monthly</p>
+                  </div>
+                </div>
                 
-                <PricingCard
-                  title="Enterprise"
-                  description="For organizations needing deep audience insights"
-                  price="$499"
-                  periodLabel="/month"
-                  features={[
-                    "Unlimited AI-generated personas",
-                    "All Premium features",
-                    "Content strategy integration",
-                    "Competitive positioning analysis",
-                    "Objection prediction & countering",
-                    "Full persona API access",
-                    "Training and onboarding"
-                  ]}
-                  buttonText="Contact Sales"
-                  buttonHref="/contact"
-                  footnote="All quotas refresh monthly"
-                />
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Enterprise</h3>
+                    <p className="text-gray-600 mb-4">For organizations needing deep audience insights</p>
+                    <p className="text-3xl font-bold text-gray-900 mb-4">$499<span className="text-lg text-gray-500 font-normal">/month</span></p>
+                    <ul className="space-y-3 mb-6">
+                      {[
+                        "Unlimited AI-generated personas",
+                        "All Premium features",
+                        "Content strategy integration",
+                        "Competitive positioning analysis",
+                        "Objection prediction & countering",
+                        "Full persona API access",
+                        "Training and onboarding"
+                      ].map((feature, i) => (
+                        <li className="flex items-center" key={i}>
+                          <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
+                          <span className="text-gray-600 text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full bg-gray-800 hover:bg-gray-700 text-white py-2 rounded-md">
+                      Contact Sales
+                    </Button>
+                    <p className="text-gray-500 text-xs text-center mt-4">All quotas refresh monthly</p>
+                  </div>
+                </div>
               </div>
               
               <div className="mt-16 max-w-3xl mx-auto">
-                <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
-                  <h3 className="text-xl font-semibold mb-4 text-white">Feature Comparison</h3>
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <h3 className="text-xl font-semibold mb-4 text-gray-900">Feature Comparison</h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full">
                       <thead>
-                        <tr className="border-b border-gray-800">
-                          <th className="pb-3 text-left text-sm font-medium text-gray-300">Customization Feature</th>
-                          <th className="pb-3 text-center text-sm font-medium text-gray-300">Basic</th>
-                          <th className="pb-3 text-center text-sm font-medium text-gray-300">Premium</th>
-                          <th className="pb-3 text-center text-sm font-medium text-gray-300">Enterprise</th>
+                        <tr className="border-b border-gray-200">
+                          <th className="pb-3 text-left text-sm font-medium text-gray-500">Customization Feature</th>
+                          <th className="pb-3 text-center text-sm font-medium text-gray-500">Basic</th>
+                          <th className="pb-3 text-center text-sm font-medium text-gray-500">Premium</th>
+                          <th className="pb-3 text-center text-sm font-medium text-gray-500">Enterprise</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr className="border-b border-gray-800">
-                          <td className="py-2 text-sm text-gray-300">Industry Selection</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-2 text-sm text-gray-600">Industry Selection</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
-                        <tr className="border-b border-gray-800">
-                          <td className="py-2 text-sm text-gray-300">Market Segment Targeting</td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-2 text-sm text-gray-600">Market Segment Targeting</td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
-                        <tr className="border-b border-gray-800">
-                          <td className="py-2 text-sm text-gray-300">Regional Adaptation</td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-2 text-sm text-gray-600">Regional Adaptation</td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
-                        <tr className="border-b border-gray-800">
-                          <td className="py-2 text-sm text-gray-300">Buying Stage Customization</td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-2 text-sm text-gray-600">Buying Stage Customization</td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
-                        <tr className="border-b border-gray-800">
-                          <td className="py-2 text-sm text-gray-300">Decision Style Profiling</td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-2 text-sm text-gray-600">Decision Style Profiling</td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
-                        <tr className="border-b border-gray-800">
-                          <td className="py-2 text-sm text-gray-300">Content Strategy Integration</td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-2 text-sm text-gray-600">Content Strategy Integration</td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
                         <tr>
-                          <td className="py-2 text-sm text-gray-300">Competitive Positioning Analysis</td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300"></td>
-                          <td className="py-2 text-center text-sm text-gray-300">✓</td>
+                          <td className="py-2 text-sm text-gray-600">Competitive Positioning Analysis</td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600"></td>
+                          <td className="py-2 text-center text-sm text-gray-600">✓</td>
                         </tr>
                       </tbody>
                     </table>
@@ -434,13 +491,13 @@ export default function AIPersonaServicePage() {
           </section>
           
           {/* Try Before You Buy Demo Section */}
-          <section id="try-demo" className="py-20 bg-gradient-to-b from-[#040a13] to-black relative">
+          <section id="try-demo" className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  <span className="text-[#74d1ea]">Try</span> Before You Buy
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  <span className="text-indigo-600">Try</span> Before You Buy
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Experience our AI persona generation technology with this interactive demo
                 </p>
               </div>
@@ -448,12 +505,12 @@ export default function AIPersonaServicePage() {
               <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Persona Generation Column */}
-                  <div className="bg-black/40 backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-gray-800 shadow-xl">
-                    <h3 className="text-2xl font-semibold mb-6 text-white">Create a Persona</h3>
+                  <div className="bg-white p-6 lg:p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h3 className="text-2xl font-semibold mb-6 text-gray-900">Create a Persona</h3>
                     
                     <div className="mb-4">
-                      <h4 className="text-lg font-medium mb-3 text-[#74d1ea]">Select an Industry</h4>
-                      <div className="bg-black/70 rounded-lg p-4 border border-gray-800">
+                      <h4 className="text-lg font-medium mb-3 text-gray-900">Select an Industry</h4>
+                      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                         <IndustrySelector 
                           selectedIndustry={selectedIndustry} 
                           onSelectIndustry={(industry) => {
@@ -464,16 +521,16 @@ export default function AIPersonaServicePage() {
                       </div>
                     </div>
                     
-                    <h4 className="text-lg font-medium mb-3 text-[#74d1ea]">Customization Options</h4>
+                    <h4 className="text-lg font-medium mb-3 text-gray-900">Customization Options</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
                       {/* Market Segment */}
-                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
-                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
                           <span>Market Segment</span>
-                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Premium</span>
+                          <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Premium</span>
                         </label>
                         <select 
-                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          className="w-full bg-white border border-gray-300 rounded p-2 text-gray-500 text-sm"
                           disabled
                         >
                           <option>Enterprise (250+ employees)</option>
@@ -484,13 +541,13 @@ export default function AIPersonaServicePage() {
                       </div>
                       
                       {/* Regional Adaptation */}
-                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
-                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
                           <span>Regional Adaptation</span>
-                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Premium</span>
+                          <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Premium</span>
                         </label>
                         <select 
-                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          className="w-full bg-white border border-gray-300 rounded p-2 text-gray-500 text-sm"
                           disabled
                         >
                           <option>North America</option>
@@ -502,13 +559,13 @@ export default function AIPersonaServicePage() {
                       </div>
                       
                       {/* Buying Stage */}
-                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
-                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
                           <span>Buying Stage</span>
-                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Business</span>
+                          <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Business</span>
                         </label>
                         <select 
-                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          className="w-full bg-white border border-gray-300 rounded p-2 text-gray-500 text-sm"
                           disabled
                         >
                           <option>Awareness</option>
@@ -519,13 +576,13 @@ export default function AIPersonaServicePage() {
                       </div>
                       
                       {/* Psychographic Profile */}
-                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
-                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
                           <span>Decision Style</span>
-                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Business</span>
+                          <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Business</span>
                         </label>
                         <select 
-                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          className="w-full bg-white border border-gray-300 rounded p-2 text-gray-500 text-sm"
                           disabled
                         >
                           <option>Analytical</option>
@@ -537,13 +594,13 @@ export default function AIPersonaServicePage() {
                       </div>
                       
                       {/* Content Strategy */}
-                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
-                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
                           <span>Content Strategy Focus</span>
-                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Enterprise</span>
+                          <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Enterprise</span>
                         </label>
                         <select 
-                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          className="w-full bg-white border border-gray-300 rounded p-2 text-gray-500 text-sm"
                           disabled
                         >
                           <option>Educational Content</option>
@@ -554,13 +611,13 @@ export default function AIPersonaServicePage() {
                       </div>
                       
                       {/* Competitive Analysis */}
-                      <div className="bg-black/70 rounded-lg p-3 border border-gray-800">
-                        <label className="flex items-center justify-between text-sm text-gray-300 mb-2">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
                           <span>Competitive Positioning</span>
-                          <span className="text-xs text-[#74d1ea] bg-[#74d1ea]/10 py-1 px-2 rounded">Enterprise</span>
+                          <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Enterprise</span>
                         </label>
                         <select 
-                          className="w-full bg-black/60 border border-gray-700 rounded p-2 text-gray-300 text-sm"
+                          className="w-full bg-white border border-gray-300 rounded p-2 text-gray-500 text-sm"
                           disabled
                         >
                           <option>Feature Comparison Focus</option>
@@ -571,18 +628,18 @@ export default function AIPersonaServicePage() {
                       </div>
                     </div>
                     
-                    <div className="bg-[#74d1ea]/10 rounded-lg p-3 border border-[#74d1ea]/30 mb-5">
+                    <div className="bg-indigo-50 rounded-lg p-4 border border-indigo-100 mb-5">
                       <div className="flex items-start">
                         <div className="mr-3 mt-1">
-                          <Sparkles className="h-5 w-5 text-[#74d1ea]" />
+                          <Sparkles className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-gray-300">
-                            <span className="text-[#74d1ea] font-medium">Premium features</span> allow you to tailor 
+                          <p className="text-sm text-gray-600">
+                            <span className="text-indigo-600 font-medium">Premium features</span> allow you to tailor 
                             personas for specific market segments and regional considerations. 
-                            <span className="text-[#74d1ea] font-medium"> Business features</span> include buying stage 
+                            <span className="text-indigo-600 font-medium"> Business features</span> include buying stage 
                             customization and decision-making style profiles. 
-                            <span className="text-[#74d1ea] font-medium"> Enterprise features</span> provide advanced content 
+                            <span className="text-indigo-600 font-medium"> Enterprise features</span> provide advanced content 
                             strategy and competitive positioning insights.
                           </p>
                         </div>
@@ -590,14 +647,14 @@ export default function AIPersonaServicePage() {
                     </div>
                     
                     {error && (
-                      <div className="mb-6 bg-red-900/30 border border-red-700 rounded-lg p-4 text-red-200">
+                      <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-600">
                         {error}
                       </div>
                     )}
                     
                     <div className="flex justify-center mt-6">
                       <Button
-                        className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-8 py-3 text-lg"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-8 py-3 text-lg rounded-md shadow-sm"
                         onClick={generateDemoPersona}
                         disabled={isGenerating || !selectedIndustry}
                       >
@@ -614,23 +671,23 @@ export default function AIPersonaServicePage() {
                   </div>
                   
                   {/* Persona Display Column */}
-                  <div className="bg-black/40 backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-gray-800 shadow-xl">
-                    <h3 className="text-2xl font-semibold mb-6 text-white">
+                  <div className="bg-white p-6 lg:p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h3 className="text-2xl font-semibold mb-6 text-gray-900">
                       {demoPersona ? `Meet ${demoPersona.name}` : 'Your Generated Persona'}
                     </h3>
                     
                     {!demoPersona && !isGenerating ? (
                       <div className="flex flex-col items-center justify-center h-[400px] text-center">
-                        <Sparkles className="h-16 w-16 text-[#74d1ea]/40 mb-4" />
-                        <p className="text-gray-400 max-w-md">
+                        <Sparkles className="h-16 w-16 text-indigo-300 mb-4" />
+                        <p className="text-gray-500 max-w-md">
                           Select an industry from the list on the left and click "Generate Persona" 
                           to create a detailed buyer persona for your marketing.
                         </p>
                       </div>
                     ) : isGenerating ? (
                       <div className="flex flex-col items-center justify-center h-[400px] text-center">
-                        <div className="w-16 h-16 border-4 border-[#74d1ea]/30 border-t-[#74d1ea] rounded-full animate-spin mb-4"></div>
-                        <p className="text-gray-300">
+                        <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
+                        <p className="text-gray-700">
                           Creating your persona...
                         </p>
                         <p className="text-gray-500 text-sm mt-2">
@@ -639,33 +696,33 @@ export default function AIPersonaServicePage() {
                       </div>
                     ) : (
                       <div className="overflow-y-auto max-h-[500px] pr-2">
-                        <div className="bg-gradient-to-r from-[#0c1a2e] to-[#111827] p-5 rounded-lg border border-gray-800 mb-6">
+                        <div className="bg-gradient-to-r from-gray-50 to-white p-5 rounded-lg border border-gray-200 mb-6">
                           <div className="flex items-center mb-4">
-                            <div className="bg-[#74d1ea]/20 p-2.5 rounded-full mr-4">
-                              <Users className="h-6 w-6 text-[#74d1ea]" />
+                            <div className="bg-indigo-100 p-2.5 rounded-full mr-4">
+                              <Users className="h-6 w-6 text-indigo-600" />
                             </div>
                             <div>
-                              <h4 className="text-xl font-medium text-white">{demoPersona.name}</h4>
-                              <p className="text-[#74d1ea]">{demoPersona.role}</p>
+                              <h4 className="text-xl font-medium text-gray-900">{demoPersona.name}</h4>
+                              <p className="text-indigo-600">{demoPersona.role}</p>
                             </div>
                           </div>
                           
                           <div className="mb-4">
-                            <div className="text-gray-400 text-sm mb-1">Company</div>
-                            <div className="text-white">{demoPersona.company}</div>
+                            <div className="text-gray-500 text-sm mb-1">Company</div>
+                            <div className="text-gray-900">{demoPersona.company}</div>
                           </div>
                           
                           {demoPersona.experience && (
                             <div className="mb-4">
-                              <div className="text-gray-400 text-sm mb-1">Experience</div>
-                              <div className="text-white">{demoPersona.experience} years</div>
+                              <div className="text-gray-500 text-sm mb-1">Experience</div>
+                              <div className="text-gray-900">{demoPersona.experience} years</div>
                             </div>
                           )}
                           
                           {demoPersona.demographics && (
                             <div className="mb-4">
-                              <div className="text-gray-400 text-sm mb-1">Demographics</div>
-                              <div className="text-white">
+                              <div className="text-gray-500 text-sm mb-1">Demographics</div>
+                              <div className="text-gray-900">
                                 {typeof demoPersona.demographics === 'string' 
                                   ? demoPersona.demographics 
                                   : typeof demoPersona.demographics === 'object' 
@@ -681,8 +738,8 @@ export default function AIPersonaServicePage() {
                           )}
                           
                           <div className="mb-4">
-                            <div className="text-gray-400 text-sm mb-1">Pain Points</div>
-                            <ul className="text-white list-disc list-inside">
+                            <div className="text-gray-500 text-sm mb-1">Pain Points</div>
+                            <ul className="text-gray-700 list-disc list-inside">
                               {demoPersona.pains?.map((pain: string, index: number) => (
                                 <li key={index} className="my-1">{pain}</li>
                               ))}
@@ -690,8 +747,8 @@ export default function AIPersonaServicePage() {
                           </div>
                           
                           <div className="mb-4">
-                            <div className="text-gray-400 text-sm mb-1">Goals</div>
-                            <ul className="text-white list-disc list-inside">
+                            <div className="text-gray-500 text-sm mb-1">Goals</div>
+                            <ul className="text-gray-700 list-disc list-inside">
                               {demoPersona.goals?.map((goal: string, index: number) => (
                                 <li key={index} className="my-1">{goal}</li>
                               ))}
@@ -699,8 +756,8 @@ export default function AIPersonaServicePage() {
                           </div>
                           
                           <div>
-                            <div className="text-gray-400 text-sm mb-1">Professional Interests</div>
-                            <ul className="text-white list-disc list-inside">
+                            <div className="text-gray-500 text-sm mb-1">Professional Interests</div>
+                            <ul className="text-gray-700 list-disc list-inside">
                               {demoPersona.interests?.map((interest: string, index: number) => (
                                 <li key={index} className="my-1">{interest}</li>
                               ))}
@@ -709,12 +766,12 @@ export default function AIPersonaServicePage() {
                         </div>
                         
                         <div className="text-center">
-                          <p className="text-gray-400 mb-4">
+                          <p className="text-gray-600 mb-4">
                             This is just a sample of what our AI can generate. Sign up for a full account to create, 
                             save, and use personas in your marketing campaigns.
                           </p>
                           <Button
-                            className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black font-medium px-6 py-2"
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-md shadow-sm"
                             onClick={() => window.location.href = "#pricing"}
                           >
                             View Pricing Plans
@@ -729,22 +786,22 @@ export default function AIPersonaServicePage() {
           </section>
 
           {/* FAQ Section */}
-          <section className="py-20 bg-black relative">
+          <section className="py-20 bg-gray-50 relative">
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Frequently Asked <span className="text-[#74d1ea]">Questions</span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Frequently Asked <span className="text-indigo-600">Questions</span>
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Find answers to common questions about our AI Persona Service
                 </p>
               </div>
               
               <div className="max-w-3xl mx-auto">
                 <div className="space-y-6">
-                  <div className="border border-gray-800 rounded-lg p-6 bg-black/50">
-                    <h3 className="text-xl font-semibold mb-3">How accurate are the AI-generated personas?</h3>
-                    <p className="text-gray-400">
+                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-900">How accurate are the AI-generated personas?</h3>
+                    <p className="text-gray-600">
                       Our AI personas are based on industry research, market data, and advanced language models. While they provide a strong starting point, we recommend refining them with your specific business knowledge and customer insights for maximum accuracy.
                     </p>
                   </div>
