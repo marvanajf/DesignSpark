@@ -148,19 +148,19 @@ export default function AIPersonaServicePage() {
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                     {/* Left Column - Input */}
                     <div className="bg-gray-50 rounded-md border border-gray-200 p-4">
-                      <div className="text-xs font-medium text-gray-500 mb-3">Industry Selection</div>
+                      <div className="text-xs font-medium text-black mb-3">Industry Selection</div>
                       
                       <div className="bg-white rounded-md border border-gray-200 p-3 mb-4">
                         <div className="flex items-center gap-2 mb-2">
                           <Building2 className="h-3.5 w-3.5 text-black" />
                           <div className="text-sm font-medium">SaaS / Technology</div>
                         </div>
-                        <div className="text-xs text-gray-500 leading-relaxed">
+                        <div className="text-xs text-black leading-relaxed">
                           Generate personas for software as a service products and technology services
                         </div>
                       </div>
                       
-                      <div className="text-xs font-medium text-gray-500 mb-3">Target Market</div>
+                      <div className="text-xs font-medium text-black mb-3">Target Market</div>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-white rounded border border-gray-200 p-2">
                           <div className="text-xs font-medium">B2B</div>
@@ -170,7 +170,7 @@ export default function AIPersonaServicePage() {
                         </div>
                       </div>
                       
-                      <div className="text-xs font-medium text-gray-500 mb-3 mt-4">Persona Type</div>
+                      <div className="text-xs font-medium text-black mb-3 mt-4">Persona Type</div>
                       <div className="grid grid-cols-2 gap-2 mb-4">
                         <div className="bg-white rounded border border-gray-200 p-2">
                           <div className="text-xs font-medium">Decision Maker</div>
@@ -190,12 +190,12 @@ export default function AIPersonaServicePage() {
                       <div className="bg-white border border-gray-200 rounded-lg p-4">
                         <div className="flex justify-between items-start mb-4">
                           <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-medium">
+                            <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center text-black font-medium">
                               AC
                             </div>
                             <div>
                               <div className="text-sm font-medium">Alex Chen</div>
-                              <div className="text-xs text-gray-500">CTO at MidSize Tech</div>
+                              <div className="text-xs text-black">CTO at MidSize Tech</div>
                             </div>
                           </div>
                           <div className="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">
@@ -207,7 +207,7 @@ export default function AIPersonaServicePage() {
                           <div>
                             <div className="flex items-center gap-1.5 mb-1.5">
                               <Users className="h-3 w-3 text-black" />
-                              <div className="text-xs font-medium text-gray-700">Demographics</div>
+                              <div className="text-xs font-medium text-black">Demographics</div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                               <div>
@@ -231,8 +231,8 @@ export default function AIPersonaServicePage() {
                           
                           <div className="pt-2 border-t border-gray-100">
                             <div className="flex items-center gap-1.5 mb-1.5">
-                              <Target className="h-3 w-3 text-gray-500" />
-                              <div className="text-xs font-medium text-gray-700">Goals & Motivations</div>
+                              <Target className="h-3 w-3 text-black" />
+                              <div className="text-xs font-medium text-black">Goals & Motivations</div>
                             </div>
                             <ul className="space-y-1">
                               <li className="flex gap-1.5 items-baseline">
@@ -319,10 +319,10 @@ export default function AIPersonaServicePage() {
             <div className="container mx-auto px-4 sm:px-6">
               <div className="text-center mb-14">
                 <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Features</div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
-                  Create Professional-Grade <span className="text-indigo-600">Audience Personas</span>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
+                  Create Professional-Grade <span className="text-black">Audience Personas</span>
                 </h2>
-                <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base md:text-lg text-black max-w-2xl mx-auto">
                   Build detailed, actionable profiles that drive your marketing strategy
                 </p>
               </div>
@@ -460,8 +460,8 @@ export default function AIPersonaServicePage() {
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                   <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">How it works</div>
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
-                    Blazingly fast, <span className="text-indigo-600">amazingly flexible</span>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black tracking-tight leading-tight">
+                    Blazingly fast, <span className="text-black">amazingly flexible</span>
                   </h2>
                   <p className="text-base text-gray-600 max-w-2xl mx-auto">
                     Our AI persona service helps you build the perfect customer profiles for your marketing needs
