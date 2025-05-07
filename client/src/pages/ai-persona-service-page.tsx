@@ -93,7 +93,7 @@ export default function AIPersonaServicePage() {
                 <div className="text-indigo-600 mb-3">AI for Marketing</div>
               </div>
 
-              <div className="max-w-4xl mx-auto text-center">
+              <div className="max-w-3xl mx-auto text-center mb-14">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 tracking-tight">
                   The data model for<br />
                   <span className="relative">
@@ -120,65 +120,142 @@ export default function AIPersonaServicePage() {
                 </div>
               </div>
               
-              <div className="mt-24 flex flex-wrap justify-center gap-8 md:gap-16">
-                {/* Persona Attribute Card - Executive */}
-                <div className="relative w-[220px] p-5 border border-gray-200 rounded-lg bg-white">
-                  <div className="flex items-center mb-3">
-                    <div className="h-6 w-6 bg-purple-100 flex items-center justify-center rounded mr-2">
-                      <Users className="h-3.5 w-3.5 text-purple-600" />
+              {/* Persona Cards in Layout Similar to Reference */}
+              <div className="max-w-6xl mx-auto mt-16">
+                <div className="flex flex-col md:flex-row justify-center items-start gap-5 lg:gap-24">
+                  {/* Persona 1 - Left Side */}
+                  <div className="bg-white px-5 py-3 rounded-md border border-gray-200 w-full max-w-xs">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-5 w-5 bg-purple-100 rounded-md flex items-center justify-center">
+                        <Users className="h-3 w-3 text-purple-600" />
+                      </div>
+                      <span className="text-sm font-medium text-purple-700">Persona</span>
+                      <div className="flex-1 text-right">
+                        <span className="text-xs text-gray-400">Custom</span>
+                      </div>
                     </div>
-                    <span className="text-sm text-purple-700 font-medium">Persona</span>
+                    
+                    <div className="space-y-3.5">
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Name</div>
+                        <div className="text-sm font-medium">Sarah Chen</div>
+                      </div>
+                      
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Role</div>
+                        <div className="text-sm font-medium">CTO</div>
+                      </div>
+                      
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Company Size</div>
+                        <div className="text-sm font-medium">250+ employees</div>
+                      </div>
+                      
+                      <div className="flex items-center text-xs text-gray-500 pt-2">
+                        <div className="h-3 w-3 rounded-full border border-gray-300 flex items-center justify-center mr-1.5">
+                          <span className="text-gray-400 text-[8px]">+</span>
+                        </div>
+                        <span>12 More Attributes</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="mb-2.5">
-                      <div className="text-xs text-gray-500">Name</div>
-                      <div className="text-sm font-medium">Sarah Chen</div>
+                  
+                  {/* Center Icons/Connectors - Hidden on Mobile */}
+                  <div className="hidden md:flex items-center md:mt-20 text-gray-300">
+                    <div className="border-t border-gray-200 w-8"></div>
+                    <div className="mx-4">
+                      <div className="h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center">
+                        <Zap className="h-3 w-3 text-gray-400" />
+                      </div>
                     </div>
-                    <div className="mb-2.5">
-                      <div className="text-xs text-gray-500">Role</div>
-                      <div className="text-sm font-medium">CTO</div>
+                    <div className="border-t border-gray-200 w-8"></div>
+                  </div>
+                  
+                  {/* Persona 2 - Right Side */}
+                  <div className="bg-white px-5 py-3 rounded-md border border-gray-200 w-full max-w-xs">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-5 w-5 bg-yellow-100 rounded-md flex items-center justify-center">
+                        <Users className="h-3 w-3 text-yellow-600" />
+                      </div>
+                      <span className="text-sm font-medium text-yellow-700">Persona</span>
+                      <div className="flex-1 text-right">
+                        <span className="text-xs text-gray-400">Custom</span>
+                      </div>
                     </div>
-                    <div className="mb-2.5">
-                      <div className="text-xs text-gray-500">Company Size</div>
-                      <div className="text-sm font-medium">250+ employees</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500">Buying Stage</div>
-                      <div className="text-sm font-medium">Consideration</div>
-                    </div>
-                    <div className="text-xs text-center text-gray-400 mt-3">
-                      +8 More Attributes
+                    
+                    <div className="space-y-3.5">
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Name</div>
+                        <div className="text-sm font-medium">Michael Rivera</div>
+                      </div>
+                      
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Role</div>
+                        <div className="text-sm font-medium">Marketing Director</div>
+                      </div>
+                      
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Pain Point</div>
+                        <div className="text-sm font-medium">Content ROI tracking</div>
+                      </div>
+                      
+                      <div className="flex items-center text-xs text-gray-500 pt-2">
+                        <div className="h-3 w-3 rounded-full border border-gray-300 flex items-center justify-center mr-1.5">
+                          <span className="text-gray-400 text-[8px]">+</span>
+                        </div>
+                        <span>12 More Attributes</span>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                {/* Persona Attribute Card - Marketing */}
-                <div className="relative w-[220px] p-5 border border-gray-200 rounded-lg bg-white">
-                  <div className="flex items-center mb-3">
-                    <div className="h-6 w-6 bg-emerald-100 flex items-center justify-center rounded mr-2">
-                      <Users className="h-3.5 w-3.5 text-emerald-600" />
+                {/* Bottom Cards Row with Dashed Connector */}
+                <div className="hidden lg:block mt-6 relative">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/3 border-t border-dashed border-gray-200"></div>
+                  <div className="flex justify-between items-center">
+                    <div className="bg-white px-4 py-2.5 rounded-md border border-gray-200 w-[180px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="h-5 w-5 bg-blue-100 rounded-md flex items-center justify-center">
+                          <Building2 className="h-3 w-3 text-blue-600" />
+                        </div>
+                        <span className="text-xs font-medium text-blue-700">Company</span>
+                        <div className="flex-1 text-right">
+                          <span className="text-[10px] text-gray-400">Standard</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-500 flex items-center">
+                        <span>Industry, Company name...</span>
+                      </div>
                     </div>
-                    <span className="text-sm text-emerald-700 font-medium">Persona</span>
-                  </div>
-                  <div>
-                    <div className="mb-2.5">
-                      <div className="text-xs text-gray-500">Name</div>
-                      <div className="text-sm font-medium">Michael Rivera</div>
+                    
+                    <div className="bg-white px-4 py-2.5 rounded-md border border-gray-200 w-[180px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="h-5 w-5 bg-violet-100 rounded-md flex items-center justify-center">
+                          <Sparkles className="h-3 w-3 text-violet-600" />
+                        </div>
+                        <span className="text-xs font-medium text-violet-700">Deal</span>
+                        <div className="flex-1 text-right">
+                          <span className="text-[10px] text-gray-400">Standard</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-500 flex items-center">
+                        <span>Deal type, Deal ID...</span>
+                      </div>
                     </div>
-                    <div className="mb-2.5">
-                      <div className="text-xs text-gray-500">Role</div>
-                      <div className="text-sm font-medium">Marketing Director</div>
-                    </div>
-                    <div className="mb-2.5">
-                      <div className="text-xs text-gray-500">Pain Point</div>
-                      <div className="text-sm font-medium">Content ROI tracking</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500">Budget Focus</div>
-                      <div className="text-sm font-medium">Growth channels</div>
-                    </div>
-                    <div className="text-xs text-center text-gray-400 mt-3">
-                      +8 More Attributes
+                    
+                    <div className="bg-white px-4 py-2.5 rounded-md border border-gray-200 w-[180px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="h-5 w-5 bg-green-100 rounded-md flex items-center justify-center">
+                          <Users className="h-3 w-3 text-green-600" />
+                        </div>
+                        <span className="text-xs font-medium text-green-700">Person</span>
+                        <div className="flex-1 text-right">
+                          <span className="text-[10px] text-gray-400">Standard</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-500 flex items-center">
+                        <span>Email, Person name...</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -808,140 +885,170 @@ export default function AIPersonaServicePage() {
                             </div>
                           </div>
                           
-                          {/* Floating persona attribute cards */}
-                          <div className="flex flex-wrap gap-4 mt-6">
-                            {/* Basic Info Card */}
-                            <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
-                              <div className="flex items-center mb-3">
-                                <div className="h-6 w-6 bg-indigo-100 flex items-center justify-center rounded mr-2">
-                                  <Building2 className="h-3.5 w-3.5 text-indigo-600" />
+                          {/* Persona Card in Same Style as Hero Section */}
+                          <div className="mt-6">
+                            <div className="bg-white px-5 py-4 rounded-md border border-gray-200 w-full max-w-md mx-auto">
+                              <div className="flex items-center gap-2 mb-4">
+                                <div className="h-5 w-5 bg-indigo-100 rounded-md flex items-center justify-center">
+                                  <Users className="h-3 w-3 text-indigo-600" />
                                 </div>
-                                <span className="text-sm text-indigo-700 font-medium">Profile</span>
+                                <span className="text-sm font-medium text-indigo-700">Persona</span>
+                                <div className="flex-1 text-right">
+                                  <span className="text-xs text-gray-400">Custom</span>
+                                </div>
                               </div>
-                              <div>
-                                <div className="mb-2.5">
-                                  <div className="text-xs text-gray-500">Company</div>
+                              
+                              <div className="grid grid-cols-2 gap-x-5 gap-y-4">
+                                <div>
+                                  <div className="text-xs text-gray-500 mb-1">Name</div>
+                                  <div className="text-sm font-medium">{demoPersona.name}</div>
+                                </div>
+                                
+                                <div>
+                                  <div className="text-xs text-gray-500 mb-1">Role</div>
+                                  <div className="text-sm font-medium">{demoPersona.role || demoPersona.title}</div>
+                                </div>
+                                
+                                <div>
+                                  <div className="text-xs text-gray-500 mb-1">Company</div>
                                   <div className="text-sm font-medium">{demoPersona.company}</div>
                                 </div>
                                 
-                                <div className="mb-2.5">
-                                  <div className="text-xs text-gray-500">Role</div>
-                                  <div className="text-sm font-medium">{demoPersona.role}</div>
-                                </div>
-                                
-                                {demoPersona.experience && (
-                                  <div className="mb-2.5">
-                                    <div className="text-xs text-gray-500">Experience</div>
-                                    <div className="text-sm font-medium">{demoPersona.experience} years</div>
-                                  </div>
-                                )}
-                                
-                                <div className="mb-2.5">
-                                  <div className="text-xs text-gray-500">Industry</div>
+                                <div>
+                                  <div className="text-xs text-gray-500 mb-1">Industry</div>
                                   <div className="text-sm font-medium">{selectedIndustry?.name}</div>
                                 </div>
                               </div>
+                              
+                              {/* Related Models with Connecting Elements */}
+                              <div className="mt-8 mb-4">
+                                <div className="flex items-center mb-3">
+                                  <div className="h-[1px] bg-gray-200 flex-1"></div>
+                                  <div className="px-3 text-xs text-gray-400">Related Models</div>
+                                  <div className="h-[1px] bg-gray-200 flex-1"></div>
+                                </div>
+                                
+                                <div className="flex flex-wrap gap-3 justify-between">
+                                  {/* Demographics Card */}
+                                  {demoPersona.demographics && typeof demoPersona.demographics === 'object' && (
+                                    <div className="bg-white px-4 py-3 rounded-md border border-gray-200 w-[175px]">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <div className="h-5 w-5 bg-blue-100 rounded-md flex items-center justify-center">
+                                          <Users className="h-3 w-3 text-blue-600" />
+                                        </div>
+                                        <span className="text-xs font-medium text-blue-700">Demographics</span>
+                                      </div>
+                                      
+                                      {Object.entries(demoPersona.demographics).slice(0, 2).map(([key, value]) => (
+                                        <div className="mb-2" key={key}>
+                                          <div className="text-xs text-gray-500 capitalize">{key}</div>
+                                          <div className="text-xs font-medium truncate">{String(value)}</div>
+                                        </div>
+                                      ))}
+                                      
+                                      <div className="flex items-center text-xs text-gray-500 pt-1">
+                                        <div className="h-3 w-3 rounded-full border border-gray-300 flex items-center justify-center mr-1.5">
+                                          <span className="text-gray-400 text-[8px]">+</span>
+                                        </div>
+                                        <span>{Object.keys(demoPersona.demographics).length - 2} More</span>
+                                      </div>
+                                    </div>
+                                  )}
+                                  
+                                  {/* Goals Card */}
+                                  {demoPersona.goals && demoPersona.goals.length > 0 && (
+                                    <div className="bg-white px-4 py-3 rounded-md border border-gray-200 w-[175px]">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <div className="h-5 w-5 bg-green-100 rounded-md flex items-center justify-center">
+                                          <Target className="h-3 w-3 text-green-600" />
+                                        </div>
+                                        <span className="text-xs font-medium text-green-700">Goals</span>
+                                      </div>
+                                      
+                                      {demoPersona.goals.slice(0, 2).map((goal, i) => (
+                                        <div className="mb-2" key={i}>
+                                          <div className="text-xs text-gray-500">Goal {i+1}</div>
+                                          <div className="text-xs font-medium truncate" title={goal}>{goal}</div>
+                                        </div>
+                                      ))}
+                                      
+                                      <div className="flex items-center text-xs text-gray-500 pt-1">
+                                        <div className="h-3 w-3 rounded-full border border-gray-300 flex items-center justify-center mr-1.5">
+                                          <span className="text-gray-400 text-[8px]">+</span>
+                                        </div>
+                                        <span>{demoPersona.goals.length - 2} More</span>
+                                      </div>
+                                    </div>
+                                  )}
+                                  
+                                  {/* Pain Points Card */}
+                                  {demoPersona.pains && demoPersona.pains.length > 0 && (
+                                    <div className="bg-white px-4 py-3 rounded-md border border-gray-200 w-[175px]">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <div className="h-5 w-5 bg-red-100 rounded-md flex items-center justify-center">
+                                          <MessagesSquare className="h-3 w-3 text-red-600" />
+                                        </div>
+                                        <span className="text-xs font-medium text-red-700">Pain Points</span>
+                                      </div>
+                                      
+                                      {demoPersona.pains.slice(0, 2).map((pain, i) => (
+                                        <div className="mb-2" key={i}>
+                                          <div className="text-xs text-gray-500">Challenge {i+1}</div>
+                                          <div className="text-xs font-medium truncate" title={pain}>{pain}</div>
+                                        </div>
+                                      ))}
+                                      
+                                      <div className="flex items-center text-xs text-gray-500 pt-1">
+                                        <div className="h-3 w-3 rounded-full border border-gray-300 flex items-center justify-center mr-1.5">
+                                          <span className="text-gray-400 text-[8px]">+</span>
+                                        </div>
+                                        <span>{demoPersona.pains.length - 2} More</span>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              
+                              {/* Premium Features */}
+                              <div className="mt-6 pt-4 border-t border-gray-100">
+                                <div className="text-xs text-gray-500 mb-3">Premium Features</div>
+                                <div className="flex flex-wrap gap-3">
+                                  <div className="relative w-[140px] p-3 border border-gray-200 rounded-md bg-white/80 backdrop-blur-sm">
+                                    <div className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-md">
+                                      <div className="flex flex-col items-center">
+                                        <div className="bg-gray-100 p-1.5 rounded-full mb-1.5">
+                                          <Settings className="h-3 w-3 text-gray-400" />
+                                        </div>
+                                        <span className="text-[10px] text-gray-500">Premium feature</span>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <div className="h-4 w-4 bg-amber-100 flex items-center justify-center rounded-sm">
+                                        <Zap className="h-2.5 w-2.5 text-amber-600" />
+                                      </div>
+                                      <span className="text-xs font-medium text-amber-700">Behaviors</span>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="relative w-[140px] p-3 border border-gray-200 rounded-md bg-white/80 backdrop-blur-sm">
+                                    <div className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-md">
+                                      <div className="flex flex-col items-center">
+                                        <div className="bg-gray-100 p-1.5 rounded-full mb-1.5">
+                                          <Settings className="h-3 w-3 text-gray-400" />
+                                        </div>
+                                        <span className="text-[10px] text-gray-500">Premium feature</span>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <div className="h-4 w-4 bg-purple-100 flex items-center justify-center rounded-sm">
+                                        <BrainCircuit className="h-2.5 w-2.5 text-purple-600" />
+                                      </div>
+                                      <span className="text-xs font-medium text-purple-700">Psychology</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            
-                            {/* Demographics Card */}
-                            {demoPersona.demographics && typeof demoPersona.demographics === 'object' && (
-                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
-                                <div className="flex items-center mb-3">
-                                  <div className="h-6 w-6 bg-blue-100 flex items-center justify-center rounded mr-2">
-                                    <Users className="h-3.5 w-3.5 text-blue-600" />
-                                  </div>
-                                  <span className="text-sm text-blue-700 font-medium">Demographics</span>
-                                </div>
-                                <div>
-                                  {Object.entries(demoPersona.demographics).slice(0, 4).map(([key, value]) => (
-                                    <div className="mb-2.5" key={key}>
-                                      <div className="text-xs text-gray-500 capitalize">{key}</div>
-                                      <div className="text-sm font-medium">{String(value)}</div>
-                                    </div>
-                                  ))}
-                                  {Object.keys(demoPersona.demographics).length > 4 && (
-                                    <div className="text-xs text-center text-gray-400 mt-2">
-                                      +{Object.keys(demoPersona.demographics).length - 4} More Attributes
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                            
-                            {/* Goals Card */}
-                            {demoPersona.goals && demoPersona.goals.length > 0 && (
-                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
-                                <div className="flex items-center mb-3">
-                                  <div className="h-6 w-6 bg-green-100 flex items-center justify-center rounded mr-2">
-                                    <Target className="h-3.5 w-3.5 text-green-600" />
-                                  </div>
-                                  <span className="text-sm text-green-700 font-medium">Goals</span>
-                                </div>
-                                <div>
-                                  {demoPersona.goals.slice(0, 4).map((goal, i) => (
-                                    <div className="mb-2.5" key={i}>
-                                      <div className="text-xs text-gray-500">Goal {i+1}</div>
-                                      <div className="text-sm font-medium truncate" title={goal}>{goal}</div>
-                                    </div>
-                                  ))}
-                                  {demoPersona.goals.length > 4 && (
-                                    <div className="text-xs text-center text-gray-400 mt-2">
-                                      +{demoPersona.goals.length - 4} More Goals
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                            
-                            {/* Pain Points Card */}
-                            {demoPersona.pains && demoPersona.pains.length > 0 && (
-                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
-                                <div className="flex items-center mb-3">
-                                  <div className="h-6 w-6 bg-red-100 flex items-center justify-center rounded mr-2">
-                                    <MessagesSquare className="h-3.5 w-3.5 text-red-600" />
-                                  </div>
-                                  <span className="text-sm text-red-700 font-medium">Pain Points</span>
-                                </div>
-                                <div>
-                                  {demoPersona.pains.slice(0, 4).map((pain, i) => (
-                                    <div className="mb-2.5" key={i}>
-                                      <div className="text-xs text-gray-500">Challenge {i+1}</div>
-                                      <div className="text-sm font-medium truncate" title={pain}>{pain}</div>
-                                    </div>
-                                  ))}
-                                  {demoPersona.pains.length > 4 && (
-                                    <div className="text-xs text-center text-gray-400 mt-2">
-                                      +{demoPersona.pains.length - 4} More Challenges
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                            
-                            {/* Interests Card */}
-                            {demoPersona.interests && demoPersona.interests.length > 0 && (
-                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
-                                <div className="flex items-center mb-3">
-                                  <div className="h-6 w-6 bg-amber-100 flex items-center justify-center rounded mr-2">
-                                    <Compass className="h-3.5 w-3.5 text-amber-600" />
-                                  </div>
-                                  <span className="text-sm text-amber-700 font-medium">Interests</span>
-                                </div>
-                                <div>
-                                  {demoPersona.interests.slice(0, 4).map((interest, i) => (
-                                    <div className="mb-2.5" key={i}>
-                                      <div className="text-xs text-gray-500">Interest {i+1}</div>
-                                      <div className="text-sm font-medium truncate" title={interest}>{interest}</div>
-                                    </div>
-                                  ))}
-                                  {demoPersona.interests.length > 4 && (
-                                    <div className="text-xs text-center text-gray-400 mt-2">
-                                      +{demoPersona.interests.length - 4} More Interests
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                         
