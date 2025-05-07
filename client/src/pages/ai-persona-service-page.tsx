@@ -7,6 +7,7 @@ import {
   BrainCircuit,
   Building2,
   CheckCircle,
+  Check,
   Code,
   Compass,
   Layout,
@@ -374,7 +375,7 @@ export default function AIPersonaServicePage() {
                         "Email support"
                       ].map((feature, i) => (
                         <li className="flex items-center text-sm" key={i}>
-                          <Check className="h-4 w-4 text-indigo-600 mr-2 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-indigo-600 mr-2 flex-shrink-0" />
                           <span className="text-gray-600">{feature}</span>
                         </li>
                       ))}
@@ -414,7 +415,7 @@ export default function AIPersonaServicePage() {
                         "Priority email & chat support"
                       ].map((feature, i) => (
                         <li className="flex items-center text-sm" key={i}>
-                          <Check className="h-4 w-4 text-indigo-600 mr-2 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-indigo-600 mr-2 flex-shrink-0" />
                           <span className="text-gray-600">{feature}</span>
                         </li>
                       ))}
@@ -451,7 +452,7 @@ export default function AIPersonaServicePage() {
                         "Dedicated account manager"
                       ].map((feature, i) => (
                         <li className="flex items-center text-sm" key={i}>
-                          <Check className="h-4 w-4 text-indigo-600 mr-2 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-indigo-600 mr-2 flex-shrink-0" />
                           <span className="text-gray-600">{feature}</span>
                         </li>
                       ))}
