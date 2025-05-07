@@ -541,68 +541,130 @@ export default function AIPersonaServicePage() {
           {/* Use Cases */}
           <section className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-                  Powerful <span className="text-indigo-600">Use Cases</span>
+              <div className="text-center mb-12">
+                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Use Cases</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
+                  Powerful Applications for <span className="text-indigo-600">Every Business</span>
                 </h2>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                <p className="text-base text-gray-600 max-w-2xl mx-auto">
                   Discover how our AI personas can transform your marketing strategy
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex items-start mb-4">
-                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
-                      <Target className="h-6 w-6 text-indigo-600" />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                <div className="bg-white border border-gray-200 rounded-md p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="h-8 w-8 bg-indigo-50 rounded-md flex items-center justify-center">
+                      <Target className="h-4 w-4 text-indigo-600" />
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Content Targeting</h3>
-                      <p className="text-gray-600">
-                        Create content specifically tailored to the needs, interests, and pain points of your target audience, increasing engagement and conversion rates.
-                      </p>
+                    <h3 className="text-sm font-medium text-gray-900">Content Targeting</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Create content specifically tailored to your target audience's needs and pain points, increasing engagement and conversion rates.
+                  </p>
+                  <div className="mt-3 flex">
+                    <div className="text-xs font-medium text-indigo-600 flex items-center">
+                      <span>Learn more</span>
+                      <div className="h-3 w-3 ml-1 flex items-center justify-center">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex items-start mb-4">
-                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
-                      <Compass className="h-6 w-6 text-indigo-600" />
+                <div className="bg-white border border-gray-200 rounded-md p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="h-8 w-8 bg-purple-50 rounded-md flex items-center justify-center">
+                      <Compass className="h-4 w-4 text-purple-600" />
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Product Development</h3>
-                      <p className="text-gray-600">
-                        Guide product development and feature prioritization based on deep understanding of customer needs and preferences.
-                      </p>
+                    <h3 className="text-sm font-medium text-gray-900">Product Development</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Guide product development and feature prioritization based on deep understanding of customer needs and preferences.
+                  </p>
+                  <div className="mt-3 flex">
+                    <div className="text-xs font-medium text-purple-600 flex items-center">
+                      <span>Learn more</span>
+                      <div className="h-3 w-3 ml-1 flex items-center justify-center">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex items-start mb-4">
-                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
-                      <Building2 className="h-6 w-6 text-indigo-600" />
+                <div className="bg-white border border-gray-200 rounded-md p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="h-8 w-8 bg-blue-50 rounded-md flex items-center justify-center">
+                      <Building2 className="h-4 w-4 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Market Expansion</h3>
-                      <p className="text-gray-600">
-                        Identify and understand new market segments to inform your expansion strategy and messaging approach.
-                      </p>
+                    <h3 className="text-sm font-medium text-gray-900">Market Expansion</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Identify and understand new market segments to inform your expansion strategy and messaging approach.
+                  </p>
+                  <div className="mt-3 flex">
+                    <div className="text-xs font-medium text-blue-600 flex items-center">
+                      <span>Learn more</span>
+                      <div className="h-3 w-3 ml-1 flex items-center justify-center">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex items-start mb-4">
-                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
-                      <Users className="h-6 w-6 text-indigo-600" />
+                <div className="bg-white border border-gray-200 rounded-md p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="h-8 w-8 bg-green-50 rounded-md flex items-center justify-center">
+                      <Users className="h-4 w-4 text-green-600" />
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Sales Enablement</h3>
-                      <p className="text-gray-600">
-                        Equip your sales team with detailed buyer personas to improve prospecting, conversations, and closing rates.
+                    <h3 className="text-sm font-medium text-gray-900">Sales Enablement</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Equip your sales team with detailed buyer personas to improve prospecting, conversations, and closing rates.
+                  </p>
+                  <div className="mt-3 flex">
+                    <div className="text-xs font-medium text-green-600 flex items-center">
+                      <span>Learn more</span>
+                      <div className="h-3 w-3 ml-1 flex items-center justify-center">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-14 max-w-6xl mx-auto">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 md:p-8">
+                  <div className="flex flex-col md:flex-row items-center gap-6">
+                    <div className="md:w-2/3">
+                      <div className="text-indigo-600 text-xs font-medium mb-2">CASE STUDY</div>
+                      <h3 className="text-lg font-semibold mb-3">How TechSoft increased conversions by 47% with AI personas</h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        By implementing detailed AI-generated personas into their marketing strategy, TechSoft was able to create hyper-targeted content that resonated with their ideal customers.
                       </p>
+                      <div className="flex items-center gap-4">
+                        <div className="flex -space-x-2">
+                          <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-medium text-indigo-700">T</div>
+                          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs font-medium text-blue-700">S</div>
+                        </div>
+                        <div className="text-xs text-gray-500">TechSoft, B2B SaaS</div>
+                      </div>
+                    </div>
+                    <div className="md:w-1/3 flex justify-end">
+                      <Button 
+                        variant="outline"
+                        className="text-xs font-medium py-2 px-4 rounded-md border-gray-200 text-gray-700"
+                      >
+                        Read case study
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -613,12 +675,12 @@ export default function AIPersonaServicePage() {
           {/* Pricing Section */}
           <section id="pricing" className="py-20 bg-white relative">
             <div className="container mx-auto px-4 sm:px-6">
-              <div className="text-center mb-10">
-                <div className="inline-block bg-gray-100 text-indigo-600 font-medium px-4 py-2 rounded-md mb-6">Pricing</div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+              <div className="text-center mb-12">
+                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Pricing</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
                   <span className="text-indigo-600">Simple pricing</span>, for everyone
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base text-gray-600 max-w-2xl mx-auto">
                   No hidden fees, no contracts, cancel anytime
                 </p>
               </div>
@@ -805,12 +867,12 @@ export default function AIPersonaServicePage() {
           {/* Try Before You Buy Demo Section */}
           <section id="demo" className="py-20 bg-gray-50 relative">
             <div className="container mx-auto px-4 sm:px-6">
-              <div className="text-center mb-16">
-                <div className="inline-block bg-gray-100 text-indigo-600 font-medium px-4 py-2 rounded-md mb-6">Demo</div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+              <div className="text-center mb-12">
+                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">Interactive Demo</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
                   Try it <span className="text-indigo-600">yourself</span>
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+                <p className="text-base text-gray-600 max-w-2xl mx-auto">
                   Experience our AI persona generation technology with this interactive demo
                 </p>
               </div>
