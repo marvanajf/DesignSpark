@@ -380,7 +380,7 @@ export default function HomePage() {
                     <span className="text-gray-300">Generate content specifically tailored to each persona</span>
                   </li>
                 </ul>
-                <div>
+                <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     onClick={() => window.location.href = "/personas-info"}
                     variant="outline"
@@ -388,6 +388,14 @@ export default function HomePage() {
                   >
                     Explore Personas
                     <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => window.location.href = "/ai-personas"}
+                    className="bg-[#74d1ea] hover:bg-[#5db8d0] text-black"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Try AI Persona Service
                   </Button>
                 </div>
               </div>
