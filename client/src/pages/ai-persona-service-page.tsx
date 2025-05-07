@@ -1162,7 +1162,7 @@ export default function AIPersonaServicePage() {
                                         <span className="text-xs font-medium text-green-700">Goals</span>
                                       </div>
                                       
-                                      {demoPersona.goals.slice(0, 2).map((goal, i) => (
+                                      {demoPersona.goals.slice(0, 2).map((goal: string, i: number) => (
                                         <div className="mb-2" key={i}>
                                           <div className="text-xs text-gray-500">Goal {i+1}</div>
                                           <div className="text-xs font-medium truncate" title={goal}>{goal}</div>
@@ -1188,7 +1188,7 @@ export default function AIPersonaServicePage() {
                                         <span className="text-xs font-medium text-red-700">Pain Points</span>
                                       </div>
                                       
-                                      {demoPersona.pains.slice(0, 2).map((pain, i) => (
+                                      {demoPersona.pains.slice(0, 2).map((pain: string, i: number) => (
                                         <div className="mb-2" key={i}>
                                           <div className="text-xs text-gray-500">Challenge {i+1}</div>
                                           <div className="text-xs font-medium truncate" title={pain}>{pain}</div>
@@ -1272,48 +1272,74 @@ export default function AIPersonaServicePage() {
           {/* FAQ Section */}
           <section className="py-20 bg-gray-50 relative">
             <div className="container mx-auto px-4 sm:px-6">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+              <div className="text-center mb-12">
+                <div className="text-xs font-medium text-indigo-600 tracking-wide uppercase mb-3">FAQ</div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
                   Frequently Asked <span className="text-indigo-600">Questions</span>
                 </h2>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                <p className="text-base text-gray-600 max-w-2xl mx-auto">
                   Find answers to common questions about our AI Persona Service
                 </p>
               </div>
               
               <div className="max-w-3xl mx-auto">
-                <div className="space-y-6">
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-                    <h3 className="text-xl font-semibold mb-3 text-gray-900">How accurate are the AI-generated personas?</h3>
-                    <p className="text-gray-600">
-                      Our AI personas are based on industry research, market data, and advanced language models. While they provide a strong starting point, we recommend refining them with your specific business knowledge and customer insights for maximum accuracy.
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white rounded-md border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 bg-indigo-50 rounded-md flex items-center justify-center">
+                        <CheckCircle className="h-3 w-3 text-indigo-600" />
+                      </div>
+                      <h3 className="text-sm font-medium text-gray-900">How accurate are the personas?</h3>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      Our AI personas are based on industry research, market data, and advanced language models. While they provide a strong starting point, we recommend refining them with your specific business knowledge for maximum accuracy.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Can I customize the personas after they're generated?</h3>
-                    <p className="text-gray-600">
-                      Yes, all generated personas can be customized. You can edit demographics, goals, pain points, behaviors, and other attributes to better match your specific target audience.
+                  <div className="bg-white rounded-md border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 bg-purple-50 rounded-md flex items-center justify-center">
+                        <Settings className="h-3 w-3 text-purple-600" />
+                      </div>
+                      <h3 className="text-sm font-medium text-gray-900">Can I customize the personas?</h3>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      Yes, all generated personas can be customized. You can edit demographics, goals, pain points, behaviors, and other attributes to better match your specific target audience needs.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Do I need technical skills to use this service?</h3>
-                    <p className="text-gray-600">
-                      No technical skills are required. Our intuitive interface guides you through the process with simple selections and clear instructions. You'll be able to generate professional personas in minutes.
+                  <div className="bg-white rounded-md border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 bg-green-50 rounded-md flex items-center justify-center">
+                        <Code className="h-3 w-3 text-green-600" />
+                      </div>
+                      <h3 className="text-sm font-medium text-gray-900">Do I need technical skills?</h3>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      No technical skills are required. Our intuitive interface guides you through the process with simple selections and clear instructions. You'll generate professional personas in minutes.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-                    <h3 className="text-xl font-semibold mb-3 text-gray-900">How do I integrate these personas with my marketing strategy?</h3>
-                    <p className="text-gray-600">
-                      Each persona includes recommendations for content types, messaging approaches, and channels that work best for that audience. You can use these insights to tailor your marketing campaigns, product messaging, and sales approaches.
+                  <div className="bg-white rounded-md border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 bg-blue-50 rounded-md flex items-center justify-center">
+                        <Target className="h-3 w-3 text-blue-600" />
+                      </div>
+                      <h3 className="text-sm font-medium text-gray-900">How do I use these in marketing?</h3>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      Each persona includes recommendations for content types, messaging approaches, and channels that work best for that audience. Use these insights to tailor your marketing campaigns and content strategy.
                     </p>
                   </div>
                   
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Can I use this as a standalone service, or do I need the full Tovably platform?</h3>
-                    <p className="text-gray-600">
+                  <div className="bg-white rounded-md border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-300 md:col-span-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 bg-amber-50 rounded-md flex items-center justify-center">
+                        <Zap className="h-3 w-3 text-amber-600" />
+                      </div>
+                      <h3 className="text-sm font-medium text-gray-900">Is this a standalone service?</h3>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
                       The AI Persona Service is available as a standalone offering with its own pricing plans. While it integrates seamlessly with the full Tovably platform for enhanced capabilities, you don't need to subscribe to other Tovably services to use it.
                     </p>
                   </div>
@@ -1323,22 +1349,57 @@ export default function AIPersonaServicePage() {
           </section>
 
           {/* CTA Section */}
-          <section className="py-20 bg-indigo-600 relative">
+          <section className="py-16 bg-indigo-600 relative">
             <div className="absolute inset-0 bg-[url('/dots-pattern.svg')] opacity-10 z-0"></div>
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
-              <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                  Ready to Understand Your Audience on a <span className="text-indigo-200">Deeper Level</span>?
-                </h2>
-                <p className="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
-                  Start creating detailed, AI-powered personas today and transform your marketing strategy with deeper audience insights.
-                </p>
-                <Button 
-                  className="bg-white hover:bg-gray-100 text-indigo-600 font-medium text-lg py-4 px-8 rounded-md shadow-md"
-                  onClick={() => window.location.href = "#pricing"}
-                >
-                  Get Started Now
-                </Button>
+              <div className="max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-center">
+                  <div className="lg:col-span-3">
+                    <div className="text-xs font-medium text-indigo-200 tracking-wide uppercase mb-3">Get Started Today</div>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white tracking-tight">
+                      Ready to Understand Your Audience on a <span className="text-indigo-200">Deeper Level</span>?
+                    </h2>
+                    <p className="text-indigo-100 mb-6 max-w-xl leading-relaxed">
+                      Start creating detailed, AI-powered personas today and transform your marketing strategy with deeper audience insights.
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-3">
+                      <Button 
+                        className="bg-white hover:bg-gray-100 text-indigo-600 font-medium py-2.5 px-5 rounded-md shadow-sm"
+                        onClick={() => window.location.href = "#pricing"}
+                      >
+                        Get Started Now
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="bg-transparent border-white text-white hover:bg-indigo-700 font-medium py-2.5 px-5 rounded-md"
+                      >
+                        Request Demo
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="lg:col-span-2">
+                    <div className="bg-white/10 backdrop-blur-sm p-5 md:p-8 rounded-lg border border-indigo-400/20 shadow-lg">
+                      <div className="flex items-center mb-4">
+                        <div className="bg-white/20 p-2 rounded-md mr-3">
+                          <Users className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="text-sm font-semibold text-white">Testimonial</div>
+                      </div>
+                      <p className="text-white/90 text-sm italic mb-5 leading-relaxed">
+                        "The personas generated by Tovably's AI service were spot-on for our target market. They've revolutionized how we approach our marketing strategy and helped us increase conversion rates by 37%."
+                      </p>
+                      <div className="flex items-center">
+                        <div className="h-9 w-9 bg-indigo-400/30 rounded-full flex items-center justify-center text-white font-medium mr-3">JR</div>
+                        <div>
+                          <div className="text-white text-sm font-medium">Jamie Rodriguez</div>
+                          <div className="text-indigo-200 text-xs">Marketing Director, TechForward</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
