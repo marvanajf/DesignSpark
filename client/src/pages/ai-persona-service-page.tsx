@@ -808,61 +808,140 @@ export default function AIPersonaServicePage() {
                             </div>
                           </div>
                           
-                          <div className="mb-4">
-                            <div className="text-gray-500 text-sm mb-1">Company</div>
-                            <div className="text-gray-900">{demoPersona.company}</div>
-                          </div>
-                          
-                          {demoPersona.experience && (
-                            <div className="mb-4">
-                              <div className="text-gray-500 text-sm mb-1">Experience</div>
-                              <div className="text-gray-900">{demoPersona.experience} years</div>
-                            </div>
-                          )}
-                          
-                          {demoPersona.demographics && (
-                            <div className="mb-4">
-                              <div className="text-gray-500 text-sm mb-1">Demographics</div>
-                              <div className="text-gray-900">
-                                {typeof demoPersona.demographics === 'string' 
-                                  ? demoPersona.demographics 
-                                  : typeof demoPersona.demographics === 'object' 
-                                    ? Object.entries(demoPersona.demographics).map(([key, value]) => (
-                                        <div key={key} className="mt-1">
-                                          <span className="font-medium capitalize">{key}: </span>
-                                          <span>{String(value)}</span>
-                                        </div>
-                                      ))
-                                    : 'Not specified'}
+                          {/* Floating persona attribute cards */}
+                          <div className="flex flex-wrap gap-4 mt-6">
+                            {/* Basic Info Card */}
+                            <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
+                              <div className="flex items-center mb-3">
+                                <div className="h-6 w-6 bg-indigo-100 flex items-center justify-center rounded mr-2">
+                                  <Building2 className="h-3.5 w-3.5 text-indigo-600" />
+                                </div>
+                                <span className="text-sm text-indigo-700 font-medium">Profile</span>
+                              </div>
+                              <div>
+                                <div className="mb-2.5">
+                                  <div className="text-xs text-gray-500">Company</div>
+                                  <div className="text-sm font-medium">{demoPersona.company}</div>
+                                </div>
+                                
+                                <div className="mb-2.5">
+                                  <div className="text-xs text-gray-500">Role</div>
+                                  <div className="text-sm font-medium">{demoPersona.role}</div>
+                                </div>
+                                
+                                {demoPersona.experience && (
+                                  <div className="mb-2.5">
+                                    <div className="text-xs text-gray-500">Experience</div>
+                                    <div className="text-sm font-medium">{demoPersona.experience} years</div>
+                                  </div>
+                                )}
+                                
+                                <div className="mb-2.5">
+                                  <div className="text-xs text-gray-500">Industry</div>
+                                  <div className="text-sm font-medium">{selectedIndustry?.name}</div>
+                                </div>
                               </div>
                             </div>
-                          )}
-                          
-                          <div className="mb-4">
-                            <div className="text-gray-500 text-sm mb-1">Pain Points</div>
-                            <ul className="text-gray-700 list-disc list-inside">
-                              {demoPersona.pains?.map((pain: string, index: number) => (
-                                <li key={index} className="my-1">{pain}</li>
-                              ))}
-                            </ul>
-                          </div>
-                          
-                          <div className="mb-4">
-                            <div className="text-gray-500 text-sm mb-1">Goals</div>
-                            <ul className="text-gray-700 list-disc list-inside">
-                              {demoPersona.goals?.map((goal: string, index: number) => (
-                                <li key={index} className="my-1">{goal}</li>
-                              ))}
-                            </ul>
-                          </div>
-                          
-                          <div>
-                            <div className="text-gray-500 text-sm mb-1">Professional Interests</div>
-                            <ul className="text-gray-700 list-disc list-inside">
-                              {demoPersona.interests?.map((interest: string, index: number) => (
-                                <li key={index} className="my-1">{interest}</li>
-                              ))}
-                            </ul>
+                            
+                            {/* Demographics Card */}
+                            {demoPersona.demographics && typeof demoPersona.demographics === 'object' && (
+                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
+                                <div className="flex items-center mb-3">
+                                  <div className="h-6 w-6 bg-blue-100 flex items-center justify-center rounded mr-2">
+                                    <Users className="h-3.5 w-3.5 text-blue-600" />
+                                  </div>
+                                  <span className="text-sm text-blue-700 font-medium">Demographics</span>
+                                </div>
+                                <div>
+                                  {Object.entries(demoPersona.demographics).slice(0, 4).map(([key, value]) => (
+                                    <div className="mb-2.5" key={key}>
+                                      <div className="text-xs text-gray-500 capitalize">{key}</div>
+                                      <div className="text-sm font-medium">{String(value)}</div>
+                                    </div>
+                                  ))}
+                                  {Object.keys(demoPersona.demographics).length > 4 && (
+                                    <div className="text-xs text-center text-gray-400 mt-2">
+                                      +{Object.keys(demoPersona.demographics).length - 4} More Attributes
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Goals Card */}
+                            {demoPersona.goals && demoPersona.goals.length > 0 && (
+                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
+                                <div className="flex items-center mb-3">
+                                  <div className="h-6 w-6 bg-green-100 flex items-center justify-center rounded mr-2">
+                                    <Target className="h-3.5 w-3.5 text-green-600" />
+                                  </div>
+                                  <span className="text-sm text-green-700 font-medium">Goals</span>
+                                </div>
+                                <div>
+                                  {demoPersona.goals.slice(0, 4).map((goal, i) => (
+                                    <div className="mb-2.5" key={i}>
+                                      <div className="text-xs text-gray-500">Goal {i+1}</div>
+                                      <div className="text-sm font-medium truncate" title={goal}>{goal}</div>
+                                    </div>
+                                  ))}
+                                  {demoPersona.goals.length > 4 && (
+                                    <div className="text-xs text-center text-gray-400 mt-2">
+                                      +{demoPersona.goals.length - 4} More Goals
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Pain Points Card */}
+                            {demoPersona.pains && demoPersona.pains.length > 0 && (
+                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
+                                <div className="flex items-center mb-3">
+                                  <div className="h-6 w-6 bg-red-100 flex items-center justify-center rounded mr-2">
+                                    <MessagesSquare className="h-3.5 w-3.5 text-red-600" />
+                                  </div>
+                                  <span className="text-sm text-red-700 font-medium">Pain Points</span>
+                                </div>
+                                <div>
+                                  {demoPersona.pains.slice(0, 4).map((pain, i) => (
+                                    <div className="mb-2.5" key={i}>
+                                      <div className="text-xs text-gray-500">Challenge {i+1}</div>
+                                      <div className="text-sm font-medium truncate" title={pain}>{pain}</div>
+                                    </div>
+                                  ))}
+                                  {demoPersona.pains.length > 4 && (
+                                    <div className="text-xs text-center text-gray-400 mt-2">
+                                      +{demoPersona.pains.length - 4} More Challenges
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Interests Card */}
+                            {demoPersona.interests && demoPersona.interests.length > 0 && (
+                              <div className="relative w-[180px] p-4 border border-gray-200 rounded-lg bg-white">
+                                <div className="flex items-center mb-3">
+                                  <div className="h-6 w-6 bg-amber-100 flex items-center justify-center rounded mr-2">
+                                    <Compass className="h-3.5 w-3.5 text-amber-600" />
+                                  </div>
+                                  <span className="text-sm text-amber-700 font-medium">Interests</span>
+                                </div>
+                                <div>
+                                  {demoPersona.interests.slice(0, 4).map((interest, i) => (
+                                    <div className="mb-2.5" key={i}>
+                                      <div className="text-xs text-gray-500">Interest {i+1}</div>
+                                      <div className="text-sm font-medium truncate" title={interest}>{interest}</div>
+                                    </div>
+                                  ))}
+                                  {demoPersona.interests.length > 4 && (
+                                    <div className="text-xs text-center text-gray-400 mt-2">
+                                      +{demoPersona.interests.length - 4} More Interests
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                         
