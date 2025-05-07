@@ -939,11 +939,11 @@ export default function AIPersonaServicePage() {
                       </div>
                     </div>
                     
-                    <h4 className="text-lg font-medium mb-3 text-gray-900">Customization Options</h4>
+                    <h4 className="text-lg font-medium mb-3 text-black">Customization Options</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
                       {/* Market Segment */}
                       <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                        <label className="flex items-center justify-between text-sm text-gray-700 mb-2">
+                        <label className="flex items-center justify-between text-sm text-black mb-2">
                           <span>Market Segment</span>
                           <span className="text-xs text-indigo-600 bg-indigo-50 py-1 px-2 rounded">Premium</span>
                         </label>
@@ -1052,7 +1052,7 @@ export default function AIPersonaServicePage() {
                           <Sparkles className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-black">
                             <span className="text-indigo-600 font-medium">Premium features</span> allow you to tailor 
                             personas for specific market segments and regional considerations. 
                             <span className="text-indigo-600 font-medium"> Business features</span> include buying stage 
@@ -1090,14 +1090,14 @@ export default function AIPersonaServicePage() {
                   
                   {/* Persona Display Column */}
                   <div className="bg-white p-6 lg:p-8 rounded-xl border border-gray-200 shadow-sm">
-                    <h3 className="text-2xl font-semibold mb-6 text-gray-900">
+                    <h3 className="text-2xl font-semibold mb-6 text-black">
                       {demoPersona ? `Meet ${demoPersona.name}` : 'Your Generated Persona'}
                     </h3>
                     
                     {!demoPersona && !isGenerating ? (
                       <div className="flex flex-col items-center justify-center h-[400px] text-center">
                         <Sparkles className="h-16 w-16 text-indigo-300 mb-4" />
-                        <p className="text-gray-500 max-w-md">
+                        <p className="text-black max-w-md">
                           Select an industry from the list on the left and click "Generate Persona" 
                           to create a detailed buyer persona for your marketing.
                         </p>
@@ -1105,10 +1105,10 @@ export default function AIPersonaServicePage() {
                     ) : isGenerating ? (
                       <div className="flex flex-col items-center justify-center h-[400px] text-center">
                         <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
-                        <p className="text-gray-700">
+                        <p className="text-black">
                           Creating your persona...
                         </p>
-                        <p className="text-gray-500 text-sm mt-2">
+                        <p className="text-black text-sm mt-2">
                           This typically takes 10-15 seconds
                         </p>
                       </div>
@@ -1120,8 +1120,8 @@ export default function AIPersonaServicePage() {
                               <Users className="h-6 w-6 text-indigo-600" />
                             </div>
                             <div>
-                              <h4 className="text-xl font-medium text-gray-900">{demoPersona.name}</h4>
-                              <p className="text-indigo-600">{demoPersona.role}</p>
+                              <h4 className="text-xl font-medium text-black">{demoPersona.name}</h4>
+                              <p className="text-black">{demoPersona.role}</p>
                             </div>
                           </div>
                           
