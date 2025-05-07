@@ -13,6 +13,7 @@ import DashboardPage from "@/pages/dashboard-page";
 import ToneAnalysisPage from "@/pages/tone-analysis-page-new";
 import ToneResultsPage from "@/pages/tone-results-page";
 import PersonaSelectionPage from "@/pages/persona-selection-page-updated";
+import AIPersonaServicePage from "@/pages/ai-persona-service-page";
 import ContentGeneratorPage from "@/pages/content-generator-page";
 import SavedContentPage from "@/pages/saved-content-page";
 import AccountPage from "@/pages/account-page";
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/campaigns-info" component={CampaignsInfoPage} />
       <Route path="/campaign-factory-info" component={CampaignFactoryInfoPage} />
       <Route path="/knowledge-base-info" component={KnowledgeBaseMarketingPage} />
+      <Route path="/ai-personas" component={AIPersonaServicePage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/payment-success" component={PaymentSuccessPage} />
