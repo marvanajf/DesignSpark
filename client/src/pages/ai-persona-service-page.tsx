@@ -119,6 +119,70 @@ export default function AIPersonaServicePage() {
                   </Button>
                 </div>
               </div>
+              
+              <div className="mt-24 flex flex-wrap justify-center gap-8 md:gap-16">
+                {/* Persona Attribute Card - Executive */}
+                <div className="relative w-[220px] p-5 border border-gray-200 rounded-lg bg-white">
+                  <div className="flex items-center mb-3">
+                    <div className="h-6 w-6 bg-purple-100 flex items-center justify-center rounded mr-2">
+                      <Users className="h-3.5 w-3.5 text-purple-600" />
+                    </div>
+                    <span className="text-sm text-purple-700 font-medium">Persona</span>
+                  </div>
+                  <div>
+                    <div className="mb-2.5">
+                      <div className="text-xs text-gray-500">Name</div>
+                      <div className="text-sm font-medium">Sarah Chen</div>
+                    </div>
+                    <div className="mb-2.5">
+                      <div className="text-xs text-gray-500">Role</div>
+                      <div className="text-sm font-medium">CTO</div>
+                    </div>
+                    <div className="mb-2.5">
+                      <div className="text-xs text-gray-500">Company Size</div>
+                      <div className="text-sm font-medium">250+ employees</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500">Buying Stage</div>
+                      <div className="text-sm font-medium">Consideration</div>
+                    </div>
+                    <div className="text-xs text-center text-gray-400 mt-3">
+                      +8 More Attributes
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Persona Attribute Card - Marketing */}
+                <div className="relative w-[220px] p-5 border border-gray-200 rounded-lg bg-white">
+                  <div className="flex items-center mb-3">
+                    <div className="h-6 w-6 bg-emerald-100 flex items-center justify-center rounded mr-2">
+                      <Users className="h-3.5 w-3.5 text-emerald-600" />
+                    </div>
+                    <span className="text-sm text-emerald-700 font-medium">Persona</span>
+                  </div>
+                  <div>
+                    <div className="mb-2.5">
+                      <div className="text-xs text-gray-500">Name</div>
+                      <div className="text-sm font-medium">Michael Rivera</div>
+                    </div>
+                    <div className="mb-2.5">
+                      <div className="text-xs text-gray-500">Role</div>
+                      <div className="text-sm font-medium">Marketing Director</div>
+                    </div>
+                    <div className="mb-2.5">
+                      <div className="text-xs text-gray-500">Pain Point</div>
+                      <div className="text-sm font-medium">Content ROI tracking</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500">Budget Focus</div>
+                      <div className="text-sm font-medium">Growth channels</div>
+                    </div>
+                    <div className="text-xs text-center text-gray-400 mt-3">
+                      +8 More Attributes
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
