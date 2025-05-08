@@ -85,7 +85,7 @@ export default function AIPersonaServicePage() {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-white text-gray-900 flex flex-col"
+      <div className="min-h-screen bg-black text-white flex flex-col"
            style={{
              fontFamily: "-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif",
              fontSize: "14px",
@@ -97,218 +97,35 @@ export default function AIPersonaServicePage() {
         <main className="flex-grow">
           {/* Hero Section */}
           <section className="relative pt-28 pb-20 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/30 to-white z-0"></div>
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
-              <div className="text-center mb-4">
-                <div className="inline-block bg-gray-100 text-black px-3 py-1 rounded-full text-xs font-medium tracking-wide">AI-Powered Personas</div>
+              <div className="text-left mb-4">
+                <div className="inline-flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <div className="text-blue-400 text-sm font-medium">Tovably AI Personas</div>
+                </div>
               </div>
 
-              <div className="max-w-3xl mx-auto text-center mb-10">
-                <h1 className="text-4xl md:text-5xl font-bold mb-6 text-black tracking-tight leading-tight">
-                  Create data-driven <span className="text-black">personas</span> in seconds
+              <div className="max-w-3xl mx-auto mb-10">
+                <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight leading-tight">
+                  Understand how your brand's <span className="text-blue-400">personas</span> connects with your audience
                 </h1>
-                <p className="text-lg text-black max-w-2xl mx-auto leading-relaxed">
-                  Generate detailed, AI-powered customer profiles tailored to your industry that drive engagement and boost conversions.
+                <p className="text-lg text-gray-300 max-w-2xl leading-relaxed">
+                  Analyze your content's tone, uncover patterns in your communication style, and discover how to enhance your brand's presence through precise language.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+                <div className="flex flex-col sm:flex-row gap-3 mt-8">
                   <Button 
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2.5 px-5 rounded-md"
+                    className="bg-blue-400 hover:bg-blue-500 text-black text-sm font-medium py-2.5 px-5 rounded-md"
                     onClick={() => window.location.href = "#demo"}
                   >
-                    Try it now
+                    Get started
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium py-2.5 px-5 rounded-md"
-                    onClick={() => window.location.href = "#pricing"}
+                    className="border-gray-600 text-white hover:bg-gray-800 text-sm font-medium py-2.5 px-5 rounded-md"
+                    onClick={() => window.location.href = "#contact"}
                   >
-                    View pricing
+                    Contact us
                   </Button>
-                </div>
-              </div>
-              
-              {/* AI Persona Generator Showcase */}
-              <div className="max-w-6xl mx-auto mt-14 bg-white rounded-xl border border-gray-200 shadow-md overflow-hidden">
-                <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 bg-gray-100 rounded-md flex items-center justify-center">
-                      <BrainCircuit className="h-3 w-3 text-black" />
-                    </div>
-                    <span className="text-sm font-medium">AI Persona Generator</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
-                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-xs text-gray-500">Live</span>
-                  </div>
-                </div>
-                
-                <div className="p-5">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                    {/* Left Column - Input */}
-                    <div className="bg-gray-50 rounded-md border border-gray-200 p-4">
-                      <div className="text-xs font-medium text-black mb-3">Industry Selection</div>
-                      
-                      <div className="bg-white rounded-md border border-gray-200 p-3 mb-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Building2 className="h-3.5 w-3.5 text-black" />
-                          <div className="text-sm font-medium">SaaS / Technology</div>
-                        </div>
-                        <div className="text-xs text-black leading-relaxed">
-                          Generate personas for software as a service products and technology services
-                        </div>
-                      </div>
-                      
-                      <div className="text-xs font-medium text-black mb-3">Target Market</div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-white rounded border border-gray-200 p-2">
-                          <div className="text-xs font-medium">B2B</div>
-                        </div>
-                        <div className="bg-white rounded border border-gray-200 p-2 opacity-50">
-                          <div className="text-xs font-medium">B2C</div>
-                        </div>
-                      </div>
-                      
-                      <div className="text-xs font-medium text-black mb-3 mt-4">Persona Type</div>
-                      <div className="grid grid-cols-2 gap-2 mb-4">
-                        <div className="bg-white rounded border border-gray-200 p-2">
-                          <div className="text-xs font-medium">Decision Maker</div>
-                        </div>
-                        <div className="bg-white rounded border border-gray-200 p-2 opacity-50">
-                          <div className="text-xs font-medium">Influencer</div>
-                        </div>
-                      </div>
-                      
-                      <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs py-2">
-                        Generate Persona
-                      </Button>
-                    </div>
-                    
-                    {/* Center Column - Persona Card */}
-                    <div className="lg:border-x lg:border-gray-100 lg:px-5">
-                      <div className="bg-white border border-gray-200 rounded-lg p-4">
-                        <div className="flex justify-between items-start mb-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center text-black font-medium">
-                              AC
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium">Alex Chen</div>
-                              <div className="text-xs text-black">CTO at MidSize Tech</div>
-                            </div>
-                          </div>
-                          <div className="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">
-                            Decision Maker
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-4">
-                          <div>
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <Users className="h-3 w-3 text-black" />
-                              <div className="text-xs font-medium text-black">Demographics</div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
-                              <div>
-                                <div className="text-xs text-gray-500">Age</div>
-                                <div className="text-xs font-medium">35-45</div>
-                              </div>
-                              <div>
-                                <div className="text-xs text-gray-500">Location</div>
-                                <div className="text-xs font-medium">Urban Tech Hubs</div>
-                              </div>
-                              <div>
-                                <div className="text-xs text-gray-500">Education</div>
-                                <div className="text-xs font-medium">MS in CS/Engineering</div>
-                              </div>
-                              <div>
-                                <div className="text-xs text-gray-500">Income</div>
-                                <div className="text-xs font-medium">$150-200K</div>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="pt-2 border-t border-gray-100">
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <Target className="h-3 w-3 text-black" />
-                              <div className="text-xs font-medium text-black">Goals & Motivations</div>
-                            </div>
-                            <ul className="space-y-1">
-                              <li className="flex gap-1.5 items-baseline">
-                                <div className="h-1 w-1 rounded-full bg-indigo-500 mt-1"></div>
-                                <div className="text-xs text-gray-600">Implement scalable tech solutions</div>
-                              </li>
-                              <li className="flex gap-1.5 items-baseline">
-                                <div className="h-1 w-1 rounded-full bg-indigo-500 mt-1"></div>
-                                <div className="text-xs text-gray-600">Reduce operational costs</div>
-                              </li>
-                              <li className="flex gap-1.5 items-baseline">
-                                <div className="h-1 w-1 rounded-full bg-indigo-500 mt-1"></div>
-                                <div className="text-xs text-gray-600">Enhance security infrastructure</div>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Right Column - Premium Features */}
-                    <div className="relative">
-                      <div className="lg:absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-md">
-                        <div className="p-4 text-center">
-                          <BrainCircuit className="h-8 w-8 text-indigo-500 mx-auto mb-3" />
-                          <h3 className="text-sm font-medium text-gray-900 mb-1">Unlock Premium Insights</h3>
-                          <p className="text-xs text-gray-500 mb-3">
-                            Premium plans include detailed psychological profiles, behavior patterns, and strategic recommendations.
-                          </p>
-                          <Button 
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs py-1.5 px-3 rounded"
-                            onClick={() => window.location.href = "#pricing"}
-                          >
-                            View Pricing
-                          </Button>
-                        </div>
-                      </div>
-                      
-                      {/* Background Content (Visible on Hover or Premium) */}
-                      <div className="bg-white border border-gray-200 rounded-md p-4">
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <MessagesSquare className="h-3 w-3 text-gray-500" />
-                          <div className="text-xs font-medium text-gray-700">Pain Points</div>
-                        </div>
-                        <ul className="space-y-1 mb-4">
-                          <li className="flex gap-1.5 items-baseline">
-                            <div className="h-1 w-1 rounded-full bg-red-500 mt-1"></div>
-                            <div className="text-xs text-gray-600">Legacy systems integration challenges</div>
-                          </li>
-                          <li className="flex gap-1.5 items-baseline">
-                            <div className="h-1 w-1 rounded-full bg-red-500 mt-1"></div>
-                            <div className="text-xs text-gray-600">Talent acquisition & retention</div>
-                          </li>
-                        </ul>
-                        
-                        <div className="flex items-center gap-1.5 mb-1.5 pt-2 border-t border-gray-100">
-                          <BarChart3 className="h-3 w-3 text-gray-500" />
-                          <div className="text-xs font-medium text-gray-700">Buying Behavior</div>
-                        </div>
-                        <ul className="space-y-1">
-                          <li className="flex gap-1.5 items-baseline">
-                            <div className="h-1 w-1 rounded-full bg-violet-500 mt-1"></div>
-                            <div className="text-xs text-gray-600">Research-driven decision making</div>
-                          </li>
-                          <li className="flex gap-1.5 items-baseline">
-                            <div className="h-1 w-1 rounded-full bg-violet-500 mt-1"></div>
-                            <div className="text-xs text-gray-600">Values ROI metrics & case studies</div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 text-xs text-gray-500 text-center">
-                  This is a preview of our AI persona generator. Sign up to access full features.
                 </div>
               </div>
             </div>
