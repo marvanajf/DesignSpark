@@ -81,7 +81,7 @@ export default function AIPersonaServicePage() {
         <title>AI Persona Service | Tovably</title>
         <meta
           name="description"
-          content="Create detailed, customized audience personas using OpenAI technology. Understand your ideal customers deeply with Tovably's AI Persona Service."
+          content="Create detailed, customized personas using OpenAI technology. Understand your ideal customers deeply with Tovably's AI Persona Service."
         />
       </Helmet>
 
@@ -105,7 +105,7 @@ export default function AIPersonaServicePage() {
 
               <div className="max-w-3xl mx-auto text-center mb-10">
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 text-black tracking-tight leading-tight">
-                  Create data-driven audience <span className="text-black">personas</span> in seconds
+                  Create data-driven <span className="text-black">personas</span> in seconds
                 </h1>
                 <p className="text-lg text-black max-w-2xl mx-auto leading-relaxed">
                   Generate detailed, AI-powered customer profiles tailored to your industry that drive engagement and boost conversions.
@@ -373,7 +373,7 @@ export default function AIPersonaServicePage() {
                     </div>
                     
                     <p className="text-xs text-gray-600 mb-4 leading-relaxed">
-                      Create detailed audience personas with demographic data, pain points, goals, and psychological profiles.
+                      Create detailed personas with demographic data, pain points, goals, and psychological profiles.
                     </p>
                     
                     <div className="grid grid-cols-2 gap-3 mt-4">
@@ -1403,7 +1403,7 @@ export default function AIPersonaServicePage() {
                       Ready to Understand Your Audience on a <span className="text-indigo-200">Deeper Level</span>?
                     </h2>
                     <p className="text-indigo-100 mb-6 max-w-xl leading-relaxed">
-                      Start creating detailed, AI-powered personas today and transform your marketing strategy with deeper audience insights.
+                      Start creating detailed, AI-powered personas today and transform your marketing strategy with deeper customer insights.
                     </p>
                     
                     <div className="flex flex-wrap gap-3">
