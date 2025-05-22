@@ -28,15 +28,21 @@ export default function PricingPage() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
 
   const handleSelectPlan = (planId: SubscriptionPlanType) => {
-    // Check if user is trying to downgrade to free plan
-    if (planId === 'free' && user?.subscription_plan !== 'free') {
+    // If user is not logged in, redirect to auth page
+    if (!user) {
+      window.location.href = '/auth';
+      return;
+    }
+    
+    // Check if user is trying to downgrade to free plan from a paid plan
+    if (planId === 'free' && user.subscription_plan && user.subscription_plan !== 'free') {
       // Open the confirmation modal instead of using the browser's confirm
       setIsCancelModalOpen(true);
       return;
     }
 
     // If they're already on the free plan and selecting free plan again
-    if (planId === 'free' && user?.subscription_plan === 'free') {
+    if (planId === 'free' && user.subscription_plan === 'free') {
       toast({
         title: "Free Plan Selected",
         description: "You're already on the free plan. Enjoy your experience with Tovably!",
@@ -44,7 +50,7 @@ export default function PricingPage() {
       return;
     }
     
-    // Allow any user to select a paid plan, whether logged in or not
+    // Allow any logged-in user to select a paid plan
     setSelectedPlan(planId);
     setIsModalOpen(true);
   };
